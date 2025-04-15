@@ -15,7 +15,7 @@ export interface PropertyCardProps {
 const PropertyCard = ({ imageURL, price, location, currency, beds, baths, sqft } : PropertyCardProps) => {
   return (
     <div className='bg-white rounded-2xl flex flex-col gap-2 p-4 shadow-2xl'>
-        <div className='relative w-full h-96 transition-all duration-200 hover:scale-105 hover:shadow-lg rounded-2xl'>
+        <div className='relative w-full h-96 transition-all duration-200 hover:scale-95 hover:cursor-pointer rounded-2xl'>
         <Image src={imageURL} alt='Property' fill objectFit='cover' className='rounded-2xl' />
         </div>
         <p className='text-primary font-bold'>{formatCurrency(price, currency)}</p>

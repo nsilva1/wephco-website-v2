@@ -14,11 +14,11 @@ const FeaturedProperties = () => {
   }, []);
 
   return (
-    <div className='bg-white p-8'>
-      <h1 className='lg:text-5xl text-4xl font-bold text-primary mb-5'>
+    <div className='bg-white p-8 my-20'>
+      <h1 className='lg:text-5xl text-4xl font-bold text-black mb-5 text-center'>
         Featured Properties
       </h1>
-      <p className='mb-5'>
+      <p className='mb-5 text-gray-500 text-center'>
         Check out some of our most exclusive houses, apartments, townhomes,
         penthouses, and more
       </p>
@@ -30,7 +30,7 @@ const FeaturedProperties = () => {
         ))}
       </div>
         <div className='mt-8'>
-            <Link href='/buy' className='bg-green-700 text-white rounded-full px-5 py-3 flex justify-between items-center hover:bg-green-700/80 cursor-pointer w-full lg:w-40'>
+            <Link href='/buy' className='bg-black text-white rounded-full px-5 py-3 flex justify-between items-center hover:bg-black/80 cursor-pointer w-full lg:w-40'>
                 <p>View More</p>
                 <BiArrowToRight className='text-2xl ml-2' />
             </Link>
