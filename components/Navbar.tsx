@@ -7,7 +7,6 @@ import { usePathname } from 'next/navigation';
 import { MdCancel, MdMenu } from 'react-icons/md';
 import Image from 'next/image';
 import logo from '@/images/logo.png';
-import { BsPersonCircle } from 'react-icons/bs';
 
 const Navbar = () => {
   const [navbarBg, setNavbarBg] = useState('transparent');
@@ -63,7 +62,6 @@ const Navbar = () => {
           <Link href='/' className={navbarButton}>
             Find A Home
           </Link>
-          <button className={navbarButton}>Register</button>
           <button className={navbarButton}>Login</button>
         </div>
         {/* Mobile menu */}
@@ -93,7 +91,6 @@ const Navbar = () => {
                 </li>
               ))}
               <li className='font-sans font-normal cursor-pointer text-[20px] mb-3'>Find A Home</li>
-              <li className='font-sans font-normal cursor-pointer text-[20px] mb-3'>Register</li>
               <li className='font-sans font-normal cursor-pointer text-[20px] mb-3'>Login</li>
             </ul>
           </div>
