@@ -50,33 +50,33 @@ export const sampleProperties: PropertyCardProps[] = [
         baths: 4,
         sqft: 3000
     },
-    // {
-    //     imageURL: '/images/property4.jpg',
-    //     price: 900000,
-    //     location: '5678 Maple Street',
-    //     currency: 'USD',
-    //     beds: 2,
-    //     baths: 1,
-    //     sqft: 1500
-    // },
-    // {
-    //     imageURL: '/images/property5.jpg',
-    //     price: 2000000,
-    //     location: '1314 Pine Street',
-    //     currency: 'USD',
-    //     beds: 4,
-    //     baths: 3,
-    //     sqft: 2500
-    // },
-    // {
-    //     imageURL: '/images/property6.jpg',
-    //     price: 3000000,
-    //     location: '1516 Cedar Street',
-    //     currency: 'USD',
-    //     beds: 5,
-    //     baths: 4,
-    //     sqft: 3500
-    // }
+    {
+        imageURL: '/images/property4.jpg',
+        price: 900000,
+        location: '5678 Maple Street',
+        currency: 'USD',
+        beds: 2,
+        baths: 1,
+        sqft: 1500
+    },
+    {
+        imageURL: '/images/property5.jpg',
+        price: 2000000,
+        location: '1314 Pine Street',
+        currency: 'USD',
+        beds: 4,
+        baths: 3,
+        sqft: 2500
+    },
+    {
+        imageURL: '/images/property6.jpg',
+        price: 3000000,
+        location: '1516 Cedar Street',
+        currency: 'USD',
+        beds: 5,
+        baths: 4,
+        sqft: 3500
+    }
 ]
 
 

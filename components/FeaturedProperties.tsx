@@ -6,7 +6,12 @@ import { sampleProperties } from '@/lib/constants';
 import { BiArrowToRight } from 'react-icons/bi';
 import Link from 'next/link';
 
-const FeaturedProperties = () => {
+interface PropertyProps extends React.ComponentPropsWithoutRef<'div'> {
+  numberOfProperties?: number;
+  viewMore?: boolean;
+}
+
+const FeaturedProperties = ({numberOfProperties = 3, viewMore = true, ...rest}: PropertyProps) => {
   const [properties, setProperties] = useState<PropertyCardProps[]>([]);
 
   useEffect(() => {
@@ -14,7 +19,7 @@ const FeaturedProperties = () => {
   }, []);
 
   return (
-    <div className='bg-white p-8 my-20'>
+    <div {...rest} className='bg-white p-8 my-20'>
       <h1 className='lg:text-5xl text-4xl font-bold text-black mb-5 text-center'>
         Featured Properties
       </h1>
@@ -23,13 +28,13 @@ const FeaturedProperties = () => {
         penthouses, and more
       </p>
       <div className='grid lg:grid-cols-3 grid-cols-1 gap-4'>
-        {properties.map((property, index) => (
+        {properties.slice(0, numberOfProperties).map((property, index) => (
           <div className='' key={index}>
             <PropertyCard {...property} />
           </div>
         ))}
       </div>
-        <div className='mt-8'>
+        <div className={`mt-8 ${viewMore ? 'flex' : 'hidden'}`}>
             <Link href='/buy' className='bg-black text-white rounded-full px-5 py-3 flex justify-between items-center hover:bg-black/80 cursor-pointer w-full lg:w-40'>
                 <p>View More</p>
                 <BiArrowToRight className='text-2xl ml-2' />
