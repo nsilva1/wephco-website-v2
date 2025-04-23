@@ -44,8 +44,8 @@ const ContactUs = () => {
                 </div>
             </div>
             <div className='col-span-1'>
-                <div className='bg-white rounded-xl shadow-2xl shadow-gray-500 w-96 md:w-[500px] p-8'>
-                    <h3 className='text-4xl uppercase text-[#131316] font-semibold mb-10'>Contact Us!</h3>
+                <div className='bg-white rounded-xl shadow-2xl shadow-gray-500 w-96 h-[500px] md:w-[500px] p-8'>
+                    <h3 className='text-3xl uppercase text-[#131316] font-semibold mb-10'>Contact Us</h3>
                     <form onSubmit={handleSubmit}>
                         <fieldset className='flex flex-col gap-8'>
                             <input type='text' value={fullName} onChange={(e) => setFullName(e.target.value)} className='border-b p-2 w-full' placeholder='Your Name...' />
