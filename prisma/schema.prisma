@@ -40,7 +40,7 @@ model Property {
   images      String[] // Prisma supports arrays in MongoDB
   price       Float
   location    String
-  agent       User?    @relation(fields: [agentId], references: [id])
+  agent       User?    @relation(fields: [agentId], references: [id], onDelete: Cascade)
   agentId     String?  @db.ObjectId
   createdAt   DateTime @default(now())
 

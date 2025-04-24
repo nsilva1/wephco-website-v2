@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import Navbar from "@/components/Navbar";
+import { ToastContainer } from "react-toastify";
 import "../globals.css";
 
 // const geistSans = Geist({
@@ -47,6 +48,7 @@ export default function RootLayout({
       <body
         className={`${outfit.variable} antialiased`}
       >
+        <ToastContainer />
         <Navbar />
         {children}
       </body>

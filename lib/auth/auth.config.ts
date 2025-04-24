@@ -32,7 +32,12 @@ export default {
                         throw new Error('Password/Email not valid')
                     }
 
-                    return user
+                    return {
+                        id: user.id,
+                        name: user.name,
+                        email: user.email,
+                        role: user.role
+                    }
                 } catch (error) {
                     throw new Error('Error authorizing user')
                 }
