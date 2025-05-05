@@ -87,7 +87,11 @@ const Navbar = () => {
                   <Link href={item.path}>{item.label}</Link>
                 </li>
               ))}
-              <li className='font-sans font-normal cursor-pointer text-[20px] mb-3'>Login</li>
+              <li className='font-sans font-normal cursor-pointer text-[20px] mb-3'>
+                <Link href='/login' className={navbarButton}>
+                  Login
+                </Link>
+              </li>
             </ul>
           </div>
         </div>

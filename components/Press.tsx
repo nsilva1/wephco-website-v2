@@ -8,7 +8,7 @@ const Press = () => {
   return (
     <div className='p-8 my-20'>
         <h3 className='lg:text-5xl text-4xl font-bold text-black mb-5 text-center'>In the Press</h3>
-        <p className='text-gray-500 mb-10 md:mb-20 text-center'>See what’s got everyone talking. Enjoy featured stories about our dynamic properties, agents, company,<br /> and more as the most followed real estate brand in the country.</p>
+        <p className='text-gray-500 mb-10 md:mb-20 text-center text-sm md:text-base'>See what’s got everyone talking. Enjoy featured stories about our dynamic properties, agents, company,<br /> and more as the most followed real estate brand in the country.</p>
         {/* <hr className='my-8' /> */}
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16'>
             {newsArticles.slice(0,3).map((article, index) => (

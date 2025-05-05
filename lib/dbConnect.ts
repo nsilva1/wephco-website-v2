@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { MongoClient, ServerApiVersion } from 'mongodb';
 
 const MONGODB_URI = process.env.MONGODB_URI
 
@@ -40,4 +41,4 @@ async function dbConnect() {
     return cached.conn
 }
 
-export default dbConnect
+export { dbConnect }

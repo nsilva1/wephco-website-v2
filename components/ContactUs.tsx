@@ -14,7 +14,7 @@ const ContactUs = () => {
     <div>
         <div className='flex justify-around flex-col md:flex-row items-center gap-8 p-8'>
             <div className='col-span-1 flex flex-col gap-8'>
-                <h3 className='text-4xl uppercase text-[#131316] font-semibold text-center md:text-start'>Speak with our real estate<br /> specialists today.</h3>
+                <h3 className='text-xl md:text-3xl uppercase text-[#131316] font-semibold text-center md:text-start'>Speak with our real estate<br /> specialists today.</h3>
                 <div className='flex gap-4'>
                     <div className='bg-black rounded-full p-3 text-white'>
                         <FaWhatsapp className='text-2xl' />
@@ -51,7 +51,7 @@ const ContactUs = () => {
                             <input type='text' value={fullName} onChange={(e) => setFullName(e.target.value)} className='border-b p-2 w-full' placeholder='Your Name...' />
                             <input type='email' value={email} onChange={(e) => setEmail(e.target.value)} className='border-b p-2 w-full' placeholder='Your Email...' />
                             <input type='tel' value={phone} onChange={(e) => setPhone(e.target.value)} className='border-b p-2 w-full' placeholder='Phone Number...' />
-                            <button className='bg-[#131316] text-white font-semibold w-full p-4' type='submit'>Submit</button>
+                            <button className='bg-[#131316] text-white font-semibold w-full p-4 rounded-3xl' type='submit'>Submit</button>
                         </fieldset>
                     </form>
                 </div>

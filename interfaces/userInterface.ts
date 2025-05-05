@@ -4,7 +4,7 @@ export enum Role {
     AGENT = "AGENT",
     ADMIN = "ADMIN",
     SUPPORT = "SUPPORT",
-    SUPER_ADMIN = "SUPER_ADMIN",
+    SUPERADMIN = "SUPERADMIN",
 }
 
 export interface IUser {

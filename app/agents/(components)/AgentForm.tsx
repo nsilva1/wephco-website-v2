@@ -87,12 +87,12 @@ const AgentForm = ({ ...rest }: INewAgent) => {
             <div className='flex mb-6'>
               <div
                 className={`flex-1 border-t-2 pt-1 ${
-                  step >= 1 ? 'border-blue-500' : 'border-gray-300'
+                  step >= 1 ? 'border-primary' : 'border-gray-300'
                 }`}
               >
                 <p
                   className={`text-sm ${
-                    step >= 1 ? 'text-blue-600 font-medium' : 'text-gray-500'
+                    step >= 1 ? 'text-primary font-medium' : 'text-gray-500'
                   }`}
                 >
                   Personal Information
@@ -100,12 +100,12 @@ const AgentForm = ({ ...rest }: INewAgent) => {
               </div>
               <div
                 className={`flex-1 border-t-2 pt-1 ${
-                  step >= 2 ? 'border-blue-500' : 'border-gray-300'
+                  step >= 2 ? 'border-primary' : 'border-gray-300'
                 }`}
               >
                 <p
                   className={`text-sm ${
-                    step >= 2 ? 'text-blue-600 font-medium' : 'text-gray-500'
+                    step >= 2 ? 'text-primary font-medium' : 'text-gray-500'
                   }`}
                 >
                   Contact Information
@@ -132,7 +132,7 @@ const AgentForm = ({ ...rest }: INewAgent) => {
                       value={formData.firstName}
                       onChange={handleChange}
                       required
-                      className='w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500'
+                      className='w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black'
                     />
                   </div>
 
@@ -150,7 +150,7 @@ const AgentForm = ({ ...rest }: INewAgent) => {
                       value={formData.lastName}
                       onChange={handleChange}
                       required
-                      className='w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500'
+                      className='w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black'
                     />
                   </div>
 
@@ -168,7 +168,7 @@ const AgentForm = ({ ...rest }: INewAgent) => {
                       value={formData.email}
                       onChange={handleChange}
                       required
-                      className='w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500'
+                      className='w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black'
                     />
                   </div>
 
@@ -181,7 +181,7 @@ const AgentForm = ({ ...rest }: INewAgent) => {
                         !formData.lastName ||
                         !formData.email
                       }
-                      className='px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed'
+                      className='px-4 py-2 bg-black text-white rounded-md cursor-pointer hover:bg-black/90 focus:outline-none focus:ring-2 focus:ring-black/50 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed'
                     >
                       Next
                     </button>
@@ -207,7 +207,7 @@ const AgentForm = ({ ...rest }: INewAgent) => {
                       value={formData.phone}
                       onChange={handleChange}
                       required
-                      className='w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500'
+                      className='w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black'
                     />
                   </div>
 
@@ -224,7 +224,7 @@ const AgentForm = ({ ...rest }: INewAgent) => {
                       value={formData.location}
                       onChange={handleChange}
                       required
-                      className='w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500'
+                      className='w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black'
                     >
                       <option value=''>Select a location</option>
                       <option value='Abuja'>Abuja</option>
@@ -243,7 +243,7 @@ const AgentForm = ({ ...rest }: INewAgent) => {
                     <button
                       type='submit'
                       disabled={!formData.phone || !formData.location}
-                      className='px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed'
+                      className='px-4 py-2 bg-black text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed'
                     >
                       Submit
                     </button>

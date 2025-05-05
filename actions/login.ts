@@ -1,38 +1,54 @@
 'use server'
 
 import { prisma } from "@/prisma/prisma"
-import { IUser } from "@/interfaces/userInterface"
-import { NextResponse } from "next/server"
-import { toast } from "react-toastify"
+import { AuthError } from "next-auth"
 import { signIn } from "@/lib/auth/auth"
 
-export const loginUser = async (user: IUser) => {
-    const { email, password } = user
+type LoginResult = {
+  success?: boolean;
+  message?: string;
+  error?: string;
+}
 
-    // Find the user in the database
-    const existingUser = await prisma.user.findUnique({
-        where: {
-            email,
-        },
+export const loginUser = async (
+  email: string,
+  password: string
+): Promise<LoginResult> => {
+  // 1. Input validation
+  if (!email || !password) {
+    return { error: "Email and password are required" }
+  }
+
+  try {
+    // 2. Attempt to sign in
+    await signIn('credentials', {
+      email,
+      password,
+      redirectTo: '/dashboard'
     })
 
-    // Check if the user exists and if the password is correct
-    if (!existingUser) {
-        toast.error("Invalid email or password")
-        return NextResponse.json({ error: "Invalid email or password" }, { status: 401 })
+    // 3. If successful, return redirect path
+    return { 
+      success: true,
+      message: "Login successful. Redirecting to dashboard..."
     }
-
-    // Sign in the user (you can use a session or JWT here)
-    const result = await signIn('credentials', {
-        email,
-        password,
-        redirect: false,
-    })
-
-    if (result?.error) {
-        toast.error(result.error)
-        return NextResponse.json({ error: result.error }, { status: 401 })
+  } catch (error) {
+    // 4. Improved error handling
+    
+      if (error instanceof AuthError) {
+        if (error.message.includes("CredentialsSignin")) {
+          return { error: "Invalid email or password" }
+        } else if (error.message.includes("CallbackRouteError")) {
+          return { error: "Account not verified. Please check your email." }
+        } else if (error.message.includes("AccessDenied")) {
+          return { error: "Access denied. Contact support for assistance." }
+        } else {
+          return { error: "Login failed. Please try again." }
+        }
     }
-
-    return NextResponse.json(existingUser)
+    
+    // For unexpected errors
+    console.error("Login error:", error)
+    return { error: "An unexpected error occurred. Please try again." }
+  }
 }

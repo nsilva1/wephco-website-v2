@@ -1,112 +1,147 @@
-import { useState } from 'react'
-import { signIn } from '@/lib/auth/auth'
-import { useRouter } from 'next/navigation'
-import { registerUser } from '@/actions/register'
-import { Role } from '@/interfaces/userInterface'
+'use client';
 
-const AuthForm = ({isLogin}: {isLogin: boolean}) => {
-    const [email, setEmail] = useState('');
+import { useState } from 'react';
+import { registerUser } from '@/actions/register';
+import { Role } from '@/interfaces/userInterface';
+import { loginUser } from '@/actions/login';
+import { Loader } from './Loader';
+
+const AuthForm = ({ isLogin }: { isLogin: boolean }) => {
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
+  const [role, setRole] = useState<Role>(Role.AGENT);
   const [error, setError] = useState('');
-  const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    
-    try {
-      if (isLogin) {
-        const result = await signIn('credentials', {
-          email,
-          password,
-          redirect: false,
-        });
-        if (result?.error) {
-          setError(result.error);
-        } else {
-          router.push('/dashboard');
-        }
-      } else {
-        // Handle registration logic here
-        const user = { name, email, password, role: Role.AGENT };
-        const response = await registerUser(user);
+    setLoading(true);
 
-        if(!response.ok){
-          const data = await response.json()
-          setError(data.error || 'Registration failed. Please try again.');
-        }
-
-        const result = await signIn('credentials', {
-          email,
-          password,
-          redirect: false,
-        });
-        if (result?.error) {
-          setError(result.error);
-        } else {
-          router.push('/dashboard');
-        }
-
+    if (isLogin) {
+      // Handle login logic here
+      // Check if email and password are provided
+      if (!email || !password) {
+        setError('Email and password are required');
+        setLoading(false);
+        return;
       }
-    } catch (err) {
-      setError('An error occurred. Please try again.');
+
+      const result = await loginUser(email, password);
+
+      if (result.error) {
+        setError(result.error);
+      }
+    } else {
+      // Handle registration logic here
+      // Check if name, email, and password are provided
+      if (!name || !email || !password) {
+        setError('Name, email, and password are required');
+        setLoading(false);
+        return;
+      }
+
+      const user = { name, email, password, role };
+      const response = await registerUser(user);
+
+      if (response.error) {
+        setError(response.error);
+        return;
+      }
+
+      const result = await loginUser(email, password);
+      if (result.error) {
+        setError(result.error);
+      }
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-md mx-auto mt-8 space-y-4">
-      {error && <div className="text-red-500">{error}</div>}
-      {!isLogin && (
-        <div>
-          <label htmlFor="name" className="block mb-1">
-            Name
-          </label>
-          <input
-            id="name"
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-            className="w-full px-3 py-2 border rounded"
-          />
-        </div>
-      )}
-      <div>
-        <label htmlFor="email" className="block mb-1">
-          Email
-        </label>
-        <input
-          id="email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          className="w-full px-3 py-2 border rounded"
-        />
-      </div>
-      <div>
-        <label htmlFor="password" className="block mb-1">
-          Password
-        </label>
-        <input
-          id="password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          className="w-full px-3 py-2 border rounded"
-          minLength={6}
-        />
-      </div>
-      <button
-        type="submit"
-        className="w-full px-4 py-2 text-white bg-black rounded hover:bg-black/80"
+    <div className=''>
+      <form
+        onSubmit={(e) => handleSubmit(e)}
+        className='max-w-md mx-auto mt-8 space-y-4'
       >
-        {isLogin ? 'Login' : 'Register'}
-      </button>
-    </form>
-  )
-}
+        <fieldset disabled={loading} className='space-y-4'>
+          {error && (
+            <div className='p-4 text-red-700 bg-red-100 rounded-md text-center'>
+              {error}
+            </div>
+          )}
+          {!isLogin && (
+            <div>
+              <label htmlFor='name' className='block mb-1'>
+                Name
+              </label>
+              <input
+                id='name'
+                type='text'
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                className='w-full px-3 py-2 border rounded'
+              />
+            </div>
+          )}
+          <div>
+            <label htmlFor='email' className='block mb-1'>
+              Email
+            </label>
+            <input
+              id='email'
+              type='email'
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className='w-full px-3 py-2 border rounded'
+            />
+          </div>
+          <div>
+            <label htmlFor='password' className='block mb-1'>
+              Password
+            </label>
+            <input
+              id='password'
+              type='password'
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className='w-full px-3 py-2 border rounded'
+              minLength={6}
+            />
+          </div>
+          {/* {!isLogin && (
+            <div>
+              <label htmlFor='role' className='block mb-1'>
+                Role
+              </label>
+              <select
+                id='role'
+                value={role}
+                onChange={(e) => setRole(e.target.value as Role)}
+                className='w-full px-3 py-2 border rounded'
+              >
+                <option value={Role.AGENT}>Agent</option>
+                <option value={Role.SUPPORT}>Support</option>
+                <option value={Role.ADMIN}>Admin</option>
+              </select>
+            </div>
+          )} */}
+          {loading ? (
+            <Loader size='sm' />
+          ) : (
+            <button
+              type='submit'
+              className='w-full px-4 py-2 text-white bg-black rounded hover:bg-black/80'
+            >
+              {isLogin ? 'Login' : 'Register'}
+            </button>
+          )}
+        </fieldset>
+      </form>
+    </div>
+  );
+};
 
-export { AuthForm }
+export { AuthForm };
