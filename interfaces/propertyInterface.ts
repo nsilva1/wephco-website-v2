@@ -6,8 +6,11 @@ export interface IProperty {
   description: string;
   images: Array<string>;
   price: number;
+  country: string;
+  city: string;
+  address: string;
   location: string;
   agent?: IUser;
-  agentId: string;
+  agentId?: string;
   createdAt: Date
 }
