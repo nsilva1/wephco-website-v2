@@ -3,7 +3,7 @@
 import { ComponentPropsWithoutRef, useState, useCallback, useRef } from 'react';
 import { Autocomplete, useJsApiLoader } from '@react-google-maps/api'
 
-const apiKey = 'AIzaSyD0I8uJEXmM5o_lpbq274719W0CNj1ulrY'
+const apiKey = process.env.GOOGLE_MAPS_API_KEY as string;
 
 const libraries: ('places')[] = ['places'];
 
