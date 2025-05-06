@@ -58,7 +58,7 @@ const AgentForm = ({ ...rest }: INewAgent) => {
       //   body: JSON.stringify(formData),
       // });
       // const data = await response.json();
-      alert('Form submitted successfully!');
+      handleNext(); // Move to the next step after successful submission
     } catch (error) {
       console.error('Error submitting form:', error);
       alert('Error submitting form. Please try again.');
@@ -227,8 +227,9 @@ const AgentForm = ({ ...rest }: INewAgent) => {
                       className='w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black'
                     >
                       <option value=''>Select a location</option>
-                      <option value='Abuja'>Abuja</option>
+                      <option value='Abu Ghabi'>Abu Dhabi</option>
                       <option value='Dubai'>Dubai</option>
+                      <option value='London'>London</option>
                     </select>
                   </div>
 
@@ -243,11 +244,23 @@ const AgentForm = ({ ...rest }: INewAgent) => {
                     <button
                       type='submit'
                       disabled={!formData.phone || !formData.location}
-                      className='px-4 py-2 bg-black text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed'
+                      className='px-4 py-2 bg-black text-white rounded-md hover:bg-black/70 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed'
                     >
                       Submit
                     </button>
                   </div>
+                </div>
+              )}
+
+              {/* Increment step to 3 and display a success message after submission */}
+              {step === 3 && (
+                <div className='text-center'>
+                  <h2 className='text-lg font-semibold text-gray-700 mb-4'>
+                    Thank you for registering!
+                  </h2>
+                  <p className='text-gray-500'>
+                    We will get back to you shortly.
+                  </p>
                 </div>
               )}
             </form>

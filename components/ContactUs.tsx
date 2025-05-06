@@ -21,7 +21,7 @@ const ContactUs = () => {
                     </div>
                     <div>
                         <p className='text-base font-semibold'>WhatsApp</p>
-                        <p className='text-sm text-gray-500'>Click to WhatsApp</p>
+                        <a href='https://wa.me/2349161246300' target='_blank' className='text-sm text-gray-500'>Click to WhatsApp</a>
                     </div>
                 </div>
                 <div className='flex gap-4'>
@@ -30,7 +30,7 @@ const ContactUs = () => {
                     </div>
                     <div>
                         <p className='text-base font-semibold'>Phone</p>
-                        <p className='text-sm text-gray-500'>+234 903 052 5756</p>
+                        <a href='tel:+2349161246300' className='text-sm text-gray-500'>+234 916 124 6300</a>
                     </div>
                 </div>
                 <div className='flex gap-4'>
@@ -39,7 +39,7 @@ const ContactUs = () => {
                     </div>
                     <div>
                         <p className='text-base font-semibold'>Email</p>
-                        <p className='text-sm text-gray-500'>info@wephco.com</p>
+                        <a href='mailto:contact@wephco.com' className='text-sm text-gray-500'>contact@wephco.com</a>
                     </div>
                 </div>
             </div>
