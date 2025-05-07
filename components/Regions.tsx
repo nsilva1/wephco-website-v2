@@ -14,7 +14,7 @@ const Regions = () => {
         </div>
         <div className='col-span-1'>
           <Link
-            href='/abu-dhabi'
+            href='/buy'
             className='bg-black text-white hover:bg-primary hover:text-white p-4 rounded-2xl flex flex-1 justify-between items-center cursor-pointer'
           >
             <h3 className='font-bold'>Abu Dhabi</h3>
@@ -23,7 +23,7 @@ const Regions = () => {
         </div>
         <div className='col-span-1'>
           <Link
-            href='/dubai'
+            href='/buy'
             className='bg-black text-white hover:bg-primary hover:text-white p-4 rounded-2xl flex flex-1 justify-between items-center cursor-pointer'
           >
             <h3 className='font-bold'>Dubai</h3>
@@ -32,7 +32,7 @@ const Regions = () => {
         </div>
         <div className='col-span-1'>
           <Link
-            href='/london'
+            href='/buy'
             className='bg-black text-white hover:bg-primary hover:text-white p-4 rounded-2xl flex flex-1 justify-between items-center cursor-pointer'
           >
             <h3 className='font-bold'>London</h3>
