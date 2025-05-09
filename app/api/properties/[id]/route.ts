@@ -1,12 +1,24 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/prisma/prisma";
 
+interface RouteParams {
+  params: {
+    id: string;
+  };
+}
+
 // Get a single property by ID
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: Request, context: RouteParams) {
   
+  const { id } = context.params;
+
+  if (!id) {
+    return NextResponse.json({ error: "Property ID is missing" }, { status: 400 });
+  }
+
   try {
     const property = await prisma.property.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         agent: {
           select: {
