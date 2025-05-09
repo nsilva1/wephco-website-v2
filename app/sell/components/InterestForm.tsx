@@ -3,6 +3,7 @@
 import { ComponentPropsWithoutRef, useState, useCallback, useRef } from 'react';
 import { Autocomplete, useJsApiLoader } from '@react-google-maps/api'
 import { createEnquiry } from '@/actions/sellEnquiry';
+import { toast } from 'react-toastify';
 
 const apiKey = process.env.GOOGLE_MAPS_API_KEY as string;
 
@@ -48,6 +49,7 @@ const InterestForm = ({ ...rest }: INewInterest) => {
 
   const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
   const [selectedPlace, setSelectedPlace] = useState<PlaceResult | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const { isLoaded, loadError } = useJsApiLoader({
@@ -142,21 +144,21 @@ const resetAndRefresh = useCallback(() => {
     const formData = new FormData(e.currentTarget);
     formData.append('address', selectedPlace?.formatted_address as string);  
 
+    setLoading(true);
+
     // Mock API call
     try {
-      // const response = await fetch('your-api-endpoint', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify(formData),
-      // });
-      // const data = await response.json();
-      alert('Form submitted successfully!');
+      const response = await createEnquiry(formData);
+
+      if(response){
+        toast.success('Form submitted successfully! We will contact you shortly')
+      }
       setStep((prev) => prev + 1);
     } catch (error) {
       console.error('Error submitting form:', error);
       alert('Error submitting form. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -298,9 +300,10 @@ const resetAndRefresh = useCallback(() => {
                         !formData.email ||
                         !formData.name
                       }
-                      className='px-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed'
+                      className={`px-4 py-2 bg-black text-white font-semibold rounded-md hover:bg-black/70 focus:outline-none focus:ring-2 focus:ring-black/50 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${
+                        loading ? 'cursor-not-allowed' : 'cursor-pointer'}`}
                     >
-                      Get An Estimate
+                      {loading ? 'Submitting...' : 'Submit'}
                     </button>
                   </div>
                 </div>
@@ -309,8 +312,8 @@ const resetAndRefresh = useCallback(() => {
               {
                 step === 3 && (
                     <div className='space-y-8 bg-white text-black p-8 rounded-2xl min-w-lg'>
-                        <h3 className='font-bold text-3xl'>Your Estimate Is On The Way</h3>
-                        <p className='text-sm md:text-base'>Thank You! We are going to prepare a customized report with information on the value of your property.</p>
+                        <h3 className='font-bold text-3xl'>Thank You For Trusting Us</h3>
+                        <p className='text-sm md:text-base'>We will reach out to you for further details.</p>
                         <button onClick={resetAndRefresh} className='bg-black text-white py-2 px-3 rounded-full cursor-pointer'>Get in Touch</button>
                     </div>
                 )
