@@ -1,16 +1,11 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/prisma/prisma";
 
-interface RouteParams {
-  params: {
-    id: string;
-  };
-}
 
 // Get a single property by ID
-export async function GET(request: Request, context: RouteParams) {
+export async function GET(request: Request) {
   
-  const { id } = context.params;
+  const id = request.url.split("/").pop() || ""; // Extracting ID from the URL
 
   if (!id) {
     return NextResponse.json({ error: "Property ID is missing" }, { status: 400 });

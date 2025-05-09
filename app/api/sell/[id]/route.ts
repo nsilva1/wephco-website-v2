@@ -1,16 +1,10 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/prisma/prisma";
 
-interface RouteParams {
-    params: {
-        id: string;
-    };
-}
-
-
 // Get a single enquiry by ID
-export async function GET(request: Request, context: RouteParams) {
-    const { id } = context.params;
+export async function GET(request: Request) {
+    const id = request.url.split("/").pop() || ""; // Extracting ID from the URL
+
     try {
         const enquiry = await prisma.sellEnquiry.findUnique({
         where: { id },
