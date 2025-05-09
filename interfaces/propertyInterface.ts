@@ -14,3 +14,14 @@ export interface IProperty {
   agentId?: string;
   createdAt: Date
 }
+
+export interface ISellEnquiry {
+  id?: string;
+  address: string;
+  name: string;
+  email: string;
+  status: boolean;
+  phone: string;
+  timeline: string;
+  createdAt?: Date;
+}

@@ -6,6 +6,10 @@ import aldar from '@/images/aldar.png'
 import damac from '@/images/damac.svg'
 import sober from '@/images/sober.png'
 import aarano from '@/images/aarano.png'
+import { MdDashboard, MdSettings } from "react-icons/md";
+import { BiBuildings, BiHeadphone } from "react-icons/bi";
+import { BsPeopleFill } from "react-icons/bs";
+import { GiProfit } from "react-icons/gi";
 
 export const navbarMenu = [
     {
@@ -147,5 +151,38 @@ export const partners = [
     {
         title: 'AA Rano',
         image: aarano
+    },
+]
+
+export const dashboardMenu = [
+    {
+        label: 'Dashboard',
+        icon: MdDashboard,
+        path: '/dashboard'
+    },
+    {
+        label: 'Properties',
+        icon: BiBuildings,
+        path: '/dashboard/properties'
+    },
+    {
+        label: 'Support Requests',
+        icon: BiHeadphone,
+        path: '/dashboard/requests'
+    },
+    {
+        label: 'Agents',
+        icon: BsPeopleFill,
+        path: '/dashboard/agents'
+    },
+    {
+        label: 'Settings',
+        icon: MdSettings,
+        path: '/dashboard/settings'
+    },
+    {
+        label: 'Profile',
+        icon: GiProfit,
+        path: '/dashboard/profile'
     },
 ]

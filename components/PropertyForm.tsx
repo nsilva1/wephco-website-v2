@@ -1,12 +1,12 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { IProperty } from '@/interfaces/propertyInterface'
+// import { useRouter } from 'next/navigation'
+// import { IProperty } from '@/interfaces/propertyInterface'
 import { toast } from 'react-toastify'
 
 const PropertyForm = () => {
-    const router = useRouter()
+    // const router = useRouter()
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [error, setError] = useState('')
     const [previewImages, setPreviewImages] = useState<string[]>([])

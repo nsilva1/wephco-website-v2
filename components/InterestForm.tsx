@@ -8,23 +8,34 @@ const InterestForm = ({open, close}: {open: boolean; close: () => void}) => {
     const [email, setEmail] = useState('')
     const [name, setName] = useState('')
     const [phone, setPhone] = useState('')
-    const [location, setLocation] = useState('')
+    // const [location, setLocation] = useState('')
     const [loading, setLoading] = useState(false)
 
     const clearForm = () => {
         setEmail('')
         setName('')
         setPhone('')
-        setLocation('')
+        // setLocation('')
     }
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         setLoading(true)
+
+        const formData = new FormData(e.currentTarget)
+        formData.append('status', 'false')
+
         try {
-            // Simulate an API call
-            await new Promise((resolve) => setTimeout(resolve, 2000))
-            toast.success('Form submitted successfully!')
+            const response = await fetch('/api/contacts', {
+                method: 'POST',
+                body: formData,
+            })
+
+            if (!response.ok) {
+                throw new Error('Failed to create contact request')
+            }
+
+            toast.success('Thank you for declaring interest for our properties. We will reach out to you shortly')
         } catch (error) {
             console.error('Error submitting form:', error)
         } finally {
@@ -34,9 +45,16 @@ const InterestForm = ({open, close}: {open: boolean; close: () => void}) => {
         }
     }
 
+    if(!open){
+        return (
+            <div className='hidden'></div>
+        )
+    }
+
   return (
     <div className='bg-white rounded-lg shadow-lg p-6'>
         <Modal open={open} onClose={close}>
+            <h3 className='text-center text-xl text-gray-600 mb-5'>Property Interest Form</h3>
             <form onSubmit={handleSubmit} className='space-y-4'>
                 <fieldset disabled={loading} className=''>
                     {/* <legend className='text-lg font-semibold'>Declare Interest</legend> */}
@@ -73,6 +91,15 @@ const InterestForm = ({open, close}: {open: boolean; close: () => void}) => {
                             className='border rounded-md p-2'
                         />
                     </div>
+                    {/* <div className='flex flex-col space-y-2 my-2'>
+                        <label htmlFor='phone' className='text-sm font-medium'>Property Location</label>
+                        <select className='border rounded-md p-2' value={location} onChange={(e) => setLocation(e.target.value)}>
+                            <option className='text-gray-300' value=''>Select Property Location</option>
+                            <option value='Abu Dhabi'>Abu Dhabi</option>
+                            <option value='Dubai'>Dubai</option>
+                            <option value='London'>London</option>
+                        </select>
+                    </div> */}
                     
                     <button
                         type='submit'

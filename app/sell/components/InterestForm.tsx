@@ -2,6 +2,7 @@
 
 import { ComponentPropsWithoutRef, useState, useCallback, useRef } from 'react';
 import { Autocomplete, useJsApiLoader } from '@react-google-maps/api'
+import { createEnquiry } from '@/actions/sellEnquiry';
 
 const apiKey = process.env.GOOGLE_MAPS_API_KEY as string;
 
@@ -18,7 +19,7 @@ interface PlaceResult {
   }
 }
 
-type FormData = {
+type InterestFormData = {
   address: string;
   name: string;
   email: string;
@@ -37,7 +38,7 @@ const InterestForm = ({ ...rest }: INewInterest) => {
   
 
   const [step, setStep] = useState<number>(1);
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<InterestFormData>({
     address: '',
     name: '',
     email: '',
@@ -134,11 +135,12 @@ const resetAndRefresh = useCallback(() => {
   // Resetting state should be sufficient to reset the form
 }, []); 
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // In a real app, you would make an API call here
-    console.log('Form submitted:', formData);
+    // create form data object
+    const formData = new FormData(e.currentTarget);
+    formData.append('address', selectedPlace?.formatted_address as string);  
 
     // Mock API call
     try {

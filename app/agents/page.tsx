@@ -12,6 +12,7 @@ import luxuryAgent from '@/images/luxury-agent.jpg'
 import agentNetwork from '@/images/agent-network.jpg'
 import { AgentForm } from './(components)/AgentForm'
 
+
 const AgentsPage = () => {
 
     const goToAgentForm = () => {
@@ -73,14 +74,12 @@ const AgentsPage = () => {
                     </div>
                 </div>
                 <div className="col-span-1 flex flex-col gap-10">
-                    <AgentPerkItem title='Join a Network of Over 1,000 Like-Minded Agents' description="Join a network of over 35,000 agents who are shaping the future of real estate. Our proven models and systems aren't just theories—they're practices that have stood the test of success. Here, mentorship is mutual, and wisdom is shared. It's not just about individual success; it's about collective growth." />
+                    <AgentPerkItem title='Join a Network of Over 1,000 Like-Minded Agents' description="Join a network of over 1,000 agents who are shaping the future of real estate. Our proven models and systems aren't just theories—they're practices that have stood the test of success. Here, mentorship is mutual, and wisdom is shared. It's not just about individual success; it's about collective growth." />
                     <Link href='#agent-form' className='bg-primary text-white py-2 px-3 w-full md:w-28 rounded-full flex items-center justify-between'>Join Us <BiCaretRight /></Link>
                 </div>
             </div>
         </section>
-
         <AgentForm id='agent-form' />
-
         <Footer />
     </div>
   )

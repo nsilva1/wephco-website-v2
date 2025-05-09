@@ -1,14 +1,42 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useTransition } from 'react'
 import { FaWhatsapp, FaPhone, FaEnvelope } from 'react-icons/fa6'
+import { toast } from 'react-toastify'
+
 
 const ContactUs = () => {
-    const [fullName, setFullName] = useState('')
+    const [name, setFullName] = useState('')
     const [email, setEmail] = useState('')
-    const [phone, setPhone] = useState('')
+    const [phoneNumber, setPhone] = useState('')
 
-    const handleSubmit = () => {}
+    const [loading, setLoading] = useState(false)
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+
+        setLoading(true)
+
+        const formData = new FormData(e.currentTarget)
+        formData.append('status', 'false')
+
+        try {
+            const response = await fetch('/api/contacts', {
+                method: 'POST',
+                body: formData,
+            })
+
+            if (!response.ok) {
+                throw new Error('Failed to create contact request')
+            }
+
+            toast.success('Contact request created successfully')
+        } catch (error) {
+            toast.error((error as Error).message)
+        } finally {
+            setLoading(false)
+        }
+    }
 
   return (
     <div>
@@ -44,14 +72,14 @@ const ContactUs = () => {
                 </div>
             </div>
             <div className='col-span-1'>
-                <div className='bg-white rounded-xl border border-gray-200 w-96 md:w-[500px] px-8 py-16'>
+                <div className='bg-white rounded-xl border border-gray-300 w-96 md:w-[500px] px-8 py-16'>
                     <h3 className='text-3xl uppercase text-[#131316] font-semibold mb-10'>Contact Us</h3>
                     <form onSubmit={handleSubmit}>
                         <fieldset className='flex flex-col gap-8'>
-                            <input type='text' value={fullName} onChange={(e) => setFullName(e.target.value)} className='border-b p-2 w-full' placeholder='Your Name...' />
+                            <input type='text' value={name} onChange={(e) => setFullName(e.target.value)} className='border-b p-2 w-full' placeholder='Your Name...' />
                             <input type='email' value={email} onChange={(e) => setEmail(e.target.value)} className='border-b p-2 w-full' placeholder='Your Email...' />
-                            <input type='tel' value={phone} onChange={(e) => setPhone(e.target.value)} className='border-b p-2 w-full' placeholder='Phone Number...' />
-                            <button className='bg-[#131316] text-white font-semibold w-full p-4 rounded-3xl' type='submit'>Submit</button>
+                            <input type='tel' value={phoneNumber} onChange={(e) => setPhone(e.target.value)} className='border-b p-2 w-full' placeholder='Phone Number...' />
+                            <button className={`bg-[#131316] text-white font-semibold w-full p-4 rounded-3xl ${loading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:bg-black/80'}`} type='submit'>{loading ? 'Submitting...' : 'Submit'}</button>
                         </fieldset>
                     </form>
                 </div>

@@ -14,5 +14,24 @@ export interface IUser {
   password: string;
   role: Role;
   createdAt?: Date;
+  
+}
+
+export interface IContactUs {
+    id?: string;
+    name: string;
+    email: string;
+    phoneNumber: string;
+    status: boolean;
+    message: string;
+    createdAt?: Date;
+}
+
+export interface IAgent {
+  id?: string;
+  name: string;
+  email: string;
+  password: string;
+  createdAt?: Date;
   properties?: IProperty[]
 }

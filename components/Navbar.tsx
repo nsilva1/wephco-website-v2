@@ -59,7 +59,7 @@ const Navbar = () => {
           ))}
         </div>
         <div className='hidden lg:col-span-1 lg:flex place-content-center gap-8'>
-          <Link href='/login' className={navbarButton}>Login</Link>
+          <Link href='/auth/login' className={navbarButton}>Login</Link>
         </div>
         {/* Mobile menu */}
         <div className='lg:hidden flex flex-1 justify-end items-center'>
@@ -88,7 +88,7 @@ const Navbar = () => {
                 </li>
               ))}
               <li className='font-sans font-normal cursor-pointer text-[20px] mb-3'>
-                <Link href='/login' className={navbarButton}>
+                <Link href='/auth/login' className={navbarButton}>
                   Login
                 </Link>
               </li>
