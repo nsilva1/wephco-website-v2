@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { dashboardMenu } from '@/lib/constants';
 // import logo from '@/images/logo.png'
 import smallLogo from '@/images/logo-w.png';
-import { BiMenu } from 'react-icons/bi';
+import { Tooltip } from '@/components/Tooltip';
 import { BellIcon, ChevronLeft, ChevronRight } from 'lucide-react';
 import { SignOutButton } from '@/components/SignOutButton';
 
@@ -19,7 +19,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
     <div className='flex h-screen bg-white text-black'>
       {/* Sidebar */}
       <aside
-        className={`flex flex-col justify-between bg-black text-white transition-all duration-300 ${
+        className={`flex flex-col justify-between bg-slate-600 text-white transition-all duration-300 ${
           isCollapsed ? 'w-20' : 'w-64'
         }`}
       >
@@ -48,7 +48,9 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
                 }`}
               >
                 <Link href={item.path} className='flex'>
-                  {<item.icon />}
+                  {
+                    isCollapsed ? (<Tooltip text={item.label} position='right'>{<item.icon />}</Tooltip>) : <item.icon />
+                  }
                   <span className={`${isCollapsed ? 'hidden' : 'ml-3'}`}>
                     {item.label}
                   </span>

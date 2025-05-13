@@ -8,8 +8,8 @@ import sober from '@/images/sober.png'
 import aarano from '@/images/aarano.png'
 import { MdDashboard, MdSettings } from "react-icons/md";
 import { BiBuildings, BiHeadphone } from "react-icons/bi";
-import { BsPeopleFill } from "react-icons/bs";
-import { GiProfit } from "react-icons/gi";
+import { BsPeopleFill, BsPersonFillGear } from "react-icons/bs";
+
 
 export const navbarMenu = [
     {
@@ -182,7 +182,7 @@ export const dashboardMenu = [
     },
     {
         label: 'Profile',
-        icon: GiProfit,
+        icon: BsPersonFillGear,
         path: '/dashboard/profile'
     },
 ]
