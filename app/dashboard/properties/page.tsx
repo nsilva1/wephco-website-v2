@@ -4,11 +4,18 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { getAllProperties } from '@/actions/properties'
 import { Loader } from '@/components/Loader'
 import { IProperty } from '@/interfaces/propertyInterface'
+import { useRouter } from 'next/navigation'
 
 const DashboardPropertiesPage = () => {
+    const router = useRouter()
+
     const [properties, setProperties] = useState<IProperty[]>([])
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
+
+    const goToAddPropertyForm = () => {
+        router.push('/dashboard/properties/add')
+    }
 
     const fetchProperties = useCallback(async () => {
         try {
@@ -46,7 +53,7 @@ const DashboardPropertiesPage = () => {
         return (
             <div className='flex flex-col gap-8 justify-center items-center h-screen'>
                 <h3 className='text-2xl'>No properties found</h3>
-                <button className='px-4 py-2 bg-black text-white hover:bg-black/80 rounded-md cursor-pointer'>Add New Property</button>
+                <button onClick={goToAddPropertyForm} className='px-4 py-2 bg-black text-white hover:bg-black/80 rounded-md cursor-pointer'>Add New Property</button>
             </div>
         )
     }
@@ -81,7 +88,6 @@ const DashboardPropertiesPage = () => {
                     <td className='p-4'>{property.city}</td>
                     <td className='p-4'>{property.address}</td>
                     <td className='p-4'>{property.description}</td>
-                    <td className='p-4'>{property?.agent?.name}</td>
                     <td className='p-4'>{new Date(property.createdAt).toLocaleDateString()}</td>
                 </tr>
             ))}
@@ -91,7 +97,7 @@ const DashboardPropertiesPage = () => {
 
   return (
     <div className='flex flex-col items-center justify-center h-screen overflow-x-auto p-5'>
-        <button className='px-4 py-2 bg-black text-white hover:bg-black/80 rounded-md'>Add New Property</button>
+        <button onClick={goToAddPropertyForm} className='px-4 py-2 bg-black text-white hover:bg-black/80 rounded-md'>Add New Property</button>
         <table className='w-full border-collapse border border-gray-300 leading-normal'>
             <caption className='text-lg font-semibold mb-4'>Properties</caption>
             {tableHead}

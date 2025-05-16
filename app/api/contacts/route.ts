@@ -19,23 +19,23 @@ export async function GET() {
 // Create a new contact request
 export async function POST(request: Request) {
     try {
-        const formData = await request.formData();
+
         const body = await request.json()
         const { name, email, phoneNumber, status, message } = body
         
         // Validate required fields
-        if (!name || !email || !phoneNumber || !status || !message) {
+        if (!name || !email || !phoneNumber) {
             return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
         }
 
 
         // create contact request data
-        const contactData: Omit<IContactUs, 'id' | 'createdAt'> = {
-            name: formData.get("name") as string,
-            email: formData.get("email") as string,
-            phoneNumber: formData.get("phoneNumber") as string,
-            message: formData.get("message") as string,
-            status: formData.get("status") as unknown as boolean,
+        const contactData: IContactUs = {
+            name,
+            email,
+            phoneNumber,
+            message,
+            status
         }
 
         // create contact request in database
@@ -45,6 +45,6 @@ export async function POST(request: Request) {
 
         return NextResponse.json(newContactRequest, { status: 201 });
     } catch (error) {
-        return NextResponse.json({ error: "Failed to create property" }, { status: 500 });
+        return NextResponse.json({ error: error }, { status: 500 });
     }
 }

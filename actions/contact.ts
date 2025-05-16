@@ -1,19 +1,13 @@
 import { IContactUs } from "@/interfaces/userInterface";
+import axios from 'axios'
 
 const API_URL = '/api/contacts'
 
-export const createContactRequest = async (contactData: FormData): Promise<IContactUs> => {
-    const response = await fetch(API_URL, {
-        method: 'POST',
-        body: contactData,
-    })
+export const createContactRequest = async (contactData: IContactUs): Promise<IContactUs> => {
 
-    if (!response.ok) {
-        throw new Error('Failed to create property')
-    }
+    const response = await axios.post(API_URL, contactData)
 
-    const data = await response.json()
-    return data
+    return response.data
 }
 
 export const getAllContactRequests = async (): Promise<IContactUs[]> => {

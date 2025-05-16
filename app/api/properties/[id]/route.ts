@@ -14,15 +14,6 @@ export async function GET(request: Request) {
   try {
     const property = await prisma.property.findUnique({
       where: { id },
-      include: {
-        agent: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-          },
-        },
-      },
     });
     if (!property) {
       return NextResponse.json({ error: "Property not found" }, { status: 404 });

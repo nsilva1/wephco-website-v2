@@ -1,35 +1,66 @@
 'use client'
 
+// import type { PropertyFormData } from '@/interfaces/propertyInterface'
 import { useState } from 'react'
 // import { useRouter } from 'next/navigation'
-// import { IProperty } from '@/interfaces/propertyInterface'
+import { IProperty } from '@/interfaces/propertyInterface'
 import { toast } from 'react-toastify'
+import { uploadImage, uploadPDF } from '@/lib/helperFunctions'
+import { createProperty } from '@/actions/properties'
 
 const PropertyForm = () => {
     // const router = useRouter()
+    const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null)
+    const [pdfFile, setPdfFile] = useState<File | null>(null)
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [error, setError] = useState('')
     const [previewImages, setPreviewImages] = useState<string[]>([])
+    const [formData, setFormData] = useState<Omit<IProperty, 'createdAt' | 'updatedAt'>>({
+      name: '',
+      description: '',
+      images: [],
+      country: '',
+      city: '',
+      pdfUrl: ''
+    })
+
+    const uploadImages = async (files: FileList): Promise<string[]> => {
+      const images: string[] = []
+      
+      for(const file of files) {
+        if(file.size > 0){
+          const imageURL = await uploadImage(file)
+          images.push(imageURL)
+        }
+      }
+
+      return images;
+    }
+
+    const getPDFurl = async (): Promise<string> => {
+      const pdfURL = await uploadPDF(pdfFile!)
+      return pdfURL
+    }
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         setIsSubmitting(true)
         setError('')
-
-        const formData = new FormData(e.currentTarget)
-        
+      
 
         try {
-            const response = await fetch('/api/properties', {
-                method: 'POST',
-                body: formData,
-            })
+          // upload images and return image urls
+          const imageURLs = await uploadImages(selectedFiles!)
 
-            if (!response.ok) {
-                throw new Error('Failed to create property')
-            }
+          // upload pdf
+          const pdf = await getPDFurl()
+          
+          formData.images = imageURLs;
+          formData.pdfUrl = pdf;
 
-            toast.success('Property created successfully')
+          await createProperty(formData)         
+
+          toast.success('Property created successfully')
         } catch (error) {
             setError((error as Error).message)
         } finally {
@@ -55,6 +86,8 @@ const PropertyForm = () => {
           }
           reader.readAsDataURL(file)
         }
+
+        setSelectedFiles(e.target.files)
     }
 
   return (
@@ -75,6 +108,8 @@ const PropertyForm = () => {
           <input
             type="text"
             name="name"
+            value={formData.name}
+            onChange={(e) => setFormData({...formData, name: e.target.value})}
             required
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
@@ -87,7 +122,9 @@ const PropertyForm = () => {
           <textarea
             name="description"
             required
-            rows={4}
+            value={formData.description}
+            onChange={(e) => setFormData({...formData, description: e.target.value})}
+            rows={2}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
@@ -103,7 +140,7 @@ const PropertyForm = () => {
             accept="image/*"
             onChange={handleImageChange}
             required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-black/50 bg-gray-300 cursor-pointer"
           />
           {previewImages.length > 0 && (
             <div className="mt-4 flex flex-wrap gap-2">
@@ -121,47 +158,48 @@ const PropertyForm = () => {
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Price
+            Upload PDF
           </label>
           <input
-            type="number"
-            name="price"
-            step="0.01"
-            min="0"
+            type="file"
+            name="pdf"
+            accept='.pdf'
+            onChange={(e) => setPdfFile(e.target.files?.[0] ?? null)}
             required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-black/50 bg-gray-300 cursor-pointer"
           />
         </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Location
+            Country
           </label>
-          <input
-            type="text"
-            name="location"
-            required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+          <select name="country" required value={formData.country}
+            onChange={(e) => setFormData({...formData, country: e.target.value})} className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'>
+            <option value="-">-</option>
+            <option value="UAE">UAE</option>
+            <option value="UK">UK</option>
+          </select>
         </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Agent ID
+            City
           </label>
-          <input
-            type="text"
-            name="agentId"
-            required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+          <select name="city" required value={formData.city}
+            onChange={(e) => setFormData({...formData, city: e.target.value})} className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'>
+            <option value="-">-</option>
+            <option value="Dubai">Dubai</option>
+            <option value="London">London</option>
+            <option value="Abu Dhabi">Abu Dhabi</option>
+          </select>
         </div>
 
         <div>
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isSubmitting ? 'Submitting...' : 'Add Property'}
           </button>

@@ -52,7 +52,7 @@ const ContactRequest = () => {
 
     let tableHead = (
         <thead>
-            <tr>
+            <tr className='bg-black text-white'>
                 <th>Actions</th>
                 <th>Name</th>
                 <th>Email</th>
@@ -65,8 +65,8 @@ const ContactRequest = () => {
 
     let tableBody = (
         <tbody>
-            {requests.map((request) => (
-        <tr key={request.id}>
+            {requests.map((request, index) => (
+        <tr key={request.id} className={`${index % 2 === 0 ? 'bg-gray-200' : 'bg-white'}`}>
             <td className='p-4'>{request.status ? (<button></button>) : (<button>Contact Customer</button>)}</td>
             <td className='p-4'>{request.name}</td>
             <td className='p-4'>{request.email}</td>
@@ -79,8 +79,8 @@ const ContactRequest = () => {
     )
 
   return (
-    <div className='flex flex-col items-center justify-center h-screen overflow-x-auto p-5'>
-        <table className='w-full border-collapse border border-gray-300 leading-normal'>
+    <div className='flex flex-col items-center h-screen overflow-x-auto p-5'>
+        <table className='w-full leading-normal'>
             <caption className='text-lg font-semibold mb-4'>Requests to Sell Property</caption>
             {tableHead}
             {tableBody}

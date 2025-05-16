@@ -1,6 +1,5 @@
 import { Hero } from "@/components/Hero";
 import { Regions } from "@/components/Regions";
-import { FeaturedProperties } from "@/components/FeaturedProperties";
 import { NewDevelopmentsSection } from "@/components/NewDevelopments";
 import { BecomeAgent } from "@/components/BecomeAgent";
 import { Partners } from "@/components/Partners";
@@ -13,7 +12,6 @@ export default function Home() {
     <div>
       <Hero />
       <Regions />
-      <FeaturedProperties />
       <NewDevelopmentsSection />
       <BecomeAgent />
       <Partners />

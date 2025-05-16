@@ -3,6 +3,8 @@
 import React, { useState } from 'react'
 import { Modal } from './Modal'
 import { toast } from 'react-toastify'
+import { createContactRequest } from '@/actions/contact'
+import { IContactUs } from '@/interfaces/userInterface'
 
 const InterestForm = ({open, close}: {open: boolean; close: () => void}) => {
     const [email, setEmail] = useState('')
@@ -22,18 +24,16 @@ const InterestForm = ({open, close}: {open: boolean; close: () => void}) => {
         e.preventDefault()
         setLoading(true)
 
-        const formData = new FormData(e.currentTarget)
-        formData.append('status', 'false')
+        const formData: IContactUs = {
+            name,
+            email,
+            phoneNumber: phone,
+            status: false,
+            message: ''
+        }
 
         try {
-            const response = await fetch('/api/contacts', {
-                method: 'POST',
-                body: formData,
-            })
-
-            if (!response.ok) {
-                throw new Error('Failed to create contact request')
-            }
+            await createContactRequest(formData)
 
             toast.success('Thank you for declaring interest for our properties. We will reach out to you shortly')
         } catch (error) {

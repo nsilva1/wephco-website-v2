@@ -15,15 +15,14 @@ datasource db {
 }
 
 model User {
-  id         String     @id @default(auto()) @map("_id") @db.ObjectId
-  name       String
-  email      String     @unique
-  password   String
-  role       Role       @default(AGENT)
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(AGENT)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  properties  Property[]  
   sessions Session[]
 
   @@map("users") // optional: maps the model to a MongoDB collection name
@@ -40,15 +39,16 @@ model Property {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   description String
-  images      String[] // Prisma supports arrays in MongoDB
-  price       Float
+  images      String[]
+  price       Float?
   country     String
   city        String
-  address     String
-  agent       User?    @relation(fields: [agentId], references: [id], onDelete: Cascade)
-  agentId     String?   @db.ObjectId
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  address     String?
+  pdf         Bytes?   @db.BinData
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  PropertyEnquiry PropertyEnquiry[]
 
   @@map("properties") // optional, aligns with MongoDB collection name
 }
@@ -65,37 +65,39 @@ model Session {
   @@map("sessions") // optional, aligns with MongoDB collection name
 }
 
-model VerificationToken {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  identifier String
-  token      String   @unique
-  expires    DateTime
-
-  @@map("verification_tokens") // optional, aligns with MongoDB collection name
-}
-
 model Contact {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   email       String
   phoneNumber String
-  message     String
-  status      Boolean
+  message     String?
+  status      Boolean  @default(false)
   createdAt   DateTime @default(now())
 
   @@map("contacts") // optional, aligns with MongoDB collection name
 }
 
 model SellEnquiry {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  email       String
-  phone       String
-  status      Boolean
-  address     String
-  timeline    String
-  createdAt   DateTime @default(now())
-  
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  email     String
+  phone     String
+  status    Boolean
+  address   String
+  timeline  String
+  createdAt DateTime @default(now())
 
   @@map("sell_enquiry") // optional, aligns with MongoDB collection name
+}
+
+model PropertyEnquiry {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  name       String
+  email      String
+  phone      String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  propertyId String   @db.ObjectId
+  createdAt  DateTime @default(now())
+
+  @@map("property_enquiry")
 }
