@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { PropertyCard, PropertyCardProps } from './PropertyCard';
-import { sampleProperties } from '@/lib/constants';
+// import { sampleProperties } from '@/lib/constants';
 import { BiArrowToRight } from 'react-icons/bi';
 import Link from 'next/link';
 
@@ -15,7 +15,7 @@ const FeaturedProperties = ({numberOfProperties = 3, viewMore = true, ...rest}: 
   const [properties, setProperties] = useState<PropertyCardProps[]>([]);
 
   useEffect(() => {
-    setProperties(sampleProperties);
+    setProperties([]);
   }, []);
 
   return (
