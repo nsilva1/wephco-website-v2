@@ -89,10 +89,7 @@ const Properties = () => {
         {filteredProperties.map((property, index) => (
           <div key={index}>
             <PropertyCard
-              imageURL={property.images[0]}
-              price={property.price}
-              location={property.city}
-              currency='USD'
+              {...property}
               showForm
             />
           </div>
