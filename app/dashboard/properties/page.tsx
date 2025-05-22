@@ -63,12 +63,11 @@ const DashboardPropertiesPage = () => {
             <tr>
                 <th>Actions</th>
                 <th>Name</th>
-                <th>Price</th>
+                <th>Description</th>
                 <th>Country</th>
                 <th>City</th>
-                <th>Address</th>
-                <th>Description</th>
-                <th>Agent</th>
+                <th>Image(s)</th>
+                <th>PDF</th>
                 <th>Created</th>
             </tr>
         </thead>
@@ -76,18 +75,18 @@ const DashboardPropertiesPage = () => {
 
     let tableBody = (
         <tbody>
-            {properties.map((property) => (
-                <tr key={property.id}>
+            {properties.map((property, index) => (
+                <tr key={property.id} className={`${index % 2 === 0 ? 'bg-gray-200' : 'bg-white'}`}>
                     <td className='flex gap-2 p-4'>
                         <button className='bg-blue-500 text-white px-2 py-1 rounded'>Edit</button>
                         <button className='bg-red-500 text-white px-2 py-1 rounded'>Delete</button>
                     </td>
                     <td className='p-4'>{property.name}</td>
-                    <td className='p-4'>{property.price}</td>
+                    <td className='p-4'>{property.description}</td>
                     <td className='p-4'>{property.country}</td>
                     <td className='p-4'>{property.city}</td>
-                    <td className='p-4'>{property.address}</td>
-                    <td className='p-4'>{property.description}</td>
+                    <td className='p-4'>{property.images ? (<p>Yes</p>) : (<p>No</p>)}</td>
+                    <td className='p-4'>{property.pdfUrl ? (<p>Yes</p>) : (<p>No</p>)}</td>
                     <td className='p-4'>{new Date(property.createdAt).toLocaleDateString()}</td>
                 </tr>
             ))}
@@ -96,10 +95,9 @@ const DashboardPropertiesPage = () => {
 
 
   return (
-    <div className='flex flex-col items-center justify-center h-screen overflow-x-auto p-5'>
+    <div className='flex flex-col items-center h-screen overflow-x-auto p-5'>
         <button onClick={goToAddPropertyForm} className='px-4 py-2 bg-black text-white hover:bg-black/80 rounded-md'>Add New Property</button>
-        <table className='w-full border-collapse border border-gray-300 leading-normal'>
-            <caption className='text-lg font-semibold mb-4'>Properties</caption>
+        <table className='w-full leading-normal mt-10'>
             {tableHead}
             {tableBody}
         </table>

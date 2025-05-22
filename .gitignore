@@ -42,3 +42,6 @@ next-env.d.ts
 
 # generated prisma files
 /lib/generated
+
+# gcs config
+gcs-credentials.json

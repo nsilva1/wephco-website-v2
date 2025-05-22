@@ -15,23 +15,24 @@ export const createProperty = async (propertyData: Omit<IProperty, 'createdAt' |
 }
 
 export const getProperty = async (id: string): Promise<IProperty> => {
-    const response = await fetch(`${API_URL}/${id}`)
+    const response = await axios.get(`${API_URL}/${id}`)
 
-    if (!response.ok) {
+    if (response.status !== 200) {
         throw new Error('Failed to fetch property')
     }
 
-    const data = await response.json()
+    const data = response.data
     return data
 }
 
 export const getAllProperties = async (): Promise<IProperty[]> => {
-    const response = await fetch(API_URL)
+    const response = await axios.get(API_URL)
 
-    if (!response.ok) {
+    if (response.status !== 200) {
+        console.log('Error: ', response.data)
         throw new Error('Failed to fetch properties')
     }
 
-    const data = await response.json()
+    const data = response.data
     return data
 }

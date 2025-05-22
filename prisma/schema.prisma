@@ -44,7 +44,7 @@ model Property {
   country     String
   city        String
   address     String?
-  pdf         Bytes?   @db.BinData
+  pdfUrl      String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 

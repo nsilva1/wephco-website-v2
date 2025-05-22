@@ -1,19 +1,25 @@
 'use client'
 
-// import type { PropertyFormData } from '@/interfaces/propertyInterface'
-import { useState } from 'react'
-// import { useRouter } from 'next/navigation'
+import { useRef, useState } from 'react'
 import { IProperty } from '@/interfaces/propertyInterface'
-import { toast } from 'react-toastify'
-import { uploadImage, uploadPDF } from '@/lib/helperFunctions'
 import { createProperty } from '@/actions/properties'
+import { XCircle } from 'lucide-react'
+import { uploadFile } from '@/actions/vercel'
+import { generateId } from '@/lib/helperFunctions'
+import { Loader } from './Loader'
 
 const PropertyForm = () => {
-    // const router = useRouter()
+    const imageInputRef = useRef<HTMLInputElement>(null)
+    const pdfInputRef = useRef<HTMLInputElement>(null)
+
     const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null)
-    const [pdfFile, setPdfFile] = useState<File | null>(null)
+    const [imageProgress, setImageProgress] = useState(0);
+    const [pdfProgress, setPdfProgress] = useState(0);
+    const [imageUploading, setImageUploading] = useState(false);
+    const [pdfUploading, setPdfUploading] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [error, setError] = useState('')
+    const [success, setSuccess] = useState('')
     const [previewImages, setPreviewImages] = useState<string[]>([])
     const [formData, setFormData] = useState<Omit<IProperty, 'createdAt' | 'updatedAt'>>({
       name: '',
@@ -23,48 +29,69 @@ const PropertyForm = () => {
       city: '',
       pdfUrl: ''
     })
-
-    const uploadImages = async (files: FileList): Promise<string[]> => {
-      const images: string[] = []
-      
-      for(const file of files) {
-        if(file.size > 0){
-          const imageURL = await uploadImage(file)
-          images.push(imageURL)
-        }
-      }
-
-      return images;
-    }
-
-    const getPDFurl = async (): Promise<string> => {
-      const pdfURL = await uploadPDF(pdfFile!)
-      return pdfURL
+    
+    const clearForm = () => {
+        setFormData({
+          name: '',
+          description: '',
+          images: [],
+          country: '',
+          city: '',
+          pdfUrl: ''
+        })
+        setPreviewImages([])
+        setSelectedFiles(null)
+        setError('')
+        setSuccess('')
     }
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         setIsSubmitting(true)
+        setImageUploading(true)
+        setPdfUploading(true)
+        setImageProgress(0);
+        setPdfProgress(0);
         setError('')
+        setSuccess('')
+
+        if (!imageInputRef.current?.files) {
+			    throw new Error("Please select an image to continue!");
+		    }
+
+        if (!pdfInputRef.current?.files) {
+          throw new Error("Please select a PDF to continue!");
+        }
+
+        const imageFiles = imageInputRef.current?.files
+        const pdfFile = pdfInputRef.current?.files[0]
+        const imageURLs: string[] = [];
+        const id = generateId()
       
 
         try {
           // upload images and return image urls
-          const imageURLs = await uploadImages(selectedFiles!)
+          for (var image of imageFiles) {
+            const imageBlob = await uploadFile(id, image, setImageProgress)
+            imageURLs.push(imageBlob.url)
+          }
 
           // upload pdf
-          const pdf = await getPDFurl()
+          const pdfBlob = await uploadFile(id, pdfFile, setPdfProgress)
           
           formData.images = imageURLs;
-          formData.pdfUrl = pdf;
+          formData.pdfUrl = pdfBlob.url
 
           await createProperty(formData)         
 
-          toast.success('Property created successfully')
+          setSuccess('Property created successfully')
+          clearForm()
         } catch (error) {
             setError((error as Error).message)
         } finally {
             setIsSubmitting(false)
+            setImageUploading(false)
+            setPdfUploading(false)
         }
     }
 
@@ -95,13 +122,22 @@ const PropertyForm = () => {
       <h1 className="text-2xl font-bold mb-6">Add New Property</h1>
       
       {error && (
-        <div className="mb-4 p-4 bg-red-100 text-red-700 rounded">
+        <div className="mb-4 p-4 bg-red-100 text-red-700 rounded flex justify-between">
           {error}
+          <XCircle onClick={() => setError('')} className='cursor-pointer' />
+        </div>
+      )}
+
+      {success && (
+        <div className="mb-4 p-4 bg-green-100 text-green-700 rounded flex justify-between">
+          {success}
+          <XCircle onClick={() => setSuccess('')} className='cursor-pointer' />
         </div>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
+        <fieldset disabled={isSubmitting}>
+          <div className='my-3'>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Property Name
           </label>
@@ -115,7 +151,7 @@ const PropertyForm = () => {
           />
         </div>
 
-        <div>
+        <div className='my-3'>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Description
           </label>
@@ -129,18 +165,20 @@ const PropertyForm = () => {
           />
         </div>
 
-        <div>
+        <div className='my-3'>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Images
           </label>
           <input
+            ref={imageInputRef}
             type="file"
             name="images"
             multiple
-            accept="image/*"
-            onChange={handleImageChange}
+            accept="image/jpeg, image/png, image/gif"
             required
-            className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-black/50 bg-gray-300 cursor-pointer"
+            disabled={imageUploading}
+            onChange={handleImageChange}
+            className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-black/50 bg-primary text-black cursor-pointer"
           />
           {previewImages.length > 0 && (
             <div className="mt-4 flex flex-wrap gap-2">
@@ -154,23 +192,48 @@ const PropertyForm = () => {
               ))}
             </div>
           )}
+
+          {imageUploading && (
+						<div className="w-full bg-gray-200 rounded-full h-2.5">
+							<div
+								className="bg-black/60 h-2.5 rounded-full transition-all duration-300"
+								style={{ width: `${imageProgress}%` }}
+							></div>
+							<p className="text-sm text-white mt-2 text-center">
+								{Math.round(imageProgress)}% uploaded
+							</p>
+						</div>
+					)}
         </div>
 
-        <div>
+        <div className='my-3'>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Upload PDF
           </label>
           <input
+            ref={pdfInputRef}
             type="file"
             name="pdf"
-            accept='.pdf'
-            onChange={(e) => setPdfFile(e.target.files?.[0] ?? null)}
+            accept='application/pdf'
+            // onChange={handlePdfChange}
+            disabled={pdfUploading}
             required
-            className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-black/50 bg-gray-300 cursor-pointer"
+            className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-black/50 bg-black text-white cursor-pointer"
           />
+          {pdfUploading && (
+						<div className="w-full bg-gray-200 rounded-full h-2.5">
+							<div
+								className="bg-black/60 h-2.5 rounded-full transition-all duration-300"
+								style={{ width: `${pdfProgress}%` }}
+							></div>
+							<p className="text-sm text-white mt-2 text-center">
+								{Math.round(pdfProgress)}% uploaded
+							</p>
+						</div>
+					)}
         </div>
 
-        <div>
+        <div className='my-3'>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Country
           </label>
@@ -182,7 +245,7 @@ const PropertyForm = () => {
           </select>
         </div>
 
-        <div>
+        <div className='my-3'>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             City
           </label>
@@ -195,15 +258,16 @@ const PropertyForm = () => {
           </select>
         </div>
 
-        <div>
+        <div className='my-3'>
           <button
             type="submit"
-            disabled={isSubmitting}
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={isSubmitting || !selectedFiles}
+            className="w-full bg-black text-white py-2 px-4 rounded-md hover:bg-black/90 focus:outline-none focus:ring-2 focus:ring-black/50 focus:ring-offset-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isSubmitting ? 'Submitting...' : 'Add Property'}
+            {isSubmitting ? <Loader /> : 'Add Property'}
           </button>
         </div>
+        </fieldset>
       </form>
     </div>
   )
