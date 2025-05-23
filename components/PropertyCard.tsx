@@ -27,6 +27,7 @@ const PropertyCard = ({ showForm = false, ...props }: PropertyCardProps) => {
 
   return (
     <div
+      onClick={showModal}
       className='bg-white rounded-xl shadow-lg overflow-hidden flex flex-col gap-2 transition-transform hover:scale-105 cursor-pointer'
     >
       <div className='relative w-full h-96 rounded-t-xl cursor-pointer'>
@@ -45,7 +46,7 @@ const PropertyCard = ({ showForm = false, ...props }: PropertyCardProps) => {
         {props.city}, {props.country}
       </p>
       </div>
-      <div className='flex items-end justify-between'>
+      {/* <div className='flex items-end justify-between'>
         <button className='bg-black text-white rounded-lg px-6 py-3 mx-2 hover:bg-black/80'>
           View More
         </button>
@@ -55,7 +56,7 @@ const PropertyCard = ({ showForm = false, ...props }: PropertyCardProps) => {
         >
           Show Interest
         </button>
-      </div>
+      </div> */}
       {interestModal}
     </div>
   );
