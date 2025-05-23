@@ -21,21 +21,26 @@ const AuthForm = ({ isLogin }: { isLogin: boolean }) => {
 
     if (isLogin) {
       // Handle login logic here
-      // Check if email and password are provided
+      try {
+        // Check if email and password are provided
       if (!email || !password) {
         setError('Email and password are required');
         setLoading(false);
         return;
       }
 
-      const result = await loginUser(email, password);
-
-      if (result.error) {
-        setError(result.error);
+      await loginUser(email, password);
+      } catch (error) {
+        if(error instanceof Error) {
+          setError(error.message);
+        }
+        return;
       }
+
     } else {
       // Handle registration logic here
-      // Check if name, email, and password are provided
+      try {
+        // Check if name, email, and password are provided
       if (!name || !email || !password) {
         setError('Name, email, and password are required');
         setLoading(false);
@@ -53,6 +58,12 @@ const AuthForm = ({ isLogin }: { isLogin: boolean }) => {
       const result = await loginUser(email, password);
       if (result.error) {
         setError(result.error);
+      }
+      } catch (error) {
+        if(error instanceof Error) {
+          setError(error.message);
+        }
+        return;
       }
     }
   };
@@ -111,7 +122,7 @@ const AuthForm = ({ isLogin }: { isLogin: boolean }) => {
               minLength={6}
             />
           </div>
-          {/* {!isLogin && (
+          {!isLogin && (
             <div>
               <label htmlFor='role' className='block mb-1'>
                 Role
@@ -127,7 +138,7 @@ const AuthForm = ({ isLogin }: { isLogin: boolean }) => {
                 <option value={Role.ADMIN}>Admin</option>
               </select>
             </div>
-          )} */}
+          )}
           {loading ? (
             <Loader size='sm' />
           ) : (

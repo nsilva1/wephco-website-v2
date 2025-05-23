@@ -1,6 +1,6 @@
 import React from 'react';
 import { Hero } from './(components)/Hero';
-import { Regions } from '@/components/Regions';
+// import { Regions } from '@/components/Regions';
 import { Footer } from '@/components/Footer';
 import { Properties } from '@/components/Properties';
 
@@ -8,7 +8,9 @@ const BuyPage = () => {
   return (
     <section>
       <Hero />
-      <Properties />
+      <div className='p-8'>
+        <Properties />
+      </div>
       <Footer />
     </section>
   );

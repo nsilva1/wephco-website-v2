@@ -8,7 +8,7 @@ import { Loader } from './Loader';
 
 const Properties = () => {
   const [properties, setProperties] = useState<IProperty[]>([]);
-  const [filteredProperties, setFilteredProperties] = useState<IProperty[]>([]);
+  const [filteredProperties, setFilteredProperties] = useState<IProperty[] | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
   const [filterText, setFilterText] = useState<string>('');
@@ -80,13 +80,11 @@ const Properties = () => {
           </div>
         </div>
       )}
-      {filteredProperties.length === 0 && <div></div>}
+      {filteredProperties?.length === 0 && <div className='flex justify-center'><h2 className='text-xl font-semibold'>No Property</h2></div>}
       <div
-        className={`grid lg:grid-cols-3 grid-cols-1 gap-4 ${
-          filteredProperties.length === 0 ? 'hidden' : ''
-        }`}
+        className={`grid lg:grid-cols-3 grid-cols-1 gap-4`}
       >
-        {filteredProperties.map((property, index) => (
+        {filteredProperties?.map((property, index) => (
           <div key={index}>
             <PropertyCard
               {...property}
