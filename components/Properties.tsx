@@ -5,13 +5,27 @@ import { IProperty } from '@/interfaces/propertyInterface';
 import { getAllProperties } from '@/actions/properties';
 import { PropertyCard } from './PropertyCard';
 import { Loader } from './Loader';
+import { InterestForm } from './InterestForm';
 
-const Properties = () => {
+const Properties = ({showForm = false}: {showForm: boolean}) => {
   const [properties, setProperties] = useState<IProperty[]>([]);
   const [filteredProperties, setFilteredProperties] = useState<IProperty[] | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
   const [filterText, setFilterText] = useState<string>('');
+  const [openModal, setOpenModal] = useState(false);
+  
+    const showModal = () => {
+      if (!showForm) {
+        return;
+      }
+  
+      setOpenModal(true);
+    };
+  
+    let interestModal = (
+      <InterestForm open={openModal} close={() => setOpenModal(false)} />
+    );
 
   const fetchProperties = useCallback(async () => {
     setLoading(true);
@@ -43,6 +57,7 @@ const Properties = () => {
 
   return (
     <div>
+      {interestModal}
       <h1 className='lg:text-5xl text-4xl font-bold text-black my-10 text-center'>
         Properties
       </h1>
@@ -88,7 +103,7 @@ const Properties = () => {
           <div key={index}>
             <PropertyCard
               {...property}
-              showForm
+              showModal={showModal}
             />
           </div>
         ))}

@@ -7,23 +7,11 @@ import { InterestForm } from './InterestForm';
 import { IProperty } from '@/interfaces/propertyInterface';
 
 export interface PropertyCardProps extends IProperty {
-  showForm?: boolean;
+  showModal?: () => void;
 }
 
-const PropertyCard = ({ showForm = false, ...props }: PropertyCardProps) => {
-  const [openModal, setOpenModal] = useState(false);
-
-  const showModal = () => {
-    if (!showForm) {
-      return;
-    }
-
-    setOpenModal(true);
-  };
-
-  let interestModal = (
-    <InterestForm open={openModal} close={() => setOpenModal(false)} />
-  );
+const PropertyCard = ({ showModal, ...props }: PropertyCardProps) => {
+  
 
   return (
     <div
@@ -57,7 +45,7 @@ const PropertyCard = ({ showForm = false, ...props }: PropertyCardProps) => {
           Show Interest
         </button>
       </div> */}
-      {interestModal}
+      
     </div>
   );
 };

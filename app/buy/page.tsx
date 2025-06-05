@@ -9,7 +9,7 @@ const BuyPage = () => {
     <section>
       <Hero />
       <div className='p-8'>
-        <Properties />
+        <Properties showForm />
       </div>
       <Footer />
     </section>
