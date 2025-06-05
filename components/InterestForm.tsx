@@ -52,7 +52,7 @@ const InterestForm = ({open, close}: {open: boolean; close: () => void}) => {
     }
 
   return (
-    <div className='bg-white rounded-lg shadow-lg p-6'>
+    <div className='bg-white rounded-lg shadow-lg p-6 z-50'>
         <Modal open={open} onClose={close}>
             <h3 className='text-center text-xl text-gray-600 mb-5'>Property Interest Form</h3>
             <form onSubmit={handleSubmit} className='space-y-4'>

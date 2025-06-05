@@ -6,6 +6,7 @@ import { getAllProperties } from '@/actions/properties';
 import { PropertyCard } from './PropertyCard';
 import { Loader } from './Loader';
 import { InterestForm } from './InterestForm';
+import { createPortal } from 'react-dom';
 
 const Properties = ({showForm = false}: {showForm: boolean}) => {
   const [properties, setProperties] = useState<IProperty[]>([]);
@@ -24,7 +25,7 @@ const Properties = ({showForm = false}: {showForm: boolean}) => {
     };
   
     let interestModal = (
-      <InterestForm open={openModal} close={() => setOpenModal(false)} />
+      createPortal(<InterestForm open={openModal} close={() => setOpenModal(false)} />, document.body)
     );
 
   const fetchProperties = useCallback(async () => {
@@ -58,30 +59,30 @@ const Properties = ({showForm = false}: {showForm: boolean}) => {
   return (
     <div>
       {interestModal}
-      <h1 className='lg:text-5xl text-4xl font-bold text-black my-10 text-center'>
+      <h1 className='lg:text-5xl text-4xl font-bold text-black dark:text-white my-10 text-center'>
         Properties
       </h1>
       <div className='flex justify-center my-10'>
         <button
           onClick={() => filterProperties('Dubai')}
-          className={`text-white rounded-lg px-6 py-3 mx-2 hover:bg-black/80 cursor-pointer ${
-            filterText === 'Dubai' ? 'bg-primary' : 'bg-black'
+          className={`text-white rounded-lg px-6 py-3 mx-2 hover:bg-black/80 dark:hover:bg-white/80 cursor-pointer ${
+            filterText === 'Dubai' ? 'bg-primary' : 'bg-black dark:bg-white dark:text-black'
           }`}
         >
           Dubai
         </button>
         <button
           onClick={() => filterProperties('Abu Dhabi')}
-          className={`text-white rounded-lg px-6 py-3 mx-2 hover:bg-black/80 cursor-pointer ${
-            filterText === 'Abu Dhabi' ? 'bg-primary' : 'bg-black'
+          className={`text-white rounded-lg px-6 py-3 mx-2 hover:bg-black/80 dark:hover:bg-white/80 cursor-pointer ${
+            filterText === 'Abu Dhabi' ? 'bg-primary' : 'bg-black dark:bg-white dark:text-black'
           }`}
         >
           Abu Dhabi
         </button>
         <button
           onClick={() => filterProperties('London')}
-          className={`text-white rounded-lg px-6 py-3 mx-2 hover:bg-black/80 cursor-pointer ${
-            filterText === 'London' ? 'bg-primary' : 'bg-black'
+          className={`text-white rounded-lg px-6 py-3 mx-2 hover:bg-black/80 dark:hover:bg-white/80 cursor-pointer ${
+            filterText === 'London' ? 'bg-primary' : 'bg-black dark:bg-white dark:text-black'
           }`}
         >
           London
@@ -104,6 +105,7 @@ const Properties = ({showForm = false}: {showForm: boolean}) => {
             <PropertyCard
               {...property}
               showModal={showModal}
+              openModal={openModal}
             />
           </div>
         ))}
