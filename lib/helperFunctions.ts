@@ -17,13 +17,13 @@ export const formatCurrency = (number: number, currencyCode = 'USD', locale = 'e
     }
 }
 
-export const scrollTo = (targetId: string) => {
-  const targetElement = document.getElementById(targetId)
+// export const scrollTo = (targetId: string) => {
+//   const targetElement = document.getElementById(targetId)
 
-  if(targetElement){
-    targetElement.scrollIntoView({behavior:'smooth'})
-  }
-}
+//   if(targetElement){
+//     targetElement.scrollIntoView({behavior:'smooth'})
+//   }
+// }
 
 export const handleError = (error: unknown) => {
   let errorMessage = 'Failed to create enquiry. An unexpected error occurred.';

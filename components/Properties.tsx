@@ -6,7 +6,7 @@ import { getAllProperties } from '@/actions/properties';
 import { PropertyCard } from './PropertyCard';
 import { Loader } from './Loader';
 import { InterestForm } from './InterestForm';
-import { createPortal } from 'react-dom';
+// import { createPortal } from 'react-dom';
 
 const Properties = ({showForm = false}: {showForm: boolean}) => {
   const [properties, setProperties] = useState<IProperty[]>([]);
@@ -25,7 +25,7 @@ const Properties = ({showForm = false}: {showForm: boolean}) => {
     };
   
     let interestModal = (
-      createPortal(<InterestForm open={openModal} close={() => setOpenModal(false)} />, document.body)
+      <InterestForm open={openModal} close={() => setOpenModal(false)} />
     );
 
   const fetchProperties = useCallback(async () => {
