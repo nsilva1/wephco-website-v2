@@ -13,7 +13,7 @@ interface PrivateRouteProps {
 
 const PrivateRoute = ({
   children,
-  redirectTo = '/login',
+  redirectTo = '/auth/login',
   loadingComponent = <Loader size='lg' />,
 }: PrivateRouteProps) => {
   const { status } = useSession();

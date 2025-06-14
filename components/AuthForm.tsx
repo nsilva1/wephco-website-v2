@@ -5,6 +5,7 @@ import { registerUser } from '@/actions/register';
 import { Role } from '@/interfaces/userInterface';
 import { loginUser } from '@/actions/login';
 import { Loader } from './Loader';
+import { useRouter } from 'next/navigation';
 
 const AuthForm = ({ isLogin }: { isLogin: boolean }) => {
   const [email, setEmail] = useState('');
@@ -12,7 +13,10 @@ const AuthForm = ({ isLogin }: { isLogin: boolean }) => {
   const [name, setName] = useState('');
   const [role, setRole] = useState<Role>(Role.AGENT);
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('')
   const [loading, setLoading] = useState(false);
+
+  const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,6 +34,12 @@ const AuthForm = ({ isLogin }: { isLogin: boolean }) => {
       }
 
       await loginUser(email, password);
+
+      // if(result?.error){
+      //   setError('Invalid email or password')
+      // } else if (result?.ok){
+      //   router.push('/dashboard')
+      // }
       } catch (error) {
         if(error instanceof Error) {
           setError(error.message);
@@ -55,10 +65,11 @@ const AuthForm = ({ isLogin }: { isLogin: boolean }) => {
         return;
       }
 
-      const result = await loginUser(email, password);
-      if (result.error) {
-        setError(result.error);
-      }
+      setSuccessMessage('Registration successful. Redirecting...')
+
+      setTimeout(() => {
+        router.push('/auth/login')
+      }, 2000)
       } catch (error) {
         if(error instanceof Error) {
           setError(error.message);
@@ -80,6 +91,13 @@ const AuthForm = ({ isLogin }: { isLogin: boolean }) => {
               {error}
             </div>
           )}
+          {
+            successMessage && (
+              <div className='p-4 text-green-700 bg-green-100 rounded-md text-center'>
+                {successMessage}
+              </div>
+            )
+          }
           {!isLogin && (
             <div>
               <label htmlFor='name' className='block mb-1'>

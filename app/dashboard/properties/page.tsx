@@ -5,9 +5,15 @@ import { getAllProperties } from '@/actions/properties'
 import { Loader } from '@/components/Loader'
 import { IProperty } from '@/interfaces/propertyInterface'
 import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
+import { Role } from '@/interfaces/userInterface'
+import { signOut } from 'next-auth/react'
+import { toast } from 'react-toastify'
 
 const DashboardPropertiesPage = () => {
     const router = useRouter()
+
+    const { data: session, status } = useSession()
 
     const [properties, setProperties] = useState<IProperty[]>([])
     const [loading, setLoading] = useState(false)
@@ -29,9 +35,25 @@ const DashboardPropertiesPage = () => {
         }
     }, [])
 
+    const checkAuthStatus = useCallback(() => {
+        if (
+            status === 'unauthenticated' ||
+            !session?.user ||
+            (session?.user.role !== Role.ADMIN && session?.user.role !== Role.SUPPORT)
+        ) {
+            toast.error('You are not authorized to view this page. Please log in with an admin or support account.')
+            signOut({redirectTo: '/auth/login'})
+        } else {
+            // User is authenticated and has the right role
+            fetchProperties()
+        }
+    }, [status])
+
+
     useEffect(() => {
-        fetchProperties()
+        checkAuthStatus()
     }, [])
+    
 
     if (loading) {
         return (
