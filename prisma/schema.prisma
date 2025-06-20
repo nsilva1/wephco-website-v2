@@ -77,6 +77,18 @@ model Contact {
   @@map("contacts") // optional, aligns with MongoDB collection name
 }
 
+model Consultation {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  email     String
+  phone     String
+  message   String
+  status    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@map("consultations") // optional, aligns with MongoDB collection name
+}
+
 model SellEnquiry {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   name      String

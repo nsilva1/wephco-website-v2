@@ -27,6 +27,16 @@ export interface IContactUs {
     createdAt?: Date;
 }
 
+export interface IConsultation {
+    id?: string;
+    name: string;
+    email: string;
+    phone: string;
+    message: string;
+    status: boolean;
+    createdAt?: Date;
+}
+
 export interface IAgent {
   id?: string;
   name: string;
