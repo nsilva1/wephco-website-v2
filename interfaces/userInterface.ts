@@ -29,10 +29,14 @@ export interface IContactUs {
 
 export interface IConsultation {
     id?: string;
-    name: string;
+    service: string;
+    meetingDate: Date;
+    meetingLocation: string;
+    phoneNumber: string;
     email: string;
-    phone: string;
-    message: string;
+    organizationName: string;
+    name: string;
+    details: string;
     status: boolean;
     createdAt?: Date;
 }

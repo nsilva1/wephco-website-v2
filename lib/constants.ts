@@ -24,10 +24,6 @@ export const navbarMenu = [
         label: 'Agents',
         path: '/agents'
     },
-    {
-        label: 'Consultations',
-        path: '/consultations'
-    }
 ]
 
 // export const sampleProperties: PropertyCardProps[] = [

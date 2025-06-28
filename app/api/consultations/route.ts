@@ -22,11 +22,15 @@ export async function POST(request: Request) {
     const body = await request.json();
 
     const consultationData: IConsultation = {
-        name: body.name,
+        service: body.service,
+        meetingDate: body.meetingDate,
+        meetingLocation: body.meetingLocation,
+        phoneNumber: body.phoneNumber,
         email: body.email,
-        phone: body.phone,
-        message: body.message,
-        status: body.status,
+        organizationName: body.organizationName,
+        name: body.name,
+        details: body.details,
+        status: false
     };
 
     try {
