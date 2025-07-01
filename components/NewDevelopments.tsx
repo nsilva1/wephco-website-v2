@@ -8,7 +8,7 @@ import { BiArrowToRight } from 'react-icons/bi';
 
 const NewDevelopmentsSection = () => {
   return (
-    <section id='#new-developments' className='p-8 my-20'>
+    <section id='#new-developments' className='p-8 my-20 font-outfit'>
       <div className='text-center lg:text-left mb-8'>
         <h2 className='text-4xl font-bold mb-4 text-black text-center lg:text-5xl'>
           The Boldest New

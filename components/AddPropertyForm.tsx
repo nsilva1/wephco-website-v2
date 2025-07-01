@@ -118,7 +118,7 @@ const PropertyForm = () => {
     }
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md">
+    <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md font-outfit">
       <h1 className="text-2xl font-bold mb-6">Add New Property</h1>
       
       {error && (

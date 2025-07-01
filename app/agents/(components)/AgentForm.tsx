@@ -67,7 +67,7 @@ const AgentForm = ({ ...rest }: INewAgent) => {
   };
 
   return (
-    <div {...rest} className='flex flex-col items-center justify-center p-4 lg:p-20'>
+    <div {...rest} className='flex flex-col items-center justify-center p-4 lg:p-20 font-outfit'>
       <h2 className='mb-10 text-2xl font-semibold'>Agent Registration</h2>
       <div className='grid grid-cols-1 md:grid-cols-2 gap-24'>
         <div className='col-span-1 hidden md:flex'>

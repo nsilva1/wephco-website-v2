@@ -39,7 +39,7 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed top-2 left-2 right-2 rounded-full transition-all duration-300 z-50 ${navbarBg} h-20`}
+      className={`fixed top-2 left-2 right-2 rounded-full transition-all duration-300 z-50 ${navbarBg} h-20 font-outfit`}
     >
       <div className='container mx-auto flex lg:grid lg:grid-cols-3 justify-between items-center p-4 lg:p-2'>
         <Link href='/' className='col-span-1'>

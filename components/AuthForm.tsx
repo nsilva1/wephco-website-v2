@@ -80,7 +80,7 @@ const AuthForm = ({ isLogin }: { isLogin: boolean }) => {
   };
 
   return (
-    <div className=''>
+    <div className='font-outfit'>
       <form
         onSubmit={(e) => handleSubmit(e)}
         className='max-w-md mx-auto mt-8 space-y-4'

@@ -52,7 +52,7 @@ const ContactUs = () => {
 
   return (
     <div>
-      <div className='flex justify-around flex-col md:flex-row items-center gap-8 p-8'>
+      <div className='flex justify-around flex-col md:flex-row items-center gap-8 p-8 font-outfit'>
         <div className='col-span-1 flex flex-col gap-8'>
           <h3 className='text-xl md:text-3xl uppercase text-[#131316] font-semibold text-center md:text-start'>
             Speak with our real estate

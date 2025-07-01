@@ -6,7 +6,7 @@ import { BiArrowToRight } from 'react-icons/bi'
 
 const BecomeAgent = () => {
   return (
-    <div id='#agents' className='my-20 p-10'>
+    <div id='#agents' className='my-20 p-10 font-outfit'>
         <div className='grid grid-cols-1 md:grid-cols-2 gap-8'>
             <div className='col-span-1 '>
                 <Image src={agent} alt='agent' className='w-full h-full rounded-3xl' />

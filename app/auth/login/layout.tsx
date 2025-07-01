@@ -1,6 +1,13 @@
 import React from 'react';
 import { ToastContainer } from 'react-toastify';
 import '../../globals.css';
+import { Metadata } from 'next';
+
+// Metadata for the login page
+export const metadata: Metadata = {
+  title: "Wephco - Login",
+  description: "Login to your Wephco account",
+};
 
 export default function AuthLayout({ children }: { children: React.ReactNode }){
   return (

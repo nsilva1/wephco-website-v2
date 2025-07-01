@@ -24,7 +24,7 @@ const AgentsPage = () => {
     <div>
         <Hero onButtonClick={goToAgentForm} />
 
-        <section className='py-20 px-10'>
+        <section className='py-20 px-10 font-outfit'>
             <div className='grid grid-cols-1 md:grid-cols-2'>
                 <div className='col-span-1'>
                     <h3 className='text-gray-500 uppercase font-semibold text-lg mb-5'>The Wephco Difference</h3>
@@ -38,7 +38,7 @@ const AgentsPage = () => {
             </div>
         </section>
 
-        <section className='py-20 px-10'>
+        <section className='py-20 px-10 font-outfit'>
             <div className='grid grid-cols-1 lg:grid-cols-2 gap-8'>
                 <div className='col-span-1'>
                     <div>
@@ -55,7 +55,7 @@ const AgentsPage = () => {
             </div>
         </section>
 
-        <section className='py-20 px-10'>
+        <section className='py-20 px-10 font-outfit'>
             <div className='flex flex-col-reverse md:grid md:grid-cols-2 gap-12 my-20'>
                 <div className="col-span-1 flex flex-col gap-10">
                     <AgentPerkItem title='Increase Your Earning Potential at WEPHCO.' description="Discover your true earning potential at WEPHCO, where agents earn on average four times more than industry standards. You're not just an agent; you're a business. We recognize that and invest in your success, making your profitability our priority." />

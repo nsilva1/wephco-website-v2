@@ -35,7 +35,7 @@ const outfit = Outfit({
 
 export const metadata: Metadata = {
   title: "Wephco - Buy, Sell Luxury Homes",
-  description: "Affordable Properties in Dubai & Abuja",
+  description: "Your Gateway to Prime Global Real Estate",
 };
 
 export default function RootLayout({

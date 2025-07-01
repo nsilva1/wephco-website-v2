@@ -3,6 +3,12 @@ import Navbar from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { ToastContainer } from "react-toastify";
 import '../globals.css';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: "Wephco - Buy, Sell Luxury Homes",
+  description: "Your Gateway to Prime Global Real Estate",
+};
 
 export default function ConsultationsLayout({
   children,

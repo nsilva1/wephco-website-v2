@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 const Regions = () => {
   return (
-    <div className='bg-white py-14 px-8 my-20'>
+    <div className='bg-white py-14 px-8 my-20 font-outfit'>
       <div className='grid lg:grid-cols-4 gap-4'>
         <div className='col-span-1'>
           <h1 className='lg:text-5xl text-4xl font-bold text-[#131316] mb-5'>

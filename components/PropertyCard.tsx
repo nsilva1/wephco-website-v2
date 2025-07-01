@@ -17,7 +17,7 @@ const PropertyCard = ({ showModal, openModal, ...props }: PropertyCardProps) => 
   return (
     <div
       onClick={showModal}
-      className='bg-white dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden flex flex-col gap-2 transition-transform hover:scale-105 cursor-pointer'
+      className='bg-white dark:bg-gray-700 font-outfit rounded-xl shadow-lg overflow-hidden flex flex-col gap-2 transition-transform hover:scale-105 cursor-pointer'
     >
       <div className='relative w-full h-96 rounded-t-xl cursor-pointer'>
         <Image
