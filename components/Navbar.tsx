@@ -7,6 +7,8 @@ import { usePathname } from 'next/navigation';
 import { MdCancel, MdMenu } from 'react-icons/md';
 import Image from 'next/image';
 import logo from '@/images/logo.png';
+import { ArrowRight } from 'lucide-react';
+import { typography } from '@/lib/styles';
 
 const Navbar = () => {
   const [navbarBg, setNavbarBg] = useState('transparent');
@@ -39,13 +41,13 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed top-2 left-2 right-2 rounded-full transition-all duration-300 z-50 ${navbarBg} h-20 font-outfit`}
+      className={`fixed top-4 left-4 right-4 rounded-full transition-all duration-300 z-50 ${navbarBg} h-16 font-outfit`}
     >
-      <div className='container mx-auto flex lg:grid lg:grid-cols-3 justify-between items-center p-4 lg:p-2'>
-        <Link href='/' className='col-span-1'>
+      <div className='flex justify-between items-center'>
+        <Link href='/' className=''>
           <Image src={logo} alt='logo' width={100} height={50} />
         </Link>
-        <div className='lg:col-span-1 place-content-center hidden lg:flex gap-8'>
+        <div className='hidden lg:flex justify-center gap-8'>
           {navbarMenu.map((item, index) => (
             <Link
               key={index}
@@ -58,16 +60,12 @@ const Navbar = () => {
             </Link>
           ))}
         </div>
-        <div className='hidden lg:col-span-1 lg:flex place-content-center gap-8'>
-          <Link href='/auth/login' className={navbarButton}>
-            Login
+        <div className='mr-6'>
+          <Link href='/consultations' className={`${navbarButton} hidden lg:flex items-center ${typography.smallParagraph}`}>
+            Talk With An Expert Consultant
+            <ArrowRight size={16} className='inline ml-1' />
           </Link>
-          <Link href='/consultations' className={navbarButton}>
-            Speak With A Consultant
-          </Link>
-        </div>
-        {/* Mobile menu */}
-        <div className='lg:hidden flex flex-1 justify-end items-center'>
+          <div className='lg:hidden col-span-1 flex justify-end items-center'>
           <div
             className='cursor-pointer'
             onClick={() => setShowMobileMenu(!showMobileMenu)}
@@ -92,16 +90,14 @@ const Navbar = () => {
                   <Link href={item.path}>{item.label}</Link>
                 </li>
               ))}
-              <li className='font-sans font-normal cursor-pointer text-[20px] mb-3'>
-                <Link href='/auth/login' className={navbarButton}>
-                  Login
-                </Link>
+              <li className='font-sans font-normal cursor-pointer text-[16px] mb-3'>
                 <Link href='/consultations' className={navbarButton}>
-                  Speak With A Consultant
+                  Talk With An Expert Consultant
                 </Link>
               </li>
             </ul>
           </div>
+        </div>
         </div>
       </div>
     </nav>

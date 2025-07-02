@@ -4,27 +4,24 @@ import Navbar from "@/components/Navbar";
 import { ToastContainer } from "react-toastify";
 import "../globals.css";
 
-// const geistSans = Geist({
-//   variable: "--font-geist-sans",
-//   subsets: ["latin"],
-// });
-
-// const geistMono = Geist_Mono({
-//   variable: "--font-geist-mono",
-//   subsets: ["latin"],
-// });
-
-// const roboto = Roboto({
-//   variable: "--font-roboto",
-//   subsets: ["latin"],
-// })
-
-// const poppins = Poppins({
-//   variable: "--font-poppins",
-//   subsets: ["latin"],
-//   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
-//   display: "swap",
-// })
+// TODO: implement dark theme, 
+// reduce vertical width of navbar on mobile, 
+// update list of servies on consultation form, 
+// prefered mode of contact on consultation form
+// change agents to affiliate
+// authentication code to create a user account
+// send pdf to email after clicking on property card
+// implement careers page functionality
+// implement development badge at the top right corner of new development card to show development status
+// look into google api key for maps
+// modify sell page layout, put image and text above, side-by-side.
+// add terms and conditions for selling a property below the form.
+// add carousel of pictures on the home page, and add upload feature to dashboard. protect the pictures from being downloaded by right clicking on them.
+// add saadiyat video to buy page hero section
+// add team section in about page.
+// add brand ambassador section on home page, and another section for press
+// add a section for social media posts on the home page.
+// complete by 7th July
 
 const outfit = Outfit({
   variable: "--font-outfit",

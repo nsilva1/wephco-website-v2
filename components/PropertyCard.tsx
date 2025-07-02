@@ -34,6 +34,9 @@ const PropertyCard = ({ showModal, openModal, ...props }: PropertyCardProps) => 
       <p className='font-mono font-bold'>
         {props.city}, {props.country}
       </p>
+      <button>
+        Download PDF
+      </button>
       </div>    
     </div>
   );

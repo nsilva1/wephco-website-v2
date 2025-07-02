@@ -18,6 +18,9 @@ const AuthForm = ({ isLogin }: { isLogin: boolean }) => {
 
   const router = useRouter()
 
+  const authCode1 = process.env.auth_code1
+  const authCode2 = process.env.auth_code2
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -58,6 +61,15 @@ const AuthForm = ({ isLogin }: { isLogin: boolean }) => {
       }
 
       const user = { name, email, password, role };
+
+      const code = prompt('Enter the authentication code:');
+
+      if (code !== authCode1 || code !== authCode2) {
+        setError('Invalid authentication code');
+        setLoading(false);
+        return;
+      }
+
       const response = await registerUser(user);
 
       if (response.error) {

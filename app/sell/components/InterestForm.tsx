@@ -103,17 +103,18 @@ const InterestForm = ({ ...rest }: INewInterest) => {
   },[])
 
   const handleNext = useCallback(() => {
+    setStep((prev) => prev + 1);
     // Check if an address was actually selected from suggestions
-    if (selectedPlace && selectedPlace.formatted_address === formData.address) {
-        setStep((prev) => prev + 1);
-    } else if (formData.address.trim() !== '') {
-        // Handle case where user typed address but didn't select suggestion
-        alert("Please select a valid address from the suggestions.");
-        // Or allow proceeding, depending on requirements
-        // setStep((prev) => prev + 1);
-    } else {
-        alert("Please enter and select an address.");
-    }
+    // if (selectedPlace && selectedPlace.formatted_address === formData.address) {
+    //     setStep((prev) => prev + 1);
+    // } else if (formData.address.trim() !== '') {
+    //     // Handle case where user typed address but didn't select suggestion
+    //     alert("Please select a valid address from the suggestions.");
+    //     // Or allow proceeding, depending on requirements
+    //     // setStep((prev) => prev + 1);
+    // } else {
+    //     alert("Please enter and select an address.");
+    // }
  }, [formData.address, selectedPlace]);
 
  const handleBack = useCallback(() => {
@@ -215,7 +216,7 @@ const resetAndRefresh = useCallback(() => {
               )}
 
               {step === 2 && (
-                <div className='space-y-4 bg-white p-4 rounded-2xl min-w-lg'>
+                <div className='space-y-4 bg-white p-8 rounded-2xl min-w-lg'>
                   <div>
                   
                     <input
