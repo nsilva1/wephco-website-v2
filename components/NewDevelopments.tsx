@@ -5,17 +5,18 @@ import saadiyat5 from '@/images/saadiyat5.jpg';
 import { NewDevelopmentCard } from './NewDevelopmentCard';
 import Link from 'next/link';
 import { BiArrowToRight } from 'react-icons/bi';
+import { typography, layout } from '@/lib/styles'; // Assuming you have a styles file for typography
 
 const NewDevelopmentsSection = () => {
   return (
-    <section id='#new-developments' className='p-8 my-20 font-outfit'>
-      <div className='text-center lg:text-left mb-8'>
-        <h2 className='text-4xl font-bold mb-4 text-black text-center lg:text-5xl'>
+    <section id='#new-developments' className={`${layout.columnSection}`}>
+      <div className='flex flex-col items-center justify-center text-center mb-6'>
+        <h2 className={`${typography.heading2}`}>
           The Boldest New
           <br />
           Developments
         </h2>
-        <p className='mb-8 text-center text-gray-500'>
+        <p className={typography.subtitle}>
           Explore our transformative new projects that elevate modern luxury
           living.
         </p>
@@ -51,7 +52,7 @@ const NewDevelopmentsSection = () => {
       <div className='mt-8'>
         <Link
           href='/new-developments'
-          className='bg-black text-white rounded-full px-5 py-3 flex justify-between items-center hover:bg-black/80 cursor-pointer w-full lg:w-40'
+          className='bg-white dark:bg-black text-black dark:text-white px-5 py-3 flex justify-between items-center cursor-pointer w-full lg:w-40'
         >
           <p>View More</p>
           <BiArrowToRight className='text-2xl ml-2' />

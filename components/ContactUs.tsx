@@ -5,6 +5,7 @@ import { FaWhatsapp, FaPhone, FaEnvelope } from 'react-icons/fa6';
 import { toast } from 'react-toastify';
 import { createContactRequest } from '@/actions/contact';
 import { IContactUs } from '@/interfaces/userInterface';
+import { typography, layout } from '@/lib/styles'; // Assuming you have a styles file for typography
 
 const ContactUs = () => {
   const [name, setFullName] = useState('');
@@ -51,14 +52,14 @@ const ContactUs = () => {
   };
 
   return (
-    <div>
+    <div className='dark:bg-black'>
       <div className='flex justify-around flex-col md:flex-row items-center gap-8 p-8 font-outfit'>
         <div className='col-span-1 flex flex-col gap-8'>
-          <h3 className='text-xl md:text-3xl uppercase text-[#131316] font-semibold text-center md:text-start'>
+          <h3 className={`${typography.heading3} text-xl md:text-3xl uppercase text-[#131316] font-semibold text-center md:text-start`}>
             Speak with our real estate
             <br /> specialists today.
           </h3>
-          <div className='flex gap-4 hover:bg-gray-100 p-2 rounded-lg transition-all duration-300 ease-in-out'>
+          <div className='flex gap-4 hover:bg-gray-200 dark:hover:bg-gray-800 p-2 rounded-lg transition-all duration-300 ease-in-out'>
             <div className='bg-black rounded-full p-3 text-white'>
               <FaWhatsapp className='text-2xl' />
             </div>
@@ -73,7 +74,7 @@ const ContactUs = () => {
               </a>
             </div>
           </div>
-          <div className='flex gap-4 hover:bg-gray-100 p-2 rounded-lg transition-all duration-300 ease-in-out'>
+          <div className='flex gap-4 hover:bg-gray-200 dark:hover:bg-gray-800 p-2 rounded-lg transition-all duration-300 ease-in-out'>
             <div className='bg-black rounded-full p-3 text-white'>
               <FaPhone className='text-2xl' />
             </div>
@@ -84,7 +85,7 @@ const ContactUs = () => {
               </a>
             </div>
           </div>
-          <div className='flex gap-4 hover:bg-gray-100 p-2 rounded-lg transition-all duration-300 ease-in-out'>
+          <div className='flex gap-4 hover:bg-gray-200 dark:hover:bg-gray-800 p-2 rounded-lg transition-all duration-300 ease-in-out'>
             <div className='bg-black rounded-full p-3 text-white'>
               <FaEnvelope className='text-2xl' />
             </div>
@@ -100,8 +101,8 @@ const ContactUs = () => {
           </div>
         </div>
         <div className='col-span-1'>
-          <div className='bg-white rounded-xl border border-gray-300 w-96 md:w-[500px] px-8 py-16'>
-            <h3 className='text-3xl uppercase text-[#131316] font-semibold mb-10'>
+          <div className='bg-white dark:bg-black rounded-xl border border-gray-300 dark:border-black w-96 md:w-[500px] px-8 py-16'>
+            <h3 className={`${typography.heading3} uppercase font-semibold mb-10`}>
               Contact Us
             </h3>
             <form onSubmit={handleSubmit}>
@@ -131,7 +132,7 @@ const ContactUs = () => {
                   className={`bg-[#131316] text-white font-semibold w-full p-4 rounded-3xl ${
                     loading
                       ? 'opacity-50 cursor-not-allowed'
-                      : 'cursor-pointer hover:bg-black/80'
+                      : 'cursor-pointer hover:bg-black/80 dark:hover:bg-white/80 dark:hover:text-black transition-all duration-300 ease-in-out'
                   }`}
                   type='submit'
                 >

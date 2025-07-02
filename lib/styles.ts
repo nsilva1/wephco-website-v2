@@ -4,14 +4,15 @@
 const textBase = "text-black dark:text-white";
 // const textDim = "text-gray-600 dark:text-[#36454F]"; // or dark:text-charcoal if configured
 const textDim = "text-gray-600 dark:text-gray-400"; // Adjusted for better contrast
-const bg = "bg-white dark:bg-gray-900";
+const bg = "bg-white dark:bg-black";
 
 // ======================
 // 2. Utilities
 // ======================
 export const spacing = {
-  paddingX: "sm:px-16 px-6",
-  paddingY: "sm:py-16 py-6",
+  paddingX: "px-16",
+  paddingY: "py-16",
+  padding: 'px-16 py-16',
 };
 
 export const utilities = {
@@ -37,7 +38,8 @@ export const typography = {
 // ======================
 export const layout = {
   boxWidth: "xl:max-w-[1280px] w-full",
-  section: `flex md:flex-row flex-col ${spacing.paddingY} ${bg}`,
+  section: `flex md:flex-row flex-col ${spacing.padding} ${bg}`,
+  columnSection: `flex flex-col ${spacing.padding} ${bg}`,
 };
 
 // ======================
