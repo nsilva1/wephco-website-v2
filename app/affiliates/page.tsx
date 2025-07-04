@@ -27,8 +27,8 @@ const AgentsPage = () => {
         <section className='py-20 px-10 font-outfit'>
             <div className='grid grid-cols-1 md:grid-cols-2'>
                 <div className='col-span-1'>
-                    <h3 className='text-gray-500 uppercase font-semibold text-lg mb-5'>The Wephco Difference</h3>
-                    <h2 className='text-primary font-bold text-3xl'>Respect For Your Talent. Value For Your Business</h2>
+                    <h3 className='text-gray-500 uppercase font-semibold text-lg mb-5 text-center md:text-start'>The Wephco Difference</h3>
+                    <h2 className='text-primary font-bold text-3xl text-center md:text-start'>Respect For Your Talent. Value For Your Business</h2>
                 </div>
                 <div className='col-span-1'>
                     <p className='text-gray-600 font-mono text-sm lg:text-lg'>

@@ -7,11 +7,11 @@ import { loginUser } from '@/actions/login';
 import { Loader } from './Loader';
 import { useRouter } from 'next/navigation';
 
-const AuthForm = ({ isLogin }: { isLogin: boolean }) => {
+const AuthForm = ({ isLogin, affiliateOnly = false }: { isLogin: boolean, affiliateOnly?: boolean }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
-  const [role, setRole] = useState<Role>(Role.AGENT);
+  const [role, setRole] = useState<Role>(Role.AFFILIATE);
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('')
   const [loading, setLoading] = useState(false);
@@ -163,9 +163,17 @@ const AuthForm = ({ isLogin }: { isLogin: boolean }) => {
                 onChange={(e) => setRole(e.target.value as Role)}
                 className='w-full px-3 py-2 border rounded'
               >
-                <option value={Role.AGENT}>Agent</option>
-                <option value={Role.SUPPORT}>Support</option>
-                <option value={Role.ADMIN}>Admin</option>
+                {
+                  affiliateOnly ? (
+                    <option value={Role.AFFILIATE}>Affiliate</option>
+                  ) : (
+                    <>
+                      <option value={Role.AFFILIATE}>Affiliate</option>
+                      <option value={Role.SUPPORT}>Support</option>
+                      <option value={Role.ADMIN}>Admin</option>
+                    </>
+                  )
+                }
               </select>
             </div>
           )}
@@ -174,7 +182,7 @@ const AuthForm = ({ isLogin }: { isLogin: boolean }) => {
           ) : (
             <button
               type='submit'
-              className='w-full px-4 py-2 text-white bg-black rounded hover:bg-black/80'
+              className='w-full px-4 py-2 text-white bg-black cursor-pointer dark:bg-primary rounded hover:bg-black/80'
             >
               {isLogin ? 'Login' : 'Register'}
             </button>

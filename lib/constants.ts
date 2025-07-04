@@ -21,8 +21,8 @@ export const navbarMenu = [
         path: '/sell'
     },
     {
-        label: 'Agents',
-        path: '/agents'
+        label: 'Affiliates',
+        path: '/affiliates'
     },
     {
         label: 'New Developments',

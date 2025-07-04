@@ -20,7 +20,7 @@ const Hero = ({onButtonClick}: {onButtonClick: () => void;}) => {
           <h1 className='lg:text-7xl text-4xl font-bold mb-4 font-outfit'>
             Become A Wephco
             <br />
-            Agent
+            Affiliate
           </h1>
           <button onClick={onButtonClick} className='bg-primary text-white py-2 px-4 rounded-full cursor-pointer'>Join Us</button>
         </div>

@@ -1,7 +1,7 @@
 import { IProperty } from "./propertyInterface"
 
 export enum Role {
-    AGENT = "AGENT",
+    AFFILIATE = "AFFILIATE",
     ADMIN = "ADMIN",
     SUPPORT = "SUPPORT",
     SUPERADMIN = "SUPERADMIN",
