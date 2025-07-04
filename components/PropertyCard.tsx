@@ -2,8 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
-// import { formatCurrency } from '@/lib/helperFunctions';
-// import { InterestForm } from './InterestForm';
+import { ArrowRight } from 'lucide-react';
 import { IProperty } from '@/interfaces/propertyInterface';
 
 export interface PropertyCardProps extends IProperty {
@@ -16,8 +15,7 @@ const PropertyCard = ({ showModal, openModal, ...props }: PropertyCardProps) => 
 
   return (
     <div
-      onClick={showModal}
-      className='bg-white dark:bg-gray-700 font-outfit rounded-xl shadow-lg overflow-hidden flex flex-col gap-2 transition-transform hover:scale-105 cursor-pointer'
+      className='bg-white dark:bg-gray-700 font-outfit rounded-xl shadow-lg overflow-hidden flex flex-col gap-2 transition-transform hover:scale-105'
     >
       <div className='relative w-full h-96 rounded-t-xl cursor-pointer'>
         <Image
@@ -34,8 +32,9 @@ const PropertyCard = ({ showModal, openModal, ...props }: PropertyCardProps) => 
       <p className='font-mono font-bold'>
         {props.city}, {props.country}
       </p>
-      <button>
-        Download PDF
+      <button onClick={showModal} className='bg-primary text-white px-4 py-2 rounded-lg flex items-center justify-center hover:bg-black transition-colors duration-300 cursor-pointer'>
+        Get PDF
+        <ArrowRight className='inline ml-2' />
       </button>
       </div>    
     </div>
