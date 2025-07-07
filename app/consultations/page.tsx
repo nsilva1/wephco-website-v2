@@ -18,6 +18,7 @@ const ConsultationsPage = () => {
     email: '',
     organizationName: '',
     name: '',
+    preferredModeOfContact: '',
     details: '',
     status: false,
   });
@@ -33,6 +34,7 @@ const ConsultationsPage = () => {
       organizationName: '',
       name: '',
       details: '',
+      preferredModeOfContact: '',
       status: false,
     });
   };
@@ -93,11 +95,11 @@ const ConsultationsPage = () => {
             <Phone size={18} />
             <span>+234(0) 916-124-6300</span>
           </div>
-          <div className='bg-red-50 w-full rounded-md flex flex-col gap-4 p-8'>
+          <div className='bg-red-50 dark:bg-gray-600 w-full rounded-md flex flex-col gap-4 p-8'>
             <h5 className='text-center text-2xl font-semibold'>
               Schedule a Consultation
             </h5>
-            <p className='text-center text-gray-500'>
+            <p className='text-center text-gray-500 dark:text-gray-200'>
               To schedule a consultation, fill out the form below to get
               started.
             </p>
@@ -111,8 +113,28 @@ const ConsultationsPage = () => {
             <form onSubmit={submitForm}>
               <fieldset disabled={loading}>
                 
-                {/* Service */}
-                <div className='mb-2 mt-4'>
+                {/* Service & Preferred Contact */}
+                <div className='my-5 grid grid-cols-1 md:grid-cols-2 gap-4 order-2'>
+                  <div className='mb-2 mt-4'>
+                    <label className='block mb-2 text-base font-bold'>
+                      Preferred Contact Method
+                      <span className='text-red-500'>*</span>
+                    </label>
+                    <select
+                      name='preferredModeOfContact'
+                      value={formData.preferredModeOfContact}
+                      onChange={handleChange}
+                      className='w-full p-4 bg-white rounded-md dark:bg-gray-500'
+                      required
+                    >
+                      <option value=''>-Select Contact Method-</option>
+                      <option value='phone'>Phone</option>
+                      <option value='email'>Email</option>
+                      <option value="whatsapp">WhatsApp</option>
+                    </select>
+                  </div>
+
+                  <div className='mb-2 mt-4 order-1'>
                   <label className='block mb-2 text-base font-bold'>
                     What type of Service do you need
                     <span className='text-red-500'>*</span>
@@ -121,13 +143,17 @@ const ConsultationsPage = () => {
                     name='service'
                     value={formData.service}
                     onChange={handleChange}
-                    className='w-full p-4 bg-white rounded-md'
+                    className='w-full p-4 bg-white rounded-md dark:bg-gray-500'
                     required
                   >
                     <option value=''>-Select Service-</option>
                     <option value='buy'>Buy Property</option>
                     <option value='sell'>Sell Property</option>
+                    <option value="General Consultation">General Consultation</option>
+                    <option value="Investment Tour">Investment Tour</option>
+                    <option value="Affiliate Program">Affiliate Program</option>
                   </select>
+                </div>
                 </div>
 
                 {/* Date & Location */}
@@ -142,7 +168,7 @@ const ConsultationsPage = () => {
                       value={formData.meetingDate.toISOString().split('T')[0]}
                       onChange={handleChange}
                       type='date'
-                      className='w-full p-4 bg-white rounded-md'
+                      className='w-full p-4 bg-white rounded-md dark:bg-gray-500'
                       required
                     />
                   </div>
@@ -155,7 +181,7 @@ const ConsultationsPage = () => {
                       name='meetingLocation'
                       value={formData.meetingLocation}
                       onChange={handleChange}
-                      className='w-full p-4 bg-white rounded-md'
+                      className='w-full p-4 bg-white rounded-md dark:bg-gray-500'
                       required
                     >
                       <option value=''>-Select Location-</option>
@@ -178,7 +204,7 @@ const ConsultationsPage = () => {
                       value={formData.phoneNumber}
                       onChange={handleChange}
                       type='tel'
-                      className='w-full p-4 bg-white rounded-md'
+                      className='w-full p-4 bg-white rounded-md dark:bg-gray-500'
                       placeholder='Your Phone Number...'
                       required
                     />
@@ -192,7 +218,7 @@ const ConsultationsPage = () => {
                       value={formData.email}
                       onChange={handleChange}
                       type='email'
-                      className='w-full p-4 bg-white rounded-md'
+                      className='w-full p-4 bg-white rounded-md dark:bg-gray-500'
                       placeholder='Your Email Address...'
                       required
                     />
@@ -210,7 +236,7 @@ const ConsultationsPage = () => {
                       value={formData.organizationName}
                       onChange={handleChange}
                       type='text'
-                      className='w-full p-4 bg-white rounded-md'
+                      className='w-full p-4 bg-white rounded-md dark:bg-gray-500'
                       placeholder='Your Organization Name...'
                     />
                   </div>
@@ -223,7 +249,7 @@ const ConsultationsPage = () => {
                       value={formData.name}
                       onChange={handleChange}
                       type='text'
-                      className='w-full p-4 bg-white rounded-md'
+                      className='w-full p-4 bg-white rounded-md dark:bg-gray-500'
                       placeholder='Your Name...'
                       required
                     />
@@ -239,7 +265,7 @@ const ConsultationsPage = () => {
                     name='details'
                     value={formData.details}
                     onChange={handleChange}
-                    className='w-full p-4 bg-white rounded-md'
+                    className='w-full p-4 bg-white rounded-md dark:bg-gray-500'
                     placeholder='Provide additional details...'
                     rows={4}
                   ></textarea>

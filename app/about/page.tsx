@@ -1,5 +1,6 @@
 import React from 'react'
 import { Hero } from './(components)/Hero'
+import { typography } from '@/lib/styles'
 
 const AboutPage = () => {
   return (
@@ -39,6 +40,10 @@ const AboutPage = () => {
                 </div>
             </div>
         </div>
+      </div>
+
+      <div className='py-20 px-10'>
+        <h4 className={`${typography.heading2} text-center`}>Meet The Team</h4>
       </div>
     </div>
   )

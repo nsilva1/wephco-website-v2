@@ -37,6 +37,7 @@ export interface IConsultation {
     organizationName: string;
     name: string;
     details: string;
+    preferredModeOfContact: string;
     status: boolean;
     createdAt?: Date;
 }

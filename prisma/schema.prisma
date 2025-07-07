@@ -78,17 +78,18 @@ model Contact {
 }
 
 model Consultation {
-  id               String   @id @default(auto()) @map("_id") @db.ObjectId
-  service          String
-  meetingDate      DateTime
-  meetingLocation  String
-  phoneNumber      String
-  email            String
-  organizationName String?
-  name             String
-  details          String?
-  status           Boolean  @default(false)
-  createdAt        DateTime @default(now())
+  id                     String   @id @default(auto()) @map("_id") @db.ObjectId
+  service                String
+  meetingDate            DateTime
+  meetingLocation        String
+  phoneNumber            String
+  email                  String
+  organizationName       String?
+  name                   String
+  details                String?
+  preferredModeOfContact String?
+  status                 Boolean  @default(false)
+  createdAt              DateTime @default(now())
 
   @@map("consultations") // optional, aligns with MongoDB collection name
 }
