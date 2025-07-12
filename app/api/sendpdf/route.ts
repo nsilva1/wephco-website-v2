@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import nodemailer from 'nodemailer';
-import { IProperty } from "@/interfaces/propertyInterface";
+// import { IProperty } from "@/interfaces/propertyInterface";
 
 export async function POST(request: Request) {
     try {
@@ -35,7 +35,7 @@ export async function POST(request: Request) {
             attachments: [
                 {
                     filename: "document.pdf",
-                    path: pdfUrl,
+                    path: property.pdfUrl,
                 },
             ],
         });
