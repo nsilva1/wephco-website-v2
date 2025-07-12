@@ -30,6 +30,7 @@ export async function POST(request: Request) {
         organizationName: body.organizationName,
         name: body.name,
         details: body.details,
+        preferredModeOfContact: body.preferredModeOfContact,
         status: false
     };
 
