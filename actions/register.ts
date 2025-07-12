@@ -54,7 +54,7 @@ export const registerUser = async (user: Omit<IUser, 'id'>): Promise<Registratio
           name,
           email,
           password: hashedPassword,
-          role: userRole, 
+          role: userRole as import("@/lib/generated/prisma").$Enums.Role, 
       },
       select: {
         id: true,

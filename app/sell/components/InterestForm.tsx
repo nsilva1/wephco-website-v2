@@ -4,6 +4,7 @@ import { ComponentPropsWithoutRef, useState, useCallback, useRef } from 'react';
 import { Autocomplete, useJsApiLoader } from '@react-google-maps/api'
 import { createEnquiry } from '@/actions/sellEnquiry';
 import { toast } from 'react-toastify';
+import Link from 'next/link';
 
 const apiKey = process.env.GOOGLE_MAPS_API_KEY as string;
 
@@ -134,8 +135,9 @@ const resetAndRefresh = useCallback(() => {
   if (inputRef.current) {
       inputRef.current.value = ''; // Clear input field
   }
-  // Avoid window.location.reload() in React/Next.js unless absolutely necessary
-  // Resetting state should be sufficient to reset the form
+  if (autocomplete) {
+      autocomplete.set('place', null); // Reset autocomplete place
+  }
 }, []); 
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -147,7 +149,7 @@ const resetAndRefresh = useCallback(() => {
 
     setLoading(true);
 
-    // Mock API call
+    // API call
     try {
       const response = await createEnquiry(formData);
 
@@ -177,7 +179,7 @@ const resetAndRefresh = useCallback(() => {
     return (
         <div className="flex items-center justify-center p-4 min-h-[100px]">
              <div className="text-red-600 bg-red-100 p-3 rounded border border-red-300">
-                Error loading Google Maps. Please check the API key and network connection.
+                Error loading Google Maps.
              </div>
         </div>
     );
@@ -192,7 +194,7 @@ const resetAndRefresh = useCallback(() => {
               {step === 1 && (
                 <div className=''>
                   <div className='bg-white flex items-center rounded-full gap-4 p-3'>
-                    <Autocomplete onLoad={onLoad} onPlaceChanged={onPlaceChanged} options={{ types: ['address'], componentRestrictions: { country: ['gb', 'ae', 'ng'] } }}>
+                    <Autocomplete onLoad={onLoad} onPlaceChanged={onPlaceChanged} options={{ types: ['address'] }}>
                     <input
                       type='text'
                       ref={inputRef}
@@ -218,7 +220,6 @@ const resetAndRefresh = useCallback(() => {
               {step === 2 && (
                 <div className='space-y-4 bg-white p-8 rounded-2xl min-w-lg'>
                   <div>
-                  
                     <input
                       type='text'
                       id='name'
@@ -307,6 +308,9 @@ const resetAndRefresh = useCallback(() => {
                       {loading ? 'Submitting...' : 'Submit'}
                     </button>
                   </div>
+                  <p className='text-sm text-black font-bold'>
+                    By clicking "Submit", you agree to our service charge deposit of 1% of the total value of the property.
+                  </p>
                 </div>
               )}
 

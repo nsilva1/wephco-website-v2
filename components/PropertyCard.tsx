@@ -32,10 +32,13 @@ const PropertyCard = ({ showModal, openModal, ...props }: PropertyCardProps) => 
       <p className='font-mono font-bold'>
         {props.city}, {props.country}
       </p>
-      <button onClick={showModal} className='bg-primary text-white px-4 py-2 rounded-lg flex items-center justify-center hover:bg-black transition-colors duration-300 cursor-pointer'>
+      {/* <button onClick={showModal} className='bg-primary text-white px-4 py-2 rounded-lg flex items-center justify-center hover:bg-black transition-colors duration-300 cursor-pointer'>
         Get PDF
         <ArrowRight className='inline ml-2' />
-      </button>
+      </button> */}
+      <a href={props.pdfUrl} target='_blank' rel='noopener noreferrer' className='bg-primary text-white px-4 py-2 rounded-lg flex items-center justify-center hover:bg-black transition-colors duration-300 cursor-pointer'>
+        View PDF
+      </a>
       </div>    
     </div>
   );
