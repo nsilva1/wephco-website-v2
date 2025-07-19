@@ -6,6 +6,7 @@ import { Role } from '@/interfaces/userInterface';
 import { loginUser } from '@/actions/login';
 import { Loader } from './Loader';
 import { useRouter } from 'next/navigation';
+import { typography, layout } from '@/lib/styles';
 
 const AuthForm = ({ isLogin, affiliateOnly = false }: { isLogin: boolean, affiliateOnly?: boolean }) => {
   const [email, setEmail] = useState('');
@@ -92,7 +93,7 @@ const AuthForm = ({ isLogin, affiliateOnly = false }: { isLogin: boolean, affili
   };
 
   return (
-    <div className='font-outfit'>
+    <div className={``}>
       <form
         onSubmit={(e) => handleSubmit(e)}
         className='max-w-md mx-auto mt-8 space-y-4'
