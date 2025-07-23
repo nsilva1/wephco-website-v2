@@ -2,26 +2,9 @@ import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import { ToastContainer } from "react-toastify";
+import Script from "next/script";
 import "../globals.css";
 
-// TODO: implement dark theme, 
-// reduce vertical width of navbar on mobile, 
-// update list of servies on consultation form, 
-// prefered mode of contact on consultation form
-// change agents to affiliate
-// authentication code to create a user account
-// send pdf to email after clicking on property card
-// implement careers page functionality
-// implement development badge at the top right corner of new development card to show development status
-// look into google api key for maps
-// modify sell page layout, put image and text above, side-by-side.
-// add terms and conditions for selling a property below the form.
-// add carousel of pictures on the home page, and add upload feature to dashboard. protect the pictures from being downloaded by right clicking on them.
-// add saadiyat video to buy page hero section
-// add team section in about page.
-// add brand ambassador section on home page, and another section for press
-// add a section for social media posts on the home page.
-// complete by 7th July
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -48,6 +31,27 @@ export default function RootLayout({
         <ToastContainer />
         <Navbar />
         {children}
+        {/* Inline Zoho setup script */}
+        <Script
+          id="zoho-init"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.$zoho = window.$zoho || {};
+              $zoho.salesiq = $zoho.salesiq || {
+                ready: function() {}
+              };
+            `,
+          }}
+        />
+
+        {/* Zoho widget loader script */}
+        <Script
+          id="zoho-script"
+          src="https://salesiq.zohopublic.com/widget?wc=siqec03d4022833d9de76f733b7ff7454d795217e06a438641d6f7172e1dd13841b"
+          strategy="afterInteractive"
+          defer
+        />
       </body>
     </html>
   );
