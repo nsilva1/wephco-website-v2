@@ -6,7 +6,8 @@ import { Role } from '@/interfaces/userInterface';
 import { loginUser } from '@/actions/login';
 import { Loader } from './Loader';
 import { useRouter } from 'next/navigation';
-import { typography, layout } from '@/lib/styles';
+import { checkAuthenticationCode } from '@/lib/helperFunctions';
+
 
 const AuthForm = ({ isLogin, affiliateOnly = false }: { isLogin: boolean, affiliateOnly?: boolean }) => {
   const [email, setEmail] = useState('');
@@ -19,8 +20,8 @@ const AuthForm = ({ isLogin, affiliateOnly = false }: { isLogin: boolean, affili
 
   const router = useRouter()
 
-  const authCode1 = process.env.auth_code1
-  const authCode2 = process.env.auth_code2
+  const authCode1 = process.env.NEXT_PUBLIC_AUTH_CODE1
+  const authCode2 = process.env.NEXT_PUBLIC_AUTH_CODE2
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -63,9 +64,11 @@ const AuthForm = ({ isLogin, affiliateOnly = false }: { isLogin: boolean, affili
 
       const user = { name, email, password, role };
 
-      const code = prompt('Enter the authentication code:');
+      const code = prompt('Enter the authentication code:')?.toLowerCase()
 
-      if (code !== authCode1 || code !== authCode2) {
+      const isValidCode = checkAuthenticationCode(code);
+
+      if (!isValidCode) {
         setError('Invalid authentication code');
         setLoading(false);
         return;
@@ -88,6 +91,8 @@ const AuthForm = ({ isLogin, affiliateOnly = false }: { isLogin: boolean, affili
           setError(error.message);
         }
         return;
+      } finally {
+        setLoading(false);
       }
     }
   };

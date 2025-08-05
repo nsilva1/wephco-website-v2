@@ -6,9 +6,10 @@ import aldar from '@/images/aldar.png'
 import damac from '@/images/damac.svg'
 import sober from '@/images/sober.png'
 import aarano from '@/images/aarano.png'
-import { MdDashboard, MdSettings } from "react-icons/md";
+import { MdDashboard, MdSettings, MdHandshake } from "react-icons/md";
 import { BiBuildings, BiHeadphone } from "react-icons/bi";
 import { BsPeopleFill, BsPersonFillGear } from "react-icons/bs";
+import { Role } from "@/interfaces/userInterface";
 
 
 export const navbarMenu = [
@@ -175,6 +176,11 @@ export const dashboardMenu = [
         path: '/dashboard/requests'
     },
     {
+        label: 'Consultations',
+        icon: MdHandshake,
+        path: '/dashboard/consultations'
+    },
+    {
         label: 'Agents',
         icon: BsPeopleFill,
         path: '/dashboard/agents'
@@ -190,3 +196,5 @@ export const dashboardMenu = [
         path: '/dashboard/profile'
     },
 ]
+
+export const allowedRoles = [Role.ADMIN, Role.SUPERADMIN, Role.SUPPORT]

@@ -185,8 +185,8 @@ const ConsultationsPage = () => {
                       required
                     >
                       <option value=''>-Select Location-</option>
-                      <option value='buy'>Physical</option>
-                      <option value='sell'>
+                      <option value='physical'>Physical</option>
+                      <option value='virtual'>
                         Virtual (Zoom, Google Meet, Microsoft Teams)
                       </option>
                     </select>

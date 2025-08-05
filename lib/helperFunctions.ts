@@ -135,3 +135,27 @@ export const convertBlobUrlToFile = async (blobUrl: string) => {
 
   return file;
 }
+
+export const checkAuthenticationCode = (code?: string): boolean => {
+  if (!code) {
+    return false;
+  }
+  const authCode1 = process.env.NEXT_PUBLIC_AUTH_CODE1?.toLowerCase();
+  const authCode2 = process.env.NEXT_PUBLIC_AUTH_CODE2?.toLowerCase();
+  if (!authCode1 || !authCode2) {
+    throw new Error('Authentication codes are not set in environment variables');
+  }
+  return code === authCode1 || code === authCode2;
+}
+
+export const getInitials = (fullName: string): string => {
+  
+  if (typeof fullName !== 'string' || fullName.trim() === '') {
+    return '';
+  }
+
+  const nameParts = fullName.trim().split(/\s+/);
+  const firstLetters = nameParts.map(part => part[0]);
+
+  return firstLetters.join('').toUpperCase();
+}

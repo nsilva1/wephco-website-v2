@@ -9,8 +9,13 @@ import smallLogo from '@/images/logo-w.png';
 import { Tooltip } from '@/components/Tooltip';
 import { BellIcon, ChevronLeft, ChevronRight } from 'lucide-react';
 import { SignOutButton } from '@/components/SignOutButton';
+import { useSession } from 'next-auth/react';
+import { getInitials } from '@/lib/helperFunctions';
+
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
+  const { data: session, status } = useSession()
+
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const toggleSidebar = () => setIsCollapsed(!isCollapsed);
@@ -27,13 +32,13 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
           {isCollapsed ? (
             <div className='flex justify-center'>
               <div className='h-10 w-10 rounded-full bg-gray-700 flex items-center justify-center text-white font-medium'>
-                JD
+                {getInitials(session?.user?.name!)}
               </div>
             </div>
           ) : (
             <div>
-              <p className='font-medium'>userName</p>
-              <p className='text-sm text-gray-400 truncate'>userEmail</p>
+              <p className='font-medium'>{session?.user.name}</p>
+              <p className='text-sm text-gray-400 truncate'>{session?.user.email}</p>
             </div>
           )}
         </div>
