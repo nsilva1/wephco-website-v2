@@ -664,6 +664,11 @@
   dependencies:
     "@prisma/debug" "6.6.0"
 
+"@prisma/nextjs-monorepo-workaround-plugin@^6.13.0":
+  version "6.13.0"
+  resolved "https://registry.yarnpkg.com/@prisma/nextjs-monorepo-workaround-plugin/-/nextjs-monorepo-workaround-plugin-6.13.0.tgz#ea40a0f826694b8c1fd8db74f82665df60ca2a38"
+  integrity sha512-RUNHn4SDb5lu8k7AcS2N2O4pftYPu0rVVRNOG6qzekup+1alb1ezgykAhsWhS15a/Sa2TThyLSegP+Ef8+3xlw==
+
 "@react-google-maps/api@^2.20.6":
   version "2.20.6"
   resolved "https://registry.yarnpkg.com/@react-google-maps/api/-/api-2.20.6.tgz#8463a4db10dd2764b14da4bfe942a584693eb4b3"

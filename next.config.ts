@@ -1,14 +1,14 @@
+const { PrismaPlugin } = require('@prisma/nextjs-monorepo-workaround-plugin')
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  // webpack: (config) => {
-  //   config.externals = [...config.externals, { '@prisma/client': 'commonjs @prisma/client' }];
-  //   return config;
-  // },
-  // serverExternalPackages: ['@prisma/client'],
+  devIndicators: {
+    buildActivity: false,
+  },
+  experimental: {
+    authInterrupts: true,
+  },
   images: {
-    // domains: ["example.com", "images.unsplash.com", "i.imgur.com"],
     remotePatterns: [
       {
         protocol: "https",
@@ -16,8 +16,21 @@ const nextConfig: NextConfig = {
         port: "",
         pathname: "/**",
       },
-    ]
-  }
+    ],
+  },
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      config.plugins.push(new PrismaPlugin());
+
+      // Optional: Uncomment if you want to externalize @prisma/client manually
+      // config.externals = [...(config.externals || []), { '@prisma/client': 'commonjs @prisma/client' }];
+    }
+
+    return config;
+  },
+
+  // Optional: Uncomment if using serverExternalPackages
+  // serverExternalPackages: ['@prisma/client'],
 };
 
 export default nextConfig;
