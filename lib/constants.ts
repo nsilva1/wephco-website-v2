@@ -181,9 +181,9 @@ export const dashboardMenu = [
         path: '/dashboard/consultations'
     },
     {
-        label: 'Agents',
+        label: 'Affiliates',
         icon: BsPeopleFill,
-        path: '/dashboard/agents'
+        path: '/dashboard/affiliates'
     },
     {
         label: 'Settings',

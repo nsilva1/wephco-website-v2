@@ -7,6 +7,7 @@ import { loginUser } from '@/actions/login';
 import { Loader } from './Loader';
 import { useRouter } from 'next/navigation';
 import { checkAuthenticationCode } from '@/lib/helperFunctions';
+import { EyeClosed, Eye } from 'lucide-react';
 
 
 const AuthForm = ({ isLogin, affiliateOnly = false }: { isLogin: boolean, affiliateOnly?: boolean }) => {
@@ -17,6 +18,7 @@ const AuthForm = ({ isLogin, affiliateOnly = false }: { isLogin: boolean, affili
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('')
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const router = useRouter()
 
@@ -144,19 +146,29 @@ const AuthForm = ({ isLogin, affiliateOnly = false }: { isLogin: boolean, affili
               className='w-full px-3 py-2 border rounded'
             />
           </div>
-          <div>
+          <div className=''>
             <label htmlFor='password' className='block mb-1'>
               Password
             </label>
-            <input
+            <div className='relative'>
+              <input
               id='password'
-              type='password'
+              type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className='w-full px-3 py-2 border rounded'
+              className='w-full px-3 py-2 pr-10 border rounded'
               minLength={6}
             />
+            <button
+              type='button'
+              onClick={() => setShowPassword(!showPassword)}
+              className='absolute inset-y-0 right-3 flex items-center text-gray-500 dark:text-white cursor-pointer'
+              tabIndex={-1}
+            >
+              {showPassword ? <Eye size={20} /> : <EyeClosed size={20} />}
+            </button>     
+            </div>      
           </div>
           {!isLogin && (
             <div>
