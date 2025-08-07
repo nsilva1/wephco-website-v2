@@ -22,7 +22,7 @@ const Footer = () => {
                 <Link className='font-semibold text-white text-sm uppercase leading-6 hover:underline' href='/buy'>Buy</Link>
                 <Link className='font-semibold text-white text-sm uppercase leading-6 hover:underline' href='/sell'>Sell</Link>
                 <Link className='font-semibold text-white text-sm uppercase leading-6 hover:underline' href='/new-developments'>New Developments</Link>
-                <Link className='font-semibold text-white text-sm uppercase leading-6 hover:underline' href='/agents'>Agents</Link>
+                <Link className='font-semibold text-white text-sm uppercase leading-6 hover:underline' href='/affiliates'>Affiliates</Link>
                 <Link className='font-semibold text-white text-sm uppercase leading-6 hover:underline' href='/contact-us'>Contact Us</Link>
                 <Link className='font-semibold text-white text-sm uppercase leading-6 hover:underline' href='/auth/login'>Login</Link>
             </div>

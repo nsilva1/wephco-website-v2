@@ -9,6 +9,8 @@ import { useSession } from 'next-auth/react'
 import { Role } from '@/interfaces/userInterface'
 import { signOut } from 'next-auth/react'
 import { toast } from 'react-toastify'
+import { Tooltip } from '@/components/Tooltip'
+import { Trash2, PenIcon } from 'lucide-react'
 
 const DashboardPropertiesPage = () => {
     const router = useRouter()
@@ -83,14 +85,14 @@ const DashboardPropertiesPage = () => {
     let tableHead = (
         <thead>
             <tr>
-                <th>Actions</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Country</th>
-                <th>City</th>
-                <th>Image(s)</th>
-                <th>PDF</th>
-                <th>Created</th>
+                <th className='p-4 text-left font-semibold'>Actions</th>
+                <th className='p-4 text-left font-semibold'>Name</th>
+                <th className='p-4 text-left font-semibold'>Description</th>
+                <th className='p-4 text-left font-semibold'>Country</th>
+                <th className='p-4 text-left font-semibold'>City</th>
+                <th className='p-4 text-left font-semibold'>Image(s)</th>
+                <th className='p-4 text-left font-semibold'>PDF</th>
+                <th className='p-4 text-left font-semibold'>Created</th>
             </tr>
         </thead>
     )
@@ -100,8 +102,12 @@ const DashboardPropertiesPage = () => {
             {properties.map((property, index) => (
                 <tr key={property.id} className={`${index % 2 === 0 ? 'bg-gray-200' : 'bg-white'}`}>
                     <td className='flex gap-2 p-4'>
-                        <button className='bg-blue-500 text-white px-2 py-1 rounded'>Edit</button>
-                        <button className='bg-red-500 text-white px-2 py-1 rounded'>Delete</button>
+                        <Tooltip text='Edit' position='top'>
+                            <PenIcon className='text-blue-500 hover:text-blue-700 cursor-pointer' />
+                        </Tooltip>
+                        <Tooltip text='Delete' position='top'>
+                            <Trash2 className='text-red-500 hover:text-red-700 cursor-pointer' />
+                        </Tooltip>
                     </td>
                     <td className='p-4'>{property.name}</td>
                     <td className='p-4'>{property.description}</td>
@@ -119,7 +125,7 @@ const DashboardPropertiesPage = () => {
   return (
     <div className='flex flex-col items-center h-screen overflow-x-auto p-5'>
         <button onClick={goToAddPropertyForm} className='px-4 py-2 bg-black text-white hover:bg-black/80 rounded-md'>Add New Property</button>
-        <table className='w-full leading-normal mt-10'>
+        <table className='w-full leading-normal mt-10 text-sm'>
             {tableHead}
             {tableBody}
         </table>

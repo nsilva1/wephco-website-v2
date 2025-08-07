@@ -10,6 +10,8 @@ import { Role } from '@/interfaces/userInterface'
 import { signOut } from 'next-auth/react'
 import { toast } from 'react-toastify'
 import { allowedRoles } from '@/lib/constants'
+import { Tooltip } from '@/components/Tooltip'
+import { Contact, NotebookPen } from 'lucide-react'
 
 const ConsultationsPage = () => {
     // const router = useRouter()
@@ -80,16 +82,16 @@ const ConsultationsPage = () => {
     let tableHead = (
         <thead>
             <tr>
-                <th>Actions</th>
-                <th>Service</th>
-                <th>Meeting Date</th>
-                <th>Meeting Location</th>
-                <th>Phone</th>
-                <th>Email</th>
-                <th>Organisation</th>
-                <th>Contact Name</th>
-                <th>Mode of Contact</th>
-                <th>Details</th>
+                <th className='p-4 text-left font-semibold'>Actions</th>
+                <th className='p-4 text-left font-semibold'>Service</th>
+                <th className='p-4 text-left font-semibold'>Meeting Date</th>
+                <th className='p-4 text-left font-semibold'>Meeting Location</th>
+                <th className='p-4 text-left font-semibold'>Phone</th>
+                <th className='p-4 text-left font-semibold'>Email</th>
+                <th className='p-4 text-left font-semibold'>Organisation</th>
+                <th className='p-4 text-left font-semibold'>Contact Name</th>
+                <th className='p-4 text-left font-semibold'>Mode of Contact</th>
+                <th className='p-4 text-left font-semibold'>Details</th>
             </tr>
         </thead>
     )
@@ -98,9 +100,13 @@ const ConsultationsPage = () => {
         <tbody>
             {consultations.map((consultation, index) => (
                 <tr key={consultation.id} className={`${index % 2 === 0 ? 'bg-gray-200' : 'bg-white'}`}>
-                    <td className='flex flex-col gap-2 p-4'>
-                        <button className='bg-blue-500 hover:bg-blue-700 text-white px-2 py-1 rounded cursor-pointer'>Contact</button>
-                        <button className='bg-green-500 hover:bg-green-700 text-white px-2 py-1 rounded cursor-pointer'>Add a Note</button>
+                    <td className='flex gap-2 p-4'>
+                        <Tooltip text='Contact Customer' position='top'>
+                            <Contact className='text-blue-500 hover:text-blue-700 cursor-pointer' />
+                        </Tooltip>
+                        <Tooltip text='Add a Note' position='top'>
+                            <NotebookPen className='text-green-500 hover:text-green-700 cursor-pointer' />
+                        </Tooltip>
                     </td>
                     <td className='p-4'>{consultation.service}</td>
                     <td className='p-4'>{new Date(consultation.meetingDate).toDateString()}</td>
@@ -119,7 +125,7 @@ const ConsultationsPage = () => {
 
   return (
     <div className='flex flex-col items-center h-screen overflow-x-scroll p-5'>
-        <table className='w-full leading-normal mt-10'>
+        <table className='w-full leading-normal mt-10 text-sm'>
             <caption className='text-2xl font-bold mb-4'>Consultations</caption>
             {tableHead}
             {tableBody}

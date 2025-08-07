@@ -8,13 +8,12 @@ export enum Role {
 }
 
 export interface IUser {
-    id?: string;
+  id?: string;
   name: string;
   email: string;
   password: string;
   role: Role;
   createdAt?: Date;
-  
 }
 
 export interface IContactUs {
@@ -42,7 +41,7 @@ export interface IConsultation {
     createdAt?: Date;
 }
 
-export interface IAgent {
+export interface IAffiliate {
   id?: string;
   name: string;
   email: string;
