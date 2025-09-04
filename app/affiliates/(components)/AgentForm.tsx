@@ -1,14 +1,56 @@
 'use client';
 
+import { useState, ChangeEvent } from 'react'
 import { ComponentPropsWithoutRef } from 'react';
 import agentRegistration from '@/images/agent-registration.jpg';
 import Image from 'next/image';
-// import { Role } from '@/interfaces/userInterface';
-import { AuthForm } from '@/components/AuthForm';
+import { registerAffiliate } from '@/actions/affiliates';
+import { Loader } from '@/components/Loader';
+import { IAffiliate } from '@/interfaces/userInterface';
+import { toast } from 'react-toastify';
 
 interface INewAgent extends ComponentPropsWithoutRef<'div'> {}
 
 const AgentForm = ({ ...rest }: INewAgent) => {
+
+  const [formData, setFormData] = useState<Omit<IAffiliate, 'id' | 'createdAt'>>({
+    name: '',
+    email: '',
+    location: '',
+  })
+  const [loading, setLoading] = useState(false);
+
+
+  type inputTypes = keyof IAffiliate
+
+  const handleChange = (input: inputTypes) => (event: ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [input]: event.target.value });
+  }
+
+  const clearForm = () => {
+    setFormData({
+        name: '',
+        email: '',
+        location: '',
+    })
+  }
+
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      await registerAffiliate(formData);
+      
+      clearForm();
+      toast.success('Registration successful! We will get back to you soon.')
+    } catch (error) {
+      toast.error('Registration failed. Please try again later.')
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <div {...rest} className='flex flex-col items-center justify-center p-4 lg:p-20 font-outfit'>
@@ -23,8 +65,37 @@ const AgentForm = ({ ...rest }: INewAgent) => {
             />
           </div>
         </div>
-        <div className='col-span-1'>
-          <AuthForm isLogin={false} affiliateOnly={true} />
+        <div className='col-span-1 place-items-center'>
+          <form onSubmit={handleSubmit} className='space-y-6 rounded-2xl p-8 min-w-sm md:min-w-lg'>
+            <fieldset className='space-y-8'>
+              <div>
+                <label className='block mb-4'>Name</label>
+                <input required className='border border-gray-300 rounded-md p-1 w-full' value={formData.name} onChange={handleChange('name')} />
+              </div>
+              <div>
+                <label className='block mb-4'>Email</label>
+                <input required className='border border-gray-300 rounded-md p-1 w-full' value={formData.email} onChange={handleChange('email')} />
+              </div>
+              <div>
+                <label className='block mb-4'>Location</label>
+                <input required className='border border-gray-300 rounded-md p-1 w-full' value={formData.location} onChange={handleChange('location')} />
+              </div>
+              <div>
+                <label className='block mb-4'>What interests you in Wephco?</label>
+                <textarea className='border border-gray-300 rounded-md p-1 w-full' rows={3}></textarea>
+              </div>
+              {loading ? (
+            <Loader size='sm' />
+          ) : (
+            <button
+              type='submit'
+              className='w-full px-4 py-2 text-white bg-black cursor-pointer dark:bg-primary rounded hover:bg-black/80'
+            >
+              Register
+            </button>
+          )}
+            </fieldset>
+          </form>
         </div>
       </div>
     </div>

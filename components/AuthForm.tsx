@@ -22,9 +22,6 @@ const AuthForm = ({ isLogin, affiliateOnly = false }: { isLogin: boolean, affili
 
   const router = useRouter()
 
-  const authCode1 = process.env.NEXT_PUBLIC_AUTH_CODE1
-  const authCode2 = process.env.NEXT_PUBLIC_AUTH_CODE2
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');

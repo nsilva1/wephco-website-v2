@@ -45,7 +45,6 @@ export interface IAffiliate {
   id?: string;
   name: string;
   email: string;
-  password: string;
+  location: string;
   createdAt?: Date;
-  properties?: IProperty[]
 }

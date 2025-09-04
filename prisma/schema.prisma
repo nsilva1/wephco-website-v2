@@ -119,3 +119,14 @@ model PropertyEnquiry {
 
   @@map("property_enquiry")
 }
+
+model Affiliate {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  email     String   @unique
+  location  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("affiliates") // optional: maps the model to a MongoDB collection name
+}

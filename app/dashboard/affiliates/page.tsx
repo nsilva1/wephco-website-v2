@@ -84,7 +84,7 @@ const DashboardPropertiesPage = () => {
                 <th className='p-4 text-left font-semibold'>Actions</th>
                 <th className='p-4 text-left font-semibold'>Name</th>
                 <th className='p-4 text-left font-semibold'>Email</th>
-                <th className='p-4 text-left font-semibold'>Properties</th>
+                <th className='p-4 text-left font-semibold'>Location</th>
                 <th className='p-4 text-left font-semibold'>Joined</th>
             </tr>
         </thead>
@@ -99,7 +99,7 @@ const DashboardPropertiesPage = () => {
                     </td>
                     <td className='p-4'>{affiliate.name}</td>
                     <td className='p-4'>{affiliate.email}</td>
-                    <td className='p-4'>{affiliate.properties && affiliate.properties?.length > 0 ? `${affiliate.properties?.length}` : 'None'}</td>
+                    <td className='p-4'>{affiliate.location}</td>
                     <td className='p-4'>{affiliate.createdAt && new Date(affiliate.createdAt).toDateString()}</td>
                 </tr>
             ))}

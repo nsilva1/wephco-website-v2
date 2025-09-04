@@ -14,3 +14,12 @@ export const getAffiliates = async (): Promise<IAffiliate[]> => {
 };
 
 
+export const registerAffiliate = async (affiliateData: Omit<IAffiliate, 'id' | 'createdAt'>): Promise<IAffiliate> => {
+    try {
+        const response = await axios.post(API_URL, affiliateData);
+        return response.data;
+    } catch (error) {
+        console.error("Error registering affiliate:", error);
+        throw error;
+    }
+}

@@ -11,7 +11,7 @@ const Loader = ({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) => {
     <div>
       <div className='flex justify-center items-center'>
         <div
-          className={`animate-spin rounded-full border-4 border-black border-t-transparent ${sizeClasses[size]}`}
+          className={`animate-spin rounded-full border-4 border-black dark:border-white dark:border-t-transparent border-t-transparent ${sizeClasses[size]}`}
         ></div>
       </div>
     </div>
