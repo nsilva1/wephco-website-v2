@@ -20,7 +20,7 @@ const Modal = ({
 		>
 			<div
 				onClick={(e) => e.stopPropagation()}
-				className={`bg-white rounded-xl shadow p-10 w-96 transition-all ${
+				className={`bg-white rounded-xl shadow p-10 transition-all ${
 					open ? 'scale-100 opacity-100' : 'scale-125 opacity-0'
 				}`}
 			>

@@ -36,3 +36,23 @@ export const getAllProperties = async (): Promise<IProperty[]> => {
     const data = response.data
     return data
 }
+
+export const updateProperty = async (propertyData: IProperty): Promise<IProperty> => {
+    const response = await axios.put(API_URL, propertyData)
+
+    if (response.status !== 200) {
+        throw new Error('Failed to update property')
+    }
+
+    return response.data
+}
+
+export const deleteProperty = async (id: string): Promise<void> => {
+    const response = await axios.delete(`${API_URL}/${id}`)
+
+    if (response.status !== 204) {
+        throw new Error('Failed to delete property')
+    }
+
+    return response.data
+}

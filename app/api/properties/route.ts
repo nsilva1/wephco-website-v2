@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/prisma/prisma";
 import { IProperty } from "@/interfaces/propertyInterface";
 import { PrismaClientKnownRequestError } from "@/lib/generated/prisma/runtime/library";
+import { withErrorHandler } from "@/lib/withErrorHandler";
 
 
 // Get all properties
@@ -72,3 +73,21 @@ export async function POST(request: Request) {
         );
     }
 }
+
+// Update a property
+export const PUT = withErrorHandler(async (request: Request) => {
+    const body = await request.json();
+  const { id, name, description, country, city, images, pdfUrl } = body;
+
+  if (!id || !name || !description || !country || !city || !Array.isArray(images) || !pdfUrl) {
+    return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+  }
+
+  const updatedProperty = await prisma.property.update({
+    where: { id },
+    data: { name, description, country, city, images, pdfUrl },
+  });
+
+  return NextResponse.json(updatedProperty, { status: 200 });
+});
+

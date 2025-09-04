@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, useCallback } from 'react'
-import { getAllProperties } from '@/actions/properties'
+import { getAllProperties, updateProperty, deleteProperty } from '@/actions/properties'
 import { Loader } from '@/components/Loader'
 import { IProperty } from '@/interfaces/propertyInterface'
 import { useRouter } from 'next/navigation'
@@ -11,6 +11,8 @@ import { signOut } from 'next-auth/react'
 import { toast } from 'react-toastify'
 import { Tooltip } from '@/components/Tooltip'
 import { Trash2, PenIcon } from 'lucide-react'
+import { EditPropertyModal } from '@/components/EditPropertyModal'
+
 
 const DashboardPropertiesPage = () => {
     const router = useRouter()
@@ -20,9 +22,25 @@ const DashboardPropertiesPage = () => {
     const [properties, setProperties] = useState<IProperty[]>([])
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
+    const [editModalOpen, setEditModalOpen] = useState(false)
+    const [selectedProperty, setSelectedProperty] = useState<IProperty | null>(null)
 
     const goToAddPropertyForm = () => {
         router.push('/dashboard/properties/add')
+    }
+
+    
+
+    const removeProperty = async (id: string) => {
+        try {
+            const confirmed = confirm('Are you sure you want to delete this property? This action cannot be undone.')
+            if (!confirmed) return
+            await deleteProperty(id)
+            toast.success('Property deleted successfully')
+        } catch (error) {
+            toast.error('Failed to delete property')
+            console.error('Error deleting property:', error)
+        }
     }
 
     const fetchProperties = useCallback(async () => {
@@ -103,10 +121,10 @@ const DashboardPropertiesPage = () => {
                 <tr key={property.id} className={`${index % 2 === 0 ? 'bg-gray-200' : 'bg-white'}`}>
                     <td className='flex gap-2 p-4'>
                         <Tooltip text='Edit' position='top'>
-                            <PenIcon className='text-blue-500 hover:text-blue-700 cursor-pointer' />
+                            <PenIcon className='text-blue-500 hover:text-blue-700 cursor-pointer' onClick={() => {setSelectedProperty(property); setEditModalOpen(true)}} />
                         </Tooltip>
                         <Tooltip text='Delete' position='top'>
-                            <Trash2 className='text-red-500 hover:text-red-700 cursor-pointer' />
+                            <Trash2 className='text-red-500 hover:text-red-700 cursor-pointer' onClick={() => removeProperty(property.id!)} />
                         </Tooltip>
                     </td>
                     <td className='p-4'>{property.name}</td>
@@ -121,6 +139,17 @@ const DashboardPropertiesPage = () => {
         </tbody>
     )
 
+    let editModal = (
+        selectedProperty && (
+            <EditPropertyModal 
+            open={editModalOpen} 
+            close={() => setEditModalOpen(false)}
+            modalData={selectedProperty}
+            callback={fetchProperties}
+        />
+        )
+    )
+
 
   return (
     <div className='flex flex-col items-center h-screen overflow-x-auto p-5'>
@@ -129,6 +158,7 @@ const DashboardPropertiesPage = () => {
             {tableHead}
             {tableBody}
         </table>
+        {editModal}
     </div>
   )
 }

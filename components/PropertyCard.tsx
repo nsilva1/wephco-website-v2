@@ -2,7 +2,6 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { ArrowRight } from 'lucide-react';
 import { IProperty } from '@/interfaces/propertyInterface';
 
 export interface PropertyCardProps extends IProperty {
