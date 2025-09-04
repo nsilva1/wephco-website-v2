@@ -1,20 +1,17 @@
 import { ISellEnquiry } from "@/interfaces/propertyInterface"
+import axios from "axios"
 
 const API_URL = '/api/sell'
 
 
-export const createEnquiry = async (enquiryData: FormData): Promise<ISellEnquiry> => {
-    const response = await fetch(API_URL, {
-        method: 'POST',
-        body: enquiryData,
-    })
+export const createEnquiry = async (enquiryData: Omit<ISellEnquiry, 'id' | 'createdAt'>): Promise<ISellEnquiry> => {
+    const response = await axios.post(API_URL, enquiryData)
 
-    if (!response.ok) {
-        throw new Error('Failed to send enquiry')
+    if (response.status !== 201) {
+        throw new Error('Failed to create Sell Enquiry')
     }
 
-    const data = await response.json()
-    return data
+    return response.data
 }
 
 

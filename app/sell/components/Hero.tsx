@@ -15,16 +15,6 @@ const Hero = () => {
           <p className='text-xl font-bold mb-6'>
             Receive a free home valuation from one of our property experts
           </p>
-          {/* <form className='bg-white flex items-center rounded-full gap-4 p-3'>
-            <input
-              type='text'
-              className='p-2 rounded-l-md text-black flex-grow focus:outline-none'
-              placeholder='Enter your property address...'
-            />
-            <button className='bg-black text-white py-2 px-3 rounded-full cursor-pointer'>
-              Continue
-            </button>
-          </form> */}
           <InterestForm />
         </div>
       </div>

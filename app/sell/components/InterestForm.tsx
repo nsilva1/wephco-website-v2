@@ -1,25 +1,12 @@
 'use client';
 
 import { ComponentPropsWithoutRef, useState, useCallback, useRef } from 'react';
-import { Autocomplete, useJsApiLoader } from '@react-google-maps/api'
+// import { Autocomplete, useJsApiLoader } from '@react-google-maps/api'
 import { createEnquiry } from '@/actions/sellEnquiry';
 import { toast } from 'react-toastify';
 import Link from 'next/link';
+import { ISellEnquiry } from '@/interfaces/propertyInterface';
 
-const apiKey = process.env.GOOGLE_MAPS_API_KEY as string;
-
-const libraries: ('places')[] = ['places'];
-
-// interface AddressAutocompleteProps {
-//   apiKey: string;
-// }
-
-interface PlaceResult {
-  formatted_address: string;
-  geometry: {
-    location: { lat: () => number; lng: () => number };
-  }
-}
 
 type InterestFormData = {
   address: string;
@@ -48,49 +35,11 @@ const InterestForm = ({ ...rest }: INewInterest) => {
     timeline: '',
   });
 
-  const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
-  const [selectedPlace, setSelectedPlace] = useState<PlaceResult | null>(null);
+  
   const [loading, setLoading] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const { isLoaded, loadError } = useJsApiLoader({
-    googleMapsApiKey: apiKey,
-    libraries: libraries,
-  });
 
-  const onLoad = useCallback((autocomplete: google.maps.places.Autocomplete) => {
-    setAutocomplete(autocomplete);
-  }, []);
-
-  const onPlaceChanged = useCallback(() => {
-    if (autocomplete !== null) {
-      const place = autocomplete.getPlace();
-      console.log('Place selected:', place);
-
-      // Basic validation: Check if geometry and location exist
-      if (place.geometry && place.geometry.location) {
-        setSelectedPlace({
-            formatted_address: place.formatted_address as string,
-            geometry: {
-                location: {
-                    lat: place.geometry.location.lat,
-                    lng: place.geometry.location.lng,
-                }
-            }
-            // You can map other needed properties here
-        });
-        setFormData({
-            ...formData,
-            address: place.formatted_address!,
-        });
-      } else {
-        console.log("Invalid place selected or details missing.");
-        setSelectedPlace(null); // Reset if place is not valid
-      }
-    } else {
-      console.log('Autocomplete is not loaded yet!');
-    }
-  }, [autocomplete]);
 
   
   const handleChange = useCallback((
@@ -105,18 +54,7 @@ const InterestForm = ({ ...rest }: INewInterest) => {
 
   const handleNext = useCallback(() => {
     setStep((prev) => prev + 1);
-    // Check if an address was actually selected from suggestions
-    // if (selectedPlace && selectedPlace.formatted_address === formData.address) {
-    //     setStep((prev) => prev + 1);
-    // } else if (formData.address.trim() !== '') {
-    //     // Handle case where user typed address but didn't select suggestion
-    //     alert("Please select a valid address from the suggestions.");
-    //     // Or allow proceeding, depending on requirements
-    //     // setStep((prev) => prev + 1);
-    // } else {
-    //     alert("Please enter and select an address.");
-    // }
- }, [formData.address, selectedPlace]);
+ }, [formData.address,]);
 
  const handleBack = useCallback(() => {
   setStep((prev) => prev - 1);
@@ -131,27 +69,32 @@ const resetAndRefresh = useCallback(() => {
     phone: '',
     timeline: '',
   });
-  setSelectedPlace(null); // Reset selected place
+  
   if (inputRef.current) {
       inputRef.current.value = ''; // Clear input field
   }
-  if (autocomplete) {
-      autocomplete.set('place', null); // Reset autocomplete place
-  }
+
 }, []); 
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     // create form data object
-    const formData = new FormData(e.currentTarget);
-    formData.append('address', selectedPlace?.formatted_address as string);  
+    const propertyData: Omit<ISellEnquiry, 'id' | 'createdAt'> = {
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      address: formData.address,
+      timeline: formData.timeline,
+      status: false,
+    }
+    
 
     setLoading(true);
 
     // API call
     try {
-      const response = await createEnquiry(formData);
+      const response = await createEnquiry(propertyData);
 
       if(response){
         toast.success('Form submitted successfully! We will contact you shortly')
@@ -165,25 +108,6 @@ const resetAndRefresh = useCallback(() => {
     }
   };
 
-  if (!isLoaded) {
-    return (
-        <div className="flex items-center justify-center p-4 min-h-[100px]">
-            <div>Loading Maps...</div>
-        </div>
-    );
-  }
-
-  // Handle error state
-  if (loadError) {
-    console.error("Google Maps API load error:", loadError);
-    return (
-        <div className="flex items-center justify-center p-4 min-h-[100px]">
-             <div className="text-red-600 bg-red-100 p-3 rounded border border-red-300">
-                Error loading Google Maps.
-             </div>
-        </div>
-    );
-  }
 
   return (
     <div {...rest} className='flex items-center justify-center p-4'>
@@ -194,7 +118,7 @@ const resetAndRefresh = useCallback(() => {
               {step === 1 && (
                 <div className=''>
                   <div className='bg-white flex items-center rounded-full gap-4 p-3'>
-                    <Autocomplete onLoad={onLoad} onPlaceChanged={onPlaceChanged} options={{ types: ['address'] }}>
+                    
                     <input
                       type='text'
                       ref={inputRef}
@@ -204,7 +128,7 @@ const resetAndRefresh = useCallback(() => {
                       onChange={handleChange}
                       value={formData.address}
                     />
-                    </Autocomplete>
+                    
                     <button
                       type='button'
                       onClick={handleNext}

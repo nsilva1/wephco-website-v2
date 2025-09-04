@@ -20,9 +20,9 @@ export async function GET() {
 // Create a new sell enquiry
 export async function POST(request: Request) {
     try {
-        const formData = await request.formData();
+        
         const body = await request.json()
-        const { name, email, phone, address, timeline } = body
+        const { name, email, phone, address, timeline, status } = body
         
         // Validate required fields
         if (!name || !email || !phone || !address || !timeline) {
@@ -32,12 +32,12 @@ export async function POST(request: Request) {
 
         // create contact request data
         const enquiryData: Omit<ISellEnquiry, 'id' | 'createdAt'> = {
-            name: formData.get("name") as string,
-            email: formData.get("email") as string,
-            phone: formData.get("phone") as string,
-            address: formData.get("address") as string,
-            timeline: formData.get("timeline") as string,
-            status: formData.get("status") as unknown as boolean,
+            name,
+            email,
+            phone,
+            address,
+            timeline,
+            status,
         }
 
         // create contact request in database
