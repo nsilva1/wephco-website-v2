@@ -7,6 +7,8 @@ import { Press } from "@/components/Press";
 import { ContactUs } from "@/components/ContactUs";
 import { Footer } from "@/components/Footer";
 import { VisionAndMission } from "@/components/VisionAndMission";
+import { FAQ } from "@/components/FAQ";
+import { NewsletterSignup } from "@/components/Newsletter";
 
 export default function Home() {
   return (
@@ -18,7 +20,8 @@ export default function Home() {
       <BecomeAgent />
       <Partners />
       <Press />
-      <ContactUs />
+      <NewsletterSignup />
+      <FAQ />
       <Footer />
     </div>
   );

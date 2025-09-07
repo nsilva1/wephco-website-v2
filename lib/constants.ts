@@ -145,3 +145,24 @@ export const dashboardMenu = [
 ]
 
 export const allowedRoles = [Role.ADMIN, Role.SUPERADMIN, Role.SUPPORT]
+
+export const faqData = [
+  {
+    question: "Is Wephco a real estate company?",
+    answer:
+      "No, Wephco is a brokerage firm which positions us as an intermediary between the owner of the property and the buyer. We also have services such as property management.",
+  },
+  {
+    question: "Does Wephco accept partnerships?",
+    answer: "Most definitely!! We encourage and welcome partnerships.",
+  },
+  {
+    question: "What is Wephco affiliate program?",
+    answer:
+      "It's a referral system that allows you to earn when a client purchases a property via your referral, all you have to do is book an appointment and we will take it from there.",
+  },
+  {
+    question: "Are there extra costs apart from the price of the property?",
+    answer: "No, there's no hidden charges or extra costs.",
+  },
+]
