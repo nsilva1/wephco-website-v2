@@ -51,7 +51,7 @@ const NewDevelopmentsSection = () => {
       </div>
       <div className='mt-8'>
         <Link
-          href='/new-developments'
+          href='/projects'
           className='bg-white dark:bg-black text-black dark:text-white px-5 py-3 flex justify-between items-center cursor-pointer w-full lg:w-40'
         >
           <p>View More</p>
