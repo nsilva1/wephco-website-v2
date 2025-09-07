@@ -6,11 +6,13 @@ import { Partners } from "@/components/Partners";
 import { Press } from "@/components/Press";
 import { ContactUs } from "@/components/ContactUs";
 import { Footer } from "@/components/Footer";
+import { VisionAndMission } from "@/components/VisionAndMission";
 
 export default function Home() {
   return (
     <div>
       <Hero />
+      <VisionAndMission />
       <Regions />
       <NewDevelopmentsSection />
       <BecomeAgent />
