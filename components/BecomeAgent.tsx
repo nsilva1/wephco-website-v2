@@ -13,8 +13,8 @@ const BecomeAgent = () => {
                 <Image src={agent} alt='agent' className='w-full h-full rounded-3xl' />
             </div>
             <div className='col-span-1 flex flex-col gap-2 items-center md:items-start'>
-                <h5 className={`${typography.subtitle} uppercase font-semibold text-center`}>Become a wephco agent</h5>
-                <h2 className={`${typography.heading2} mb-4 text-center md:text-start`}>Join the Future of Real Estate</h2>
+                <h5 className={`${typography.subtitle} uppercase font-semibold text-center`}>Become a wephco affiliate</h5>
+                <h2 className={`${typography.heading2} mb-4 text-center md:text-start`}>Earn With Us</h2>
                 <p className={`${typography.paragraph} mb-8 text-center md:text-start`}>Grow your business and brand with a brokerage that empowers you with the resourcess and access to do great things.</p>
                 <Link href='/agents' className='bg-black text-white rounded-full px-5 py-3 flex justify-between items-center hover:bg-black/80 cursor-pointer w-full lg:w-40'>
                     <p className='font-bold'>Join Us</p>

@@ -12,16 +12,17 @@ const FAQ = () => {
   }
 
   return (
-    <div className="w-full">
+    <div className="py-20 dark:bg-black">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
       <div className="w-full space-y-4">
         {faqData.map((item, index) => (
-          <div key={index} className="border border-gray-200 rounded-lg bg-white shadow-sm">
+          <div key={index} className="border-b-1 border-gray-700 dark:border-gray-300">
             <button
               onClick={() => toggleItem(index)}
-              className="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset"
+              className="w-full px-6 py-4 text-left flex justify-between items-center transition-colors cursor-pointer"
               aria-expanded={openIndex === index}
             >
-              <span className="text-lg font-semibold text-gray-900 pr-4">{item.question}</span>
+              <span className="text-lg font-semibold text-gray-900 dark:text-white pr-4">{item.question}</span>
               <svg
                 className={`w-5 h-5 text-gray-500 transition-transform duration-200 flex-shrink-0 ${
                   openIndex === index ? "rotate-180" : ""
@@ -43,6 +44,7 @@ const FAQ = () => {
           </div>
         ))}
       </div>
+    </div>
     </div>
   )
 }

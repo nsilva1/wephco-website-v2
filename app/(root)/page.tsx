@@ -1,5 +1,6 @@
 import { Hero } from "@/components/Hero";
 import { Regions } from "@/components/Regions";
+import { BackgroundStory } from "@/components/BackgroundStory";
 import { NewDevelopmentsSection } from "@/components/NewDevelopments";
 import { BecomeAgent } from "@/components/BecomeAgent";
 import { Partners } from "@/components/Partners";

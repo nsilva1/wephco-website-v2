@@ -37,7 +37,7 @@ const NewsletterSignup = () => {
   }
 
   return (
-    <div className="p-8 shadow-sm">
+    <div className="p-8 bg-gray-200 dark:bg-black">
       <div className="text-center mb-6">
         <h2 className="text-2xl font-bold text-foreground mb-2">Stay Updated</h2>
         <p className="text-muted-foreground">
