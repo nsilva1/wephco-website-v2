@@ -1291,6 +1291,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/jquery@npm:*":
+  version: 3.5.33
+  resolution: "@types/jquery@npm:3.5.33"
+  dependencies:
+    "@types/sizzle": "npm:*"
+  checksum: 10c0/d96c42762b7370ddf3b81cdad436a79d275e0ff09e2f4d7fbf2bbd8f97acef4110a11f1c3cb683195a1eba4fd9959e59d73f84d56ce2c010907a2bea696eb057
+  languageName: node
+  linkType: hard
+
 "@types/node@npm:*":
   version: 22.15.18
   resolution: "@types/node@npm:22.15.18"
@@ -1332,12 +1341,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:^19":
-  version: 19.0.4
-  resolution: "@types/react-dom@npm:19.0.4"
+"@types/react-dom@npm:^19.1.9":
+  version: 19.1.9
+  resolution: "@types/react-dom@npm:19.1.9"
   peerDependencies:
     "@types/react": ^19.0.0
-  checksum: 10c0/4e71853919b94df9e746a4bd73f8180e9ae13016333ce9c543dcba9f4f4c8fe6e28b038ca6ee61c24e291af8e03ca3bc5ded17c46dee938fcb32d71186fda7a3
+  checksum: 10c0/34c8dda86c1590b3ef0e7ecd38f9663a66ba2dd69113ba74fb0adc36b83bbfb8c94c1487a2505282a5f7e5e000d2ebf36f4c0fd41b3b672f5178fd1d4f1f8f58
+  languageName: node
+  linkType: hard
+
+"@types/react-slick@npm:^0.23.13":
+  version: 0.23.13
+  resolution: "@types/react-slick@npm:0.23.13"
+  dependencies:
+    "@types/react": "npm:*"
+  checksum: 10c0/35dd72dfbac234b8db019fb8af250ac3891e564d13001642353aa0b7c37f6ed1ff1f5e8fa8b034706993c4d27ac1977c031942636cfd05414ee4667d45c8aea6
   languageName: node
   linkType: hard
 
@@ -1350,12 +1368,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:^19":
-  version: 19.0.12
-  resolution: "@types/react@npm:19.0.12"
+"@types/react@npm:*, @types/react@npm:^19.1.12":
+  version: 19.1.12
+  resolution: "@types/react@npm:19.1.12"
   dependencies:
     csstype: "npm:^3.0.2"
-  checksum: 10c0/c814b6af5c0fbcf5c65d031b1c9bf98c5b857e015254d95811f2851b27b869c3d31c6f35dab127dc6921a3dbda0b0622c6323d493a14b31b231a6a58c41c5e84
+  checksum: 10c0/e35912b43da0caaab5252444bab87a31ca22950cde2822b3b3dc32e39c2d42dad1a4cf7b5dde9783aa2d007f0b2cba6ab9563fc6d2dbcaaa833b35178118767c
   languageName: node
   linkType: hard
 
@@ -1368,6 +1386,22 @@ __metadata:
     "@types/tough-cookie": "npm:*"
     form-data: "npm:^2.5.0"
   checksum: 10c0/dd3d03d68af95b1e1961dc51efc63023543a91a74afd481dafb441521a31baa58c42f80d3bdd0d5d4633aa777e31b17f7ff7bed5606ad3f5eb175a65148adbce
+  languageName: node
+  linkType: hard
+
+"@types/sizzle@npm:*":
+  version: 2.3.10
+  resolution: "@types/sizzle@npm:2.3.10"
+  checksum: 10c0/d43ec1cd0b5e1f66b1abeaf359608853629cd3d6b8dc8b3b40b85a5ee2ce149a4485ccd7eee5c58b5a2814d384f5a951f1dab5d49041ad83457270cb2bc66fe7
+  languageName: node
+  linkType: hard
+
+"@types/slick-carousel@npm:^1":
+  version: 1.6.40
+  resolution: "@types/slick-carousel@npm:1.6.40"
+  dependencies:
+    "@types/jquery": "npm:*"
+  checksum: 10c0/3e7e9ad518ec19e5afd3b34b8546fe5f190262d8a29640c7aad19ddd1aad1d6a71dcc11a9528bafb9034e9d4031e2b3cc186c1baf5ed95d13a541e4231463d51
   languageName: node
   linkType: hard
 
@@ -1656,6 +1690,13 @@ __metadata:
   version: 3.0.0
   resolution: "chownr@npm:3.0.0"
   checksum: 10c0/43925b87700f7e3893296c8e9c56cc58f926411cce3a6e5898136daaf08f08b9a8eb76d37d3267e707d0dcc17aed2e2ebdf5848c0c3ce95cf910a919935c1b10
+  languageName: node
+  linkType: hard
+
+"classnames@npm:^2.2.5":
+  version: 2.5.1
+  resolution: "classnames@npm:2.5.1"
+  checksum: 10c0/afff4f77e62cea2d79c39962980bf316bacb0d7c49e13a21adaadb9221e1c6b9d3cdb829d8bb1b23c406f4e740507f37e1dcf506f7e3b7113d17c5bab787aa69
   languageName: node
   linkType: hard
 
@@ -2606,6 +2647,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"json2mq@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "json2mq@npm:0.2.0"
+  dependencies:
+    string-convert: "npm:^0.2.0"
+  checksum: 10c0/fc9e2f2306572522d3e61d246afdf70b56ca9ea32f4ad5924c30949867851ab59c926bd0ffc821ebb54d32f3e82e95225f3906eacdb3e54c1ad49acdadf7e0c7
+  languageName: node
+  linkType: hard
+
 "jwa@npm:^2.0.0":
   version: 2.0.1
   resolution: "jwa@npm:2.0.1"
@@ -2755,6 +2805,13 @@ __metadata:
   version: 1.2.4
   resolution: "lines-and-columns@npm:1.2.4"
   checksum: 10c0/3da6ee62d4cd9f03f5dc90b4df2540fb85b352081bee77fe4bbcd12c9000ead7f35e0a38b8d09a9bb99b13223446dd8689ff3c4959807620726d788701a83d2d
+  languageName: node
+  linkType: hard
+
+"lodash.debounce@npm:^4.0.8":
+  version: 4.0.8
+  resolution: "lodash.debounce@npm:4.0.8"
+  checksum: 10c0/762998a63e095412b6099b8290903e0a8ddcb353ac6e2e0f2d7e7d03abd4275fe3c689d88960eb90b0dde4f177554d51a690f22a343932ecbc50a5d111849987
   languageName: node
   linkType: hard
 
@@ -3489,6 +3546,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-slick@npm:^0.31.0":
+  version: 0.31.0
+  resolution: "react-slick@npm:0.31.0"
+  dependencies:
+    classnames: "npm:^2.2.5"
+    json2mq: "npm:^0.2.0"
+    lodash.debounce: "npm:^4.0.8"
+    resize-observer-polyfill: "npm:^1.5.0"
+  peerDependencies:
+    react: ^0.14.0 || ^15.0.1 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    react-dom: ^0.14.0 || ^15.0.1 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+  checksum: 10c0/ac006104323c61af6d8e208edb49038485458756b72c9e15622beef2700085bcdb1d21f028be1b3f199ff15616eab9d61a45aa09650c9ae1d72bf2a23be48616
+  languageName: node
+  linkType: hard
+
 "react-toastify@npm:^11.0.5":
   version: 11.0.5
   resolution: "react-toastify@npm:11.0.5"
@@ -3531,6 +3603,13 @@ __metadata:
     string_decoder: "npm:^1.1.1"
     util-deprecate: "npm:^1.0.1"
   checksum: 10c0/e37be5c79c376fdd088a45fa31ea2e423e5d48854be7a22a58869b4e84d25047b193f6acb54f1012331e1bcd667ffb569c01b99d36b0bd59658fb33f513511b7
+  languageName: node
+  linkType: hard
+
+"resize-observer-polyfill@npm:^1.5.0":
+  version: 1.5.1
+  resolution: "resize-observer-polyfill@npm:1.5.1"
+  checksum: 10c0/5e882475067f0b97dc07e0f37c3e335ac5bc3520d463f777cec7e894bb273eddbfecb857ae668e6fb6881fd6f6bb7148246967172139302da50fa12ea3a15d95
   languageName: node
   linkType: hard
 
@@ -3739,6 +3818,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"slick-carousel@npm:^1.8.1":
+  version: 1.8.1
+  resolution: "slick-carousel@npm:1.8.1"
+  peerDependencies:
+    jquery: ">=1.8.0"
+  checksum: 10c0/e8c9c9a454c107cfee88689477b453449ed66d5343cf495d3135ec25ea736a0df862f625a9cdc8abd6262629ecef3343c5de686694831f99b13dfe837a1aa587
+  languageName: node
+  linkType: hard
+
 "smart-buffer@npm:^4.2.0":
   version: 4.2.0
   resolution: "smart-buffer@npm:4.2.0"
@@ -3819,6 +3907,13 @@ __metadata:
   version: 1.1.0
   resolution: "streamsearch@npm:1.1.0"
   checksum: 10c0/fbd9aecc2621364384d157f7e59426f4bfd385e8b424b5aaa79c83a6f5a1c8fd2e4e3289e95de1eb3511cb96bb333d6281a9919fafce760e4edb35b2cd2facab
+  languageName: node
+  linkType: hard
+
+"string-convert@npm:^0.2.0":
+  version: 0.2.1
+  resolution: "string-convert@npm:0.2.1"
+  checksum: 10c0/00673ed8a3106137395436537ace7d3672c91a3290da73466055daa0134331dc84bc58c54ba2d2ea40711adc5744426d3c8239dbfc30290438fa3e9ff65db528
   languageName: node
   linkType: hard
 
@@ -4146,8 +4241,10 @@ __metadata:
     "@types/bcryptjs": "npm:^3.0.0"
     "@types/node": "npm:^20"
     "@types/nodemailer": "npm:^6.4.17"
-    "@types/react": "npm:^19"
-    "@types/react-dom": "npm:^19"
+    "@types/react": "npm:^19.1.12"
+    "@types/react-dom": "npm:^19.1.9"
+    "@types/react-slick": "npm:^0.23.13"
+    "@types/slick-carousel": "npm:^1"
     "@vercel/blob": "npm:^1.0.1"
     axios: "npm:^1.9.0"
     bcryptjs: "npm:^3.0.2"
@@ -4168,7 +4265,9 @@ __metadata:
     react-dom: "npm:^19.0.0"
     react-icons: "npm:^5.5.0"
     react-select: "npm:^5.10.2"
+    react-slick: "npm:^0.31.0"
     react-toastify: "npm:^11.0.5"
+    slick-carousel: "npm:^1.8.1"
     tailwind-merge: "npm:^3.0.2"
     tailwindcss: "npm:^4"
     typescript: "npm:^5"

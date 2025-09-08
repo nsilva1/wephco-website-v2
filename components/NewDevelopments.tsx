@@ -1,13 +1,76 @@
-import React from 'react';
+'use client'
+
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { IProperty } from '@/interfaces/propertyInterface';
 import saadiyat3 from '@/images/saadiyat3.jpg';
 import saadiyat4 from '@/images/saadiyat4.jpg';
 import saadiyat5 from '@/images/saadiyat5.jpg';
 import { NewDevelopmentCard } from './NewDevelopmentCard';
 import Link from 'next/link';
 import { BiArrowToRight } from 'react-icons/bi';
-import { typography, layout } from '@/lib/styles'; // Assuming you have a styles file for typography
+import { typography, layout } from '@/lib/styles';
+import Select from 'react-select'
+import { getAllProperties } from '@/actions/properties';
+import { Loader } from './Loader';
+import Slider from 'react-slick';
+import { lightSelectStyles, darkSelectStyles } from '@/lib/styles';
+import { useBrowserTheme } from '@/hooks/browserTheme';
 
 const NewDevelopmentsSection = () => {
+
+  const [properties, setProperties] = useState<IProperty[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [selectedCountry, setSelectedCountry] = useState('');
+
+
+  const theme = useBrowserTheme();
+  const selectStyle = theme === 'dark' ? darkSelectStyles : lightSelectStyles;
+
+
+  const fetchProperties = useCallback(async () => {
+      setLoading(true);
+      try {
+        const data = await getAllProperties();
+        setProperties(data);
+      } catch (err) {
+        setError('Failed to fetch properties');
+      } finally {
+        setLoading(false);
+      }
+    }, []);
+
+
+    // Create a list of unique countries for dropdown
+  const countryOptions = useMemo(() => {
+    const countries = Array.from(new Set(properties.map((p) => p.country)));
+    return countries.map((c) => ({ label: c, value: c }));
+  }, [properties]);
+
+
+  // Filter properties by selectedCountry
+  const filteredProperties = useMemo(() => {
+    if (!selectedCountry) return [];
+    return properties.filter((p) => p.country === selectedCountry);
+  }, [properties, selectedCountry]);
+  
+  
+    useEffect(() => {
+      fetchProperties();
+    }, []);
+
+
+    const sliderSettings = {
+    centerMode: true,
+    dots: true,
+    infinite: true,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000,
+  };
+  
+
   return (
     <section id='#new-developments' className={`${layout.columnSection}`}>
       <div className='flex flex-col items-center justify-center text-center mb-6'>
@@ -21,34 +84,27 @@ const NewDevelopmentsSection = () => {
           living.
         </p>
       </div>
-      <div className='grid grid-cols-1 md:grid-cols-3 gap-5'>
-        <div className='col-span-1'>
-          <div className='flex justify-center gap-10 mb-5'>
-            <NewDevelopmentCard
-              imageURL={saadiyat4}
-              title='MANDARIN ORIENTAL RESIDENCES'
-              location='Saadiyat Cultural District, Abu Dhabi'
-              description='Experience unparalleled luxury in the heart of Dubai with stunning views and world-class amenities.'
-            />
+
+      {loading ? <Loader /> : <div className='max-w-lg mx-auto mb-8'>
+        <Select styles={selectStyle} options={countryOptions} placeholder='Project Location' onChange={(e) => setSelectedCountry(e!.value)} />
+      </div>}
+
+      
+
+      {filteredProperties.length > 0 ? (
+          <div className='slider-container'>
+            <Slider {...sliderSettings}>
+          {filteredProperties.map((property) => (
+            <div key={property.id} className="px-2">
+              <NewDevelopmentCard {...property} />
+            </div>
+          ))}
+        </Slider>
           </div>
-        </div>
-        <div className='col-span-1'>
-          <NewDevelopmentCard
-            imageURL={saadiyat5}
-            title='MANDARIN ORIENTAL RESIDENCES'
-            location='Saadiyat Cultural District, Abu Dhabi'
-            description='Experience unparalleled luxury in the heart of Dubai with stunning views and world-class amenities.'
-          />
-        </div>
-        <div className='col-span-1'>
-          <NewDevelopmentCard
-            imageURL={saadiyat3}
-            title='MANDARIN ORIENTAL RESIDENCES'
-            location='Saadiyat Cultural District, Abu Dhabi'
-            description='Experience unparalleled luxury in the heart of Dubai with stunning views and world-class amenities.'
-          />
-        </div>
-      </div>
+      ) : (
+        <div></div>
+      )}
+
       <div className='mt-8'>
         <Link
           href='/projects'
