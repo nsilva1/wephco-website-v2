@@ -1,8 +1,12 @@
-import React from 'react'
-import Navbar from '@/components/Navbar'
-import '../globals.css'
+import React from 'react';
+import Navbar from '@/components/Navbar';
+import '../globals.css';
 
-export default function AbujaLayout({children}: {children: React.ReactNode}) {
+export default function AbujaLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
       <body>
@@ -10,5 +14,5 @@ export default function AbujaLayout({children}: {children: React.ReactNode}) {
         {children}
       </body>
     </html>
-  )
+  );
 }

@@ -1,21 +1,20 @@
-import type { Metadata } from "next";
-import { Outfit } from "next/font/google";
-import Navbar from "@/components/Navbar";
-import { ToastContainer } from "react-toastify";
-import Script from "next/script";
-import "./globals.css";
-
+import type { Metadata } from 'next';
+import { Outfit } from 'next/font/google';
+import Navbar from '@/components/Navbar';
+import { ToastContainer } from 'react-toastify';
+import Script from 'next/script';
+import './globals.css';
 
 const outfit = Outfit({
-  variable: "--font-outfit",
-  subsets: ["latin"],
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
-  display: 'swap'
-})
+  variable: '--font-outfit',
+  subsets: ['latin'],
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
-  title: "Wephco - Buy, Sell Luxury Homes",
-  description: "Your Gateway to Prime Global Real Estate",
+  title: 'Wephco - Buy, Sell Luxury Homes',
+  description: 'Your Gateway to Prime Global Real Estate',
 };
 
 export default function RootLayout({
@@ -25,9 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${outfit.variable} antialiased`}
-      >
+      <body className={`${outfit.variable} antialiased`}>
         <ToastContainer />
         <Navbar />
         {children}

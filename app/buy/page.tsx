@@ -8,7 +8,7 @@ const BuyPage = () => {
   return (
     <section>
       <Hero />
-      <div className='p-8'>
+      <div className="p-8">
         <Properties showForm />
       </div>
       <Footer />

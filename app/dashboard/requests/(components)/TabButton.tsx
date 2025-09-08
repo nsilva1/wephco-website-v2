@@ -20,8 +20,7 @@ const TabButton = ({ isActive, onClick, children }: ITabButtonProps) => {
             ? 'bg-black text-white'
             : 'text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 hover:text-black dark:hover:text-white' // Inactive tab
         }
-      `}
-    >
+      `}>
       {children}
     </button>
   );

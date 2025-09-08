@@ -5,8 +5,8 @@ import '../globals.css';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Wephco - Buy, Sell Luxury Homes",
-  description: "Your Gateway to Prime Global Real Estate",
+  title: 'Wephco - Buy, Sell Luxury Homes',
+  description: 'Your Gateway to Prime Global Real Estate',
 };
 
 export default function PressLayout({
@@ -15,7 +15,7 @@ export default function PressLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang='en'>
+    <html lang="en">
       <body>
         <Navbar />
         {children}

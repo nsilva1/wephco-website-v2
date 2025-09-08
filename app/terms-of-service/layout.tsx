@@ -5,7 +5,8 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Terms of Service | WEPHCO',
-  description: 'These Terms of Service govern your access to and use of the website located at www.wephco.com.',
+  description:
+    'These Terms of Service govern your access to and use of the website located at www.wephco.com.',
 };
 
 export default function TermsOfServiceLayout({
@@ -14,7 +15,7 @@ export default function TermsOfServiceLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang='en'>
+    <html lang="en">
       <body>
         {children}
         <Footer />

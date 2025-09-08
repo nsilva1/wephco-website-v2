@@ -6,7 +6,8 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy | WEPHCO',
-  description: 'This Privacy Policy explains how WEPHCO collects, uses, discloses, and protects your personal information when you visit our website.',
+  description:
+    'This Privacy Policy explains how WEPHCO collects, uses, discloses, and protects your personal information when you visit our website.',
 };
 
 export default function PrivacyPolicyLayout({
@@ -15,7 +16,7 @@ export default function PrivacyPolicyLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang='en'>
+    <html lang="en">
       <body>
         <Navbar />
         {children}

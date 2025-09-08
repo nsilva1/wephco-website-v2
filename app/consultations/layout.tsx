@@ -1,13 +1,13 @@
 import React from 'react';
 import Navbar from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
-import { ToastContainer } from "react-toastify";
+import { ToastContainer } from 'react-toastify';
 import '../globals.css';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Wephco - Buy, Sell Luxury Homes",
-  description: "Your Gateway to Prime Global Real Estate",
+  title: 'Wephco - Buy, Sell Luxury Homes',
+  description: 'Your Gateway to Prime Global Real Estate',
 };
 
 export default function ConsultationsLayout({
@@ -16,7 +16,7 @@ export default function ConsultationsLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang='en'>
+    <html lang="en">
       <body>
         <ToastContainer />
         <Navbar />

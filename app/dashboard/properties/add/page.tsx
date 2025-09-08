@@ -1,12 +1,12 @@
-import React from 'react'
-import { PropertyForm } from '@/components/AddPropertyForm'
+import React from 'react';
+import { PropertyForm } from '@/components/AddPropertyForm';
 
 const AddPropertyPage = () => {
   return (
     <section>
-        <PropertyForm />
+      <PropertyForm />
     </section>
-  )
-}
+  );
+};
 
-export default AddPropertyPage
+export default AddPropertyPage;

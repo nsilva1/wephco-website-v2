@@ -9,14 +9,18 @@ export async function POST(request: Request): Promise<NextResponse> {
     const jsonResponse = await handleUpload({
       body,
       request,
-      onBeforeGenerateToken: async (
-      ) => {
+      onBeforeGenerateToken: async () => {
         return {
-          allowedContentTypes: ['image/jpeg', 'image/png', 'image/gif', 'application/pdf'],
+          allowedContentTypes: [
+            'image/jpeg',
+            'image/png',
+            'image/gif',
+            'application/pdf',
+          ],
           allowOverwrite: true,
           tokenPayload: JSON.stringify({
-            userId: "h348n23jjj23",
-            projectId: 23
+            userId: 'h348n23jjj23',
+            projectId: 23,
           }),
         };
       },
@@ -30,7 +34,9 @@ export async function POST(request: Request): Promise<NextResponse> {
         try {
           // Run any logic after the file upload completed
           const { userId, projectId } = JSON.parse(tokenPayload as string);
-          console.log(`File uploaded for user: ${userId} and projectId: ${projectId}`)
+          console.log(
+            `File uploaded for user: ${userId} and projectId: ${projectId}`
+          );
         } catch (error) {
           console.log(error);
           throw new Error('Could not update user');
@@ -42,7 +48,7 @@ export async function POST(request: Request): Promise<NextResponse> {
   } catch (error) {
     return NextResponse.json(
       { error: (error as Error).message },
-      { status: 400 },
+      { status: 400 }
     );
   }
 }

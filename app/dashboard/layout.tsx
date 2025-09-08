@@ -1,12 +1,14 @@
-import React from 'react'
-import '../globals.css'
-import { MainLayout } from './(components)/MainLayout'
-import { AuthProvider } from '@/lib/auth/SessionProvider'
+import React from 'react';
+import '../globals.css';
+import { MainLayout } from './(components)/MainLayout';
+import { AuthProvider } from '@/lib/auth/SessionProvider';
 import { ToastContainer } from 'react-toastify';
 
-export default async function DashboardLayout({children}: {children: React.ReactNode}) {
-    
-
+export default async function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
       <body>
@@ -18,5 +20,5 @@ export default async function DashboardLayout({children}: {children: React.React
         </AuthProvider>
       </body>
     </html>
-  )
+  );
 }

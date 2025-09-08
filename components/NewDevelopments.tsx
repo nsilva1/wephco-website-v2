@@ -2,9 +2,6 @@
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { IProperty } from '@/interfaces/propertyInterface';
-import saadiyat3 from '@/images/saadiyat3.jpg';
-import saadiyat4 from '@/images/saadiyat4.jpg';
-import saadiyat5 from '@/images/saadiyat5.jpg';
 import { NewDevelopmentCard } from './NewDevelopmentCard';
 import Link from 'next/link';
 import { BiArrowToRight } from 'react-icons/bi';

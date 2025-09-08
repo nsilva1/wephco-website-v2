@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "postinstall": "npx prisma generate",
-    "format": "prettier --write src/**/*.{ts,tsx} && prettier --write src/*.{ts,tsx} && prettier --write src/**/**/*.{ts,tsx} && prettier --write src/**/**/**/*.{ts,tsx}"
+    "format": "prettier --write app/**/*.{ts,tsx} && prettier --write app/*.{ts,tsx} && prettier --write app/**/**/*.{ts,tsx} && prettier --write app/**/**/**/*.{ts,tsx}"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.9.0",
