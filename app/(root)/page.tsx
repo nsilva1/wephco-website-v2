@@ -16,12 +16,13 @@ export default function Home() {
     <div>
       <Hero />
       <VisionAndMission />
-      <Regions />
+      <BackgroundStory />
       <NewDevelopmentsSection />
       <BecomeAgent />
       <Partners />
       <Press />
       <NewsletterSignup />
+      <ContactUs />
       <FAQ />
       <Footer />
     </div>
