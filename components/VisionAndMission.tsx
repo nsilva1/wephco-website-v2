@@ -4,7 +4,7 @@ import { Target, Heart } from 'lucide-react'
 const VisionAndMission = () => {
   return (
     <div>
-        <section className="bg-gray-100 dark:bg-black py-12">
+        <section className="bg-gray-100 dark:bg-black py-12 font-outfit">
         <div className="container mx-auto px-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">

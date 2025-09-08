@@ -1,8 +1,8 @@
 'use client'
 
 import React, { useState } from 'react'
-import hero from '@/images/saadiyat2.jpg'
-import Image from 'next/image'
+// import hero from '@/images/saadiyat2.jpg'
+// import Image from 'next/image'
 import { BiSearch } from 'react-icons/bi'
 import { useRouter } from 'next/navigation'
 

@@ -12,7 +12,7 @@ const FAQ = () => {
   }
 
   return (
-    <div className="py-20 dark:bg-black">
+    <div className="py-20 dark:bg-black font-outfit">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
       <div className="w-full space-y-4">
         {faqData.map((item, index) => (

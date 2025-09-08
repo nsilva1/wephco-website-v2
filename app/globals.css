@@ -61,3 +61,10 @@ body {
     transform: translateY(0);
   }
 }
+
+.image-shadow-container {
+  position: relative;
+  overflow: hidden;
+  /* Adjust values as needed */
+  box-shadow: inset 0 0 50px 20px rgba(0, 0, 0, 0.7); 
+}
