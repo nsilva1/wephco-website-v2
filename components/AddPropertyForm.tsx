@@ -7,7 +7,10 @@ import { XCircle } from 'lucide-react'
 import { uploadFile } from '@/actions/vercel'
 import { generateId } from '@/lib/helperFunctions'
 import { Loader } from './Loader'
-import { getAllCountries, getCitiesByCountry } from '@/actions/app'
+import { 
+  getAllCountries, 
+  // getCitiesByCountry 
+      } from '@/actions/app'
 import Select from 'react-select'
 
 const PropertyForm = () => {
@@ -32,8 +35,8 @@ const PropertyForm = () => {
       pdfUrl: ''
     })
     const [countries, setCountries] = useState<{label: string, value: string}[]>([])
-    const [cities, setCities] = useState<{label: string}[]>([])
-    const [countryCode, setCountryCode] = useState('')
+    // const [cities, setCities] = useState<{label: string}[]>([])
+    // const [countryCode, setCountryCode] = useState('')
 
 
     const fetchCountries = useCallback(async () => {
@@ -46,22 +49,22 @@ const PropertyForm = () => {
     },[])
 
 
-    const fetchCities = useCallback(async (code:string) => {
+    // const fetchCities = useCallback(async (code:string) => {
         
-        try {
-            const data = await getCitiesByCountry(code)
-            setCities(data)
-        } catch (error) {
-            setError('Failed to fetch cities')
-        }
-    }, [countryCode])
+    //     try {
+    //         const data = await getCitiesByCountry(code)
+    //         setCities(data)
+    //     } catch (error) {
+    //         setError('Failed to fetch cities')
+    //     }
+    // }, [countryCode])
 
 
-    const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const selectedCountry = e.target.value
-        setFormData({...formData, country: selectedCountry})
-        setCountryCode(selectedCountry)
-    }
+    // const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    //     const selectedCountry = e.target.value
+    //     setFormData({...formData, country: selectedCountry})
+    //     setCountryCode(selectedCountry)
+    // }
     
     const clearForm = () => {
         setFormData({
@@ -278,8 +281,10 @@ const PropertyForm = () => {
             options={countries}
             onChange={(option) => {
               setFormData({...formData, country: option!.label})
-              setCountryCode(option!.value)
-              fetchCities(option!.value)}}
+              // setCountryCode(option!.value)
+              // fetchCities(option!.value)
+            }
+            }
           />
           
         </div>
@@ -288,12 +293,19 @@ const PropertyForm = () => {
           <label className="block text-sm font-medium text-gray-700 mb-1">
             City
           </label>
-          <Select 
+          {/* <Select 
             options={cities}
             onChange={(option) => setFormData({...formData, city: option!.label})}
             isDisabled={!countryCode}
+          /> */}
+          <input 
+            type="text"
+            name="city"
+            value={formData.city}
+            onChange={(e) => setFormData({...formData, city: e.target.value})}
+            required
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          
         </div>
 
         <div className='my-3'>

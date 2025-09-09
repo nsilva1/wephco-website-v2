@@ -25,8 +25,12 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { name, email, phone, propertyId } = body;
 
+    var fullName = name?.trim();
+    var emailAddress = email?.trim();
+    var phoneNumber = phone?.trim();
+
     // Validate required fields
-    if (!name || !email || !phone || !propertyId) {
+    if (!fullName || !emailAddress || !phoneNumber || !propertyId) {
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 }
@@ -57,6 +61,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json(newPropertyEnquiry, { status: 201 });
   } catch (error) {
+    console.error('Create property enquiry error:', error);
     return NextResponse.json(
       { error: 'Failed to create property' },
       { status: 500 }

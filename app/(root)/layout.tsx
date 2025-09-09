@@ -3,7 +3,7 @@ import { Outfit } from 'next/font/google';
 import Navbar from '@/components/Navbar';
 import { ToastContainer } from 'react-toastify';
 import Script from 'next/script';
-import './globals.css';
+import '../globals.css';
 
 const outfit = Outfit({
   variable: '--font-outfit',

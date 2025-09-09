@@ -57,7 +57,7 @@ const Properties = ({showForm = false}: {showForm: boolean}) => {
           </div>
         </div>
       )}
-      {properties?.length === 0 && <div className='flex justify-center'><h2 className='text-xl font-semibold'>No Property</h2></div>}
+      {!loading && properties?.length === 0 && <div className='flex justify-center'><h2 className='text-xl font-semibold'>No Property</h2></div>}
       <div
         className={`grid lg:grid-cols-3 grid-cols-1 xl:grid-cols-4 gap-5`}
       >

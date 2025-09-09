@@ -128,6 +128,11 @@ export const dashboardMenu = [
         path: '/dashboard/properties'
     },
     {
+        label: 'Property Enquiries',
+        icon: BiBuildings,
+        path: '/dashboard/property-enquiry'
+    },
+    {
         label: 'Support Requests',
         icon: BiHeadphone,
         path: '/dashboard/requests'
