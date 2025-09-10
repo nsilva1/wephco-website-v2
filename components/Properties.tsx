@@ -21,10 +21,6 @@ const Properties = ({showForm = false}: {showForm: boolean}) => {
   
       setOpenModal(true);
     };
-  
-    let interestModal = (
-      <InterestForm open={openModal} close={() => setOpenModal(false)} />
-    );
 
   const fetchProperties = useCallback(async () => {
     setLoading(true);
@@ -45,7 +41,6 @@ const Properties = ({showForm = false}: {showForm: boolean}) => {
 
   return (
     <div>
-      {interestModal}
       <h1 className='lg:text-5xl text-4xl font-bold text-black dark:text-white my-10 text-center'>
         Properties
       </h1>
@@ -59,17 +54,17 @@ const Properties = ({showForm = false}: {showForm: boolean}) => {
       )}
       {!loading && properties?.length === 0 && <div className='flex justify-center'><h2 className='text-xl font-semibold'>No Property</h2></div>}
       <div
-        className={`grid lg:grid-cols-3 grid-cols-1 xl:grid-cols-4 gap-5`}
+        className={`flex flex-col md:flex-row justify-center items-center flex-wrap gap-5`}
       >
         {properties?.map((property, index) => (
-          <div key={index} className='col-span-1'>
             <PropertyCard
+              key={index}
               {...property}
               showModal={showModal}
               openModal={openModal}
             />
-          </div>
         ))}
+        
       </div>
     </div>
   );

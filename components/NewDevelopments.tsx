@@ -102,7 +102,7 @@ const NewDevelopmentsSection = () => {
         <div></div>
       )}
 
-      <div className='mt-8'>
+      {/* <div className='mt-8'>
         <Link
           href='/projects'
           className='bg-white dark:bg-black text-black dark:text-white px-5 py-3 flex justify-between items-center cursor-pointer w-full lg:w-40'
@@ -110,7 +110,7 @@ const NewDevelopmentsSection = () => {
           <p>View More</p>
           <BiArrowToRight className='text-2xl ml-2' />
         </Link>
-      </div>
+      </div> */}
     </section>
   );
 };

@@ -24,6 +24,11 @@ const PropertyCard = ({ showModal, openModal, ...props }: PropertyCardProps) => 
 
   const handleGetPdf = async () => {
 
+    if(formData.email === '' || formData.name === '' || formData.phone === '') {
+      toast.warning('Please fill all fields of the form')
+      return;
+    }
+
     const propertyData: IPropertyEnquiry = {
       name: formData.name,
       email: formData.email,
@@ -46,7 +51,7 @@ const PropertyCard = ({ showModal, openModal, ...props }: PropertyCardProps) => 
 
   return (
     <div
-      className='[perspective:1000px] w-96 h-[400px]'
+      className='w-full max-w-xs sm:max-w-sm md:w-96 h-[400px]'
     >
       <div
         className={`relative w-full h-full transition-transform duration-500 [transform-style:preserve-3d] ${
@@ -61,7 +66,7 @@ const PropertyCard = ({ showModal, openModal, ...props }: PropertyCardProps) => 
               alt='Property'
               fill
               style={{ objectFit: 'cover' }}
-              className={`rounded-t-xl ${openModal ? '-z-10' : ''}`}
+              className={`rounded-t-xl`}
             />
           </div>
           <div className='p-4 flex flex-col gap-2'>
@@ -86,7 +91,9 @@ const PropertyCard = ({ showModal, openModal, ...props }: PropertyCardProps) => 
             Back
           </button>
           <p>Fill the form to view the PDF</p>
-          <input
+          <form>
+            <fieldset>
+              <input
             type='text'
             name='name'
             value={formData.name}
@@ -94,6 +101,7 @@ const PropertyCard = ({ showModal, openModal, ...props }: PropertyCardProps) => 
             placeholder='Your Name'
             className='mb-2 p-2 border rounded w-full'
             required
+            disabled={loading}
           />
           <input
             type='email'
@@ -103,6 +111,7 @@ const PropertyCard = ({ showModal, openModal, ...props }: PropertyCardProps) => 
             placeholder='Your Email'
             className='mb-2 p-2 border rounded w-full'
             required
+            disabled={loading}
           />
           <input
             type='tel'
@@ -112,15 +121,18 @@ const PropertyCard = ({ showModal, openModal, ...props }: PropertyCardProps) => 
             placeholder='Your Phone Number'
             className='mb-4 p-2 border rounded w-full'
             required
+            disabled={loading}
           />
           <button
             onClick={handleGetPdf}
-            className='bg-wephco text-white px-4 py-2 rounded-lg flex items-center justify-center hover:bg-black transition-colors duration-300 cursor-pointer'
+            className='bg-wephco text-white px-4 py-2 rounded-lg flex items-center justify-center hover:bg-black transition-colors duration-300 cursor-pointer w-full'
           >
             {
               loading ? <Loader /> : 'View PDF'
             }
           </button>
+            </fieldset>
+          </form>
         </div>
       </div>
     </div>

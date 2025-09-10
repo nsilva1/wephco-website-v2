@@ -38,11 +38,11 @@ export const navbarMenu = [
     {
         label: 'Services',
         path: '/services'
-    },
-    {
-        label: 'Projects',
-        path: '/projects'
     }
+    // {
+    //     label: 'Projects',
+    //     path: '/projects'
+    // }
 ]
 
 
