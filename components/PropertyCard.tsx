@@ -72,7 +72,7 @@ const PropertyCard = ({ showModal, openModal, ...props }: PropertyCardProps) => 
             </p>
             <button
               onClick={() => setFlipped(true)}
-              className='bg-primary text-white px-4 py-2 rounded-lg flex items-center justify-center hover:bg-black transition-colors duration-300 cursor-pointer'
+              className='bg-wephco text-white px-4 py-2 rounded-lg flex items-center justify-center hover:bg-black transition-colors duration-300 cursor-pointer'
             >
               Get PDF
             </button>
@@ -115,7 +115,7 @@ const PropertyCard = ({ showModal, openModal, ...props }: PropertyCardProps) => 
           />
           <button
             onClick={handleGetPdf}
-            className='bg-primary text-white px-4 py-2 rounded-lg flex items-center justify-center hover:bg-black transition-colors duration-300 cursor-pointer'
+            className='bg-wephco text-white px-4 py-2 rounded-lg flex items-center justify-center hover:bg-black transition-colors duration-300 cursor-pointer'
           >
             {
               loading ? <Loader /> : 'View PDF'

@@ -23,7 +23,7 @@ const Hero = ({ onButtonClick }: { onButtonClick: () => void }) => {
           </h1>
           <button
             onClick={onButtonClick}
-            className="bg-primary text-white py-2 px-4 rounded-full cursor-pointer">
+            className="bg-wephco text-white py-2 px-4 rounded-full cursor-pointer">
             Join Us
           </button>
         </div>

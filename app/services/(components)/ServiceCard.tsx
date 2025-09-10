@@ -34,7 +34,7 @@ const ServiceCard = ({
         />
       </div>
       <div className="col-span-1 flex flex-col gap-4 justify-start items-start">
-        <h2 className="text-primary uppercase font-semibold">Our Services</h2>
+        <h2 className="text-wephco uppercase font-semibold">Our Services</h2>
         <hr className="text-black w-full" />
         <h2 className="text-black text-3xl my-8">{title}</h2>
         <p className="font-light mb-4 text-black">{description}</p>
@@ -42,13 +42,13 @@ const ServiceCard = ({
           <button
             onClick={decreaseStep}
             disabled={step === 0 ? true : false}
-            className="flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-lg font-medium hover:bg-primary/80 cursor-pointer focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 transition-colors">
+            className="flex items-center gap-2 bg-wephco text-wephco-foreground px-4 py-2 rounded-lg font-medium hover:bg-wephco/80 cursor-pointer focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 transition-colors">
             <ArrowLeft size={16} />
           </button>
           <button
             onClick={increaseStep}
             disabled={step === length ? true : false}
-            className="flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-lg font-medium hover:bg-primary/80 cursor-pointer focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 transition-colors">
+            className="flex items-center gap-2 bg-wephco text-wephco-foreground px-4 py-2 rounded-lg font-medium hover:bg-wephco/80 cursor-pointer focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 transition-colors">
             <ArrowRight size={16} />
           </button>
         </div>

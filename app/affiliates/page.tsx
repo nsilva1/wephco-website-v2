@@ -28,7 +28,7 @@ const AgentsPage = () => {
             <h3 className="text-gray-500 uppercase font-semibold text-lg mb-5 text-center md:text-start">
               The Wephco Difference
             </h3>
-            <h2 className="text-primary font-bold text-3xl text-center md:text-start">
+            <h2 className="text-wephco font-bold text-3xl text-center md:text-start">
               Respect For Your Talent. Value For Your Business
             </h2>
           </div>
@@ -88,7 +88,7 @@ const AgentsPage = () => {
             />
             <Link
               href="#agent-form"
-              className="bg-primary text-white py-2 px-3 w-full md:w-28 rounded-full flex items-center justify-between">
+              className="bg-wephco text-white py-2 px-3 w-full md:w-28 rounded-full flex items-center justify-between">
               Join Us <BiCaretRight />
             </Link>
           </div>
@@ -111,7 +111,7 @@ const AgentsPage = () => {
             />
             <Link
               href="#agent-form"
-              className="bg-primary text-white py-2 px-3 w-full md:w-28 rounded-full flex items-center justify-between">
+              className="bg-wephco text-white py-2 px-3 w-full md:w-28 rounded-full flex items-center justify-between">
               Join Us <BiCaretRight />
             </Link>
           </div>

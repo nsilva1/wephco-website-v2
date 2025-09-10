@@ -26,7 +26,7 @@ const AboutPage = () => {
             international buyer, we simplify your journey and deliver results.
           </p>
         </div>
-        <h3 className="font-outfit text-primary text-center uppercase font-semibold text-3xl my-20">
+        <h3 className="font-outfit text-wephco text-center uppercase font-semibold text-3xl my-20">
           Why Choose Us
         </h3>
         <div className="mt-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">

@@ -21,7 +21,7 @@ const SellPage = () => {
             />
           </div>
           <div className="col-span-1 flex flex-col items-center md:items-start justify-start gap-4">
-            <h3 className="text-primary text-2xl font-semibold text-center md:text-start">
+            <h3 className="text-wephco text-2xl font-semibold text-center md:text-start">
               Put your property in front of more potential buyers worldwide than
               anyone else.
             </h3>
@@ -44,26 +44,26 @@ const SellPage = () => {
           <h4 className="tracking-wide text-center">
             The most followed Real Estate brand in the country
           </h4>
-          <h3 className="text-primary text-4xl font-semibold text-center md:text-start">
+          <h3 className="text-wephco text-4xl font-semibold text-center md:text-start">
             Why Everyone is Selling with Wephco
           </h3>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
             <div className="col-span-1 border border-gray-300 rounded-lg p-20">
-              <h4 className="text-primary text-3xl md:text-4xl lg:text-5xl font-bold text-center">
+              <h4 className="text-wephco text-3xl md:text-4xl lg:text-5xl font-bold text-center">
                 40M+
                 <br />
                 impressions per month
               </h4>
             </div>
             <div className="col-span-1 border border-gray-300 rounded-lg p-20">
-              <h4 className="text-primary text-3xl md:text-4xl lg:text-5xl font-bold text-center">
+              <h4 className="text-wephco text-3xl md:text-4xl lg:text-5xl font-bold text-center">
                 1M+
                 <br />
                 followers
               </h4>
             </div>
             <div className="col-span-1 border border-gray-300 rounded-lg p-20">
-              <h4 className="text-primary text-3xl md:text-4xl lg:text-5xl font-bold text-center">
+              <h4 className="text-wephco text-3xl md:text-4xl lg:text-5xl font-bold text-center">
                 1B+
                 <br />
                 total impressions

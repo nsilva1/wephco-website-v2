@@ -218,7 +218,7 @@ const PropertyForm = () => {
             required
             disabled={imageUploading}
             onChange={handleImageChange}
-            className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-black/50 bg-primary text-black cursor-pointer"
+            className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-black/50 bg-wephco text-black cursor-pointer"
           />
           {previewImages.length > 0 && (
             <div className="mt-4 flex flex-wrap gap-2">

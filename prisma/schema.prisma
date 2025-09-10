@@ -15,6 +15,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum Role {
+  AGENT
+  SUPPORT
+  ADMIN
+  SUPERADMIN
+}
+
+
 model User {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   name      String
@@ -25,16 +39,11 @@ model User {
   updatedAt DateTime @updatedAt
 
   sessions Session[]
+  posts Post[]
 
   @@map("users") // optional: maps the model to a MongoDB collection name
 }
 
-enum Role {
-  AGENT
-  SUPPORT
-  ADMIN
-  SUPERADMIN
-}
 
 model Property {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
@@ -130,3 +139,44 @@ model Affiliate {
 
   @@map("affiliates") // optional: maps the model to a MongoDB collection name
 }
+
+model Category {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  color       String?  @default("#3B82F6")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  posts Post[]
+
+  @@map("categories")
+}
+
+model Post {
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  slug        String      @unique
+  content     String
+  excerpt     String?
+  coverImage  String?
+  status      PostStatus  @default(DRAFT)
+  featured    Boolean     @default(false)
+  views       Int         @default(0)
+  readTime    Int?        // in minutes
+  tags        String[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  publishedAt DateTime?
+
+  authorId   String @db.ObjectId
+  author     User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  
+  categoryId String?   @db.ObjectId
+  category   Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+
+  @@map("posts")
+}
+

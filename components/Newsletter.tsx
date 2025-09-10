@@ -62,11 +62,11 @@ const NewsletterSignup = () => {
                 <button
           type="submit"
           disabled={status === "loading"}
-          className=" bg-primary text-primary-foreground px-4 py-2 rounded-lg font-medium hover:bg-primary/80 cursor-pointer focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className=" bg-wephco text-wephco-foreground px-4 py-2 rounded-lg font-medium hover:bg-wephco/80 cursor-pointer focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           {status === "loading" ? (
             <div className="flex items-center justify-center">
-              <div className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin mr-2"></div>
+              <div className="w-4 h-4 border-2 border-wephco-foreground/30 border-t-wephco-foreground rounded-full animate-spin mr-2"></div>
               Subscribing...
             </div>
           ) : (
