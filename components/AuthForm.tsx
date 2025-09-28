@@ -8,6 +8,7 @@ import { Loader } from './Loader';
 import { useRouter } from 'next/navigation';
 import { checkAuthenticationCode } from '@/lib/helperFunctions';
 import { EyeClosed, Eye } from 'lucide-react';
+import { getErrorMessage } from '@/lib/helperFunctions';
 
 
 const AuthForm = ({ isLogin, affiliateOnly = false }: { isLogin: boolean, affiliateOnly?: boolean }) => {
@@ -45,10 +46,11 @@ const AuthForm = ({ isLogin, affiliateOnly = false }: { isLogin: boolean, affili
       //   router.push('/dashboard')
       // }
       } catch (error) {
-        if(error instanceof Error) {
-          setError(error.message);
-        }
+        const errorMessage = getErrorMessage(error)
+        setError(errorMessage);
         return;
+      } finally {
+        setLoading(false);
       }
 
     } else {
@@ -86,9 +88,8 @@ const AuthForm = ({ isLogin, affiliateOnly = false }: { isLogin: boolean, affili
         router.push('/auth/login')
       }, 2000)
       } catch (error) {
-        if(error instanceof Error) {
-          setError(error.message);
-        }
+        const errorMessage = getErrorMessage(error)
+        setError(errorMessage);
         return;
       } finally {
         setLoading(false);
