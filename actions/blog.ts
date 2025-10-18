@@ -1,44 +1,6 @@
 import axios from "axios"
-
-// Client-side API functions for blog operations
-export interface BlogPost {
-  id: string
-  title: string
-  slug: string
-  content: string
-  excerpt?: string
-  coverImage?: string
-  status: "DRAFT" | "PUBLISHED" | "ARCHIVED"
-  featured: boolean
-  views: number
-  readTime?: number
-  tags: string[]
-  createdAt: string
-  updatedAt: string
-  publishedAt?: string
-  author: {
-    id: string
-    name: string
-    avatar?: string
-  }
-  category?: {
-    id: string
-    name: string
-    slug: string
-    color: string
-  }
-}
-
-export interface BlogCategory {
-  id: string
-  name: string
-  slug: string
-  description?: string
-  color: string
-  _count: {
-    posts: number
-  }
-}
+import { IBlogPost, IBlogCategory } from "@/interfaces/blogInterface"
+import { apiClient, handleApiError } from "@/app/api/apiClient"
 
 export interface PaginatedResponse<T> {
   posts?: T[]
@@ -53,6 +15,27 @@ export interface PaginatedResponse<T> {
   }
 }
 
+// POSTS
+// create new blog post
+/**
+ * Creates a new blog post.
+ * @param postData - The data for the new post.
+ * @returns The created blog post.
+ */
+export const createBlogPost = async (postData: Partial<IBlogPost>): Promise<IBlogPost> => {
+  const URL = '/api/blog/posts'
+
+  try {
+    const response = await apiClient.post<IBlogPost>(URL, postData)
+    return response.data
+  } catch (error) {
+    handleApiError(error, "creating post")
+    throw error;
+  }
+}
+
+
+
 // Fetch published posts
 export async function fetchPosts(params?: {
   page?: number
@@ -61,7 +44,7 @@ export async function fetchPosts(params?: {
   tag?: string
   search?: string
   featured?: boolean
-}): Promise<PaginatedResponse<BlogPost>> {
+}): Promise<PaginatedResponse<IBlogPost>> {
   const searchParams = new URLSearchParams()
 
   if (params?.page) searchParams.set("page", params.page.toString().trim())
@@ -78,20 +61,51 @@ const response = await fetch(`/api/blog/posts`)
   return response.json()
 }
 
-// Fetch single post by slug
-export async function fetchPost(slug: string): Promise<BlogPost> {
-  const response = await fetch(`/api/blog/posts/${slug}`)
-  if (!response.ok) throw new Error("Failed to fetch post")
 
-  return response.json()
+/**
+ * Fetches a single blog post by its slug.
+ * @param slug - The slug of the post to fetch.
+ * @returns The requested blog post.
+ */
+export const fetchPost = async(slug: string): Promise<IBlogPost> => {
+  const URL = `/api/blog/posts/${slug}`
+
+  try {
+    const response = await apiClient.get<IBlogPost>(URL)
+    return response.data
+  } catch (error) {
+    handleApiError(error, `fetching post with slug: ${slug}`)
+    throw error;
+  }
+  
 }
 
-// Fetch categories
-export async function fetchCategories(): Promise<BlogCategory[]> {
-  const response = await fetch("/api/blog/categories")
-  if (!response.ok) throw new Error("Failed to fetch categories")
 
-  return response.json()
+// CATEGORIES
+// Fetch categories
+export const fetchCategories = async (): Promise<IBlogCategory[]> => {
+  const URL = '/api/blog/categories'
+  
+  try {
+        const response = await axios.get(URL);
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching consultations:", error);
+        throw error;
+    }
+}
+
+// Create new category
+export const createCategory = async (data: Partial<IBlogCategory>): Promise<IBlogCategory> => {
+  const URL = '/api/blog/categories'
+
+  try {
+        const response = await axios.post(URL, data);
+        return response.data;
+    } catch (error) {
+        console.error("Error creating category:", error);
+        throw error;
+    }
 }
 
 // Admin functions
@@ -99,7 +113,7 @@ export async function fetchAdminPosts(params?: {
   page?: number
   limit?: number
   status?: string
-}): Promise<PaginatedResponse<BlogPost>> {
+}): Promise<PaginatedResponse<IBlogPost>> {
   const searchParams = new URLSearchParams()
 
   if (params?.page) searchParams.set("page", params.page.toString())

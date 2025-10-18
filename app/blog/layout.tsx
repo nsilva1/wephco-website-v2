@@ -14,21 +14,15 @@ export default function BlogLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body>
-        <div className="min-h-screen bg-background">
+        <div className="min-h-screen bg-white dark:bg-gray-800">
               <BlogHeader />
-        
-              <main className="container mx-auto px-4 py-8">
-                <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+              <main className="container mx-auto">
+                <div className="">
                   {/* Main Content */}
-                  <div className="lg:col-span-3">
+                  <div className="">
                     <Suspense fallback={<BlogPostSkeleton />}>
                       {children}
                     </Suspense>
-                  </div>
-        
-                  {/* Sidebar */}
-                  <div className="lg:col-span-1">
-                    <BlogSidebar />
                   </div>
                 </div>
               </main>

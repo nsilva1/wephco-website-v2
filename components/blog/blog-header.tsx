@@ -8,6 +8,7 @@ import { Search, Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useRouter } from "next/navigation"
+import { socialLinks } from "@/lib/constants"
 
 export function BlogHeader() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -25,33 +26,19 @@ export function BlogHeader() {
     <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-50">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
+          <div className="hidden lg:flex items-center gap-2">
+            {socialLinks.map((social, index) => (
+              <Link key={index} href={social.link} target='_blank' rel='noopener noreferrer'>
+                <social.icon className='text-4xl text-gray-500 hover:text-green-700 p-2' />
+              </Link>
+            ))}
+          </div>
+
           {/* Logo/Title */}
           <div className="flex items-center gap-8">
             <Link href="/blog" className="text-2xl font-bold text-primary">
-              Blog
+              WephcoBlog
             </Link>
-
-            {/* Desktop Navigation */}
-            {/* <nav className="hidden md:flex items-center gap-6">
-              <Link href="/blog" className="text-sm font-medium hover:text-primary transition-colors">
-                All Posts
-              </Link>
-              <Link
-                href="/blog?category=technology"
-                className="text-sm font-medium hover:text-primary transition-colors"
-              >
-                Technology
-              </Link>
-              <Link
-                href="/blog?category=lifestyle"
-                className="text-sm font-medium hover:text-primary transition-colors"
-              >
-                Lifestyle
-              </Link>
-              <Link href="/blog?featured=true" className="text-sm font-medium hover:text-primary transition-colors">
-                Featured
-              </Link>
-            </nav> */}
           </div>
 
           {/* Search and Mobile Menu */}
@@ -80,26 +67,7 @@ export function BlogHeader() {
         {/* Mobile Menu */}
         {isMenuOpen && (
           <div className="md:hidden border-t py-4">
-            <nav className="flex flex-col gap-4">
-              {/* <Link href="/blog" className="text-sm font-medium hover:text-primary transition-colors">
-                All Posts
-              </Link>
-              <Link
-                href="/blog?category=technology"
-                className="text-sm font-medium hover:text-primary transition-colors"
-              >
-                Technology
-              </Link>
-              <Link
-                href="/blog?category=lifestyle"
-                className="text-sm font-medium hover:text-primary transition-colors"
-              >
-                Lifestyle
-              </Link>
-              <Link href="/blog?featured=true" className="text-sm font-medium hover:text-primary transition-colors">
-                Featured
-              </Link> */}
-
+            <nav className="flex flex-col items-center gap-4">
               {/* Mobile Search */}
               <form onSubmit={handleSearch} className="sm:hidden">
                 <div className="relative">
@@ -113,6 +81,13 @@ export function BlogHeader() {
                   />
                 </div>
               </form>
+              <div className="flex items-center gap-2 mt-5">
+                {socialLinks.map((social, index) => (
+                  <Link key={index} href={social.link} target='_blank' rel='noopener noreferrer'>
+                    <social.icon className='text-4xl text-gray-500 hover:text-green-700 p-2' />
+                  </Link>
+                ))}
+              </div>
             </nav>
           </div>
         )}

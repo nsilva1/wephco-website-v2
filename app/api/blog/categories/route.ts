@@ -6,28 +6,44 @@ import { validateCreateCategory } from "@/lib/blogValidation"
 export async function GET() {
   try {
     const categories = await prisma.category.findMany({
-      include: {
-        _count: {
-          select: {
-            posts: {
-              where: {
-                status: "PUBLISHED",
-              },
-            },
-          },
-        },
-      },
       orderBy: {
         name: "asc",
       },
-    })
-
-    return NextResponse.json(categories)
+      include: {
+        posts: true
+      }
+    });
+    return NextResponse.json(categories);
   } catch (error) {
-    console.error("Error fetching categories:", error)
-    return NextResponse.json({ error: "Failed to fetch categories" }, { status: 500 })
+    return NextResponse.error();
   }
 }
+
+// export async function GET() {
+//   try {
+//     const categories = await prisma.category.findMany({
+//       include: {
+//         _count: {
+//           select: {
+//             posts: {
+//               where: {
+//                 status: "PUBLISHED",
+//               },
+//             },
+//           },
+//         },
+//       },
+//       orderBy: {
+//         name: "asc",
+//       },
+//     })
+
+//     return NextResponse.json(categories)
+//   } catch (error) {
+//     console.error("Error fetching categories:", error)
+//     return NextResponse.json({ error: "Failed to fetch categories" }, { status: 500 })
+//   }
+// }
 
 // POST /api/blog/categories - Create new category (admin only)
 export async function POST(request: NextRequest) {
@@ -63,3 +79,4 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Failed to create category" }, { status: 500 })
   }
 }
+

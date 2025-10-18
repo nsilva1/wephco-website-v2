@@ -4,51 +4,12 @@ import { validateCreatePost } from "@/lib/blogValidation"
 import { PostStatus } from "@/lib/generated/prisma"
 
 // GET /api/blog/posts - List published posts with pagination and filtering
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
-    const { searchParams } = new URL(request.url)
-    const page = Number.parseInt(searchParams.get("page") || "1")
-    const limit = Number.parseInt(searchParams.get("limit") || "10")
-    const category = searchParams.get("category")
-    const tag = searchParams.get("tag")
-    const search = searchParams.get("search")
-    const featured = searchParams.get("featured") === "true"
-
-    const skip = (page - 1) * limit
-
-    // Build where clause
-    const where: any = {
-      status: PostStatus.PUBLISHED,
-    }
-
-    if (category) {
-      where.category = {
-        slug: category,
-      }
-    }
-
-    if (tag) {
-      where.tags = {
-        has: tag,
-      }
-    }
-
-    if (search) {
-      where.OR = [
-        { title: { contains: search, mode: "insensitive" } },
-        { excerpt: { contains: search, mode: "insensitive" } },
-        { content: { contains: search, mode: "insensitive" } },
-      ]
-    }
-
-    if (featured) {
-      where.featured = true
-    }
-
-    const [posts, total] = await Promise.all([
-      prisma.post.findMany({
-        where,
-        include: {
+    
+    const posts = await prisma.post.findMany({
+      where: { status: PostStatus.PUBLISHED },
+      include: {
           author: {
             select: {
               id: true,
@@ -65,25 +26,10 @@ export async function GET(request: NextRequest) {
           },
         },
         orderBy: [{ featured: "desc" }, { publishedAt: "desc" }],
-        skip,
-        take: limit,
-      }),
-      prisma.post.count({ where }),
-    ])
-
-    const totalPages = Math.ceil(total / limit)
-
-    return NextResponse.json({
-      posts,
-      pagination: {
-        page,
-        limit,
-        total,
-        totalPages,
-        hasNext: page < totalPages,
-        hasPrev: page > 1,
-      },
     })
+    
+
+    return NextResponse.json(posts)
   } catch (error) {
     console.error("Error fetching posts:", error)
     return NextResponse.json({ error: "Failed to fetch posts" }, { status: 500 })

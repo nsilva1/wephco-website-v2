@@ -1,14 +1,15 @@
-import { notFound } from "next/navigation"
 import { format } from "date-fns"
 import { Clock, Eye, Calendar, User, ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { fetchPost } from "@/actions/blog"
+import { sampleBlogPosts } from "@/interfaces/blogInterface"
 
 export default async function BlogPostPage({ params }: { params: { slug: string } }) {
-  try {
-    const post = await fetchPost(params.slug)
+
+    // const post = await fetchPost(params.slug)
+    const post = sampleBlogPosts.find(p => p.slug === params.slug) || sampleBlogPosts[0];
 
     return (
       <div className="min-h-screen bg-background">
@@ -32,7 +33,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                 <Badge
                   variant="secondary"
                   className="mb-4"
-                  style={{ backgroundColor: post.category.color + "20", color: post.category.color }}
+                  style={{ backgroundColor: post.category.color + "20", color:'black' }}
                 >
                   {post.category.name}
                 </Badge>
@@ -48,12 +49,12 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
               <div className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground">
                 <div className="flex items-center gap-2">
                   <User className="h-4 w-4" />
-                  <span>{post.author.name}</span>
+                  <span>{post.author?.name}</span>
                 </div>
 
                 <div className="flex items-center gap-2">
                   <Calendar className="h-4 w-4" />
-                  <time dateTime={post.publishedAt}>{format(new Date(post.publishedAt!), "MMMM d, yyyy")}</time>
+                  <time >{format(new Date(post.publishedAt!), "MMMM d, yyyy")}</time>
                 </div>
 
                 {post.readTime && (
@@ -108,7 +109,5 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
         </main>
       </div>
     )
-  } catch (error) {
-    notFound()
-  }
+  
 }

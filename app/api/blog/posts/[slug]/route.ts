@@ -8,20 +8,32 @@ function looksLikeId(str: string) {
   return /^[0-9a-fA-F-]{24,}$/.test(str); // works for MongoDB ObjectId-like or UUID
 }
 
-// GET /api/blog/posts/[identifier] - Get post by slug or id
+// GET /api/blog/posts/[slug] - Get post by slug or id
 export async function GET(
   request: NextRequest,
-  { params }: { params: { identifier: string } }
+  { params }: { params: { slug: string } }
 ) {
   try {
-    const { identifier } = params;
+    const { slug } = params;
 
     let post;
 
-    if (looksLikeId(identifier)) {
+    // const where = looksLikeId(slug)
+    //   ? { id: slug, status: "PUBLISHED" }
+    //   : { slug: slug, status: "PUBLISHED" };
+
+    // const post = await prisma.post.findUnique({
+    //   where,
+    //   include: {
+    //     author: { select: { id: true, name: true } },
+    //     category: { select: { id: true, name: true, slug: true, color: true } },
+    //   },
+    // });
+
+    if (looksLikeId(slug)) {
       // fetch by id
       post = await prisma.post.findUnique({
-        where: { id: identifier, status: "PUBLISHED" },
+        where: { id: slug, status: "PUBLISHED" },
         include: {
           author: { select: { id: true, name: true } },
           category: { select: { id: true, name: true, slug: true, color: true } },
@@ -30,7 +42,7 @@ export async function GET(
     } else {
       // fetch by slug
       post = await prisma.post.findUnique({
-        where: { slug: identifier, status: "PUBLISHED" },
+        where: { slug: slug, status: "PUBLISHED" },
         include: {
           author: { select: { id: true, name: true } },
           category: { select: { id: true, name: true, slug: true, color: true } },
@@ -55,13 +67,13 @@ export async function GET(
   }
 }
 
-// PUT /api/blog/posts/[identifier] - Update post (id only)
+// PUT /api/blog/posts/[slug] - Update post (id only)
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { identifier: string } }
+  { params }: { params: { slug: string } }
 ) {
   try {
-    const { identifier: id } = params;
+    const { slug: id } = params;
 
     const body = await request.json();
     const validation = validateUpdatePost(body);
@@ -116,13 +128,13 @@ export async function PUT(
   }
 }
 
-// DELETE /api/blog/posts/[identifier] - Delete post (id only)
+// DELETE /api/blog/posts/[slug] - Delete post (id only)
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { identifier: string } }
+  { params }: { params: { slug: string } }
 ) {
   try {
-    const { identifier: id } = params;
+    const { slug: id } = params;
 
     await prisma.post.delete({ where: { id } });
 

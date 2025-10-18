@@ -1,10 +1,28 @@
+'use client'
+
 import Link from "next/link"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { fetchCategories, fetchPosts } from "@/actions/blog"
+import { useState, useCallback, useEffect } from "react"
+import { IBlogCategory } from "@/interfaces/blogInterface"
 
-export async function BlogSidebar() {
-  const [categories, recentPosts] = await Promise.all([fetchCategories(), fetchPosts({ limit: 5 })])
+const BlogSidebar = () => {
+  const [categories, setCategories] = useState<IBlogCategory[]>([])
+  // const [categories, recentPosts] = await Promise.all([fetchCategories(), fetchPosts({ limit: 5 })])
+
+  const loadCategories = useCallback(async () => {
+    try {
+      const data = await fetchCategories()
+      setCategories(data)
+    } catch (error) {
+      console.error("Error loading categories:", error)
+    }
+  }, [])
+
+  useEffect(() => {
+    loadCategories()
+  }, [])
 
   return (
     <div className="space-y-6">
@@ -21,8 +39,8 @@ export async function BlogSidebar() {
               className="flex items-center justify-between p-2 rounded-md hover:bg-accent hover:text-accent-foreground transition-colors"
             >
               <span className="font-medium">{category.name}</span>
-              <Badge variant="secondary" style={{ backgroundColor: category.color + "20", color: category.color }}>
-                {category._count.posts}
+              <Badge variant="secondary" style={{ backgroundColor: category.color + "20" }}>
+                {category.posts?.length}
               </Badge>
             </Link>
           ))}
@@ -30,7 +48,7 @@ export async function BlogSidebar() {
       </Card>
 
       {/* Recent Posts */}
-      <Card>
+      {/* <Card>
         <CardHeader>
           <CardTitle className="text-lg">Recent Posts</CardTitle>
         </CardHeader>
@@ -48,7 +66,7 @@ export async function BlogSidebar() {
             </Link>
           ))}
         </CardContent>
-      </Card>
+      </Card> */}
 
       {/* Newsletter Signup */}
       <Card className="bg-primary/5 border-primary/20">
@@ -72,3 +90,5 @@ export async function BlogSidebar() {
     </div>
   )
 }
+
+export { BlogSidebar }
