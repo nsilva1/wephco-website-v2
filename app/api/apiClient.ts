@@ -4,7 +4,9 @@ import axios from "axios"
  * Centralized axios instance with a predefined baseURL.
  * This can be easily configured with headers, interceptors, etc. in one place.
  */
-export const apiClient = axios.create({})
+export const apiClient = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000',
+})
 
 /**
  * A reusable, consistent error handler for API calls.

@@ -1,6 +1,13 @@
-import { PostEditor } from "@/components/blog/admin/post-editor"
+'use client'
 
-export default function NewPostPage() {
+import { PostEditor } from "@/components/blog/admin/post-editor"
+import { useSession } from 'next-auth/react';
+
+
+export default async function NewPostPage() {
+
+  const { data: session } = useSession();
+  
   return (
     <div className="space-y-6">
       <div>
@@ -8,7 +15,7 @@ export default function NewPostPage() {
         <p className="text-muted-foreground">Write and publish a new blog post</p>
       </div>
 
-      <PostEditor />
+      <PostEditor userId={session?.user.id} />
     </div>
   )
 }

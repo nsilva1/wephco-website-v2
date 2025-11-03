@@ -4,12 +4,11 @@ import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { fetchPost } from "@/actions/blog"
-import { sampleBlogPosts } from "@/interfaces/blogInterface"
+
 
 export default async function BlogPostPage({ params }: { params: { slug: string } }) {
 
-    // const post = await fetchPost(params.slug)
-    const post = sampleBlogPosts.find(p => p.slug === params.slug) || sampleBlogPosts[0];
+    const post = await fetchPost(params.slug)
 
     return (
       <div className="min-h-screen bg-background">

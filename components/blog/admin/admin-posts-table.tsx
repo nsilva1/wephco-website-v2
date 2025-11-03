@@ -11,20 +11,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { fetchAdminPosts } from "@/actions/blog"
+import { fetchPosts } from "@/actions/blog"
 
-interface AdminPostsTableProps {
-  searchParams: {
-    page?: string
-    status?: string
-  }
-}
 
-export async function AdminPostsTable({ searchParams }: AdminPostsTableProps) {
-  const page = Number.parseInt(searchParams.page || "1")
-  const status = searchParams.status
 
-  const { posts } = await fetchAdminPosts({ page, limit: 20, status })
+export async function AdminPostsTable() {
+  
+
+  const posts = await fetchPosts()
 
   return (
     <div className="border rounded-lg">
@@ -64,7 +58,7 @@ export async function AdminPostsTable({ searchParams }: AdminPostsTableProps) {
                 {post.category ? (
                   <Badge
                     variant="outline"
-                    style={{ backgroundColor: post.category.color + "20", color: post.category.color }}
+                    style={{ backgroundColor: post.category.color + "20", color: 'blanchedalmond' }}
                   >
                     {post.category.name}
                   </Badge>
@@ -72,9 +66,9 @@ export async function AdminPostsTable({ searchParams }: AdminPostsTableProps) {
                   <span className="text-muted-foreground">No category</span>
                 )}
               </TableCell>
-              <TableCell>{post.author.name}</TableCell>
+              <TableCell>{post.author?.name}</TableCell>
               <TableCell>{post.views}</TableCell>
-              <TableCell>{format(new Date(post.createdAt), "MMM d, yyyy")}</TableCell>
+              <TableCell>{format(new Date(post.createdAt!), "MMM d, yyyy")}</TableCell>
               <TableCell>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>

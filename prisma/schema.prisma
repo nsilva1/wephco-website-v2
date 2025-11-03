@@ -173,11 +173,11 @@ model Post {
   updatedAt         DateTime    @updatedAt
   publishedAt       DateTime?
 
-  authorId          String @db.ObjectId
-  author            User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId          String?     @db.ObjectId
+  author            User?       @relation(fields: [authorId], references: [id], onDelete: Cascade)
   
-  categoryId        String?   @db.ObjectId
-  category          Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  categoryId        String?     @db.ObjectId
+  category          Category?   @relation(fields: [categoryId], references: [id], onDelete: SetNull)
 
 
   @@index([status])

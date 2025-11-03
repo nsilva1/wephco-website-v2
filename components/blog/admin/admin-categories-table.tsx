@@ -31,7 +31,7 @@ export async function AdminCategoriesTable() {
                 </div>
               </TableCell>
               <TableCell>
-                <Badge variant="secondary">{category._count.posts}</Badge>
+                <Badge variant="secondary">{category.posts?.length}</Badge>
               </TableCell>
               <TableCell>
                 <div className="flex items-center gap-1">

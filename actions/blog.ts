@@ -1,4 +1,3 @@
-import axios from "axios"
 import { IBlogPost, IBlogCategory } from "@/interfaces/blogInterface"
 import { apiClient, handleApiError } from "@/app/api/apiClient"
 
@@ -22,7 +21,7 @@ export interface PaginatedResponse<T> {
  * @param postData - The data for the new post.
  * @returns The created blog post.
  */
-export const createBlogPost = async (postData: Partial<IBlogPost>): Promise<IBlogPost> => {
+export const createBlogPost = async (postData: Omit<IBlogPost, 'slug' | 'views' | 'readTime' | 'metaTitle' | 'metaDescription' | 'publishedAt'>): Promise<IBlogPost> => {
   const URL = '/api/blog/posts'
 
   try {
@@ -37,28 +36,16 @@ export const createBlogPost = async (postData: Partial<IBlogPost>): Promise<IBlo
 
 
 // Fetch published posts
-export async function fetchPosts(params?: {
-  page?: number
-  limit?: number
-  category?: string
-  tag?: string
-  search?: string
-  featured?: boolean
-}): Promise<PaginatedResponse<IBlogPost>> {
-  const searchParams = new URLSearchParams()
+export const fetchPosts = async(): Promise<IBlogPost[]>  =>{
+    const URL = '/api/blog/posts'
 
-  if (params?.page) searchParams.set("page", params.page.toString().trim())
-  if (params?.limit) searchParams.set("limit", params.limit.toString().trim())
-  if (params?.category) searchParams.set("category", params.category.trim())
-  if (params?.tag) searchParams.set("tag", params.tag.trim())
-  if (params?.search) searchParams.set("search", params.search.trim())
-  if (params?.featured) searchParams.set("featured", "true")
-
-//   const response = await fetch(`/api/blog/posts?${searchParams}`)
-const response = await fetch(`/api/blog/posts`)
-  if (!response.ok) throw new Error("Failed to fetch posts")
-
-  return response.json()
+    try {
+      const response = await apiClient.get(URL);
+      return response.data;
+    } catch (error) {
+      handleApiError(error, "fetching posts");
+      throw error;
+    }
 }
 
 
@@ -87,10 +74,10 @@ export const fetchCategories = async (): Promise<IBlogCategory[]> => {
   const URL = '/api/blog/categories'
   
   try {
-        const response = await axios.get(URL);
+        const response = await apiClient.get(URL);
         return response.data;
     } catch (error) {
-        console.error("Error fetching consultations:", error);
+        console.error("Error fetching categories:", error);
         throw error;
     }
 }
@@ -100,7 +87,7 @@ export const createCategory = async (data: Partial<IBlogCategory>): Promise<IBlo
   const URL = '/api/blog/categories'
 
   try {
-        const response = await axios.post(URL, data);
+        const response = await apiClient.post(URL, data);
         return response.data;
     } catch (error) {
         console.error("Error creating category:", error);

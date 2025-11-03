@@ -3,11 +3,7 @@ import { Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { AdminPostsTable } from "@/components/blog/admin/admin-posts-table"
 
-export default function AdminPostsPage({
-  searchParams,
-}: {
-  searchParams: { page?: string; status?: string }
-}) {
+export default function AdminPostsPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -23,7 +19,7 @@ export default function AdminPostsPage({
         </Link>
       </div>
 
-      <AdminPostsTable searchParams={searchParams} />
+      <AdminPostsTable />
     </div>
   )
 }

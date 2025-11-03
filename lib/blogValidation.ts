@@ -1,3 +1,5 @@
+import { IBlogPost } from "@/interfaces/blogInterface"
+
 export interface CreatePostInput {
   title: string
   content: string
@@ -31,7 +33,7 @@ export interface ValidationError {
   message: string
 }
 
-export function validateCreatePost(data: any): { isValid: boolean; errors: ValidationError[]; data?: CreatePostInput } {
+export function validateCreatePost(data: IBlogPost): { isValid: boolean; errors: ValidationError[]; data?: CreatePostInput } {
   const errors: ValidationError[] = []
 
   // Title validation
@@ -86,9 +88,9 @@ export function validateCreatePost(data: any): { isValid: boolean; errors: Valid
     data: {
       title: data.title,
       content: data.content,
-      excerpt: data.excerpt || undefined,
-      coverImage: data.coverImage || undefined,
-      categoryId: data.categoryId || undefined,
+      excerpt: data.excerpt,
+      coverImage: data.coverImage,
+      categoryId: data.categoryId,
       tags,
       status: status as "DRAFT" | "PUBLISHED" | "ARCHIVED",
       featured,

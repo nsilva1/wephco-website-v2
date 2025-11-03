@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
 
     // TODO: Add authentication check here
     // For now, we'll use a default author ID
-    const defaultAuthorId = "default-author-id" // Replace with actual auth logic
+    // const defaultAuthorId = "default-author-id" // Replace with actual auth logic
 
     // Generate slug from title if not provided
     const slug = validatedData.title
@@ -68,24 +68,8 @@ export async function POST(request: NextRequest) {
         ...validatedData,
         slug,
         readTime,
-        authorId: defaultAuthorId,
+        authorId: body.authorId,
         publishedAt: validatedData.status === "PUBLISHED" ? new Date() : null,
-      },
-      include: {
-        author: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-        category: {
-          select: {
-            id: true,
-            name: true,
-            slug: true,
-            color: true,
-          },
-        },
       },
     })
 

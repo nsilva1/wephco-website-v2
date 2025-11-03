@@ -49,14 +49,12 @@ export function BlogPostCard({ title, slug, excerpt, coverImage, category, tags,
         {excerpt && <p className="text-muted-foreground text-sm leading-relaxed text-pretty font-outfit">{excerpt}</p>}
 
         {/* Tags */}
-        {/* {tags!.length > 0 && (
+        {tags!.length > 0 && (
           <div className="flex flex-wrap gap-1 mt-3">
             {tags!.slice(0, 3).map((tag) => (
-              <Link key={tag} href={`/blog?tag=${tag}`}>
                 <Badge variant="outline" className="text-xs hover:bg-accent hover:text-accent-foreground">
                   #{tag}
                 </Badge>
-              </Link>
             ))}
             {tags!.length > 3 && (
               <Badge variant="outline" className="text-xs">
@@ -64,7 +62,7 @@ export function BlogPostCard({ title, slug, excerpt, coverImage, category, tags,
               </Badge>
             )}
           </div>
-        )} */}
+        )}
       </CardContent>
 
       <CardFooter className="pt-3 border-t flex items-center justify-between">
@@ -72,7 +70,7 @@ export function BlogPostCard({ title, slug, excerpt, coverImage, category, tags,
         <div className="flex items-center gap-4 text-xs text-muted-foreground">
           <div className="flex items-center gap-1">
             <User className="h-3 w-3" />
-            <span>{author!.name}</span>
+            {/* <span>{author!.email}</span> */}
           </div>
 
           <div className="flex items-center gap-1">
@@ -90,7 +88,7 @@ export function BlogPostCard({ title, slug, excerpt, coverImage, category, tags,
 
         {/* Read More Button */}
         <Link href={`/blog/${slug}`}>
-          <Button size="sm" variant="secondary" className="text-primary hover:text-primary-foreground hover:bg-primary">
+          <Button size="sm" variant="secondary" className="text-primary hover:text-primary-foreground hover:bg-primary cursor-pointer">
             Read More
           </Button>
         </Link>

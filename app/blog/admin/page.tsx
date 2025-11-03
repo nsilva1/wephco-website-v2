@@ -1,9 +1,18 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { fetchBlogStats } from "@/actions/blog"
+import { fetchPosts } from "@/actions/blog"
 import { BarChart3, FileText, Eye, TrendingUp } from "lucide-react"
+import { auth } from "@/lib/auth/auth"
+import { redirect } from "next/navigation"
 
 export default async function BlogAdminPage() {
-  const stats = await fetchBlogStats()
+
+  const session = await auth()
+
+  if(!session) {
+    redirect('/')
+  }
+
+  const posts = await fetchPosts()
 
   return (
     <div className="space-y-6">
@@ -20,7 +29,7 @@ export default async function BlogAdminPage() {
             <FileText className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.totalPosts}</div>
+            <div className="text-2xl font-bold">{posts?.length}</div>
             <p className="text-xs text-muted-foreground">All posts in database</p>
           </CardContent>
         </Card>
@@ -31,7 +40,7 @@ export default async function BlogAdminPage() {
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.publishedPosts}</div>
+            <div className="text-2xl font-bold">{posts?.length}</div>
             <p className="text-xs text-muted-foreground">Live on your blog</p>
           </CardContent>
         </Card>
@@ -42,7 +51,7 @@ export default async function BlogAdminPage() {
             <FileText className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.draftPosts}</div>
+            <div className="text-2xl font-bold">0</div>
             <p className="text-xs text-muted-foreground">Unpublished posts</p>
           </CardContent>
         </Card>
@@ -53,7 +62,7 @@ export default async function BlogAdminPage() {
             <Eye className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.totalViews.toLocaleString()}</div>
+            <div className="text-2xl font-bold">{posts?.reduce((prevPost, post) => prevPost + post.views, 0)}</div>
             <p className="text-xs text-muted-foreground">All time views</p>
           </CardContent>
         </Card>
@@ -69,12 +78,12 @@ export default async function BlogAdminPage() {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {stats.recentPosts.map((post: any) => (
+            {posts?.splice(0, 3).map((post) => (
               <div key={post.id} className="flex items-center justify-between p-3 border rounded-lg">
                 <div>
                   <h3 className="font-medium">{post.title}</h3>
                   <p className="text-sm text-muted-foreground">
-                    {post.status} • {post.views} views • {new Date(post.createdAt).toLocaleDateString()}
+                    {post.status} • {post.views} views • {new Date(post.createdAt!).toLocaleDateString()}
                   </p>
                 </div>
                 <div className="flex items-center gap-2">

@@ -1,7 +1,6 @@
 "use client"
 
-import type React from "react"
-import { useState } from "react"
+import { useState, useCallback, useEffect, FormEvent } from "react"
 import { useRouter } from "next/navigation"
 import { Save, Eye, ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -10,12 +9,14 @@ import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { toast } from "react-toastify"
+import { fetchCategories } from "@/actions/blog"
+import { IBlogCategory, IBlogPost, PostStatus } from "@/interfaces/blogInterface"
+import { generateId } from "@/lib/helperFunctions"
+import { uploadFile } from "@/actions/vercel"
+import { createBlogPost } from "@/actions/blog"
 
-interface PostEditorProps {
-  post?: any // In a real app, this would be properly typed
-}
 
-const validateForm = (formData: FormData) => {
+const validateForm = (formData: IBlogPost) => {
   const errors: Record<string, string> = {}
 
   if (!formData.title.trim()) {
@@ -33,35 +34,59 @@ const validateForm = (formData: FormData) => {
   return errors
 }
 
-interface FormData {
-  title: string
-  content: string
-  excerpt: string
-  coverImage: string
-  categoryId: string
-  tags: string[]
-  status: "DRAFT" | "PUBLISHED" | "ARCHIVED"
-  featured: boolean
-}
-
-export function PostEditor({ post }: PostEditorProps) {
+export function PostEditor({userId}: {userId: string | undefined}) {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
-
-  const [formData, setFormData] = useState<FormData>({
-    title: post?.title || "",
-    content: post?.content || "",
-    excerpt: post?.excerpt || "",
-    coverImage: post?.coverImage || "",
-    categoryId: post?.categoryId || "",
-    tags: post?.tags || [],
-    status: post?.status || "DRAFT",
-    featured: post?.featured || false,
+  const [categories, setCategories] = useState<IBlogCategory[]>([])
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [imageUploading, setImageUploading] = useState(false);
+  const [previewImages, setPreviewImages] = useState<string[]>([])
+  const [imageProgress, setImageProgress] = useState(0);
+  const [formData, setFormData] = useState<IBlogPost>({
+    title: "",
+    content: "",
+    excerpt: "",
+    coverImage: "",
+    categoryId: "",
+    tags: [],
+    status: PostStatus.DRAFT,
+    featured: false,
+    slug: "",
+    views: 0,
+    readTime: 0,
+    metaTitle: "",
+    metaDescription: "",
+    publishedAt: null,
+    authorId: ''
   })
-
+  const [tagInput, setTagInput] = useState("")
   const [errors, setErrors] = useState<Record<string, string>>({})
 
-  const updateField = (field: keyof FormData, value: any) => {
+  const getCategories = useCallback(async () => {
+    try {
+      const result = await fetchCategories()
+      setCategories(result);
+    } catch (error) {
+      toast.error('Error fetching categories')
+    }
+  }, [])
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0]
+        if (!file) return
+
+        const reader = new FileReader()
+        reader.onload = () => {
+          if (typeof reader.result === 'string') {
+          setPreviewImages([reader.result])
+          }
+        }
+        reader.readAsDataURL(file)
+    
+        setSelectedFile(file)
+    }
+
+  const updateField = (field: keyof IBlogPost, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
     // Clear error when user starts typing
     if (errors[field]) {
@@ -69,7 +94,7 @@ export function PostEditor({ post }: PostEditorProps) {
     }
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
 
     const validationErrors = validateForm(formData)
@@ -78,17 +103,29 @@ export function PostEditor({ post }: PostEditorProps) {
       return
     }
 
+    setImageUploading(true)
     setIsLoading(true)
+
+    const imageId = generateId()
+
+    const imageBlob = await uploadFile(imageId, selectedFile!, setImageProgress)
+    
+    const blogData: Omit<IBlogPost, 'slug' | 'views' | 'readTime' | 'metaTitle' | 'metaDescription' | 'publishedAt'> = {
+      title: formData.title,
+      content: formData.content,
+      excerpt: formData.excerpt,
+      coverImage: imageBlob.url,
+      categoryId: formData.categoryId,
+      tags: formData.tags,
+      status: PostStatus.PUBLISHED,
+      featured: formData.featured,
+      authorId: userId!
+    }
+
     try {
-      const response = await fetch("/api/blog/posts", {
-        method: post ? "PUT" : "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      })
+      await createBlogPost(blogData)
 
-      if (!response.ok) throw new Error("Failed to save post")
-
-      toast.success(post ? "Post updated successfully" : "Post created successfully")
+      toast.success("Post created successfully")
       router.push("/blog/admin/posts")
     } catch (error) {
       toast.error("Failed to save post")
@@ -96,6 +133,10 @@ export function PostEditor({ post }: PostEditorProps) {
       setIsLoading(false)
     }
   }
+
+  useEffect(() => {
+    getCategories()
+  }, [])
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -111,7 +152,7 @@ export function PostEditor({ post }: PostEditorProps) {
           </Button>
           <Button type="submit" disabled={isLoading} className="gap-2">
             <Save className="h-4 w-4" />
-            {isLoading ? "Saving..." : post ? "Update Post" : "Create Post"}
+            {isLoading ? "Saving..." : "Create Post"}
           </Button>
         </div>
       </div>
@@ -131,7 +172,7 @@ export function PostEditor({ post }: PostEditorProps) {
                   placeholder="Enter post title..."
                   value={formData.title}
                   onChange={(e) => updateField("title", e.target.value)}
-                  className="text-lg"
+                  className="text-lg mt-2"
                 />
                 {errors.title && <p className="text-sm text-red-500 mt-1">{errors.title}</p>}
               </div>
@@ -144,6 +185,7 @@ export function PostEditor({ post }: PostEditorProps) {
                   value={formData.excerpt}
                   onChange={(e) => updateField("excerpt", e.target.value)}
                   rows={3}
+                  className="mt-2"
                 />
               </div>
 
@@ -155,7 +197,7 @@ export function PostEditor({ post }: PostEditorProps) {
                   value={formData.content}
                   onChange={(e) => updateField("content", e.target.value)}
                   rows={20}
-                  className="font-mono"
+                  className="font-mono mt-2"
                 />
                 {errors.content && <p className="text-sm text-red-500 mt-1">{errors.content}</p>}
               </div>
@@ -175,7 +217,7 @@ export function PostEditor({ post }: PostEditorProps) {
                 <select
                   value={formData.status}
                   onChange={(e) => updateField("status", e.target.value as any)}
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  className="flex mt-2 h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                 >
                   <option value="DRAFT">Draft</option>
                   <option value="PUBLISHED">Published</option>
@@ -188,23 +230,15 @@ export function PostEditor({ post }: PostEditorProps) {
                 <select
                   value={formData.categoryId}
                   onChange={(e) => updateField("categoryId", e.target.value)}
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  className="flex mt-2 h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                 >
-                  <option value="">Select category</option>
-                  <option value="tech">Technology</option>
-                  <option value="lifestyle">Lifestyle</option>
+                  <option value="">-</option>
+                  {
+                    categories.map((category, index) => (
+                      <option key={index} value={category.id}>{category.name}</option>
+                    ))
+                  }
                 </select>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <Label htmlFor="featured">Featured Post</Label>
-                <input
-                  type="checkbox"
-                  id="featured"
-                  checked={formData.featured}
-                  onChange={(e) => updateField("featured", e.target.checked)}
-                  className="h-4 w-4 rounded border-gray-300"
-                />
               </div>
             </CardContent>
           </Card>
@@ -216,12 +250,37 @@ export function PostEditor({ post }: PostEditorProps) {
             <CardContent>
               <div>
                 <Label htmlFor="coverImage">Cover Image URL</Label>
-                <Input
+                <Input className="mt-2" type='file' accept="image/jpeg, image/png, image/svg" onChange={handleImageChange} />
+                {/* <Input
                   id="coverImage"
                   placeholder="https://example.com/image.jpg"
                   value={formData.coverImage}
                   onChange={(e) => updateField("coverImage", e.target.value)}
+                  className="mt-2"
+                /> */}
+                {previewImages.length > 0 && (
+            <div className="mt-4 flex flex-wrap gap-2">
+              {previewImages.map((src, index) => (
+                <img
+                  key={index}
+                  src={src}
+                  alt={`Preview ${index}`}
+                  className="w-24 h-24 object-cover rounded-md"
                 />
+              ))}
+            </div>
+          )}
+                {imageUploading && (
+						<div className="w-full bg-gray-200 rounded-full h-2.5">
+							<div
+								className="bg-black/60 h-2.5 rounded-full transition-all duration-300"
+								style={{ width: `${imageProgress}%` }}
+							></div>
+							<p className="text-sm text-white mt-2 text-center">
+								{Math.round(imageProgress)}% uploaded
+							</p>
+						</div>
+					)}
               </div>
             </CardContent>
           </Card>
@@ -235,16 +294,28 @@ export function PostEditor({ post }: PostEditorProps) {
                 <Label htmlFor="tags">Tags (comma separated)</Label>
                 <Input
                   id="tags"
-                  placeholder="react, javascript, web-development"
-                  value={formData.tags.join(", ")}
-                  onChange={(e) => {
-                    const tags = e.target.value
+                  placeholder="react, travelling, self-development"
+                  className="mt-2"
+                  value={tagInput}
+                  onChange={(e) => setTagInput(e.target.value)}
+                  onBlur={(e) => {
+                    const tags = tagInput
                       .split(",")
                       .map((tag) => tag.trim())
                       .filter(Boolean)
                     updateField("tags", tags)
+                    setTagInput(tags.join(", "))
                   }}
                 />
+              </div>
+
+              <div className="mt-4">
+                <Label>Featured Post</Label>
+                <select onChange={(e) => updateField('featured', e.target.value)} className="flex mt-2 h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2" >
+                  <option value="-">-</option>
+                  <option value='True'>Yes</option>
+                  <option value="False">No</option>
+                </select>
               </div>
             </CardContent>
           </Card>

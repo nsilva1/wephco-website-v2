@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { createCategory } from "@/actions/blog"
 
 interface CreateCategoryDialogProps {
   children: React.ReactNode
@@ -69,13 +70,9 @@ export function CreateCategoryDialog({ children }: CreateCategoryDialogProps) {
 
     setIsLoading(true)
     try {
-      const response = await fetch("/api/blog/categories", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      })
+      const response = await createCategory(formData)
 
-      if (!response.ok) throw new Error("Failed to create category")
+      
 
       setToast({ message: "Category created successfully", type: "success" })
       setTimeout(() => setToast(null), 3000)

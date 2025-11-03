@@ -4,15 +4,15 @@ import { Role } from "./userInterface";
 export enum PostStatus {
   DRAFT = "DRAFT",
   PUBLISHED = "PUBLISHED",
-  ARCHIVED = "ARCHIVED", // Assuming this might be another status
+  ARCHIVED = "ARCHIVED",
 }
 
 export interface IBlogCategory {
   id: string;
   name: string;
   slug: string;
-  description: string | null;
-  color: string | null;
+  description: string;
+  color: string;
   createdAt: Date;
   updatedAt: Date;
 
@@ -25,12 +25,12 @@ export interface IBlogCategory {
 
 
 export interface IBlogPost {
-  id: string;
+  id?: string;
   title: string;
   slug: string;
   content: string;
-  excerpt: string | null;
-  coverImage: string | null;
+  excerpt: string;
+  coverImage: string;
   status: PostStatus;
   featured: boolean;
   views: number;
@@ -38,13 +38,13 @@ export interface IBlogPost {
   tags: string[];
   metaTitle: string | null;
   metaDescription: string | null;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
   publishedAt: Date | null;
 
   // Foreign Keys
   authorId: string;
-  categoryId: string | null;
+  categoryId: string;
 
   /**
    * Relational fields.
@@ -177,7 +177,7 @@ export const sampleBlogPosts: IBlogPost[] = [
     slug: "understanding-typescript-generics",
     content: "Full content about TypeScript generics...",
     excerpt: "Unlock the power of reusable components and functions with TypeScript generics. A practical guide with real-world examples.",
-    coverImage: null,
+    coverImage: '',
     status: PostStatus.PUBLISHED,
     featured: false,
     views: 6543,
@@ -221,7 +221,7 @@ export const sampleBlogPosts: IBlogPost[] = [
     slug: "database-relations-in-prisma-made-easy",
     content: "Full content about one-to-many and many-to-many relations...",
     excerpt: "A clear and concise guide to defining and working with database relations in your Prisma schema.",
-    coverImage: null,
+    coverImage: '',
     status: PostStatus.PUBLISHED,
     featured: false,
     views: 4321,
@@ -287,7 +287,7 @@ export const sampleBlogPosts: IBlogPost[] = [
     slug: "migrating-from-javascript-to-typescript-a-case-study",
     content: "Our team's journey migrating a large codebase...",
     excerpt: "The challenges, benefits, and key takeaways from our experience migrating a production JavaScript application to TypeScript.",
-    coverImage: null,
+    coverImage: '',
     status: PostStatus.PUBLISHED,
     featured: false,
     views: 3456,
@@ -309,7 +309,7 @@ export const sampleBlogPosts: IBlogPost[] = [
     slug: "exploring-new-features-in-react-19",
     content: "A look at the upcoming features in the next major version of React...",
     excerpt: "This post is still under development and will be published soon. Stay tuned for updates on React 19!",
-    coverImage: null,
+    coverImage: '',
     status: PostStatus.DRAFT,
     featured: false,
     views: 10,

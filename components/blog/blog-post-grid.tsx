@@ -2,7 +2,6 @@
 
 import { fetchPosts } from "@/actions/blog"
 import { BlogPostCard } from "./blog-post-card"
-import { BlogPagination } from "./blog-pagination"
 import { BlogPostSkeleton } from "./blog-post-skeleton"
 import { useState, useCallback, useEffect } from "react"
 import { IBlogPost } from "@/interfaces/blogInterface"
@@ -22,9 +21,10 @@ export const BlogPostGrid = () => {
     setError(null);
 
     try {
-      const { posts, pagination } = await fetchPosts()
+      const posts = await fetchPosts()
       setPosts(posts || sampleBlogPosts)
       setPagination(pagination)
+      setCurrentPage(currentPage)
     } catch (error) {
       setPosts([]);
       setError(`Error loading posts: ${error}`)
