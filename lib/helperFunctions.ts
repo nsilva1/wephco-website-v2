@@ -3,6 +3,7 @@ import axios, { AxiosError } from "axios";
 import { put } from "@vercel/blob";
 import { nanoid } from "nanoid";
 import { upload } from "@vercel/blob/client";
+import { differenceInMonths } from "date-fns";
 
 
 export const formatCurrency = (number: number, currencyCode = 'USD', locale = 'en-US'): string => {
@@ -165,3 +166,98 @@ export const getErrorMessage = (error: unknown, fallback = 'Something went wrong
   if (typeof error === 'string') return error;
   return fallback;
 }
+
+/**
+ * Generates a URL-friendly slug from a given blog title string.
+ * @param title The string to convert into a slug.
+ * @returns {string} The generated slug string.
+ */
+export const createSlug = (title: string): string => {
+  const slug = title
+    .toLowerCase()
+    // Replace spaces with a hyphen
+    .replace(/\s+/g, '-')
+    // Remove all characters that are not letters, numbers, or hyphens
+    .replace(/[^\w-]+/g, '')
+    // Replace multiple consecutive hyphens with a single one
+    .replace(/--+/g, '-')
+    // Trim leading hyphens
+    .replace(/^-+/, '')
+    // Trim trailing hyphens
+    .replace(/-+$/, '');
+
+    return slug;
+}
+
+
+/**
+ * Checks if a property's creation date is within the last 3 months from today.
+ * @param createdAt The creation date of the property (as a Date object).
+ * @returns {boolean} Returns true if the property is less than 3 months old, otherwise false.
+ */
+export const isPropertyRecent = (createdAt: Date): boolean => {
+  const currentDate = new Date();
+
+  const monthDifference = differenceInMonths(currentDate, createdAt)
+
+  return monthDifference < 3;
+}
+
+/**
+ * Calculates the estimated read time for a given text.
+ * @param text The plain text content of the blog post.
+ * @param wordsPerMinute The average reading speed (default is 200 WPM).
+ * @returns The estimated read time in minutes, rounded up to the nearest whole number.
+ */
+export const calculateSimpleReadTime = (text: string, wordsPerMinute: number = 200): number => {
+  // Find all sequences of non-whitespace characters to count words.
+  const words = text.match(/\S+/g) || [];
+  const wordCount = words.length;
+
+  if (wordCount === 0) {
+    return 0;
+  }
+
+  // Calculate the read time and round up to the nearest minute.
+  const readTime = Math.ceil(wordCount / wordsPerMinute);
+
+  return readTime;
+};
+
+
+/**
+ * Calculates a more accurate read time by stripping HTML and accounting for images.
+ * @param content The blog post content, which may include HTML.
+ * @param wordsPerMinute The average reading speed (default is 200 WPM).
+ * @returns The estimated read time in minutes.
+ */
+export const calculateAdvancedReadTime = (content: string, wordsPerMinute: number = 200): number => {
+  // 1. Strip all HTML tags to get the plain text.
+  const textOnly = content.replace(/<[^>]*>/g, ' ');
+
+  // 2. Count the words in the plain text.
+  const words = textOnly.match(/\S+/g) || [];
+  const wordCount = words.length;
+  const textReadTimeInMinutes = wordCount / wordsPerMinute;
+
+  // 3. Count the number of images in the original content.
+  const imageCount = (content.match(/<img[^>]*>/g) || []).length;
+  
+  let imageReadTimeInSeconds = 0;
+  if (imageCount > 0) {
+    let seconds = 12; // Start with 12 seconds for the first image
+    for (let i = 0; i < imageCount; i++) {
+      imageReadTimeInSeconds += seconds;
+      if (seconds > 3) {
+        // Decrease by one second for each subsequent image, down to a minimum of 3.
+        seconds--; 
+      }
+    }
+  }
+  const imageReadTimeInMinutes = imageReadTimeInSeconds / 60;
+
+  // 4. Combine text and image time and round up to the nearest minute.
+  const totalReadTime = Math.ceil(textReadTimeInMinutes + imageReadTimeInMinutes);
+
+  return totalReadTime;
+};
