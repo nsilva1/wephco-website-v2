@@ -11,10 +11,10 @@ function looksLikeId(str: string) {
 // GET /api/blog/posts/[slug] - Get post by slug or id
 export async function GET(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  context: { params: { slug: string } }
 ) {
   try {
-    const { slug } = params;
+    const { slug } = context.params;
 
     let post;
 
