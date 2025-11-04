@@ -1,4 +1,4 @@
-import { IProperty } from "./propertyInterface"
+// import { IProperty } from "./propertyInterface"
 
 export enum Role {
     AFFILIATE = "AFFILIATE",
