@@ -11,7 +11,7 @@ function looksLikeId(str: string) {
 // GET /api/blog/posts/[slug] - Get post by slug or id
 export async function GET(
   request: NextRequest,
-  context: { params: { slug: string } }
+  context: any
 ) {
   try {
     const { slug } = context.params;
