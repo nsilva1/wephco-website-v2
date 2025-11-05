@@ -70,10 +70,10 @@ export async function GET(
 // PUT /api/blog/posts/[slug] - Update post (id only)
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  context: any
 ) {
   try {
-    const { slug: id } = params;
+    const { slug: id } = context.params;
 
     const body = await request.json();
     const validation = validateUpdatePost(body);
@@ -131,10 +131,10 @@ export async function PUT(
 // DELETE /api/blog/posts/[slug] - Delete post (id only)
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  context: any
 ) {
   try {
-    const { slug: id } = params;
+    const { slug: id } = context.params;
 
     await prisma.post.delete({ where: { id } });
 
