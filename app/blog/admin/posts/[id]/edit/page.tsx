@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation"
-import { PostEditor } from "@/components/blog/admin/post-editor"
+// import { PostEditor } from "@/components/blog/admin/post-editor"
 
 // This would fetch the post data in a real implementation
 async function getPost(id: string) {
@@ -7,7 +7,7 @@ async function getPost(id: string) {
   return null
 }
 
-export default async function EditPostPage({ params }: { params: { id: string } }) {
+export default async function EditPostPage({ params }: any) {
   const post = await getPost(params.id)
 
   if (!post) {
@@ -21,7 +21,7 @@ export default async function EditPostPage({ params }: { params: { id: string } 
         <p className="text-muted-foreground">Make changes to your blog post</p>
       </div>
 
-      <PostEditor post={post} />
+      {/* <PostEditor post={post} /> */}
     </div>
   )
 }
