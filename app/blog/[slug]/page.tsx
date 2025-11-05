@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { fetchPost } from "@/actions/blog"
 
 
-export default async function BlogPostPage({ params }: { params: { slug: string } }) {
+export default async function BlogPostPage({ params }: any) {
 
     const post = await fetchPost(params.slug)
 
