@@ -29,7 +29,7 @@ export default function RootLayout({
         <Navbar />
         {children}
         {/* Inline Zoho setup script */}
-        <Script
+        {/* <Script
           id="zoho-init"
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{
@@ -40,12 +40,25 @@ export default function RootLayout({
               };
             `,
           }}
-        />
+        /> */}
 
         {/* Zoho widget loader script */}
-        <Script
+        {/* <Script
           id="zoho-script"
           src="https://salesiq.zohopublic.com/widget?wc=siqec03d4022833d9de76f733b7ff7454d795217e06a438641d6f7172e1dd13841b"
+          strategy="afterInteractive"
+          defer
+        /> */}
+
+        {/* === BOTPRESS WIDGET === */}
+        <Script
+          id="botpress-inject"
+          src="https://cdn.botpress.cloud/webchat/v3.3/inject.js"
+          strategy="afterInteractive"
+        />
+        <Script
+          id="botpress-config"
+          src="https://files.bpcontent.cloud/2025/03/19/13/20250319132418-LVYGHU2D.js"
           strategy="afterInteractive"
           defer
         />
