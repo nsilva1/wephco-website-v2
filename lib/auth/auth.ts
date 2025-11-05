@@ -5,7 +5,7 @@ import authConfig from "./auth.config";
 
 export const { auth, handlers, signIn } = NextAuth({
     ...authConfig,
-    adapter: PrismaAdapter(prisma as any),
+    adapter: PrismaAdapter(prisma as any) as any,
     session: { strategy: "jwt" },
     secret: process.env.NEXTAUTH_SECRET,
     pages: {
@@ -16,7 +16,7 @@ export const { auth, handlers, signIn } = NextAuth({
         jwt({ token, user }) {
             if (user) {
                 token.id = user.id;
-                token.role = user.role;
+                token.role = (user as any).role;
                 token.email = user.email;
                 token.name = user.name;
             }
