@@ -1,11 +1,19 @@
+'use client'
+
+import { useState, useEffect } from "react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Edit, Trash2 } from "lucide-react"
 import { fetchCategories } from "@/actions/blog"
+import { IBlogCategory } from "@/interfaces/blogInterface"
 
-export async function AdminCategoriesTable() {
-  const categories = await fetchCategories()
+export function AdminCategoriesTable() {
+  const [categories, setCategories] = useState<IBlogCategory[]>([])
+  
+  useEffect(() => {
+    fetchCategories().then(setCategories)
+  },[])
 
   return (
     <div className="border rounded-lg">

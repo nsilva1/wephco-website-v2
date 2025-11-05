@@ -123,6 +123,11 @@ export const dashboardMenu = [
         path: '/dashboard'
     },
     {
+        label: 'Blog Admin',
+        icon: MdDashboard,
+        path: '/blog/admin'
+    },
+    {
         label: 'Properties',
         icon: BiBuildings,
         path: '/dashboard/properties'
