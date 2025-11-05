@@ -1,3 +1,6 @@
+'use client'
+
+import { useState, useEffect } from 'react'
 import { format } from "date-fns"
 import { Eye, Edit, Trash2, MoreHorizontal } from "lucide-react"
 import Link from "next/link"
@@ -12,13 +15,16 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { fetchPosts } from "@/actions/blog"
+import { IBlogPost } from '@/interfaces/blogInterface'
 
 
 
-export async function AdminPostsTable() {
-  
+export function AdminPostsTable() {
+  const [posts, setPosts] = useState<IBlogPost[]>([])
 
-  const posts = await fetchPosts()
+  useEffect(() => {
+    fetchPosts().then(setPosts)
+  }, [])
 
   return (
     <div className="border rounded-lg">
