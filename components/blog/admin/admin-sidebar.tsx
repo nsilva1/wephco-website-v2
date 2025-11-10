@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { BarChart3, FileText, FolderOpen, Settings } from "lucide-react"
+import { BarChart3, FileText, FolderOpen } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const navigation = [
@@ -20,11 +20,6 @@ const navigation = [
     name: "Categories",
     href: "/blog/admin/categories",
     icon: FolderOpen,
-  },
-  {
-    name: "Settings",
-    href: "/blog/admin/settings",
-    icon: Settings,
   },
 ]
 

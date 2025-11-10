@@ -24,7 +24,7 @@ export function AdminCategoriesTable() {
             <TableHead>Description</TableHead>
             <TableHead>Color</TableHead>
             <TableHead>Posts</TableHead>
-            <TableHead className="w-[100px]">Actions</TableHead>
+            {/* <TableHead className="w-[100px]">Actions</TableHead> */}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -41,7 +41,7 @@ export function AdminCategoriesTable() {
               <TableCell>
                 <Badge variant="secondary">{category.posts?.length}</Badge>
               </TableCell>
-              <TableCell>
+              {/* <TableCell>
                 <div className="flex items-center gap-1">
                   <Button variant="ghost" size="sm">
                     <Edit className="h-4 w-4" />
@@ -50,7 +50,7 @@ export function AdminCategoriesTable() {
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
-              </TableCell>
+              </TableCell> */}
             </TableRow>
           ))}
         </TableBody>

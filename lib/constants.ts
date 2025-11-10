@@ -6,7 +6,7 @@ import aldar from '@/images/aldar.png'
 import damac from '@/images/damac.svg'
 import sober from '@/images/sober.png'
 import aarano from '@/images/aarano.png'
-import { MdDashboard, MdSettings, MdHandshake } from "react-icons/md";
+import { MdDashboard, MdSettings, MdHandshake, MdChatBubble } from "react-icons/md";
 import { BiBuildings, BiHeadphone } from "react-icons/bi";
 import { BsPeopleFill, BsPersonFillGear } from "react-icons/bs";
 import { Role } from "@/interfaces/userInterface";
@@ -124,7 +124,7 @@ export const dashboardMenu = [
     },
     {
         label: 'Blog Admin',
-        icon: MdDashboard,
+        icon: MdChatBubble,
         path: '/blog/admin'
     },
     {

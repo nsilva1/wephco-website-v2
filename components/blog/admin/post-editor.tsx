@@ -146,10 +146,10 @@ export function PostEditor({userId}: {userId: string | undefined}) {
           Back
         </Button>
         <div className="flex items-center gap-2">
-          <Button type="button" variant="outline" className="gap-2 bg-transparent">
+          {/* <Button type="button" variant="outline" className="gap-2 bg-transparent">
             <Eye className="h-4 w-4" />
             Preview
-          </Button>
+          </Button> */}
           <Button type="submit" disabled={isLoading} className="gap-2">
             <Save className="h-4 w-4" />
             {isLoading ? "Saving..." : "Create Post"}

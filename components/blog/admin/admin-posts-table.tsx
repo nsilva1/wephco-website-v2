@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { format } from "date-fns"
-import { Eye, Edit, Trash2, MoreHorizontal } from "lucide-react"
+import { Eye, MoreHorizontal } from "lucide-react"
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -89,17 +89,11 @@ export function AdminPostsTable() {
                         View
                       </Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link href={`/blog/admin/posts/${post.id}/edit`} className="flex items-center">
-                        <Edit className="h-4 w-4 mr-2" />
-                        Edit
-                      </Link>
-                    </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem className="text-destructive">
+                    {/* <DropdownMenuItem className="text-destructive">
                       <Trash2 className="h-4 w-4 mr-2" />
                       Delete
-                    </DropdownMenuItem>
+                    </DropdownMenuItem> */}
                   </DropdownMenuContent>
                 </DropdownMenu>
               </TableCell>
