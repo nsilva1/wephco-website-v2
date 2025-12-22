@@ -2,11 +2,12 @@
 
 import React, { useState, FormEvent } from 'react';
 import { Phone } from 'lucide-react';
-import { BsWhatsapp } from 'react-icons/bs';
+// import { BsWhatsapp } from 'react-icons/bs';
 import { Loader } from '@/components/Loader';
 import { toast } from 'react-toastify';
 import { createConsultation } from '@/actions/consultation';
 import { IConsultation } from '@/interfaces/userInterface';
+import { consultationServices } from '@/lib/constants';
 
 const ConsultationsPage = () => {
   const [loading, setLoading] = useState(false);
@@ -82,9 +83,9 @@ const ConsultationsPage = () => {
     }
   };
 
-  const openWhatsApp = () => {
-    window.open('https://wa.me/2349161246300', '_blank');
-  };
+  // const openWhatsApp = () => {
+  //   window.open('https://wa.me/2349161246300', '_blank');
+  // };
 
   return (
     <div className="p-8 my-20">
@@ -103,12 +104,12 @@ const ConsultationsPage = () => {
               To schedule a consultation, fill out the form below to get
               started.
             </p>
-            <button
+            {/* <button
               onClick={openWhatsApp}
               className="mx-auto flex items-center justify-center gap-2 bg-green-500 hover:bg-green-400 text-white py-2 px-4 rounded-md cursor-pointer">
               <BsWhatsapp size={18} />
               <span>Chat with us on WhatsApp</span>
-            </button>
+            </button> */}
             <form onSubmit={submitForm}>
               <fieldset disabled={loading}>
                 {/* Service & Preferred Contact */}
@@ -142,16 +143,12 @@ const ConsultationsPage = () => {
                       onChange={handleChange}
                       className="w-full p-4 bg-white rounded-md dark:bg-gray-500"
                       required>
-                      <option value="">-Select Service-</option>
-                      <option value="buy">Buy Property</option>
-                      <option value="sell">Sell Property</option>
-                      <option value="General Consultation">
-                        General Consultation
-                      </option>
-                      <option value="Investment Tour">Investment Tour</option>
-                      <option value="Affiliate Program">
-                        Affiliate Program
-                      </option>
+                      <option value="">--</option>
+                      {consultationServices.map((service) => (
+                        <option key={service.label} value={service.label}>
+                          {service.label}
+                        </option>
+                      ))}
                     </select>
                   </div>
                 </div>

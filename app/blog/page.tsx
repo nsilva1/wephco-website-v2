@@ -1,8 +1,8 @@
-import { Suspense } from "react"
-import { BlogHeader } from "@/components/blog/blog-header"
-import { BlogPostGrid } from "@/components/blog/blog-post-grid"
-import { BlogSidebar } from "@/components/blog/blog-sidebar"
-import { BlogPostSkeleton } from "@/components/blog/blog-post-skeleton"
+import { Suspense } from 'react';
+import { BlogHeader } from '@/components/blog/blog-header';
+import { BlogPostGrid } from '@/components/blog/blog-post-grid';
+import { BlogSidebar } from '@/components/blog/blog-sidebar';
+import { BlogPostSkeleton } from '@/components/blog/blog-post-skeleton';
 
 export default function BlogPage() {
   return (
@@ -18,5 +18,5 @@ export default function BlogPage() {
         </div>
       </main>
     </div>
-  )
+  );
 }

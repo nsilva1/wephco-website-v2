@@ -71,6 +71,7 @@ const PropertyCard = ({ showModal, openModal, ...props }: PropertyCardProps) => 
           </div>
           <div className='p-4 flex flex-col gap-2'>
             <p className='text-base font-medium font-sans'>{props.name}</p>
+            <p className='text-sm font-semibold font-outfit'>{props.price}</p>
             <p className='text-sm font-light line-clamp-2'>{props.description}</p>
             <p className='font-mono font-bold'>
               {props.city}, {props.country}
@@ -91,7 +92,10 @@ const PropertyCard = ({ showModal, openModal, ...props }: PropertyCardProps) => 
             Back
           </button>
           <p>Fill the form to view the PDF</p>
-          <form>
+          <form onSubmit={(e) => {
+              e.preventDefault();
+              handleGetPdf();
+            }}>
             <fieldset>
               <input
             type='text'
@@ -124,7 +128,7 @@ const PropertyCard = ({ showModal, openModal, ...props }: PropertyCardProps) => 
             disabled={loading}
           />
           <button
-            onClick={handleGetPdf}
+          type='submit'
             className='bg-wephco text-white px-4 py-2 rounded-lg flex items-center justify-center hover:bg-black transition-colors duration-300 cursor-pointer w-full'
           >
             {

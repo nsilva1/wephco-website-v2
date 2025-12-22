@@ -1,21 +1,21 @@
-import { type NextRequest, NextResponse } from "next/server"
-import { prisma } from "@/prisma/prisma"
+import { type NextRequest, NextResponse } from 'next/server';
+import { prisma } from '@/prisma/prisma';
 
 // GET /api/blog/admin/posts - List all posts including drafts (admin only)
 export async function GET(request: NextRequest) {
   try {
     // TODO: Add admin authentication check here
 
-    const { searchParams } = new URL(request.url)
-    const page = Number.parseInt(searchParams.get("page") || "1")
-    const limit = Number.parseInt(searchParams.get("limit") || "10")
-    const status = searchParams.get("status")
+    const { searchParams } = new URL(request.url);
+    const page = Number.parseInt(searchParams.get('page') || '1');
+    const limit = Number.parseInt(searchParams.get('limit') || '10');
+    const status = searchParams.get('status');
 
-    const skip = (page - 1) * limit
+    const skip = (page - 1) * limit;
 
-    const where: any = {}
+    const where: any = {};
     if (status) {
-      where.status = status
+      where.status = status;
     }
 
     const [posts, total] = await Promise.all([
@@ -38,15 +38,15 @@ export async function GET(request: NextRequest) {
           },
         },
         orderBy: {
-          updatedAt: "desc",
+          updatedAt: 'desc',
         },
         skip,
         take: limit,
       }),
       prisma.post.count({ where }),
-    ])
+    ]);
 
-    const totalPages = Math.ceil(total / limit)
+    const totalPages = Math.ceil(total / limit);
 
     return NextResponse.json({
       posts,
@@ -58,9 +58,12 @@ export async function GET(request: NextRequest) {
         hasNext: page < totalPages,
         hasPrev: page > 1,
       },
-    })
+    });
   } catch (error) {
-    console.error("Error fetching admin posts:", error)
-    return NextResponse.json({ error: "Failed to fetch posts" }, { status: 500 })
+    console.error('Error fetching admin posts:', error);
+    return NextResponse.json(
+      { error: 'Failed to fetch posts' },
+      { status: 500 }
+    );
   }
 }

@@ -1,10 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import {
-  getAllProperties,
-  deleteProperty,
-} from '@/actions/properties';
+import { getAllProperties, deleteProperty } from '@/actions/properties';
 import { Loader } from '@/components/Loader';
 import { IProperty } from '@/interfaces/propertyInterface';
 import { useRouter } from 'next/navigation';
@@ -152,9 +149,7 @@ const DashboardPropertiesPage = () => {
           <td className="p-4">{property.city}</td>
           <td className="p-4">{property.images ? <p>Yes</p> : <p>No</p>}</td>
           <td className="p-4">{property.pdfUrl ? <p>Yes</p> : <p>No</p>}</td>
-          <td className="p-4">
-            {new Date(property.createdAt).toDateString()}
-          </td>
+          <td className="p-4">{new Date(property.createdAt).toDateString()}</td>
         </tr>
       ))}
     </tbody>

@@ -161,11 +161,54 @@ export const getInitials = (fullName: string): string => {
   return firstLetters.join('').toUpperCase();
 }
 
-export const getErrorMessage = (error: unknown, fallback = 'Something went wrong') => {
-  if (error instanceof Error) return error.message;
-  if (typeof error === 'string') return error;
-  return fallback;
+export const getErrorMessage = (
+  error: unknown,
+  fallback = "Something went wrong. Please try again."
+) => {
+  if (!error) return fallback
+
+  // Axios / fetch error shape
+  if (typeof error === "object" && error !== null) {
+    const anyError = error as any
+
+    // API-provided message
+    if (anyError.response?.data?.error) {
+      return anyError.response.data.error
+    }
+
+    // HTTP status-based messages
+    switch (anyError.response?.status) {
+      case 400:
+        return "Some of the information you entered is invalid. Please check and try again."
+      case 401:
+        return "Incorrect email or password. Please try again."
+      case 403:
+        return "You don’t have permission to perform this action."
+      case 404:
+        return "We couldn’t find an account with those details."
+      case 409:
+        return "An account with this email already exists."
+      case 500:
+        return "Our servers are having trouble right now. Please try again later."
+    }
+
+    // Network error
+    if (anyError.message?.includes("Network")) {
+      return "Network error. Please check your internet connection."
+    }
+  }
+
+  // Standard JS Error
+  if (error instanceof Error) {
+    return error.message || fallback
+  }
+
+  // String error
+  if (typeof error === "string") return error
+
+  return fallback
 }
+
 
 /**
  * Generates a URL-friendly slug from a given blog title string.

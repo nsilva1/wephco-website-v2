@@ -20,12 +20,11 @@ const PropertyEnquiryPage = () => {
   const [properties, setProperties] = useState<IPropertyEnquiry[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
 
   const fetchProperties = useCallback(async () => {
     try {
       setLoading(true);
-      const data = await getAllPropertyEnquiryRequests()
+      const data = await getAllPropertyEnquiryRequests();
       setProperties(data);
     } catch (err) {
       setError('Failed to fetch properties');
@@ -33,7 +32,6 @@ const PropertyEnquiryPage = () => {
       setLoading(false);
     }
   }, []);
-
 
   const checkAuthStatus = useCallback(() => {
     if (
@@ -51,11 +49,9 @@ const PropertyEnquiryPage = () => {
     }
   }, [status]);
 
-
   useEffect(() => {
     checkAuthStatus();
   }, []);
-
 
   if (loading) {
     return (
@@ -64,7 +60,6 @@ const PropertyEnquiryPage = () => {
       </div>
     );
   }
-
 
   if (error) {
     return (
@@ -124,7 +119,6 @@ const PropertyEnquiryPage = () => {
       ))}
     </tbody>
   );
-
 
   return (
     <div className="flex flex-col items-center h-screen overflow-x-auto p-5">

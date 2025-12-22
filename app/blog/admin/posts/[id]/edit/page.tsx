@@ -1,17 +1,17 @@
-import { notFound } from "next/navigation"
+import { notFound } from 'next/navigation';
 // import { PostEditor } from "@/components/blog/admin/post-editor"
 
 // This would fetch the post data in a real implementation
 async function getPost(id: string) {
   // TODO: Implement post fetching by ID
-  return null
+  return null;
 }
 
 export default async function EditPostPage({ params }: any) {
-  const post = await getPost(params.id)
+  const post = await getPost(params.id);
 
   if (!post) {
-    notFound()
+    notFound();
   }
 
   return (
@@ -23,5 +23,5 @@ export default async function EditPostPage({ params }: any) {
 
       {/* <PostEditor post={post} /> */}
     </div>
-  )
+  );
 }

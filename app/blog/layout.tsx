@@ -10,23 +10,25 @@ export const metadata: Metadata = {
   description: 'Your Gateway to Prime Global Real Estate',
 };
 
-export default function BlogLayout({ children }: { children: React.ReactNode }) {
+export default function BlogLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
       <body>
         <div className="min-h-screen bg-white dark:bg-gray-800 font-outfit">
-              <BlogHeader />
-              <main className="container mx-auto">
-                <div className="">
-                  {/* Main Content */}
-                  <div className="">
-                    <Suspense fallback={<BlogPostSkeleton />}>
-                      {children}
-                    </Suspense>
-                  </div>
-                </div>
-              </main>
+          <BlogHeader />
+          <main className="container mx-auto">
+            <div className="">
+              {/* Main Content */}
+              <div className="">
+                <Suspense fallback={<BlogPostSkeleton />}>{children}</Suspense>
+              </div>
             </div>
+          </main>
+        </div>
       </body>
     </html>
   );

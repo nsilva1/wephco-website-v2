@@ -20,7 +20,7 @@ const AgentForm = ({ ...rest }: INewAgent) => {
     location: '',
   });
   const [loading, setLoading] = useState(false);
-  const [interest, setInterest] = useState('')
+  const [interest, setInterest] = useState('');
 
   type inputTypes = keyof IAffiliate;
 
@@ -35,7 +35,7 @@ const AgentForm = ({ ...rest }: INewAgent) => {
       email: '',
       location: '',
     });
-    setInterest('')
+    setInterest('');
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -109,8 +109,7 @@ const AgentForm = ({ ...rest }: INewAgent) => {
                   className="border border-gray-300 rounded-md p-1 w-full"
                   rows={3}
                   value={interest}
-                  onChange={(e) => setInterest(e.target.value)}
-                  ></textarea>
+                  onChange={(e) => setInterest(e.target.value)}></textarea>
               </div>
               {loading ? (
                 <Loader size="sm" />

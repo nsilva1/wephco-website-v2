@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios from 'axios';
 
 /**
  * Centralized axios instance with a predefined baseURL.
@@ -6,7 +6,7 @@ import axios from "axios"
  */
 export const apiClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000',
-})
+});
 
 /**
  * A reusable, consistent error handler for API calls.
@@ -18,14 +18,15 @@ export const apiClient = axios.create({
 export const handleApiError = (error: unknown, context: string): never => {
   if (axios.isAxiosError(error)) {
     // Error came from the server response
-    const serverError = error.response?.data
+    const serverError = error.response?.data;
     const errorMessage =
-      serverError?.error || `Request failed with status ${error.response?.status}`
-    console.error(`API Error ${context}:`, errorMessage)
-    throw new Error(errorMessage)
+      serverError?.error ||
+      `Request failed with status ${error.response?.status}`;
+    console.error(`API Error ${context}:`, errorMessage);
+    throw new Error(errorMessage);
   } else {
     // A network error or an unexpected issue occurred
-    console.error(`Unexpected error ${context}:`, error)
-    throw new Error("An unexpected network error occurred.")
+    console.error(`Unexpected error ${context}:`, error);
+    throw new Error('An unexpected network error occurred.');
   }
-}
+};

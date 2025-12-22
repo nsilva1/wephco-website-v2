@@ -1,15 +1,15 @@
 'use client'
 
-import React, { useState, useRef } from 'react'
+import React, { useState } from 'react'
 import Image from 'next/image'
-import { typography } from '@/lib/styles'
+// import { typography } from '@/lib/styles'
 import { IProperty } from '@/interfaces/propertyInterface'
 
 
-const NewDevelopmentCard = ({name, description, images, country, city}: IProperty) => {
+const NewDevelopmentCard = ({name, images, country, city}: IProperty) => {
     const [isHovered, setIsHovered] = useState(false)
-    const [imageHeight, setImageHeight] = useState<number>(480)
-    const textRef = useRef<HTMLParagraphElement>(null)
+    // const [imageHeight, setImageHeight] = useState<number>(480)
+    // const textRef = useRef<HTMLParagraphElement>(null)
 
 
   return (
@@ -22,9 +22,8 @@ const NewDevelopmentCard = ({name, description, images, country, city}: IPropert
         </span>
         <div className={`absolute inset-0 bg-gradient-to-t from-black/80 to-transparent transition-opacity duration-300 ${isHovered ? 'opacity-100': 'opacity-0'}`} />
         <div className='absolute bottom-4 left-4 text-white'>
-            <h3 className={`font-semibold ${isHovered ? 'text-3xl' : 'text-lg'} transition-all duration-300`}>{name}</h3>
-            <p className={`${isHovered ? 'text-xl' : 'text-sm'} transition-all duration-300 font-outfit`}>{`${city}, ${country}`}</p>
-            <p ref={textRef} className={`${typography.paragraph} whitespace-pre-line transition-opacity duration-500 max-h-0 ${isHovered ? 'opacity-100 max-h-[500px]' : 'opacity-0 max-h-0'} overflow-hidden pointer-events-none`}>{description}</p>
+            <h3 className={`font-semibold text-lg`}>{name}</h3>
+            <p className={`text-sm font-outfit`}>{`${city}, ${country}`}</p>
         </div>
     </div>
   )

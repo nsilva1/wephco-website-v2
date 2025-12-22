@@ -220,3 +220,18 @@ export const wephcoServices = [
         description: 'Beyond acquisitions, we help investors structure real estate holdings in alignment with long-term goals — securing family security, estate planning, and generational influence'
     }
 ]
+
+export const consultationServices = [
+    { label: 'Business and strategic advisory' },
+    { label: 'Partnership and sponsorship ' },
+    { label: 'Investment / financial/ mortgage advisory' },
+    { label: 'Training/ capacity development ' },
+    { label: 'International/ Local  Property Brokerage' },
+    { label: 'Property management & Leasing' },
+    { label: 'Renovation & Interior/ Exterior design ' },
+    { label: 'Acquisition Consultation' },
+    { label: 'Deal Preparation & Coaching' },
+    { label: 'Private Real Estate Advisory' },
+    { label: 'Investor Circle Access' },
+    { label: 'Legacy & Wealth Structuring' },
+]

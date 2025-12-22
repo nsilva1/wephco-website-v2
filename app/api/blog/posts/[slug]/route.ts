@@ -1,6 +1,6 @@
-import { type NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/prisma/prisma";
-import { validateUpdatePost } from "@/lib/blogValidation";
+import { type NextRequest, NextResponse } from 'next/server';
+import { prisma } from '@/prisma/prisma';
+import { validateUpdatePost } from '@/lib/blogValidation';
 
 // helper to detect if string is UUID
 function looksLikeId(str: string) {
@@ -9,10 +9,7 @@ function looksLikeId(str: string) {
 }
 
 // GET /api/blog/posts/[slug] - Get post by slug or id
-export async function GET(
-  request: NextRequest,
-  context: any
-) {
+export async function GET(request: NextRequest, context: any) {
   try {
     const { slug } = context.params;
 
@@ -33,25 +30,29 @@ export async function GET(
     if (looksLikeId(slug)) {
       // fetch by id
       post = await prisma.post.findUnique({
-        where: { id: slug, status: "PUBLISHED" },
+        where: { id: slug, status: 'PUBLISHED' },
         include: {
           author: { select: { id: true, name: true } },
-          category: { select: { id: true, name: true, slug: true, color: true } },
+          category: {
+            select: { id: true, name: true, slug: true, color: true },
+          },
         },
       });
     } else {
       // fetch by slug
       post = await prisma.post.findUnique({
-        where: { slug: slug, status: "PUBLISHED" },
+        where: { slug: slug, status: 'PUBLISHED' },
         include: {
           author: { select: { id: true, name: true } },
-          category: { select: { id: true, name: true, slug: true, color: true } },
+          category: {
+            select: { id: true, name: true, slug: true, color: true },
+          },
         },
       });
     }
 
     if (!post) {
-      return NextResponse.json({ error: "Post not found" }, { status: 404 });
+      return NextResponse.json({ error: 'Post not found' }, { status: 404 });
     }
 
     // increment views only for GET
@@ -62,16 +63,16 @@ export async function GET(
 
     return NextResponse.json(post);
   } catch (error) {
-    console.error("Error fetching post:", error);
-    return NextResponse.json({ error: "Failed to fetch post" }, { status: 500 });
+    console.error('Error fetching post:', error);
+    return NextResponse.json(
+      { error: 'Failed to fetch post' },
+      { status: 500 }
+    );
   }
 }
 
 // PUT /api/blog/posts/[slug] - Update post (id only)
-export async function PUT(
-  request: NextRequest,
-  context: any
-) {
+export async function PUT(request: NextRequest, context: any) {
   try {
     const { slug: id } = context.params;
 
@@ -80,7 +81,7 @@ export async function PUT(
 
     if (!validation.isValid) {
       return NextResponse.json(
-        { error: "Validation failed", details: validation.errors },
+        { error: 'Validation failed', details: validation.errors },
         { status: 400 }
       );
     }
@@ -92,17 +93,17 @@ export async function PUT(
     if (validatedData.title) {
       updateData.slug = validatedData.title
         .toLowerCase()
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/(^-|-$)/g, "");
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)/g, '');
     }
 
-    if (validatedData.status === "PUBLISHED") {
+    if (validatedData.status === 'PUBLISHED') {
       const existingPost = await prisma.post.findUnique({
         where: { id },
         select: { status: true, publishedAt: true },
       });
 
-      if (existingPost?.status !== "PUBLISHED" && !existingPost?.publishedAt) {
+      if (existingPost?.status !== 'PUBLISHED' && !existingPost?.publishedAt) {
         updateData.publishedAt = new Date();
       }
     }
@@ -123,24 +124,27 @@ export async function PUT(
 
     return NextResponse.json(post);
   } catch (error) {
-    console.error("Error updating post:", error);
-    return NextResponse.json({ error: "Failed to update post" }, { status: 500 });
+    console.error('Error updating post:', error);
+    return NextResponse.json(
+      { error: 'Failed to update post' },
+      { status: 500 }
+    );
   }
 }
 
 // DELETE /api/blog/posts/[slug] - Delete post (id only)
-export async function DELETE(
-  request: NextRequest,
-  context: any
-) {
+export async function DELETE(request: NextRequest, context: any) {
   try {
     const { slug: id } = context.params;
 
     await prisma.post.delete({ where: { id } });
 
-    return NextResponse.json({ message: "Post deleted successfully" });
+    return NextResponse.json({ message: 'Post deleted successfully' });
   } catch (error) {
-    console.error("Error deleting post:", error);
-    return NextResponse.json({ error: "Failed to delete post" }, { status: 500 });
+    console.error('Error deleting post:', error);
+    return NextResponse.json(
+      { error: 'Failed to delete post' },
+      { status: 500 }
+    );
   }
 }

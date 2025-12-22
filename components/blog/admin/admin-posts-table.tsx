@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { format } from "date-fns"
-import { Eye, MoreHorizontal } from "lucide-react"
+import { Eye, MoreHorizontal, Trash2 } from "lucide-react"
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -14,8 +14,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { fetchPosts } from "@/actions/blog"
+import { fetchPosts, deletePost } from "@/actions/blog"
 import { IBlogPost } from '@/interfaces/blogInterface'
+import { toast } from 'react-toastify'
 
 
 
@@ -25,6 +26,26 @@ export function AdminPostsTable() {
   useEffect(() => {
     fetchPosts().then(setPosts)
   }, [])
+
+
+  const handleDelete = async (postId: string) => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this post? This action cannot be undone."
+    )
+
+    if (!confirmed) return
+
+    try {
+      await deletePost(postId)
+      toast.success("Post deleted successfully")
+      // Optimistically update UI
+      setPosts((prev) => prev.filter((post) => post.id !== postId))
+    } catch (error) {
+      console.error("Failed to delete post:", error)
+      toast.error("Failed to delete post. Please try again.")
+    }
+  }
+
 
   return (
     <div className="border rounded-lg">
@@ -90,10 +111,10 @@ export function AdminPostsTable() {
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    {/* <DropdownMenuItem className="text-destructive">
+                    <DropdownMenuItem className="text-destructive" onClick={() => handleDelete(post.id!)}>
                       <Trash2 className="h-4 w-4 mr-2" />
                       Delete
-                    </DropdownMenuItem> */}
+                    </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </TableCell>

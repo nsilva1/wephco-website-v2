@@ -119,3 +119,20 @@ export async function fetchBlogStats() {
 
   return response.json()
 }
+
+
+/**
+ * Deletes a blog post by ID (admin only).
+ * @param postId - The ID of the post to delete.
+ */
+export const deletePost = async (Id: string): Promise<{ message: string }> => {
+  const URL = `/api/blog/admin/posts/${Id}`
+
+  try {
+    const response = await apiClient.delete<{ message: string }>(URL)
+    return response.data
+  } catch (error) {
+    handleApiError(error, "deleting post")
+    throw error
+  }
+}

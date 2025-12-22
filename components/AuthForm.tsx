@@ -23,6 +23,11 @@ const AuthForm = ({ isLogin, affiliateOnly = false }: { isLogin: boolean, affili
 
   const router = useRouter()
 
+  const isFormValid = isLogin
+  ? email && password
+  : name && email && password
+
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -46,7 +51,10 @@ const AuthForm = ({ isLogin, affiliateOnly = false }: { isLogin: boolean, affili
       //   router.push('/dashboard')
       // }
       } catch (error) {
-        const errorMessage = getErrorMessage(error)
+        const errorMessage = getErrorMessage(
+    error,
+    "Login failed. Please check your email and password."
+  )
         setError(errorMessage);
         return;
       } finally {
@@ -88,7 +96,10 @@ const AuthForm = ({ isLogin, affiliateOnly = false }: { isLogin: boolean, affili
         router.push('/auth/login')
       }, 2000)
       } catch (error) {
-        const errorMessage = getErrorMessage(error)
+        const errorMessage = getErrorMessage(
+    error,
+    "Registration failed. Please verify your details and try again."
+  )
         setError(errorMessage);
         return;
       } finally {
@@ -105,15 +116,25 @@ const AuthForm = ({ isLogin, affiliateOnly = false }: { isLogin: boolean, affili
       >
         <fieldset disabled={loading} className='space-y-4'>
           {error && (
-            <div className='p-4 text-red-700 bg-red-100 rounded-md text-center'>
-              {error}
-            </div>
+            <div
+  role="alert"
+  className="p-4 rounded-md border border-red-300 bg-red-50 text-red-800"
+>
+  <p className="font-semibold mb-1">There was a problem</p>
+  <p className="text-sm">{error}</p>
+</div>
+
           )}
           {
             successMessage && (
-              <div className='p-4 text-green-700 bg-green-100 rounded-md text-center'>
-                {successMessage}
-              </div>
+              <div
+  role="status"
+  className="p-4 rounded-md border border-green-300 bg-green-50 text-green-800"
+>
+  <p className="font-semibold mb-1">Success</p>
+  <p className="text-sm">{successMessage}</p>
+</div>
+
             )
           }
           {!isLogin && (
@@ -198,7 +219,8 @@ const AuthForm = ({ isLogin, affiliateOnly = false }: { isLogin: boolean, affili
           ) : (
             <button
               type='submit'
-              className='w-full px-4 py-2 text-white bg-black cursor-pointer dark:bg-wephco rounded hover:bg-black/80'
+              disabled={!isFormValid || loading}
+              className='w-full px-4 py-2 text-white bg-black cursor-pointer dark:bg-wephco rounded hover:bg-black/80 disabled:opacity-50 disabled:cursor-not-allowed'
             >
               {isLogin ? 'Login' : 'Register'}
             </button>

@@ -1,4 +1,4 @@
-import type React from "react"
+import type React from 'react';
 
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -7,7 +7,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
         <main className="flex-1 p-6">{children}</main>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default AdminLayout;
