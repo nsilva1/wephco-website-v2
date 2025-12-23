@@ -1,16 +1,17 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/prisma/prisma';
 
+
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: any
 ) {
   try {
     // TODO: Add admin authentication check here
 
-    const postId = params.id;
+    const { id } = context.params;
 
-    if (!postId) {
+    if (!id) {
       return NextResponse.json(
         { error: 'Post ID is required' },
         { status: 400 }
@@ -19,7 +20,7 @@ export async function DELETE(
 
     // Check if post exists
     const existingPost = await prisma.post.findUnique({
-      where: { id: postId },
+      where: { id: id },
     });
 
     if (!existingPost) {
@@ -27,7 +28,7 @@ export async function DELETE(
     }
 
     await prisma.post.delete({
-      where: { id: postId },
+      where: { id: id },
     });
 
     return NextResponse.json(
