@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import { Outfit } from 'next/font/google';
 import Navbar from '@/components/Navbar';
 import { ToastContainer } from 'react-toastify';
-import Script from 'next/script';
+// import Script from 'next/script';
+import { WhatsAppWidget } from '@/components/WhatsappWidget';
 import '../globals.css';
 
 const outfit = Outfit({
@@ -28,40 +29,7 @@ export default function RootLayout({
         <ToastContainer />
         <Navbar />
         {children}
-        {/* Inline Zoho setup script */}
-        {/* <Script
-          id="zoho-init"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.$zoho = window.$zoho || {};
-              $zoho.salesiq = $zoho.salesiq || {
-                ready: function() {}
-              };
-            `,
-          }}
-        /> */}
-
-        {/* Zoho widget loader script */}
-        {/* <Script
-          id="zoho-script"
-          src="https://salesiq.zohopublic.com/widget?wc=siqec03d4022833d9de76f733b7ff7454d795217e06a438641d6f7172e1dd13841b"
-          strategy="afterInteractive"
-          defer
-        /> */}
-
-        {/* === BOTPRESS WIDGET === */}
-        <Script
-          id="botpress-inject"
-          src="https://cdn.botpress.cloud/webchat/v3.3/inject.js"
-          strategy="afterInteractive"
-        />
-        <Script
-          id="botpress-config"
-          src="https://files.bpcontent.cloud/2025/03/19/13/20250319132418-LVYGHU2D.js"
-          strategy="afterInteractive"
-          defer
-        />
+        <WhatsAppWidget />
       </body>
     </html>
   );

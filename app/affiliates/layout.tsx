@@ -3,6 +3,7 @@ import Navbar from '@/components/Navbar';
 import '../globals.css';
 import type { Metadata } from 'next';
 import { ToastContainer } from 'react-toastify';
+import { WhatsAppWidget } from '@/components/WhatsappWidget';
 
 export const metadata: Metadata = {
   title: 'Wephco - Buy, Sell Luxury Homes',
@@ -20,6 +21,7 @@ export default function AgentLayout({
         <ToastContainer />
         <Navbar />
         {children}
+        <WhatsAppWidget />
       </body>
     </html>
   );

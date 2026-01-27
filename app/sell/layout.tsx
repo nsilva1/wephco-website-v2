@@ -2,6 +2,7 @@ import React from 'react';
 import Navbar from '@/components/Navbar';
 import '../globals.css';
 import { Metadata } from 'next';
+import { WhatsAppWidget } from '@/components/WhatsappWidget';
 
 export const metadata: Metadata = {
   title: 'Wephco - Buy, Sell Luxury Homes',
@@ -18,6 +19,7 @@ export default function SellLayout({
       <body>
         <Navbar />
         {children}
+        <WhatsAppWidget />
       </body>
     </html>
   );
