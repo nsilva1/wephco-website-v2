@@ -16,6 +16,48 @@ export interface IUser {
   createdAt?: Date;
 }
 
+export interface INewUser {
+  id?: string;
+	firstName: string;
+	lastName: string;
+	email: string;
+	password?: string;
+	role: 'Agent' | 'Investor';
+}
+
+export interface IUserInfo {
+	id: string;
+	email: string;
+	name: string;
+	role: string;
+	commision: number;
+	activeLeads: number;
+	dealsClosed: number;
+	wallet: WalletInfo;
+	transactions: ITransaction[];
+	createdAt?: string;
+}
+
+export interface WalletInfo {
+	availableBalance: number;
+	escrowBalance: number;
+	totalEarnings: number;
+	currency: string;
+}
+
+export interface ITransaction {
+	id?: string;
+	userId: string;
+	recipientId?: string;
+	propertyId?: string;
+	type: 'Deposit' | 'Withdrawal' | 'Income' | 'Escrow';
+	transactionType: 'Credit' | 'Debit';
+	amount: number;
+	status: 'Pending' | 'Completed' | 'Failed';
+	description: string;
+	createdAt?: string;
+}
+
 export interface IContactUs {
     id?: string;
     name: string;

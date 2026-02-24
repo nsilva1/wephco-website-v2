@@ -2,7 +2,10 @@
 
 // import { AuthError } from "next-auth"
 import { signIn } from "@/lib/auth/auth"
-
+import {
+	signInWithEmailAndPassword,
+} from 'firebase/auth';
+import { auth } from '../firebase/firebaseConfig';
 
 
 // Basic email validation regex
@@ -35,4 +38,31 @@ export const loginUser = async (
       redirectTo: '/dashboard'
     })
 
+}
+
+export const loginBrokerageUser = async (email: string, password: string) => {
+	try {
+		// 1. Sign in using the SDK
+		const userCredential = await signInWithEmailAndPassword(
+			auth,
+			email,
+			password
+		);
+
+		// 2. The user is now logged in!
+		// The SDK automatically stores the token in the browser.
+		const user = userCredential.user;
+
+		console.log('Login successful:', user.uid);
+
+		return {
+			uid: user.uid,
+			email: user.email,
+			name: user.displayName,
+		};
+	} catch (error: any) {
+		// Firebase returns specific error codes (e.g., 'auth/invalid-credential')
+		console.error('Login Error:', error.code, error.message);
+		throw new Error('Invalid Email or Password');
+	}
 }

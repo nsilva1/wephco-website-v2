@@ -1,13 +1,17 @@
 'use server'
 
 import { prisma } from "@/prisma/prisma"
-// import bcrypt from "bcryptjs"
 import { IUser } from "@/interfaces/userInterface"
-// import { NextResponse } from "next/server"
 import { Role } from "@/interfaces/userInterface"
-// import { AuthError } from "next-auth"
 import bcrypt from "bcryptjs"
 import { PrismaClientKnownRequestError } from "@/lib/generated/prisma/runtime/library"
+import {
+	createUserWithEmailAndPassword,
+	updateProfile,
+} from 'firebase/auth';
+import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { auth, db } from '../firebase/firebaseConfig';
+import type { INewUser, IUserInfo } from '../interfaces/userInterface';
 
 type RegistrationResult = {
   success: boolean;
@@ -85,3 +89,57 @@ export const registerUser = async (user: Omit<IUser, 'id'>): Promise<Registratio
   }
 
 }
+
+export const registerBrokerageUser = async (userData: INewUser) => {
+	const { email, password, firstName, lastName, role } = userData;
+
+	try {
+		// 1. Basic Validation
+		if (!email || !password) {
+			throw new Error('Email and password are required');
+		}
+
+		// 2. Create User in Firebase Auth
+		const userCredential = await createUserWithEmailAndPassword(
+			auth,
+			email,
+			password
+		);
+		const user = userCredential.user;
+
+		const name = `${firstName} ${lastName}`.trim();
+
+		// 3. Update the User's Display Name (optional but recommended)
+		if (name) {
+			await updateProfile(user, { displayName: name });
+		}
+
+		// 4. Create Firestore Document in the "users" collection
+		const userData: IUserInfo = {
+			id: user.uid,
+			email: email,
+			name: name ?? '',
+			role: role ?? 'Agent', // Default to 'Agent' if no role provided
+			commision: 0,
+			activeLeads: 0,
+			dealsClosed: 0,
+			wallet: {
+				availableBalance: 0,
+				escrowBalance: 0,
+				totalEarnings: 0,
+				currency: 'USD',
+			},
+			transactions: [],
+		};
+		// We use setDoc + doc() to ensure the Firestore ID matches the Auth UID
+		await setDoc(doc(db, 'users', user.uid), {
+			...userData,
+			createdAt: serverTimestamp(),
+		});
+
+		return { uid: user.uid, success: true };
+	} catch (error: any) {
+		console.error('Registration Error:', error.code, error.message);
+		throw error; // Re-throw to handle in the UI (e.g., showing an alert)
+	}
+};

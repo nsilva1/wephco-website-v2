@@ -1,7 +1,18 @@
 const { PrismaPlugin } = require('@prisma/nextjs-monorepo-workaround-plugin')
 import type { NextConfig } from "next";
 
+const withPWA = require('next-pwa')({
+  dest: 'public',
+  register: true,
+  skipWaiting: true,
+  scope: '/brokerage/',
+  runtimeCaching: require('next-pwa/cache'),
+  disable: process.env.NODE_ENV === 'development',
+});
+
+
 const nextConfig: NextConfig = {
+  reactStrictMode: true,
   devIndicators: {
     buildActivity: false,
   },
@@ -33,4 +44,4 @@ const nextConfig: NextConfig = {
   // serverExternalPackages: ['@prisma/client'],
 };
 
-export default nextConfig;
+module.exports = withPWA(nextConfig)
