@@ -24,7 +24,7 @@ const PropertyCard = ({ showModal, openModal, ...props }: PropertyCardProps) => 
 
   const handleGetPdf = async () => {
 
-    if(formData.email === '' || formData.name === '' || formData.phone === '') {
+    if (formData.email === '' || formData.name === '' || formData.phone === '') {
       toast.warning('Please fill all fields of the form')
       return;
     }
@@ -39,6 +39,22 @@ const PropertyCard = ({ showModal, openModal, ...props }: PropertyCardProps) => 
     try {
       setLoading(true)
       await createPropertyEnquiryRequest(propertyData)
+
+      // Send PDF to email
+      await fetch('/api/sendpdf', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          pdfUrl: props.pdfUrl,
+          propertyName: props.name,
+        }),
+      });
+
+      toast.success('Access granted! We also sent a copy to your email.');
+
       setFormData({ name: '', email: '', phone: '' });
       setFlipped(false);
       window.open(props.pdfUrl, '_blank');
@@ -54,9 +70,8 @@ const PropertyCard = ({ showModal, openModal, ...props }: PropertyCardProps) => 
       className='w-full max-w-xs sm:max-w-sm md:w-96 h-[400px]'
     >
       <div
-        className={`relative w-full h-full transition-transform duration-500 [transform-style:preserve-3d] ${
-          flipped ? '[transform:rotateY(180deg)]' : ''
-        }`}
+        className={`relative w-full h-full transition-transform duration-500 [transform-style:preserve-3d] ${flipped ? '[transform:rotateY(180deg)]' : ''
+          }`}
       >
         {/* --- FRONT SIDE --- */}
         <div className='absolute inset-0 [backface-visibility:hidden] bg-white dark:bg-gray-700 font-outfit rounded-xl shadow-lg overflow-hidden flex flex-col gap-2'>
@@ -93,48 +108,48 @@ const PropertyCard = ({ showModal, openModal, ...props }: PropertyCardProps) => 
           </button>
           <p>Fill the form to view the PDF</p>
           <form onSubmit={(e) => {
-              e.preventDefault();
-              handleGetPdf();
-            }}>
+            e.preventDefault();
+            handleGetPdf();
+          }}>
             <fieldset>
               <input
-            type='text'
-            name='name'
-            value={formData.name}
-            onChange={handleChange}
-            placeholder='Your Name'
-            className='mb-2 p-2 border rounded w-full'
-            required
-            disabled={loading}
-          />
-          <input
-            type='email'
-            name='email'
-            value={formData.email}
-            onChange={handleChange}
-            placeholder='Your Email'
-            className='mb-2 p-2 border rounded w-full'
-            required
-            disabled={loading}
-          />
-          <input
-            type='tel'
-            name='phone'
-            value={formData.phone}
-            onChange={handleChange}
-            placeholder='Your Phone Number'
-            className='mb-4 p-2 border rounded w-full'
-            required
-            disabled={loading}
-          />
-          <button
-          type='submit'
-            className='bg-wephco text-white px-4 py-2 rounded-lg flex items-center justify-center hover:bg-black transition-colors duration-300 cursor-pointer w-full'
-          >
-            {
-              loading ? <Loader /> : 'View PDF'
-            }
-          </button>
+                type='text'
+                name='name'
+                value={formData.name}
+                onChange={handleChange}
+                placeholder='Your Name'
+                className='mb-2 p-2 border rounded w-full'
+                required
+                disabled={loading}
+              />
+              <input
+                type='email'
+                name='email'
+                value={formData.email}
+                onChange={handleChange}
+                placeholder='Your Email'
+                className='mb-2 p-2 border rounded w-full'
+                required
+                disabled={loading}
+              />
+              <input
+                type='tel'
+                name='phone'
+                value={formData.phone}
+                onChange={handleChange}
+                placeholder='Your Phone Number'
+                className='mb-4 p-2 border rounded w-full'
+                required
+                disabled={loading}
+              />
+              <button
+                type='submit'
+                className='bg-wephco text-white px-4 py-2 rounded-lg flex items-center justify-center hover:bg-black transition-colors duration-300 cursor-pointer w-full'
+              >
+                {
+                  loading ? <Loader /> : 'View PDF'
+                }
+              </button>
             </fieldset>
           </form>
         </div>

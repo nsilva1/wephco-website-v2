@@ -20,11 +20,11 @@ import privateRealEstate from '@/images/private-real-estate-advisory.jpg'
 
 export const navbarMenu = [
     {
-        label:'Buy',
+        label: 'Buy',
         path: '/buy'
     },
     {
-        label:'Sell',
+        label: 'Sell',
         path: '/sell'
     },
     {
@@ -39,10 +39,10 @@ export const navbarMenu = [
         label: 'Services',
         path: '/services'
     },
-    {
-        label: 'Brokerage App',
-        path: '/brokerage'
-    }
+    // {
+    //     label: 'Brokerage App',
+    //     path: '/brokerage'
+    // }
 ]
 
 
@@ -167,59 +167,89 @@ export const dashboardMenu = [
 export const allowedRoles = [Role.ADMIN, Role.SUPERADMIN, Role.SUPPORT]
 
 export const faqData = [
-  {
-    question: "Is Wephco a real estate company?",
-    answer:
-      "No, Wephco is a brokerage firm which positions us as an intermediary between the owner of the property and the buyer. We also have services such as property management.",
-  },
-  {
-    question: "Does Wephco accept partnerships?",
-    answer: "Most definitely!! We encourage and welcome partnerships.",
-  },
-  {
-    question: "What is Wephco affiliate program?",
-    answer:
-      "It's a referral system that allows you to earn when a client purchases a property via your referral, all you have to do is book an appointment and we will take it from there.",
-  },
-  {
-    question: "Are there extra costs apart from the price of the property?",
-    answer: "No, there's no hidden charges or extra costs.",
-  },
+    {
+        question: "Is Wephco a real estate company?",
+        answer:
+            "No, Wephco is a brokerage firm which positions us as an intermediary between the owner of the property and the buyer. We also have services such as property management.",
+    },
+    {
+        question: "Does Wephco accept partnerships?",
+        answer: "Most definitely!! We encourage and welcome partnerships.",
+    },
+    {
+        question: "What is Wephco affiliate program?",
+        answer:
+            "It's a referral system that allows you to earn when a client purchases a property via your referral, all you have to do is book an appointment and we will take it from there.",
+    },
+    {
+        question: "Are there extra costs apart from the price of the property?",
+        answer: "No, there's no hidden charges or extra costs.",
+    },
 ]
 
 
-export const wephcoServices = [
-    {
-        image: internatinalPropertyBrokerage,
-        title: 'International Property Brokerage',
-        description: 'We connect African and global investors with high-value properties in prime markets such as the UAE, UK, Monaco, USA, Turkey, Australia, and Africa. Whether acquiring luxury residences, investment apartments, or commercial assets, we offer access to opportunities rarely available on the open market.'
-    },
-    {
-        image: acquisitionConsultation,
-        title: 'Acquisition Consultation',
-        description: 'Every investor has a unique vision. Wephco provides tailored advisory sessions to align acquisitions with your long-term objectives — whether wealth preservation, portfolio diversification, or family legacy planning'
-    },
-    {
-        image: dealPreparation,
-        title: 'Deal Preparation & Coaching',
-        description: 'We guide our clients through the complexities of international property transactions — from negotiations and legal compliance to financing structures. Our coaching ensures confidence and clarity in every deal.'
-    },
-    {
-        image: privateRealEstate,
-        title: 'Private Real Estate Advisory',
-        description: 'Designed for ultra-high-net-worth individuals, our private advisory service offers discreet solutions for cross-border investments, residency-linked acquisitions, offshore holdings, and intergenerational wealth transfer'
-    },
-    {
-        image: investorCircle,
-        title: 'Investor Circle Access',
-        description: 'Wephco clients enjoy membership in an exclusive circle where premium opportunities are shared ahead of the market. This ensures first-mover advantage on rare and highly profitable investments'
-    },
-    {
-        image: legacyWealth,
-        title: 'Legacy & Wealth Structuring',
-        description: 'Beyond acquisitions, we help investors structure real estate holdings in alignment with long-term goals — securing family security, estate planning, and generational influence'
-    }
-]
+export const wephcoServices = {
+    intro: 'At Wephco, we understand the unique opportunities and challenges within Nigeria and Africa’s real estate landscape. Our local services are designed to support executives, entrepreneurs, and families who seek profitable investments, luxury living, and long-term security within the continent.',
+    international: [
+        {
+            title: 'International Property Brokerage',
+            description: 'We connect African and global investors with high-value properties in prime markets such as the UAE, UK, Monaco, USA, Turkey, Australia, and Africa. Whether acquiring luxury residences, investment apartments, or commercial assets, we offer access to opportunities rarely available on the open market.'
+        },
+        {
+            title: 'Deal Preparation & Coaching',
+            description: 'We guide our clients through the complexities of international property transactions — from negotiations and legal compliance to financing structures. Our coaching ensures confidence and clarity in every deal.'
+        },
+    ],
+    local: [
+        {
+            title: 'Residential & Luxury Homes',
+            description: 'We specialize in sourcing and selling premium residences, from high-end apartments to exclusive estates. Whether you’re seeking a family home, a luxury penthouse, or a gated community property, Wephco ensures access to the finest options.'
+        },
+        {
+            title: 'Commercial Property Brokerage',
+            description: 'We connect investors with prime commercial spaces — office complexes, retail hubs, hotels, and mixed-use developments — positioned in growth-driven cities across Nigeria and Africa.'
+        },
+        {
+            title: 'Land Acquisition & Development Advisory',
+            description: 'For clients interested in land banking, estate development, or agricultural opportunities, we provide structured guidance on acquisition, regulatory compliance, and future appreciation potential.'
+        },
+        {
+            title: 'Property Management & Leasing',
+            description: 'Beyond acquisition, Wephco offers professional property management — handling leasing, tenant placement, and asset maintenance to ensure steady rental income and value protection.'
+        },
+        {
+            title: 'Renovation & Interior/Exterior Design',
+            description: 'Through our design and renovation division, we transform properties into modern, market-ready assets. From upscale interiors to structural enhancements, we maximize property value and appeal.'
+        },
+        {
+            title: 'Escrow Verification',
+            description: 'We provide escrow verification services to ensure secure and transparent property transactions.'
+        }
+    ],
+    consultation: [
+        {
+            title: 'Acquisition Consultation',
+            description: 'Every investor has a unique vision. Wephco provides tailored advisory sessions to align acquisitions with your long-term objectives — whether wealth preservation, portfolio diversification, or family legacy planning'
+        },
+        {
+            title: 'Private Real Estate Advisory',
+            description: 'Designed for ultra-high-net-worth individuals, our private advisory service offers discreet solutions for cross-border investments, residency-linked acquisitions, offshore holdings, and intergenerational wealth transfer'
+        },
+        {
+            title: 'Investor Circle Access',
+            description: 'Wephco clients enjoy membership in an exclusive circle where premium opportunities are shared ahead of the market. This ensures first-mover advantage on rare and highly profitable investments'
+        },
+        {
+            title: 'Legacy & Wealth Structuring',
+            description: 'Beyond acquisitions, we help investors structure real estate holdings in alignment with long-term goals — securing family security, estate planning, and generational influence'
+        },
+        {
+            title: 'Investment Advisory',
+            description: 'Our tailored advisory helps clients identify high-yield local projects, from affordable housing schemes to luxury estates. We align opportunities with your risk appetite, portfolio goals, and generational wealth strategy.'
+        },
+    ],
+    outro: 'Wephco’s local property services bridge ambition with opportunity — providing Nigerian and African investors with a trusted pathway to secure wealth, luxury, and legacy at home.'
+}
 
 export const consultationServices = [
     { label: 'Business and strategic advisory' },
