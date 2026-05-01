@@ -1,14 +1,14 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
+import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect, ReactNode } from 'react';
 import { Loader } from './Loader';
 
 interface PrivateRouteProps {
   children: ReactNode;
-  redirectTo: string;
-  loadingComponent: React.ReactNode;
+  redirectTo?: string;
+  loadingComponent?: React.ReactNode;
 }
 
 const PrivateRoute = ({
@@ -16,10 +16,9 @@ const PrivateRoute = ({
   redirectTo = '/auth/login',
   loadingComponent = <Loader size='lg' />,
 }: PrivateRouteProps) => {
-  const { status } = useSession();
+  const { isAuthenticated, loading } = useAuth();
   const router = useRouter();
-  const isAuthenticated = status === 'authenticated';
-  const isLoading = status === 'loading';
+  const isLoading = loading;
 
   useEffect(() => {
     if (!isAuthenticated && !isLoading) {

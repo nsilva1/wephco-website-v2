@@ -1,27 +1,27 @@
 'use client';
 
 import { useState } from 'react';
-import { registerUser } from '@/actions/register';
 import { Role } from '@/interfaces/userInterface';
-import { loginUser } from '@/actions/login';
 import { Loader } from './Loader';
 import { useRouter } from 'next/navigation';
 import { checkAuthenticationCode } from '@/lib/helperFunctions';
 import { EyeClosed, Eye } from 'lucide-react';
 import { getErrorMessage } from '@/lib/helperFunctions';
+import { useAuth } from '@/context/AuthContext';
 
 
 const AuthForm = ({ isLogin, affiliateOnly = false }: { isLogin: boolean, affiliateOnly?: boolean }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
-  const [role, setRole] = useState<Role>(Role.AFFILIATE);
+  const [role, setRole] = useState<Role>(Role.SUPPORT);
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('')
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const router = useRouter()
+  const { login, signup, logout } = useAuth();
 
   const isFormValid = isLogin
   ? email && password
@@ -34,27 +34,28 @@ const AuthForm = ({ isLogin, affiliateOnly = false }: { isLogin: boolean, affili
     setLoading(true);
 
     if (isLogin) {
-      // Handle login logic here
       try {
-        // Check if email and password are provided
-      if (!email || !password) {
-        setError('Email and password are required');
-        setLoading(false);
-        return;
-      }
+        if (!email || !password) {
+          setError('Email and password are required');
+          setLoading(false);
+          return;
+        }
 
-      await loginUser(email, password);
+        const sessionData = await login(email, password);
+        const userRole = sessionData?.role;
 
-      // if(result?.error){
-      //   setError('Invalid email or password')
-      // } else if (result?.ok){
-      //   router.push('/dashboard')
-      // }
+        if (['SUPPORT', 'ADMIN', 'SUPERADMIN'].includes(userRole.toUpperCase())) {
+          setSuccessMessage('Login successful. Redirecting...');
+          router.push('/dashboard');
+        } else {
+          setError('403 Forbidden: You do not have access to the dashboard.');
+          await logout();
+        }
       } catch (error) {
         const errorMessage = getErrorMessage(
-    error,
-    "Login failed. Please check your email and password."
-  )
+          error,
+          "Login failed. Please check your email and password."
+        )
         setError(errorMessage);
         return;
       } finally {
@@ -62,44 +63,42 @@ const AuthForm = ({ isLogin, affiliateOnly = false }: { isLogin: boolean, affili
       }
 
     } else {
-      // Handle registration logic here
       try {
-        // Check if name, email, and password are provided
-      if (!name || !email || !password) {
-        setError('Name, email, and password are required');
-        setLoading(false);
-        return;
-      }
+        if (!name || !email || !password) {
+          setError('Name, email, and password are required');
+          setLoading(false);
+          return;
+        }
 
-      const user = { name, email, password, role };
+        const code = prompt('Enter the authentication code:')?.toLowerCase()
+        const isValidCode = checkAuthenticationCode(code);
 
-      const code = prompt('Enter the authentication code:')?.toLowerCase()
+        if (!isValidCode) {
+          setError('Invalid authentication code');
+          setLoading(false);
+          return;
+        }
 
-      const isValidCode = checkAuthenticationCode(code);
+        const [firstName, ...lastNameParts] = name.split(' ');
+        const lastName = lastNameParts.join(' ');
 
-      if (!isValidCode) {
-        setError('Invalid authentication code');
-        setLoading(false);
-        return;
-      }
+        const sessionData = await signup(email, password, { firstName, lastName, role });
+        const userRole = sessionData?.role;
 
-      const response = await registerUser(user);
-
-      if (response.error) {
-        setError(response.error);
-        return;
-      }
-
-      setSuccessMessage('Registration successful. Redirecting...')
-
-      setTimeout(() => {
-        router.push('/auth/login')
-      }, 2000)
+        if (['SUPPORT', 'ADMIN', 'SUPERADMIN'].includes(userRole.toUpperCase())) {
+          setSuccessMessage('Registration successful. Redirecting...')
+          setTimeout(() => {
+            router.push('/dashboard')
+          }, 2000)
+        } else {
+          setError('403 Forbidden: You do not have access to the dashboard.');
+          await logout();
+        }
       } catch (error) {
         const errorMessage = getErrorMessage(
-    error,
-    "Registration failed. Please verify your details and try again."
-  )
+          error,
+          "Registration failed. Please verify your details and try again."
+        )
         setError(errorMessage);
         return;
       } finally {
@@ -189,7 +188,7 @@ const AuthForm = ({ isLogin, affiliateOnly = false }: { isLogin: boolean, affili
             </button>     
             </div>      
           </div>
-          {!isLogin && (
+          {/* {!isLogin && (
             <div>
               <label htmlFor='role' className='block mb-1'>
                 Role
@@ -213,7 +212,7 @@ const AuthForm = ({ isLogin, affiliateOnly = false }: { isLogin: boolean, affili
                 }
               </select>
             </div>
-          )}
+          )} */}
           {loading ? (
             <Loader size='sm' />
           ) : (

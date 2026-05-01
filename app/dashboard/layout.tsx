@@ -1,7 +1,7 @@
 import React from 'react';
 import '../globals.css';
 import { MainLayout } from './(components)/MainLayout';
-import { AuthProvider } from '@/lib/auth/SessionProvider';
+import { AuthProvider } from '@/context/AuthContext';
 import { ToastContainer } from 'react-toastify';
 
 export default async function DashboardLayout({

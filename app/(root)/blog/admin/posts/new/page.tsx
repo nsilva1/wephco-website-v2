@@ -1,10 +1,10 @@
 'use client';
 
 import { PostEditor } from '@/components/blog/admin/post-editor';
-import { useSession } from 'next-auth/react';
+import { useAuth } from '@/context/AuthContext';
 
-export default async function NewPostPage() {
-  const { data: session } = useSession();
+export default function NewPostPage() {
+  const { currentUser } = useAuth();
 
   return (
     <div className="space-y-6">
@@ -15,7 +15,7 @@ export default async function NewPostPage() {
         </p>
       </div>
 
-      <PostEditor userId={session?.user.id} />
+      <PostEditor userId={currentUser?.uid} />
     </div>
   );
 }

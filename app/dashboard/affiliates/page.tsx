@@ -5,9 +5,8 @@ import { getAffiliates } from '@/actions/affiliates';
 import { Loader } from '@/components/Loader';
 import { IAffiliate } from '@/interfaces/userInterface';
 import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
+import { useAuth } from '@/context/AuthContext';
 import { Role } from '@/interfaces/userInterface';
-import { signOut } from 'next-auth/react';
 import { toast } from 'react-toastify';
 import { Trash2 } from 'lucide-react';
 import { Tooltip } from '@/components/Tooltip';
@@ -15,7 +14,7 @@ import { Tooltip } from '@/components/Tooltip';
 const DashboardPropertiesPage = () => {
   const router = useRouter();
 
-  const { data: session, status } = useSession();
+  const { currentUser, role, loading: authLoading, logout } = useAuth();
 
   const [affiliates, setAffiliates] = useState<IAffiliate[]>([]);
   const [loading, setLoading] = useState(false);
@@ -34,26 +33,28 @@ const DashboardPropertiesPage = () => {
   }, []);
 
   const checkAuthStatus = useCallback(() => {
+    if (authLoading) return;
     if (
-      status === 'unauthenticated' ||
-      !session?.user ||
-      (session?.user.role !== Role.ADMIN && session?.user.role !== Role.SUPPORT)
+      !currentUser ||
+      (role !== Role.ADMIN && role !== Role.SUPPORT)
     ) {
       toast.error(
         'You are not authorized to view this page. Please log in with an admin or support account.'
       );
-      signOut({ redirectTo: '/auth/login' });
+      logout().then(() => router.push('/brokerage/auth/login'));
     } else {
       // User is authenticated and has the right role
       fetchAffiliates();
     }
-  }, [status]);
+  }, [authLoading, currentUser, role, fetchAffiliates, logout, router]);
 
   useEffect(() => {
-    checkAuthStatus();
-  }, []);
+    if (!authLoading) {
+      checkAuthStatus();
+    }
+  }, [authLoading, checkAuthStatus]);
 
-  if (loading) {
+  if (loading || authLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
         <Loader />

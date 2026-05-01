@@ -5,9 +5,8 @@ import { getAllPropertyEnquiryRequests } from '@/actions/propertyEnquiry';
 import { Loader } from '@/components/Loader';
 import { IPropertyEnquiry } from '@/interfaces/propertyInterface';
 import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
+import { useAuth } from '@/context/AuthContext';
 import { Role } from '@/interfaces/userInterface';
-import { signOut } from 'next-auth/react';
 import { toast } from 'react-toastify';
 import { Tooltip } from '@/components/Tooltip';
 import { Trash2, PenIcon } from 'lucide-react';
@@ -15,7 +14,7 @@ import { Trash2, PenIcon } from 'lucide-react';
 const PropertyEnquiryPage = () => {
   const router = useRouter();
 
-  const { data: session, status } = useSession();
+  const { currentUser, role, loading: authLoading, logout } = useAuth();
 
   const [properties, setProperties] = useState<IPropertyEnquiry[]>([]);
   const [loading, setLoading] = useState(false);
@@ -34,26 +33,28 @@ const PropertyEnquiryPage = () => {
   }, []);
 
   const checkAuthStatus = useCallback(() => {
+    if (authLoading) return;
     if (
-      status === 'unauthenticated' ||
-      !session?.user ||
-      (session?.user.role !== Role.ADMIN && session?.user.role !== Role.SUPPORT)
+      !currentUser ||
+      (role !== Role.ADMIN && role !== Role.SUPPORT)
     ) {
       toast.error(
         'You are not authorized to view this page. Please log in with an admin or support account.'
       );
-      signOut({ redirectTo: '/auth/login' });
+      logout().then(() => router.push('/brokerage/auth/login'));
     } else {
       // User is authenticated and has the right role
       fetchProperties();
     }
-  }, [status]);
+  }, [authLoading, currentUser, role, fetchProperties, logout, router]);
 
   useEffect(() => {
-    checkAuthStatus();
-  }, []);
+    if (!authLoading) {
+      checkAuthStatus();
+    }
+  }, [authLoading, checkAuthStatus]);
 
-  if (loading) {
+  if (loading || authLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
         <Loader />

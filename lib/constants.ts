@@ -1,13 +1,13 @@
 // import { PropertyCardProps } from "@/components/PropertyCard"
-import { FaFacebookF, FaInstagram, FaLinkedinIn } from "react-icons/fa"
+import { FaFacebookF, FaInstagram, FaLinkedinIn, FaPercent } from "react-icons/fa"
 import { FaXTwitter } from "react-icons/fa6";
 import wellahealth from '@/images/wellahealth.svg'
 import aldar from '@/images/aldar.png'
 import damac from '@/images/damac.svg'
 import sober from '@/images/sober.png'
 import aarano from '@/images/aarano.png'
-import { MdDashboard, MdSettings, MdHandshake, MdChatBubble } from "react-icons/md";
-import { BiBuildings, BiHeadphone } from "react-icons/bi";
+import { MdDashboard, MdSettings, MdHandshake, MdChatBubble, MdAttachMoney, MdVerifiedUser, MdNotifications, MdAnalytics } from "react-icons/md";
+import { BiBuildings, BiHeadphone, BiSupport } from "react-icons/bi";
 import { BsPeopleFill, BsPersonFillGear } from "react-icons/bs";
 import { Role } from "@/interfaces/userInterface";
 import acquisitionConsultation from '@/images/acquisition-consultation.jpg'
@@ -123,9 +123,24 @@ export const dashboardMenu = [
         path: '/dashboard'
     },
     {
-        label: 'Blog Admin',
-        icon: MdChatBubble,
-        path: '/blog/admin'
+        label: 'Users',
+        icon: BsPeopleFill,
+        path: '/dashboard/users'
+    },
+    {
+        label: 'Withdrawals',
+        icon: MdAttachMoney,
+        path: '/dashboard/withdrawals'
+    },
+    {
+        label: 'KYC',
+        icon: MdVerifiedUser,
+        path: '/dashboard/kyc'
+    },
+    {
+        label: 'Support',
+        icon: BiSupport,
+        path: '/dashboard/support'
     },
     {
         label: 'Properties',
@@ -133,34 +148,24 @@ export const dashboardMenu = [
         path: '/dashboard/properties'
     },
     {
-        label: 'Property Enquiries',
-        icon: BiBuildings,
-        path: '/dashboard/property-enquiry'
+        label: 'Leads',
+        icon: MdChatBubble,
+        path: '/dashboard/leads'
     },
     {
-        label: 'Support Requests',
-        icon: BiHeadphone,
-        path: '/dashboard/requests'
+        label: 'Commission',
+        icon: FaPercent,
+        path: '/dashboard/commission'
     },
     {
-        label: 'Consultations',
-        icon: MdHandshake,
-        path: '/dashboard/consultations'
+        label: 'Send Notifications',
+        icon: MdNotifications,
+        path: '/dashboard/notifications'
     },
     {
-        label: 'Affiliates',
-        icon: BsPeopleFill,
-        path: '/dashboard/affiliates'
-    },
-    {
-        label: 'Settings',
-        icon: MdSettings,
-        path: '/dashboard/settings'
-    },
-    {
-        label: 'Profile',
-        icon: BsPersonFillGear,
-        path: '/dashboard/profile'
+        label: 'Analytics',
+        icon: MdAnalytics,
+        path: '/dashboard/analytics'
     },
 ]
 

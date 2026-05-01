@@ -1,15 +1,17 @@
 export interface IProperty {
   id?: string;
-  name: string;
+  title: string;
+  developer: string;
+  location: string;
+  yieldValue: number;
+  status: string;
   description: string;
-  images: Array<string>;
-  price?: number;
-  country: string;
-  city: string;
-  address?: string;
-  pdfUrl?: string;
+  image: string;
+  price: number;
+  pdfUrl: string;
   createdAt: Date
   updatedAt: Date
+  currency: string;
 }
 
 export interface ISellEnquiry {

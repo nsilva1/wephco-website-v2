@@ -45,3 +45,6 @@ next-env.d.ts
 
 # gcs config
 gcs-credentials.json
+
+# firebase config
+firebase.json

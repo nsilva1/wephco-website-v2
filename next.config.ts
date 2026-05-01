@@ -18,6 +18,7 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     authInterrupts: true,
+    serverComponentsExternalPackages: ['firebase-admin']
   },
   images: {
     remotePatterns: [

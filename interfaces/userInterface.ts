@@ -36,6 +36,17 @@ export interface IUserInfo {
 	wallet: WalletInfo;
 	transactions: ITransaction[];
 	createdAt?: string;
+  bankInfo?: IBankInfo;
+  status?: 'Active' | 'Suspended';
+}
+
+export interface IBankInfo {
+  bankName: string;
+  bankAccountNumber: string;
+  bankAccountName: string;
+  nin: string;
+  bvn: string;
+  bankCode: string;
 }
 
 export interface WalletInfo {

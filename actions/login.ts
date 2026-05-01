@@ -1,7 +1,6 @@
 'use server'
 
 // import { AuthError } from "next-auth"
-import { signIn } from "@/lib/auth/auth"
 import {
 	signInWithEmailAndPassword,
 } from 'firebase/auth';

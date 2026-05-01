@@ -2,7 +2,7 @@ import type React from 'react';
 import { AdminSidebar } from '@/components/blog/admin/admin-sidebar';
 import { AdminHeader } from '@/components/blog/admin/admin-header';
 import { ToastContainer } from 'react-toastify';
-import { SessionProvider } from 'next-auth/react';
+import { AuthProvider } from '@/context/AuthContext';
 
 export default function AdminLayout({
   children,
@@ -11,7 +11,7 @@ export default function AdminLayout({
 }) {
   return (
     <div>
-      <SessionProvider>
+      <AuthProvider>
         <ToastContainer />
         <div className="min-h-screen bg-background">
           <AdminHeader />
@@ -20,7 +20,7 @@ export default function AdminLayout({
             <main className="flex-1 p-6">{children}</main>
           </div>
         </div>
-      </SessionProvider>
+      </AuthProvider>
     </div>
   );
 }

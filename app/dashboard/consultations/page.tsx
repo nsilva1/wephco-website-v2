@@ -4,19 +4,17 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { getConsultations } from '@/actions/consultation';
 import { Loader } from '@/components/Loader';
 import { IConsultation } from '@/interfaces/userInterface';
-// import { useRouter } from 'next/navigation'
-import { useSession } from 'next-auth/react';
+import { useAuth } from '@/context/AuthContext';
 import { Role } from '@/interfaces/userInterface';
-import { signOut } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { allowedRoles } from '@/lib/constants';
 import { Tooltip } from '@/components/Tooltip';
 import { Contact, NotebookPen } from 'lucide-react';
 
 const ConsultationsPage = () => {
-  // const router = useRouter()
-
-  const { data: session, status } = useSession();
+  const router = useRouter();
+  const { currentUser, role, loading: authLoading, logout } = useAuth();
 
   const [consultations, setConsultations] = useState<IConsultation[]>([]);
   const [loading, setLoading] = useState(false);
@@ -35,26 +33,28 @@ const ConsultationsPage = () => {
   }, []);
 
   const checkAuthStatus = useCallback(() => {
+    if (authLoading) return;
     if (
-      status === 'unauthenticated' ||
-      !session?.user ||
-      !allowedRoles.includes(session?.user.role as Role)
+      !currentUser ||
+      !allowedRoles.includes(role as Role)
     ) {
       toast.error(
         'You are not authorized to view this page. Please log in with an admin or support account.'
       );
-      signOut({ redirectTo: '/auth/login' });
+      logout().then(() => router.push('/brokerage/auth/login'));
     } else {
       // User is authenticated and has the right role
       fetchConsultations();
     }
-  }, [status]);
+  }, [authLoading, currentUser, role, fetchConsultations, logout, router]);
 
   useEffect(() => {
-    checkAuthStatus();
-  }, []);
+    if (!authLoading) {
+      checkAuthStatus();
+    }
+  }, [authLoading, checkAuthStatus]);
 
-  if (loading) {
+  if (loading || authLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
         <Loader />

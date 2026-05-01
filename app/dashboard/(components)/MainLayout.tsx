@@ -2,110 +2,143 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import { dashboardMenu } from '@/lib/constants';
-// import logo from '@/images/logo.png'
-import smallLogo from '@/images/logo-w.png';
 import { Tooltip } from '@/components/Tooltip';
-import { BellIcon, ChevronLeft, ChevronRight } from 'lucide-react';
+import { 
+  Bell, 
+  ChevronLeft, 
+  ChevronRight, 
+  Search, 
+  Settings,
+  Building
+} from 'lucide-react';
 import { SignOutButton } from '@/components/SignOutButton';
-import { useSession } from 'next-auth/react';
+import { useAuth } from '@/context/AuthContext';
 import { getInitials } from '@/lib/helperFunctions';
+import logo from '@/images/logo.png';
+import { PrivateRoute } from '@/components/PrivateRoute';
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
-  const { data: session, status } = useSession();
-
+  const { currentUser, role, userInfo } = useAuth();
+  const pathname = usePathname();
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const toggleSidebar = () => setIsCollapsed(!isCollapsed);
 
   return (
-    <div className="flex h-screen bg-white text-black">
+    <PrivateRoute>
+      <div className="flex h-screen bg-[#f8f9fa] text-slate-800 font-sans">
       {/* Sidebar */}
       <aside
-        className={`flex flex-col justify-between bg-slate-600 text-white transition-all duration-300 ${
-          isCollapsed ? 'w-20' : 'w-64'
+        className={`flex flex-col bg-[#fdfcfb] border-r border-gray-100 transition-all duration-300 ${
+          isCollapsed ? 'w-20' : 'w-72'
         }`}>
-        <div className="p-4 border-b border-gray-800">
+        
+        {/* Logo Area */}
+        <div className="p-3 flex items-center justify-center">
           {isCollapsed ? (
-            <div className="flex justify-center">
-              <div className="h-10 w-10 rounded-full bg-gray-700 flex items-center justify-center text-white font-medium">
-                {getInitials(session?.user?.name!)}
-              </div>
-            </div>
+             <div className="flex items-center justify-center">
+               <Image src={logo} alt="Logo" width={50} height={50} />
+             </div>
           ) : (
-            <div>
-              <p className="font-medium">{session?.user.name}</p>
-              <p className="text-sm text-gray-400 truncate">
-                {session?.user.email}
-              </p>
+            <div className="flex items-center gap-3 w-full">
+              <div className="flex items-center justify-center">
+                <Image src={logo} alt="Logo" width={50} height={50} />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-bold text-lg tracking-wider text-slate-900 leading-none">WEPHCO</span>
+                <span className="text-[10px] text-[#cfb53b] font-semibold tracking-widest mt-1">ELITE MANAGEMENT</span>
+              </div>
             </div>
           )}
         </div>
 
-        <nav className="p-4">
-          <ul className="space-y-2">
-            {dashboardMenu.map((item) => (
-              <li
-                key={item.label}
-                className={`flex items-center p-2 rounded-md hover:bg-gray-700 hover:cursor-pointer transition-colors duration-200 ${
-                  isCollapsed ? 'justify-center' : ''
-                }`}>
-                <Link href={item.path} className="flex">
-                  {isCollapsed ? (
-                    <Tooltip text={item.label} position="right">
-                      {<item.icon />}
-                    </Tooltip>
-                  ) : (
-                    <item.icon />
-                  )}
-                  <span className={`${isCollapsed ? 'hidden' : 'ml-3'}`}>
-                    {item.label}
-                  </span>
-                </Link>
-              </li>
-            ))}
+        {/* Main Navigation */}
+        <nav className="flex-1 px-4 py-4 overflow-y-auto">
+          <ul className="space-y-1">
+            {dashboardMenu.map((item) => {
+              const isActive = pathname === item.path || (pathname?.startsWith(item.path) && item.path !== '/dashboard');
+              return (
+                <li key={item.label} className="w-full">
+                  <Link href={item.path} className="w-full block">
+                    <div className={`flex items-center p-3 rounded-xl transition-all duration-200 ${
+                      isActive 
+                        ? 'bg-[#fef9e8] text-[#cfb53b] font-medium' 
+                        : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900'
+                    } ${isCollapsed ? 'justify-center' : ''}`}>
+                      {isCollapsed ? (
+                        <Tooltip text={item.label} position="right">
+                          <item.icon className="text-xl" />
+                        </Tooltip>
+                      ) : (
+                        <div className="flex items-center gap-4 w-full">
+                           <item.icon className={`text-xl ${isActive ? 'text-[#cfb53b]' : 'text-gray-400'}`} />
+                           <span className="text-sm">{item.label}</span>
+                        </div>
+                      )}
+                    </div>
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </nav>
-
-        <div className="p-4 border-t border-gray-800 flex justify-center">
-          <Image
-            src={smallLogo.src}
-            alt="Wephco"
-            width={100}
-            height={100}
-            className=""
-          />
-        </div>
       </aside>
 
-      {/* Main Content */}
+      {/* Main Content Area */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        <header className="bg-white border-b border-gray-200 p-4 flex justify-between items-center">
-          <button
-            onClick={toggleSidebar}
-            className="p-2 rounded-md hover:bg-gray-200 transition-colors duration-200">
-            {isCollapsed ? (
-              <ChevronRight size={20} />
-            ) : (
-              <ChevronLeft size={20} />
-            )}
-          </button>
-          <div className="flex items-center space-x-4 gap-4">
-            <button className="p-2 rounded-full hover:bg-gray-100 relative">
-              <BellIcon size={20} />
-              <span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"></span>
-            </button>
-            <SignOutButton />
-          </div>
+        {/* Header */}
+        <header className="bg-[#f8f9fa] py-4 px-8 flex justify-between items-center z-10">
+           <div className="flex items-center gap-4 flex-1">
+             <button
+               onClick={toggleSidebar}
+               className="p-2 rounded-full hover:bg-gray-200 transition-colors text-gray-500">
+               {isCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
+             </button>
+           </div>
+
+           {/* Header Right */}
+           <div className="flex items-center gap-6">
+             <div className="flex items-center gap-3">
+               <button className="p-2.5 bg-white rounded-full shadow-sm relative hover:bg-gray-50 transition-colors text-gray-600">
+                 <Bell size={18} />
+                 <span className="absolute top-2.5 right-2.5 h-2 w-2 rounded-full bg-red-500 ring-2 ring-white"></span>
+               </button>
+               <button className="p-2.5 bg-white rounded-full shadow-sm hover:bg-gray-50 transition-colors text-gray-600">
+                 <Settings size={18} />
+               </button>
+             </div>
+             
+             <div className="h-8 w-px bg-gray-200"></div>
+             
+             <div className="flex items-center gap-3 cursor-pointer">
+               <div className="text-right hidden md:block">
+                 <p className="text-sm font-semibold text-slate-800">{currentUser?.displayName || (userInfo?.name ? userInfo.name : 'User')}</p>
+                 <p className="text-[10px] text-[#cfb53b] font-bold uppercase">{role || 'USER'}</p>
+               </div>
+               <div className="h-10 w-10 rounded-full bg-slate-200 overflow-hidden shadow-sm flex items-center justify-center text-slate-600 font-semibold border-2 border-white">
+                 {currentUser?.photoURL ? (
+                   <Image src={currentUser.photoURL} alt="User avatar" width={40} height={40} className="object-cover" />
+                 ) : (
+                   getInitials(currentUser?.displayName || userInfo?.name || 'User')
+                 )}
+               </div>
+             </div>
+             
+             <div className="h-8 w-px bg-gray-200"></div>
+             <SignOutButton />
+           </div>
         </header>
 
-        {/* Content */}
-        <main className="flex-1 overflow-y-auto p-6 bg-gray-50">
+        {/* Page Content */}
+        <main className="flex-1 overflow-y-auto p-8 pt-4">
           {children}
         </main>
       </div>
     </div>
+    </PrivateRoute>
   );
 };
 
