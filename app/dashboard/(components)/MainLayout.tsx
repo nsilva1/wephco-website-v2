@@ -49,7 +49,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
               </div>
               <div className="flex flex-col">
                 <span className="font-bold text-lg tracking-wider text-slate-900 leading-none">WEPHCO</span>
-                <span className="text-[10px] text-[#cfb53b] font-semibold tracking-widest mt-1">ELITE MANAGEMENT</span>
+                <span className="text-[10px] text-[#cfb53b] font-semibold tracking-widest mt-1">ADMIN PANEL</span>
               </div>
             </div>
           )}
@@ -115,14 +115,14 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
              
              <div className="flex items-center gap-3 cursor-pointer">
                <div className="text-right hidden md:block">
-                 <p className="text-sm font-semibold text-slate-800">{currentUser?.displayName || (userInfo?.name ? userInfo.name : 'User')}</p>
-                 <p className="text-[10px] text-[#cfb53b] font-bold uppercase">{role || 'USER'}</p>
+                 <p className="text-sm font-semibold text-slate-800">{currentUser?.displayName}</p>
+                 <p className="text-[10px] text-[#cfb53b] font-bold uppercase">{role}</p>
                </div>
                <div className="h-10 w-10 rounded-full bg-slate-200 overflow-hidden shadow-sm flex items-center justify-center text-slate-600 font-semibold border-2 border-white">
                  {currentUser?.photoURL ? (
                    <Image src={currentUser.photoURL} alt="User avatar" width={40} height={40} className="object-cover" />
                  ) : (
-                   getInitials(currentUser?.displayName || userInfo?.name || 'User')
+                   getInitials(currentUser?.displayName!)
                  )}
                </div>
              </div>

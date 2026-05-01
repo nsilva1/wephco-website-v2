@@ -38,6 +38,8 @@ export interface IUserInfo {
 	createdAt?: string;
   bankInfo?: IBankInfo;
   status?: 'Active' | 'Suspended';
+  kycStatus?: 'pending' | 'verified' | 'flagged';
+  kycFlagReason?: string;
 }
 
 export interface IBankInfo {
@@ -67,6 +69,10 @@ export interface ITransaction {
 	status: 'Pending' | 'Completed' | 'Failed';
 	description: string;
 	createdAt?: string;
+	rejectedReason?: string;
+	approvedAt?: string;
+	approvedBy?: string;
+	user?: IUserInfo;
 }
 
 export interface IContactUs {
@@ -100,4 +106,18 @@ export interface IAffiliate {
   email: string;
   location: string;
   createdAt?: Date;
+}
+
+export interface ISupportTicket {
+  id?: string;
+  userId: string;
+  subject: string;
+  message: string;
+  category: string;
+  status: 'open' | 'resolved';
+  responseNotes?: string;
+  resolvedAt?: string;
+  resolvedBy?: string;
+  createdAt?: string;
+  user?: IUserInfo;
 }

@@ -10,7 +10,8 @@ import Link from "next/link"
 export const revalidate = 0;
 
 export default async function UserDetailsPage({ params }: { params: { id: string } }) {
-  const data = await getUserById(params.id)
+  const { id } = await params;
+  const data = await getUserById(id)
   if (!data) return notFound()
 
   const { user, transactions } = data

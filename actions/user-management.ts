@@ -7,27 +7,30 @@ import { serializeDoc } from '@/lib/utils';
 
 export async function getUsers() {
   const usersSnapshot = await db.collection('users').get();
-  return usersSnapshot.docs.map(doc => ({
-    id: doc.id,
-    ...serializeDoc(doc.data())
-  })) as IUserInfo[];
+    
+  return usersSnapshot.docs
+    .filter(doc => {
+      const role = doc.data().role;
+      return role === 'Agent' || role === 'AFFILIATE';
+    })
+    .map(doc => ({
+      id: doc.id,
+      ...serializeDoc(doc.data())
+    })) as IUserInfo[];
 }
 
 export async function getUserById(id: string) {
   const userDoc = await db.collection('users').doc(id).get();
   if (!userDoc.exists) return null;
   
-  const user = { id: userDoc.id, ...userDoc.data() } as IUserInfo;
+  const user = { id: userDoc.id, ...serializeDoc(userDoc.data()!) } as IUserInfo;
   
   // Also fetch user's transactions
-  const transactionsSnapshot = await db.collection('transactions')
-    .where('userId', '==', id)
-    .orderBy('createdAt', 'desc')
-    .get();
+  const transactionsSnapshot = await db.collection('transactions').get();
     
-  const transactions = transactionsSnapshot.docs.map(doc => ({
+  const transactions = transactionsSnapshot.docs.filter(doc => doc.data().userId === id).map(doc => ({
     id: doc.id,
-    ...doc.data()
+    ...serializeDoc(doc.data())
   })) as ITransaction[];
 
   return { user, transactions };
@@ -85,4 +88,32 @@ export async function toggleUserSuspension(userId: string, isSuspended: boolean)
   }
 
   return { success: true, status };
+}
+
+export async function getAllUsersForKyc() {
+  const usersSnapshot = await db.collection('users').get();
+
+  return usersSnapshot.docs
+    .map(doc => ({
+      id: doc.id,
+      ...serializeDoc(doc.data())
+    })) as IUserInfo[];
+}
+
+export async function updateKycStatus(
+  userId: string,
+  status: 'pending' | 'verified' | 'flagged',
+  reason?: string
+) {
+  const userRef = db.collection('users').doc(userId);
+  const updateData: Record<string, any> = { kycStatus: status };
+
+  if (status === 'flagged' && reason) {
+    updateData.kycFlagReason = reason;
+  } else {
+    updateData.kycFlagReason = admin.firestore.FieldValue.delete();
+  }
+
+  await userRef.update(updateData);
+  return { success: true };
 }

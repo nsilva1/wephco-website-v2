@@ -81,8 +81,9 @@ const AuthForm = ({ isLogin, affiliateOnly = false }: { isLogin: boolean, affili
 
         const [firstName, ...lastNameParts] = name.split(' ');
         const lastName = lastNameParts.join(' ');
+        const fullName = `${firstName} ${lastName}`;
 
-        const sessionData = await signup(email, password, { firstName, lastName, role });
+        const sessionData = await signup(email, password, { fullName, role });
         const userRole = sessionData?.role;
 
         if (['SUPPORT', 'ADMIN', 'SUPERADMIN'].includes(userRole.toUpperCase())) {

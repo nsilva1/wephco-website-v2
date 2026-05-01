@@ -106,10 +106,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const roleToSet = additionalData?.role || Role.SUPPORT;
 
         const userData = {
+			name: additionalData?.fullName || '',
             email,
-            firstName: additionalData?.firstName || '',
-            lastName: additionalData?.lastName || '',
-            phone: additionalData?.phone || '',
             role: roleToSet,
             createdAt: new Date().toISOString(),
             status: 'ACTIVE'

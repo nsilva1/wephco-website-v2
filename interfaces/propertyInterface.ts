@@ -5,6 +5,7 @@ export interface IProperty {
   location: string;
   yieldValue: number;
   status: string;
+  tag: string;
   description: string;
   image: string;
   price: number;

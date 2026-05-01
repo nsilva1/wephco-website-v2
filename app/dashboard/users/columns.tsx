@@ -51,10 +51,10 @@ export const columns: ColumnDef<IUserInfo>[] = [
       
       return (
         <div className="flex flex-col gap-1">
-          <Badge variant={hasNin ? "default" : "destructive"} className="w-fit">
+          <Badge variant={hasNin ? "secondary" : "destructive"} className={`w-fit ${hasNin ? "bg-green-500 hover:bg-green-600 text-white" : ""}`}>
             NIN: {hasNin ? "Verified" : "Missing"}
           </Badge>
-          <Badge variant={hasBvn ? "default" : "destructive"} className="w-fit">
+          <Badge variant={hasBvn ? "secondary" : "destructive"} className={`w-fit ${hasBvn ? "bg-green-500 hover:bg-green-600 text-white" : ""}`}>
             BVN: {hasBvn ? "Verified" : "Missing"}
           </Badge>
         </div>
