@@ -7,23 +7,25 @@ import Image from 'next/image';
 import { dashboardMenu } from '@/lib/constants';
 import { Tooltip } from '@/components/Tooltip';
 import { 
-  Bell, 
   ChevronLeft, 
   ChevronRight, 
   Search, 
   Settings,
   Building
 } from 'lucide-react';
+import { NotificationBell } from './NotificationBell';
 import { SignOutButton } from '@/components/SignOutButton';
 import { useAuth } from '@/context/AuthContext';
 import { getInitials } from '@/lib/helperFunctions';
 import logo from '@/images/logo.png';
 import { PrivateRoute } from '@/components/PrivateRoute';
+import { useRouter } from 'next/navigation';
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
-  const { currentUser, role, userInfo } = useAuth();
+  const { currentUser, role } = useAuth();
   const pathname = usePathname();
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const router = useRouter();
 
   const toggleSidebar = () => setIsCollapsed(!isCollapsed);
 
@@ -102,13 +104,10 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
            {/* Header Right */}
            <div className="flex items-center gap-6">
              <div className="flex items-center gap-3">
-               <button className="p-2.5 bg-white rounded-full shadow-sm relative hover:bg-gray-50 transition-colors text-gray-600">
-                 <Bell size={18} />
-                 <span className="absolute top-2.5 right-2.5 h-2 w-2 rounded-full bg-red-500 ring-2 ring-white"></span>
-               </button>
-               <button className="p-2.5 bg-white rounded-full shadow-sm hover:bg-gray-50 transition-colors text-gray-600">
+               <NotificationBell />
+               <Link href={'/dashboard/settings'} className="p-2.5 bg-white rounded-full cursor-pointer shadow-sm hover:bg-gray-200 transition-colors text-gray-600">
                  <Settings size={18} />
-               </button>
+               </Link>
              </div>
              
              <div className="h-8 w-px bg-gray-200"></div>

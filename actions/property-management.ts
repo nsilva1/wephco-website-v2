@@ -8,7 +8,7 @@ export async function getProperties() {
   const snapshot = await db.collection('properties').get();
   return snapshot.docs.map(doc => ({
     id: doc.id,
-    ...serializeDoc(doc.data())
+    ...serializeDoc(doc.data()!)
   })) as IProperty[];
 }
 

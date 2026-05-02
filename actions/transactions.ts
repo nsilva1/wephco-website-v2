@@ -11,7 +11,7 @@ export async function getWithdrawals() {
 
   const withdrawals = transactionsSnapshot.docs.map(doc => ({
     id: doc.id,
-    ...serializeDoc(doc.data())
+    ...serializeDoc(doc.data()!)
   })) as ITransaction[];
 
   // Fetch associated users

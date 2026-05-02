@@ -9,7 +9,7 @@ export async function getSupportTickets() {
 
   const tickets = ticketsSnapshot.docs.map(doc => ({
     id: doc.id,
-    ...serializeDoc(doc.data())
+    ...serializeDoc(doc.data()!)
   })) as ISupportTicket[];
 
   // Fetch associated users

@@ -15,7 +15,7 @@ export async function getUsers() {
     })
     .map(doc => ({
       id: doc.id,
-      ...serializeDoc(doc.data())
+      ...serializeDoc(doc.data()!)
     })) as IUserInfo[];
 }
 
@@ -30,7 +30,7 @@ export async function getUserById(id: string) {
     
   const transactions = transactionsSnapshot.docs.filter(doc => doc.data().userId === id).map(doc => ({
     id: doc.id,
-    ...serializeDoc(doc.data())
+    ...serializeDoc(doc.data()!)
   })) as ITransaction[];
 
   return { user, transactions };
@@ -96,7 +96,7 @@ export async function getAllUsersForKyc() {
   return usersSnapshot.docs
     .map(doc => ({
       id: doc.id,
-      ...serializeDoc(doc.data())
+      ...serializeDoc(doc.data()!)
     })) as IUserInfo[];
 }
 
