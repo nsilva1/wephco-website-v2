@@ -3,16 +3,19 @@ export interface IProperty {
   title: string;
   developer: string;
   location: string;
-  yieldValue: number;
-  status: string;
-  tag: string;
-  description: string;
-  image: string;
   price: number;
-  pdfUrl: string;
-  createdAt: Date
-  updatedAt: Date
+  yieldValue?: number;
+  status: string;
+  description: string;
+  images: string[];
   currency: string;
+  tag: string;
+  pdfUrl: string;
+  category: string;
+  verified: boolean;
+  interests: string[];
+  createdAt?: Date | null;
+  updatedAt?: Date | null;
 }
 
 export interface ISellEnquiry {

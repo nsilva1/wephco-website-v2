@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import { Checkbox } from "@/components/ui/checkbox"
-import { useAuth } from "@/context/AuthContext"
+import { useSessionUser } from "@/hooks/useSessionUser"
 import { Send, Users, UserCheck, Bell } from "lucide-react"
 
 interface ComposeNotificationProps {
@@ -19,7 +19,7 @@ interface ComposeNotificationProps {
 
 export default function ComposeNotification({ agents }: ComposeNotificationProps) {
   const router = useRouter()
-  const { currentUser } = useAuth()
+  const { user: currentUser } = useSessionUser()
 
   const [title, setTitle] = useState("")
   const [body, setBody] = useState("")
@@ -65,7 +65,7 @@ export default function ComposeNotification({ agents }: ComposeNotificationProps
         body,
         targetType,
         targetType === 'specific' ? selectedAgentIds : [],
-        currentUser.uid
+        currentUser.id!
       )
       setResult({ successCount: res.successCount, failureCount: res.failureCount, totalTokens: res.totalTokens })
       router.refresh()

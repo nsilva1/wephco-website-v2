@@ -7,7 +7,7 @@ import {
 	useState,
 	type ReactNode,
 } from 'react';
-import type { IUserInfo } from '../interfaces/userInterface';
+import type { IUserInfo, IAdminUser } from '../interfaces/userInterface';
 import { 
     signInWithEmailAndPassword, 
     createUserWithEmailAndPassword, 
@@ -20,22 +20,15 @@ import {
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { auth, db } from '@/firebase/firebaseClient';
 import { Role } from '@/interfaces/userInterface';
-
-export interface User {
-  uid: string;
-  email: string | null;
-  emailVerified: boolean;
-  displayName: string | null;
-  photoURL: string | null;
-}
+import { useSessionUser } from '@/hooks/useSessionUser';
 
 interface AuthContextType {
-	currentUser: User | null;
+	currentUser: IAdminUser | null;
 	loading: boolean;
 	role: string | null;
 	isAuthenticated: boolean;
 	userInfo: IUserInfo | null;
-	signup: (email: string, password: string, additionalData?: any) => Promise<any>;
+	signup: (email: string, password: string, fullName: string) => Promise<any>;
 	login: (email: string, password: string) => Promise<any>;
 	logout: () => Promise<void>;
 	resetPassword: (email: string) => Promise<void>;
@@ -53,23 +46,26 @@ export const useAuth = (): AuthContextType => {
 };
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-	const [currentUser, setCurrentUser] = useState<User | null>(null);
+	const [currentUser, setCurrentUser] = useState<IAdminUser | null>(null);
 	const [role, setRole] = useState<string | null>(null);
 	const [loading, setLoading] = useState(true);
 	const [userInfo, setUserInfo] = useState<IUserInfo | null>(null);
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+    const { deleteSessionUser } = useSessionUser();
+
 	useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
             if (firebaseUser) {
 				setIsAuthenticated(true);
-                setCurrentUser({
-                    uid: firebaseUser.uid,
-                    email: firebaseUser.email,
+                setCurrentUser((prev) => ({
+                    ...prev,
+                    id: firebaseUser.uid,
+                    name: firebaseUser.displayName!,
+                    email: firebaseUser.email!,
                     emailVerified: firebaseUser.emailVerified,
-                    displayName: firebaseUser.displayName,
-                    photoURL: firebaseUser.photoURL
-                });
+                    photoURL: firebaseUser.photoURL,
+                } as IAdminUser));
 
                 try {
                     const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
@@ -99,21 +95,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         return () => unsubscribe();
 	}, []);
 
-	const signup = async (email: string, password: string, additionalData?: any) => {
+	const signup = async (email: string, password: string, fullName: string) => {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
-        const roleToSet = additionalData?.role || Role.SUPPORT;
+        const roleToSet = Role.SUPPORT;
 
-        const userData = {
-			name: additionalData?.fullName || '',
-            email,
-            role: roleToSet,
-            createdAt: new Date().toISOString(),
-            status: 'ACTIVE'
+        const userData: IAdminUser = {
+			id: user.uid,
+			firstName: fullName.split(' ')[0],
+			lastName: fullName.split(' ').slice(1).join(' '),
+            emailVerified: user.emailVerified,
+            photoURL: user.photoURL,
+			email: email,
+			role: roleToSet,
+			createdAt: new Date(),
+			updatedAt: new Date(),
         };
 
         await setDoc(doc(db, 'users', user.uid), userData);
+
+        sessionStorage.setItem('user', JSON.stringify(userData));
         
         return { role: roleToSet, uid: user.uid };
 	};
@@ -124,12 +126,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         // Wait for the doc to return the role for the AuthForm redirection
         const userDoc = await getDoc(doc(db, 'users', userCredential.user.uid));
         const userRole = userDoc.exists() ? userDoc.data().role : null;
+
+        setCurrentUser(userDoc.data() as IAdminUser);
+
+        sessionStorage.setItem('user', JSON.stringify(userDoc.data()));
         
         return { role: userRole, uid: userCredential.user.uid };
 	};
 
 	const logout = async () => {
         await firebaseSignOut(auth);
+        deleteSessionUser();
 	};
 
 	const resetPassword = async (email: string) => {

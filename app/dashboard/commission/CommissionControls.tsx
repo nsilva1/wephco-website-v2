@@ -25,7 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { useAuth } from "@/context/AuthContext"
+import { useSessionUser } from "@/hooks/useSessionUser"
 import { Settings, Percent, DollarSign, PenLine } from "lucide-react"
 
 interface CommissionControlsProps {
@@ -35,7 +35,7 @@ interface CommissionControlsProps {
 
 export default function CommissionControls({ globalRate, agents }: CommissionControlsProps) {
   const router = useRouter()
-  const { currentUser } = useAuth()
+  const { user: currentUser } = useSessionUser()
 
   // Global rate state
   const [newGlobalRate, setNewGlobalRate] = useState(globalRate.toString())
@@ -99,7 +99,7 @@ export default function CommissionControls({ globalRate, agents }: CommissionCon
 
     setIsLogging(true)
     try {
-      await logCommission(logAgentId, amount, logDescription, currentUser.uid)
+      await logCommission(logAgentId, amount, logDescription, currentUser.id!)
       setIsLogDialogOpen(false)
       setLogAgentId("")
       setLogAmount("")

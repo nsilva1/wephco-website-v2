@@ -8,24 +8,36 @@ import { checkAuthenticationCode } from '@/lib/helperFunctions';
 import { EyeClosed, Eye } from 'lucide-react';
 import { getErrorMessage } from '@/lib/helperFunctions';
 import { useAuth } from '@/context/AuthContext';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from '@/components/ui/dialog';
 
 
-const AuthForm = ({ isLogin, affiliateOnly = false }: { isLogin: boolean, affiliateOnly?: boolean }) => {
+const AuthForm = ({ isLogin }: { isLogin: boolean }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
-  const [role, setRole] = useState<Role>(Role.SUPPORT);
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('')
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showAuthCodeModal, setShowAuthCodeModal] = useState(false);
+  const [authCode, setAuthCode] = useState('');
+  const [authCodeError, setAuthCodeError] = useState('');
 
   const router = useRouter()
   const { login, signup, logout } = useAuth();
 
+  const validate = (val: string | undefined) => !!val?.trim();
+
   const isFormValid = isLogin
-  ? email && password
-  : name && email && password
+  ? validate(email) && validate(password)
+  : validate(name) && validate(email) && validate(password);
 
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -63,53 +75,107 @@ const AuthForm = ({ isLogin, affiliateOnly = false }: { isLogin: boolean, affili
       }
 
     } else {
-      try {
-        if (!name || !email || !password) {
-          setError('Name, email, and password are required');
-          setLoading(false);
-          return;
-        }
-
-        const code = prompt('Enter the authentication code:')?.toLowerCase()
-        const isValidCode = checkAuthenticationCode(code);
-
-        if (!isValidCode) {
-          setError('Invalid authentication code');
-          setLoading(false);
-          return;
-        }
-
-        const [firstName, ...lastNameParts] = name.split(' ');
-        const lastName = lastNameParts.join(' ');
-        const fullName = `${firstName} ${lastName}`;
-
-        const sessionData = await signup(email, password, { fullName, role });
-        const userRole = sessionData?.role;
-
-        if (['SUPPORT', 'ADMIN', 'SUPERADMIN'].includes(userRole.toUpperCase())) {
-          setSuccessMessage('Registration successful. Redirecting...')
-          setTimeout(() => {
-            router.push('/dashboard')
-          }, 2000)
-        } else {
-          setError('403 Forbidden: You do not have access to the dashboard.');
-          await logout();
-        }
-      } catch (error) {
-        const errorMessage = getErrorMessage(
-          error,
-          "Registration failed. Please verify your details and try again."
-        )
-        setError(errorMessage);
-        return;
-      } finally {
+      if (!name || !email || !password) {
+        setError('Name, email, and password are required');
         setLoading(false);
+        return;
       }
+      setShowAuthCodeModal(true);
+      setLoading(false);
+    }
+  };
+
+  const handleRegisterWithCode = async () => {
+    setAuthCodeError('');
+    setLoading(true);
+
+    const isValidCode = checkAuthenticationCode(authCode.toLowerCase());
+
+    if (!isValidCode) {
+      setAuthCodeError('Invalid authentication code');
+      setLoading(false);
+      return;
+    }
+
+    setShowAuthCodeModal(false);
+
+    try {
+      const [firstName, ...lastNameParts] = name.split(' ');
+      const lastName = lastNameParts.join(' ');
+      const fullName = `${firstName} ${lastName}`;
+
+      const sessionData = await signup(email, password, fullName);
+      const userRole = sessionData?.role;
+
+      if (['SUPPORT', 'ADMIN', 'SUPERADMIN'].includes(userRole.toUpperCase())) {
+        setSuccessMessage('Registration successful. Redirecting...')
+        setTimeout(() => {
+          router.push('/dashboard')
+        }, 2000)
+      } else {
+        setError('403 Forbidden: You do not have access to the dashboard.');
+        await logout();
+      }
+    } catch (error) {
+      const errorMessage = getErrorMessage(
+        error,
+        "Registration failed. Please verify your details and try again."
+      )
+      setError(errorMessage);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className={``}>
+      <Dialog open={showAuthCodeModal} onOpenChange={setShowAuthCodeModal}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Authentication Code</DialogTitle>
+            <DialogDescription>
+              Please enter the authentication code to complete your registration.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex flex-col space-y-4 py-4">
+            {authCodeError && (
+              <div className="p-3 rounded-md border border-red-300 bg-red-50 text-red-800 text-sm">
+                {authCodeError}
+              </div>
+            )}
+            <div>
+              <label htmlFor="authCode" className="block mb-1 text-sm font-medium">
+                Code
+              </label>
+              <input
+                id="authCode"
+                type="text"
+                value={authCode}
+                onChange={(e) => setAuthCode(e.target.value)}
+                className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
+                placeholder="Enter code"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <button
+              type="button"
+              onClick={() => setShowAuthCodeModal(false)}
+              className="px-4 py-2 border rounded text-sm hover:bg-slate-100 dark:hover:bg-slate-800"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={handleRegisterWithCode}
+              disabled={!authCode.trim() || loading}
+              className="px-4 py-2 bg-black text-white rounded text-sm hover:bg-black/80 dark:bg-white dark:text-black dark:hover:bg-white/80 disabled:opacity-50"
+            >
+              {loading ? <Loader size="sm" /> : 'Verify & Register'}
+            </button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
       <form
         onSubmit={(e) => handleSubmit(e)}
         className='max-w-md mx-auto mt-8 space-y-4'
@@ -189,31 +255,6 @@ const AuthForm = ({ isLogin, affiliateOnly = false }: { isLogin: boolean, affili
             </button>     
             </div>      
           </div>
-          {/* {!isLogin && (
-            <div>
-              <label htmlFor='role' className='block mb-1'>
-                Role
-              </label>
-              <select
-                id='role'
-                value={role}
-                onChange={(e) => setRole(e.target.value as Role)}
-                className='w-full px-3 py-2 border rounded'
-              >
-                {
-                  affiliateOnly ? (
-                    <option value={Role.AFFILIATE}>Affiliate</option>
-                  ) : (
-                    <>
-                      <option value={Role.AFFILIATE}>Affiliate</option>
-                      <option value={Role.SUPPORT}>Support</option>
-                      <option value={Role.ADMIN}>Admin</option>
-                    </>
-                  )
-                }
-              </select>
-            </div>
-          )} */}
           {loading ? (
             <Loader size='sm' />
           ) : (

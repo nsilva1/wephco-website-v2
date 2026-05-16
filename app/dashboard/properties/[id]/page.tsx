@@ -55,9 +55,13 @@ export default async function PropertyDetailPage({ params }: { params: { id: str
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {property.image && (
-              <div className="relative w-full h-56 rounded-lg overflow-hidden">
-                <Image src={property.image} alt={property.title} fill className="object-cover" sizes="600px" />
+            {property.images && property.images.length > 0 && (
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                {property.images.map((img, idx) => (
+                  <div key={idx} className="relative w-full h-40 rounded-lg overflow-hidden">
+                    <Image src={img} alt={`${property.title} - ${idx + 1}`} fill className="object-cover" sizes="(max-width: 768px) 50vw, 33vw" />
+                  </div>
+                ))}
               </div>
             )}
             <div className="flex justify-between border-b pb-2">

@@ -1,21 +1,23 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
+import Image from 'next/image';
+import { useSessionUser } from '@/hooks/useSessionUser';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { toast } from 'react-toastify';
-import { updateProfile, updateBankInfo, updateGlobalSettings } from '@/actions/settings';
+import { updateBankInfo, updateGlobalSettings } from '@/actions/settings';
 import { setGlobalCommissionRate } from '@/actions/commission';
+import { updateUserProfile } from '@/actions/profile';
 import { 
   User, 
   Lock, 
-  Bell, 
+  Camera,  
   ShieldCheck, 
-  CreditCard, 
   Save, 
   Loader2,
   AlertTriangle,
@@ -23,15 +25,25 @@ import {
 } from 'lucide-react';
 
 const SettingsForm = ({ initialGlobalSettings, globalCommission }: { initialGlobalSettings: any, globalCommission: number }) => {
-  const { userInfo, currentUser, resetPassword } = useAuth();
+  const { userInfo, resetPassword } = useAuth();
+  const { user: currentUser } = useSessionUser();
   const [activeTab, setActiveTab] = useState('profile');
   const [isSaving, setIsSaving] = useState(false);
 
   // Form States
-  const [profileData, setProfileData] = useState({
-    name: userInfo?.name || '',
-    phone: (userInfo as any)?.phone || '',
-  });
+  const [name, setName] = useState(`${currentUser?.firstName ?? ''} ${currentUser?.lastName ?? ''}`);
+  const [email, setEmail] = useState(currentUser?.email || '');
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(currentUser?.photoURL || null);
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (currentUser) {
+      setName(`${currentUser.firstName} ${currentUser.lastName}`);
+      setEmail(currentUser.email || '');
+      setAvatarPreview(currentUser.photoURL || null);
+    }
+  }, [currentUser]);
 
   const [bankData, setBankData] = useState({
     bankName: userInfo?.bankInfo?.bankName || '',
@@ -48,18 +60,46 @@ const SettingsForm = ({ initialGlobalSettings, globalCommission }: { initialGlob
     contactEmail: initialGlobalSettings?.contactEmail || 'support@wephco.com',
   });
 
-  const handleProfileUpdate = async (e: React.FormEvent) => {
+  const handleProfileUpdate = async (e: React.SubmitEvent) => {
     e.preventDefault();
-    if (!currentUser) return;
+    if (!currentUser?.id) return;
     
     setIsSaving(true);
-    const res = await updateProfile(currentUser.uid, { name: profileData.name });
+    
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('email', email);
+    if (avatarFile) {
+      formData.append('avatar', avatarFile);
+    }
+    formData.append('existingPhotoURL', currentUser.photoURL || '');
+
+    const res = await updateUserProfile(currentUser.id, formData);
     setIsSaving(false);
     
     if (res.success) {
       toast.success('Profile updated successfully');
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
     } else {
-      toast.error(res.error || 'Failed to update profile');
+      toast.error(res.message || 'Failed to update profile');
+    }
+  };
+
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error('Image size should be less than 5MB');
+        return;
+      }
+      setAvatarFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setAvatarPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -68,7 +108,7 @@ const SettingsForm = ({ initialGlobalSettings, globalCommission }: { initialGlob
     if (!currentUser) return;
     
     setIsSaving(true);
-    const res = await updateBankInfo(currentUser.uid, bankData as any);
+    const res = await updateBankInfo(currentUser.id!, bankData as any);
     setIsSaving(false);
     
     if (res.success) {
@@ -111,7 +151,6 @@ const SettingsForm = ({ initialGlobalSettings, globalCommission }: { initialGlob
 
   const tabs = [
     { id: 'profile', label: 'Profile', icon: User },
-    { id: 'bank', label: 'Bank Info', icon: CreditCard },
     { id: 'security', label: 'Security', icon: Lock },
     ...(userInfo?.role === 'ADMIN' || userInfo?.role === 'SUPERADMIN' ? [
       { id: 'admin', label: 'Admin Settings', icon: ShieldCheck }
@@ -148,13 +187,45 @@ const SettingsForm = ({ initialGlobalSettings, globalCommission }: { initialGlob
             </CardHeader>
             <CardContent>
               <form onSubmit={handleProfileUpdate} className="space-y-6">
+                {/* Avatar Section */}
+                <div className="flex flex-col sm:flex-row items-center gap-6 pb-6 border-b border-gray-100">
+                  <div className="relative group">
+                    <div className="h-24 w-24 rounded-full bg-slate-100 flex items-center justify-center overflow-hidden border-2 border-white shadow-md">
+                      {avatarPreview ? (
+                        <Image src={avatarPreview} alt="Avatar Preview" width={96} height={96} className="object-cover h-full w-full" />
+                      ) : (
+                        <User className="h-10 w-10 text-slate-400" />
+                      )}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="absolute bottom-0 right-0 p-1.5 bg-[#cfb53b] text-white rounded-full hover:bg-[#b59d32] transition-colors shadow-sm"
+                      title="Change picture"
+                    >
+                      <Camera className="h-4 w-4" />
+                    </button>
+                    <input 
+                      type="file" 
+                      ref={fileInputRef} 
+                      onChange={handleAvatarChange} 
+                      accept="image/*" 
+                      className="hidden" 
+                    />
+                  </div>
+                  <div className="text-center sm:text-left space-y-1">
+                    <h3 className="font-medium text-slate-800">Profile Picture</h3>
+                    <p className="text-sm text-slate-500">JPG, GIF or PNG. Max size of 5MB.</p>
+                  </div>
+                </div>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="name">Full Name</Label>
                     <Input 
                       id="name" 
-                      value={profileData.name} 
-                      onChange={(e) => setProfileData({...profileData, name: e.target.value})}
+                      value={name} 
+                      onChange={(e) => setName(e.target.value)}
                       placeholder="Enter your full name" 
                     />
                   </div>
@@ -162,80 +233,16 @@ const SettingsForm = ({ initialGlobalSettings, globalCommission }: { initialGlob
                     <Label htmlFor="email">Email Address</Label>
                     <Input 
                       id="email" 
-                      value={currentUser?.email || ''} 
-                      disabled 
-                      className="bg-gray-50 cursor-not-allowed"
+                      value={email} 
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Enter your email address"
                     />
-                    <p className="text-[10px] text-gray-400">Email cannot be changed manually for security reasons.</p>
+                    <p className="text-[10px] text-gray-400">Updating your email might require re-verification.</p>
                   </div>
                 </div>
                 <Button type="submit" disabled={isSaving} className="bg-[#cfb53b] hover:bg-[#b59d32] text-white">
                   {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
                   Save Changes
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
-        )}
-
-        {activeTab === 'bank' && (
-          <Card className="border-gray-100 shadow-sm">
-            <CardHeader>
-              <CardTitle className="text-xl">Bank Account Information</CardTitle>
-              <CardDescription>Enter your payment details for commission withdrawals.</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleBankUpdate} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="bankName">Bank Name</Label>
-                    <Input 
-                      id="bankName" 
-                      value={bankData.bankName} 
-                      onChange={(e) => setBankData({...bankData, bankName: e.target.value})}
-                      placeholder="e.g. Zenith Bank" 
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="accNumber">Account Number</Label>
-                    <Input 
-                      id="accNumber" 
-                      value={bankData.bankAccountNumber} 
-                      onChange={(e) => setBankData({...bankData, bankAccountNumber: e.target.value})}
-                      placeholder="10-digit account number" 
-                    />
-                  </div>
-                  <div className="space-y-2 md:col-span-2">
-                    <Label htmlFor="accName">Account Name</Label>
-                    <Input 
-                      id="accName" 
-                      value={bankData.bankAccountName} 
-                      onChange={(e) => setBankData({...bankData, bankAccountName: e.target.value})}
-                      placeholder="Full name as it appears on bank account" 
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="bvn">BVN (Optional)</Label>
-                    <Input 
-                      id="bvn" 
-                      value={bankData.bvn} 
-                      onChange={(e) => setBankData({...bankData, bvn: e.target.value})}
-                      placeholder="Bank Verification Number" 
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="nin">NIN (Optional)</Label>
-                    <Input 
-                      id="nin" 
-                      value={bankData.nin} 
-                      onChange={(e) => setBankData({...bankData, nin: e.target.value})}
-                      placeholder="National Identity Number" 
-                    />
-                  </div>
-                </div>
-                <Button type="submit" disabled={isSaving} className="bg-[#cfb53b] hover:bg-[#b59d32] text-white">
-                  {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
-                  Save Bank Details
                 </Button>
               </form>
             </CardContent>

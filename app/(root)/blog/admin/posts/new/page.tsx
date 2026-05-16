@@ -1,10 +1,10 @@
 'use client';
 
 import { PostEditor } from '@/components/blog/admin/post-editor';
-import { useAuth } from '@/context/AuthContext';
+import { useSessionUser } from '@/hooks/useSessionUser';
 
 export default function NewPostPage() {
-  const { currentUser } = useAuth();
+  const { user: currentUser } = useSessionUser();
 
   return (
     <div className="space-y-6">
@@ -15,7 +15,7 @@ export default function NewPostPage() {
         </p>
       </div>
 
-      <PostEditor userId={currentUser?.uid} />
+      <PostEditor userId={currentUser?.id} />
     </div>
   );
 }

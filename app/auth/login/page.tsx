@@ -1,7 +1,6 @@
 import React from 'react';
 import { AuthForm } from '@/components/AuthForm';
 import Link from 'next/link';
-import { typography } from '@/lib/styles';
 
 const LoginPage = () => {
   return (

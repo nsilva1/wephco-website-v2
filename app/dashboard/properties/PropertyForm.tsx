@@ -4,6 +4,7 @@ import { useState, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { createProperty, updateProperty } from "@/actions/property-management"
 import { IProperty } from "@/interfaces/propertyInterface"
+import { toast } from "sonner"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -19,6 +20,7 @@ import {
 import { ArrowLeft, Upload, ImageIcon, FileText } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
+import { uploadFile } from "@/lib/helperFunctions"
 
 interface PropertyFormProps {
   property?: IProperty
@@ -30,8 +32,8 @@ export default function PropertyForm({ property, mode }: PropertyFormProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const pdfInputRef = useRef<HTMLInputElement>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [imagePreview, setImagePreview] = useState<string | null>(property?.image || null)
-  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [existingImages, setExistingImages] = useState<string[]>(property?.images || [])
+  const [selectedFiles, setSelectedFiles] = useState<{file: File, preview: string}[]>([])
   const [selectedPdf, setSelectedPdf] = useState<File | null>(null)
   const [pdfFileName, setPdfFileName] = useState<string | null>(property?.pdfUrl ? 'Existing brochure' : null)
 
@@ -52,13 +54,22 @@ export default function PropertyForm({ property, mode }: PropertyFormProps) {
   }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      setSelectedFile(file)
+    const files = Array.from(e.target.files || [])
+    files.forEach(file => {
       const reader = new FileReader()
-      reader.onloadend = () => setImagePreview(reader.result as string)
+      reader.onloadend = () => {
+        setSelectedFiles(prev => [...prev, { file, preview: reader.result as string }])
+      }
       reader.readAsDataURL(file)
-    }
+    })
+  }
+
+  const removeExistingImage = (index: number) => {
+    setExistingImages(prev => prev.filter((_, i) => i !== index))
+  }
+
+  const removeNewImage = (index: number) => {
+    setSelectedFiles(prev => prev.filter((_, i) => i !== index))
   }
 
   const handlePdfChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -73,6 +84,11 @@ export default function PropertyForm({ property, mode }: PropertyFormProps) {
     e.preventDefault()
     setIsSubmitting(true)
 
+    const imageUrls = await Promise.all(
+      selectedFiles.map(file => uploadFile(file.file, 'properties'))
+    );
+    const pdfUrl = selectedPdf ? await uploadFile(selectedPdf, 'properties/pdfs') : '';
+
     try {
       const formData = new FormData()
       formData.append('title', formState.title)
@@ -84,23 +100,19 @@ export default function PropertyForm({ property, mode }: PropertyFormProps) {
       formData.append('currency', formState.currency)
       formData.append('status', formState.status)
       formData.append('tag', formState.tag)
+      formData.append('imageUrls', JSON.stringify(imageUrls));
+      formData.append('pdfUrl', pdfUrl)
 
-      if (selectedFile) {
-        formData.append('image', selectedFile)
-      }
-
-      if (selectedPdf) {
-        formData.append('pdf', selectedPdf)
-      }
 
       if (mode === 'edit' && property?.id) {
-        formData.append('existingImage', property.image || '')
+        formData.append('existingImages', JSON.stringify(existingImages))
         formData.append('existingPdf', property.pdfUrl || '')
         await updateProperty(property.id, formData)
       } else {
         await createProperty(formData)
       }
 
+      toast.success(`Property ${mode === 'create' ? 'created' : 'updated'} successfully`);
       router.push('/dashboard/properties')
       router.refresh()
     } catch (error) {
@@ -265,34 +277,52 @@ export default function PropertyForm({ property, mode }: PropertyFormProps) {
                 className="border-2 border-dashed rounded-lg p-6 text-center cursor-pointer hover:border-[#cfb53b] transition-colors"
                 onClick={() => fileInputRef.current?.click()}
               >
-                {imagePreview ? (
-                  <div className="relative w-full h-48">
-                    <Image src={imagePreview} alt="Preview" fill className="object-cover rounded-md" sizes="400px" />
-                  </div>
-                ) : (
-                  <div className="flex flex-col items-center gap-2 text-muted-foreground">
-                    <ImageIcon className="h-10 w-10" />
-                    <p className="text-sm">Click to upload an image</p>
-                    <p className="text-xs">PNG, JPG up to 10MB</p>
-                  </div>
-                )}
+                <div className="flex flex-col items-center gap-2 text-muted-foreground">
+                  <ImageIcon className="h-10 w-10" />
+                  <p className="text-sm">Click to upload images</p>
+                  <p className="text-xs">PNG, JPG up to 10MB</p>
+                </div>
                 <input
                   ref={fileInputRef}
                   type="file"
                   accept="image/*"
+                  multiple
                   className="hidden"
                   onChange={handleFileChange}
                 />
               </div>
-              {imagePreview && (
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => { setImagePreview(null); setSelectedFile(null) }}
-                >
-                  Remove Image
-                </Button>
+              
+              {(existingImages.length > 0 || selectedFiles.length > 0) && (
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+                  {existingImages.map((url, idx) => (
+                    <div key={`existing-${idx}`} className="relative w-full h-32 group">
+                      <Image src={url} alt="Existing Preview" fill className="object-cover rounded-md" sizes="200px" />
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        size="sm"
+                        className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                        onClick={() => removeExistingImage(idx)}
+                      >
+                        Remove
+                      </Button>
+                    </div>
+                  ))}
+                  {selectedFiles.map((sf, idx) => (
+                    <div key={`new-${idx}`} className="relative w-full h-32 group">
+                      <Image src={sf.preview} alt="New Preview" fill className="object-cover rounded-md" sizes="200px" />
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        size="sm"
+                        className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                        onClick={() => removeNewImage(idx)}
+                      >
+                        Remove
+                      </Button>
+                    </div>
+                  ))}
+                </div>
               )}
             </CardContent>
           </Card>

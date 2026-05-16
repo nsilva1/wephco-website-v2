@@ -9,23 +9,23 @@ import { Tooltip } from '@/components/Tooltip';
 import { 
   ChevronLeft, 
   ChevronRight, 
-  Search, 
   Settings,
-  Building
 } from 'lucide-react';
 import { NotificationBell } from './NotificationBell';
 import { SignOutButton } from '@/components/SignOutButton';
-import { useAuth } from '@/context/AuthContext';
+// import { useAuth } from '@/context/AuthContext';
 import { getInitials } from '@/lib/helperFunctions';
 import logo from '@/images/logo.png';
 import { PrivateRoute } from '@/components/PrivateRoute';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
+import { useSessionUser } from '@/hooks/useSessionUser';
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
-  const { currentUser, role } = useAuth();
+
   const pathname = usePathname();
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const router = useRouter();
+  // const router = useRouter();
+  const { user, loading } = useSessionUser();
 
   const toggleSidebar = () => setIsCollapsed(!isCollapsed);
 
@@ -114,14 +114,14 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
              
              <div className="flex items-center gap-3 cursor-pointer">
                <div className="text-right hidden md:block">
-                 <p className="text-sm font-semibold text-slate-800">{currentUser?.displayName}</p>
-                 <p className="text-[10px] text-[#cfb53b] font-bold uppercase">{role}</p>
+                 <p className="text-sm font-semibold text-slate-800">{`${user?.firstName ?? ''} ${user?.lastName ?? ''}`}</p>
+                 <p className="text-[10px] text-[#cfb53b] font-bold uppercase">{user?.role ?? 'Admin'}</p>
                </div>
                <div className="h-10 w-10 rounded-full bg-slate-200 overflow-hidden shadow-sm flex items-center justify-center text-slate-600 font-semibold border-2 border-white">
-                 {currentUser?.photoURL ? (
-                   <Image src={currentUser.photoURL} alt="User avatar" width={40} height={40} className="object-cover" />
+                 {user?.photoURL ? (
+                   <Image src={user.photoURL} alt="User avatar" width={40} height={40} className="object-cover" />
                  ) : (
-                   getInitials(currentUser?.displayName!)
+                   getInitials(`${user?.firstName ?? ''} ${user?.lastName ?? ''}`)
                  )}
                </div>
              </div>

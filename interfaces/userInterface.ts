@@ -7,23 +7,18 @@ export enum Role {
     SUPERADMIN = "SUPERADMIN",
 }
 
-export interface IUser {
+export interface IAdminUser {
   id?: string;
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
-  password: string;
+  emailVerified?: boolean;
+  photoURL?: string | null;
   role: Role;
-  createdAt?: Date;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
 }
 
-export interface INewUser {
-  id?: string;
-	firstName: string;
-	lastName: string;
-	email: string;
-	password?: string;
-	role: 'Agent' | 'Investor';
-}
 
 export interface IUserInfo {
 	id: string;

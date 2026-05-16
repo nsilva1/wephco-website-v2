@@ -28,37 +28,43 @@ export async function createProperty(formData: FormData) {
   const currency = formData.get('currency') as string || 'NGN';
   const status = formData.get('status') as string || 'available';
   const tag = formData.get('tag') as string || 'pending';
-  const imageFile = formData.get('image') as File | null;
-  const pdfFile = formData.get('pdf') as File | null;
+  const category = formData.get('category') as string || '';
+  const verified = formData.get('verified') === 'true';
+  const interestsRaw = formData.get('interests');
+  const interests = interestsRaw ? (typeof interestsRaw === 'string' && interestsRaw.startsWith('[') ? JSON.parse(interestsRaw) : formData.getAll('interests') as string[]) : [];
+  const imageUrls: string[] = JSON.parse(formData.get('imageUrls') as string || '[]');
+  const pdfUrl = formData.get('pdfUrl') as string || '';
 
-  let imageUrl = '';
-  let pdfUrl = '';
+  // let imageUrls: string[] = [];
+  // let pdfUrl = '';
 
-  const bucket = storage.bucket();
+  // const bucket = storage.bucket(process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET);
 
-  if (imageFile && imageFile.size > 0) {
-    const fileName = `properties/${Date.now()}_${imageFile.name}`;
-    const file = bucket.file(fileName);
-    const buffer = Buffer.from(await imageFile.arrayBuffer());
-    await file.save(buffer, {
-      contentType: imageFile.type,
-      metadata: { firebaseStorageDownloadTokens: Date.now().toString() },
-    });
-    await file.makePublic();
-    imageUrl = `https://storage.googleapis.com/${bucket.name}/${fileName}`;
-  }
+  // for (const imageFile of imageFiles) {
+  //   if (imageFile && imageFile.size > 0) {
+  //     const fileName = `properties/${Date.now()}_${imageFile.name}`;
+  //     const file = bucket.file(fileName);
+  //     const buffer = Buffer.from(await imageFile.arrayBuffer());
+  //     await file.save(buffer, {
+  //       contentType: imageFile.type,
+  //       metadata: { firebaseStorageDownloadTokens: Date.now().toString() },
+  //     });
+  //     await file.makePublic();
+  //     imageUrls.push(`https://storage.googleapis.com/${bucket.name}/${fileName}`);
+  //   }
+  // }
 
-  if (pdfFile && pdfFile.size > 0) {
-    const fileName = `properties/pdfs/${Date.now()}_${pdfFile.name}`;
-    const file = bucket.file(fileName);
-    const buffer = Buffer.from(await pdfFile.arrayBuffer());
-    await file.save(buffer, {
-      contentType: pdfFile.type,
-      metadata: { firebaseStorageDownloadTokens: Date.now().toString() },
-    });
-    await file.makePublic();
-    pdfUrl = `https://storage.googleapis.com/${bucket.name}/${fileName}`;
-  }
+  // if (pdfFile && pdfFile.size > 0) {
+  //   const fileName = `properties/pdfs/${Date.now()}_${pdfFile.name}`;
+  //   const file = bucket.file(fileName);
+  //   const buffer = Buffer.from(await pdfFile.arrayBuffer());
+  //   await file.save(buffer, {
+  //     contentType: pdfFile.type,
+  //     metadata: { firebaseStorageDownloadTokens: Date.now().toString() },
+  //   });
+  //   await file.makePublic();
+  //   pdfUrl = `https://storage.googleapis.com/${bucket.name}/${fileName}`;
+  // }
 
   const propertyData = {
     title,
@@ -70,8 +76,11 @@ export async function createProperty(formData: FormData) {
     currency,
     status,
     tag,
+    category,
+    verified,
+    interests,
     pdfUrl,
-    image: imageUrl,
+    images: imageUrls,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   };
@@ -90,26 +99,32 @@ export async function updateProperty(id: string, formData: FormData) {
   const currency = formData.get('currency') as string || 'NGN';
   const status = formData.get('status') as string || 'available';
   const tag = formData.get('tag') as string || 'pending';
-  const imageFile = formData.get('image') as File | null;
+  const category = formData.get('category') as string || '';
+  const verified = formData.get('verified') === 'true';
+  const interestsRaw = formData.get('interests');
+  const interests = interestsRaw ? (typeof interestsRaw === 'string' && interestsRaw.startsWith('[') ? JSON.parse(interestsRaw) : formData.getAll('interests') as string[]) : [];
+  const imageFiles = formData.getAll('images') as File[];
   const pdfFile = formData.get('pdf') as File | null;
-  const existingImage = formData.get('existingImage') as string || '';
+  const existingImagesRaw = formData.get('existingImages') as string;
   const existingPdf = formData.get('existingPdf') as string || '';
 
-  let imageUrl = existingImage;
+  let imageUrls: string[] = existingImagesRaw ? JSON.parse(existingImagesRaw) : [];
   let pdfUrl = existingPdf;
 
-  const bucket = storage.bucket();
+  const bucket = storage.bucket(process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET);
 
-  if (imageFile && imageFile.size > 0) {
-    const fileName = `properties/${Date.now()}_${imageFile.name}`;
-    const file = bucket.file(fileName);
-    const buffer = Buffer.from(await imageFile.arrayBuffer());
-    await file.save(buffer, {
-      contentType: imageFile.type,
-      metadata: { firebaseStorageDownloadTokens: Date.now().toString() },
-    });
-    await file.makePublic();
-    imageUrl = `https://storage.googleapis.com/${bucket.name}/${fileName}`;
+  for (const imageFile of imageFiles) {
+    if (imageFile && imageFile.size > 0) {
+      const fileName = `properties/${Date.now()}_${imageFile.name}`;
+      const file = bucket.file(fileName);
+      const buffer = Buffer.from(await imageFile.arrayBuffer());
+      await file.save(buffer, {
+        contentType: imageFile.type,
+        metadata: { firebaseStorageDownloadTokens: Date.now().toString() },
+      });
+      await file.makePublic();
+      imageUrls.push(`https://storage.googleapis.com/${bucket.name}/${fileName}`);
+    }
   }
 
   if (pdfFile && pdfFile.size > 0) {
@@ -134,8 +149,11 @@ export async function updateProperty(id: string, formData: FormData) {
     currency,
     status,
     tag,
+    category,
+    verified,
+    interests,
     pdfUrl,
-    image: imageUrl,
+    images: imageUrls,
     updatedAt: new Date().toISOString(),
   };
 
@@ -147,15 +165,17 @@ export async function deleteProperty(id: string) {
   const doc = await db.collection('properties').doc(id).get();
   if (doc.exists) {
     const data = doc.data();
-    const bucket = storage.bucket();
+    const bucket = storage.bucket(process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET);
 
     // Delete image from storage
-    if (data?.image) {
-      try {
-        const urlParts = data.image.split(`${bucket.name}/`);
-        if (urlParts[1]) await bucket.file(urlParts[1]).delete();
-      } catch (e) {
-        console.error('Failed to delete property image from storage:', e);
+    if (data?.images && Array.isArray(data.images)) {
+      for (const imageUrl of data.images) {
+        try {
+          const urlParts = imageUrl.split(`${bucket.name}/`);
+          if (urlParts[1]) await bucket.file(urlParts[1]).delete();
+        } catch (e) {
+          console.error('Failed to delete property image from storage:', e);
+        }
       }
     }
 

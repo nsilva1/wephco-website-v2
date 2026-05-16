@@ -15,7 +15,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { useAuth } from "@/context/AuthContext"
+import { useSessionUser } from "@/hooks/useSessionUser"
 import { CheckCircle2, RotateCcw } from "lucide-react"
 
 interface TicketControlsProps {
@@ -25,7 +25,7 @@ interface TicketControlsProps {
 
 export default function TicketControls({ ticketId, status }: TicketControlsProps) {
   const router = useRouter()
-  const { currentUser: user } = useAuth()
+  const { user } = useSessionUser()
   const [isLoading, setIsLoading] = useState(false)
   const [responseNotes, setResponseNotes] = useState("")
   const [isResolveModalOpen, setIsResolveModalOpen] = useState(false)
@@ -38,7 +38,7 @@ export default function TicketControls({ ticketId, status }: TicketControlsProps
     }
     setIsLoading(true)
     try {
-      await resolveTicket(ticketId, user.uid, responseNotes)
+      await resolveTicket(ticketId, user.id!, responseNotes)
       setIsResolveModalOpen(false)
       setResponseNotes("")
       router.refresh()

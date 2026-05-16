@@ -4,6 +4,14 @@ import { put } from "@vercel/blob";
 import { nanoid } from "nanoid";
 import { upload } from "@vercel/blob/client";
 import { differenceInMonths } from "date-fns";
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { storage } from '@/firebase/firebaseClient';
+
+export async function uploadFile(file: File, path: string): Promise<string> {
+  const fileRef = ref(storage, `${path}/${Date.now()}_${file.name}`);
+  await uploadBytes(fileRef, file);
+  return await getDownloadURL(fileRef);
+}
 
 
 export const formatCurrency = (number: number, currencyCode = 'USD', locale = 'en-US'): string => {

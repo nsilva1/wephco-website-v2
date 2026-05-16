@@ -5,6 +5,7 @@ import { getConsultations } from '@/actions/consultation';
 import { Loader } from '@/components/Loader';
 import { IConsultation } from '@/interfaces/userInterface';
 import { useAuth } from '@/context/AuthContext';
+import { useSessionUser } from '@/hooks/useSessionUser';
 import { Role } from '@/interfaces/userInterface';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
@@ -14,7 +15,8 @@ import { Contact, NotebookPen } from 'lucide-react';
 
 const ConsultationsPage = () => {
   const router = useRouter();
-  const { currentUser, role, loading: authLoading, logout } = useAuth();
+  const { role, loading: authLoading, logout } = useAuth();
+  const { user: currentUser } = useSessionUser();
 
   const [consultations, setConsultations] = useState<IConsultation[]>([]);
   const [loading, setLoading] = useState(false);

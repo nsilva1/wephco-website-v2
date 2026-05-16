@@ -7,7 +7,6 @@ const RegisterPage = () => {
     <div className="flex flex-col">
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">Create an Account</h1>
-        <p className="text-slate-500 dark:text-slate-400">Join us to manage your real estate business</p>
       </div>
 
       <AuthForm isLogin={false} />

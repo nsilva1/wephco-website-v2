@@ -6,6 +6,7 @@ import { Loader } from '@/components/Loader';
 import { IAffiliate } from '@/interfaces/userInterface';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
+import { useSessionUser } from '@/hooks/useSessionUser';
 import { Role } from '@/interfaces/userInterface';
 import { toast } from 'react-toastify';
 import { Trash2 } from 'lucide-react';
@@ -14,7 +15,8 @@ import { Tooltip } from '@/components/Tooltip';
 const DashboardPropertiesPage = () => {
   const router = useRouter();
 
-  const { currentUser, role, loading: authLoading, logout } = useAuth();
+  const { role, loading: authLoading, logout } = useAuth();
+  const { user: currentUser } = useSessionUser();
 
   const [affiliates, setAffiliates] = useState<IAffiliate[]>([]);
   const [loading, setLoading] = useState(false);

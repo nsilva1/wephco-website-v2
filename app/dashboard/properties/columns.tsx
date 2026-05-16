@@ -14,7 +14,8 @@ export const columns: ColumnDef<IProperty>[] = [
     id: "image",
     header: "",
     cell: ({ row }) => {
-      const image = row.original.image;
+      const images = row.original.images;
+      const image = images && images.length > 0 ? images[0] : null;
       return image ? (
         <div className="w-16 h-12 rounded overflow-hidden relative bg-muted">
           <Image src={image} alt={row.original.title} fill className="object-cover" sizes="64px" />

@@ -15,7 +15,7 @@ export default function AuthLayout({
         <div className="hidden md:flex flex-col justify-center items-center bg-slate-900 text-white p-10 relative overflow-hidden">
           {/* Background image for premium feel */}
           <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-40"></div>
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-slate-900/90"></div>
+          <div className="absolute inset-0 bg-linear-to-b from-transparent to-slate-900/90"></div>
           
           <div className="relative z-10 flex flex-col items-center max-w-md text-center">
             <div className="bg-white/10 p-6 rounded-3xl backdrop-blur-sm mb-8 border border-white/20 shadow-2xl">

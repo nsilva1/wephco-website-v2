@@ -1,8 +1,6 @@
 import type { Metadata } from 'next';
 import '../globals.css';
-import { ReloadPrompt } from '@/components/InstallPrompt';
 import { AuthProvider } from '@/context/AuthContext';
-import { PWAProvider } from '@/context/PwaContext';
 
 export const metadata: Metadata = {
   title: "Wephco Brokerage App - Your Gateway to Global Real Estate",
@@ -18,10 +16,7 @@ export default function BrokerageLayout({
     <html lang="en">
       <body className={`antialiased`}>
         <AuthProvider>
-          <PWAProvider>
-            {children}
-            <ReloadPrompt />
-          </PWAProvider>
+          {children}
         </AuthProvider>
       </body>
     </html>
