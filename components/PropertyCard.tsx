@@ -1,12 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Image from 'next/image';
-import { IProperty, IPropertyEnquiry } from '@/interfaces/propertyInterface';
-import { createPropertyEnquiryRequest } from '@/actions/propertyEnquiry';
-import { Loader } from './Loader';
-import { toast } from 'react-toastify';
-import { ArrowLeft } from 'lucide-react';
+import { IProperty } from '@/interfaces/propertyInterface';
+import { formatCurrency as format } from '@/lib/utils';
+import Link from 'next/link';
 
 export interface PropertyCardProps extends IProperty {
   showModal?: () => void;
@@ -14,144 +12,55 @@ export interface PropertyCardProps extends IProperty {
 }
 
 const PropertyCard = ({ showModal, openModal, ...props }: PropertyCardProps) => {
-  const [flipped, setFlipped] = useState(false);
-  const [formData, setFormData] = useState({ name: '', email: '', phone: '' });
-  const [loading, setLoading] = useState(false)
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
-
-  const handleGetPdf = async () => {
-
-    if (formData.email === '' || formData.name === '' || formData.phone === '') {
-      toast.warning('Please fill all fields of the form')
-      return;
-    }
-
-    const propertyData: IPropertyEnquiry = {
-      name: formData.name,
-      email: formData.email,
-      phone: formData.phone,
-      propertyId: props.id!,
-    }
-
-    try {
-      setLoading(true)
-      await createPropertyEnquiryRequest(propertyData)
-
-      // Send PDF to email
-      await fetch('/api/sendpdf', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: formData.email,
-          pdfUrl: props.pdfUrl,
-          propertyName: props.name,
-        }),
-      });
-
-      toast.success('Access granted! We also sent a copy to your email.');
-
-      setFormData({ name: '', email: '', phone: '' });
-      setFlipped(false);
-      window.open(props.pdfUrl, '_blank');
-    } catch (error) {
-      toast.error('Failed loading PDF. Please try again.')
-    } finally {
-      setLoading(false)
-    }
-  };
 
   return (
     <div
-      className='w-full max-w-xs sm:max-w-sm md:w-96 h-[400px]'
+      className='w-full max-w-xs sm:max-w-sm md:w-96 h-[460px] font-display z-10'
     >
       <div
-        className={`relative w-full h-full transition-transform duration-500 [transform-style:preserve-3d] ${flipped ? '[transform:rotateY(180deg)]' : ''
-          }`}
+        className='relative w-full h-full transition-transform duration-500 [transform-3d]'
       >
         {/* --- FRONT SIDE --- */}
-        <div className='absolute inset-0 [backface-visibility:hidden] bg-white dark:bg-gray-700 font-outfit rounded-xl shadow-lg overflow-hidden flex flex-col gap-2'>
-          <div className='relative w-full h-52 rounded-t-xl cursor-pointer'>
-            <Image
-              src={props.images[0]}
-              alt='Property'
-              fill
-              style={{ objectFit: 'cover' }}
-              className={`rounded-t-xl`}
-            />
+        <div className='absolute inset-0 backface-hidden bg-secondary/20 rounded-xl border border-primary/10 hover:border-primary/40 transition-all duration-500 overflow-hidden flex flex-col justify-between shadow-xl shadow-black/20 group'>
+          <div className='relative w-full h-56 cursor-pointer overflow-hidden'>
+            {props.images && props.images[0] ? (
+              <Image
+                src={props.images[0]}
+                alt='Property'
+                fill
+                style={{ objectFit: 'cover' }}
+                className='group-hover:scale-110 transition-transform duration-700'
+              />
+            ) : (
+              <div className="w-full h-full bg-secondary/40 flex items-center justify-center text-slate-500">No Image</div>
+            )}
+            <div className='absolute top-4 left-4 bg-background-dark/80 backdrop-blur-md px-4 py-1.5 rounded text-[10px] font-bold text-primary tracking-widest uppercase border border-primary/20 z-20'>
+              {props.status}
+            </div>
+            <div className='absolute inset-0 bg-linear-to-t from-background-dark via-transparent to-transparent opacity-80 z-10'></div>
+            <div className='absolute bottom-4 left-6 right-6 z-20'>
+              <p className='text-primary text-2xl font-black mb-0.5'>{format(props.price, props.currency)}</p>
+              <h4 className='text-white text-lg font-light tracking-tight'>{props.title}</h4>
+            </div>
           </div>
-          <div className='p-4 flex flex-col gap-2'>
-            <p className='text-base font-medium font-sans'>{props.name}</p>
-            <p className='text-sm font-semibold font-outfit'>{props.price}</p>
-            <p className='text-sm font-light line-clamp-2'>{props.description}</p>
-            <p className='font-mono font-bold'>
-              {props.city}, {props.country}
-            </p>
-            <button
-              onClick={() => setFlipped(true)}
-              className='bg-wephco text-white px-4 py-2 rounded-lg flex items-center justify-center hover:bg-black transition-colors duration-300 cursor-pointer'
-            >
-              Get PDF
-            </button>
-          </div>
-        </div>
+          <div className='p-6 flex flex-col gap-4 flex-1 justify-between'>
+            <p className='text-slate-300 text-sm font-light line-clamp-2 leading-relaxed'>{props.description}</p>
+            
+            <div className="flex justify-between items-center text-slate-400 text-xs font-semibold">
+              <span className='flex items-center gap-1.5 font-mono uppercase tracking-wider text-[10px]'>
+                <span className="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
+                {props.location}
+              </span>
+            </div>
 
-        {/* --- BACK SIDE --- */}
-        <div className='absolute inset-0 [backface-visibility:hidden] [transform:rotateY(180deg)] bg-white dark:bg-gray-700 font-outfit rounded-xl shadow-lg overflow-hidden flex flex-col gap-4 justify-center p-6'>
-          <button className='flex cursor-pointer' onClick={() => setFlipped(false)}>
-            <ArrowLeft />
-            Back
-          </button>
-          <p>Fill the form to view the PDF</p>
-          <form onSubmit={(e) => {
-            e.preventDefault();
-            handleGetPdf();
-          }}>
-            <fieldset>
-              <input
-                type='text'
-                name='name'
-                value={formData.name}
-                onChange={handleChange}
-                placeholder='Your Name'
-                className='mb-2 p-2 border rounded w-full'
-                required
-                disabled={loading}
-              />
-              <input
-                type='email'
-                name='email'
-                value={formData.email}
-                onChange={handleChange}
-                placeholder='Your Email'
-                className='mb-2 p-2 border rounded w-full'
-                required
-                disabled={loading}
-              />
-              <input
-                type='tel'
-                name='phone'
-                value={formData.phone}
-                onChange={handleChange}
-                placeholder='Your Phone Number'
-                className='mb-4 p-2 border rounded w-full'
-                required
-                disabled={loading}
-              />
-              <button
-                type='submit'
-                className='bg-wephco text-white px-4 py-2 rounded-lg flex items-center justify-center hover:bg-black transition-colors duration-300 cursor-pointer w-full'
-              >
-                {
-                  loading ? <Loader /> : 'View PDF'
-                }
-              </button>
-            </fieldset>
-          </form>
+            <Link
+              href={`/properties/${props.id}`}
+              className='w-full py-3 border border-primary/30 text-primary hover:bg-primary hover:text-background-dark font-bold text-xs tracking-widest uppercase rounded-lg transition-all duration-300 cursor-pointer flex items-center justify-center'
+            >
+              View Property
+            </Link>
+          </div>
         </div>
       </div>
     </div>
@@ -159,3 +68,4 @@ const PropertyCard = ({ showModal, openModal, ...props }: PropertyCardProps) => 
 };
 
 export { PropertyCard };
+

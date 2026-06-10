@@ -6,22 +6,16 @@ import aldar from '@/images/aldar.png'
 import damac from '@/images/damac.svg'
 import sober from '@/images/sober.png'
 import aarano from '@/images/aarano.png'
-import { MdDashboard, MdSettings, MdHandshake, MdChatBubble, MdAttachMoney, MdVerifiedUser, MdNotifications, MdAnalytics } from "react-icons/md";
-import { BiBuildings, BiHeadphone, BiSupport } from "react-icons/bi";
-import { BsPeopleFill, BsPersonFillGear } from "react-icons/bs";
+import { MdDashboard, MdChatBubble, MdAttachMoney, MdVerifiedUser, MdNotifications, MdAnalytics } from "react-icons/md";
+import { BiBuildings, BiSupport } from "react-icons/bi";
+import { BsPeopleFill } from "react-icons/bs";
 import { Role } from "@/interfaces/userInterface";
-import acquisitionConsultation from '@/images/acquisition-consultation.jpg'
-import internatinalPropertyBrokerage from '@/images/international-property-brokerage.jpg'
-import dealPreparation from '@/images/deal-preparation-coaching.jpg'
-import investorCircle from '@/images/investor-circle-access.jpg'
-import legacyWealth from '@/images/legacy-wealth-structuring.jpg'
-import privateRealEstate from '@/images/private-real-estate-advisory.jpg'
 
 
 export const navbarMenu = [
     {
         label: 'Buy',
-        path: '/buy'
+        path: '/properties'
     },
     {
         label: 'Sell',
@@ -270,3 +264,16 @@ export const consultationServices = [
     { label: 'Investor Circle Access' },
     { label: 'Legacy & Wealth Structuring' },
 ]
+
+export const FIRESTORE_COLLECTIONS = {
+    PROPERTIES: 'properties',
+    CONSULTATIONS: 'consultations',
+    USERS: 'users',
+    LEADS: 'leads',
+    COMMISSIONS: 'commissions',
+    WITHDRAWALS: 'withdrawals',
+    NOTIFICATIONS: 'notifications',
+    ANALYTICS: 'analytics',
+    KYC: 'kyc',
+    INQUIRY: 'inquiry'
+}

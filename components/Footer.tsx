@@ -6,7 +6,7 @@ import { socialLinks } from '@/lib/constants'
 
 const Footer = () => {
     return (
-        <footer className='px-8 md:py-16 bg-[#131316] font-outfit'>
+        <footer className='px-8 md:py-16 bg-background-dark/80 font-outfit'>
             <div className='grid grid-cols-1 md:grid-cols-4 py-8 gap-5 justify-between'>
                 <div className='col-span-1 flex justify-center items-center md:justify-start'>
                     <Link href='/'><Image src={logo.src} alt='logo' width={200} height={200} className='' /></Link>

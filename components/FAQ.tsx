@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { faqData } from "@/lib/constants"
-
+import { Plus } from 'lucide-react'
 
 const FAQ = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
@@ -12,39 +12,49 @@ const FAQ = () => {
   }
 
   return (
-    <div className="py-20 dark:bg-black font-outfit">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-      <div className="w-full space-y-4">
-        {faqData.map((item, index) => (
-          <div key={index} className="border-b-1 border-gray-700 dark:border-gray-300">
-            <button
+    <div className="py-24 bg-secondary/5 border-t border-primary/10 font-display z-10">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-16">
+          <span className="text-primary font-bold tracking-[0.3em] uppercase text-xs mb-3 block">
+            Knowledge Base
+          </span>
+          <h3 className="text-4xl font-light text-white">
+            Common <span className="font-extrabold text-primary">Inquiries</span>
+          </h3>
+        </div>
+
+        <div className="max-w-3xl mx-auto space-y-4">
+          {faqData.map((item, index) => (
+            <div 
+              key={index} 
+              className="border border-primary/10 bg-background-dark/50 rounded-lg p-6 hover:border-primary/30 transition-all duration-300 cursor-pointer group"
               onClick={() => toggleItem(index)}
-              className="w-full px-6 py-4 text-left flex justify-between items-center transition-colors cursor-pointer"
-              aria-expanded={openIndex === index}
             >
-              <span className="text-lg font-semibold text-gray-900 dark:text-white pr-4">{item.question}</span>
-              <svg
-                className={`w-5 h-5 text-gray-500 transition-transform duration-200 flex-shrink-0 ${
-                  openIndex === index ? "rotate-180" : ""
-                }`}
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+              <button
+                className="w-full text-left flex justify-between items-center cursor-pointer outline-none"
+                aria-expanded={openIndex === index}
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-            <div
-              className={`overflow-hidden transition-all duration-200 ease-in-out ${
-                openIndex === index ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-              }`}
-            >
-              <div className="px-6 pb-4 pt-2 text-gray-600 leading-relaxed">{item.answer}</div>
+                <span className="text-base font-medium text-white pr-4">{item.question}</span>
+                <span className={`material-symbols-outlined text-primary text-xl transition-transform duration-300 shrink-0 ${
+                  openIndex === index ? "rotate-45" : "group-hover:rotate-45"
+                }`}>
+                  <Plus size={24} />
+                </span>
+              </button>
+              
+              <div
+                className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                  openIndex === index ? "max-h-96 opacity-100 mt-4" : "max-h-0 opacity-0"
+                }`}
+              >
+                <p className="text-slate-400 text-sm font-light leading-relaxed border-t border-primary/5 pt-4">
+                  {item.answer}
+                </p>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
     </div>
   )
 }

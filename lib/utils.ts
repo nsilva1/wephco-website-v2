@@ -5,13 +5,14 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function formatCurrency(amount: number, currency: string = 'NGN'): string {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
+export function formatCurrency(amount: number, currency: string): string {
+  const currencySymbol = currency === 'NGN' ? '₦' : '$';
+  return `${currencySymbol}${new Intl.NumberFormat('en-US', {
+    // style: 'currency',
     currency: currency === 'NGN' ? 'NGN' : 'USD',
     minimumFractionDigits: 0,
     maximumFractionDigits: 2,
-  }).format(amount);
+  }).format(amount)}`;
 }
 
 // lib/utils/serialize.ts

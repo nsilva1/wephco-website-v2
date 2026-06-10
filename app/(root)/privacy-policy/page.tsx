@@ -1,5 +1,5 @@
 import React from 'react';
-import { typography, layout } from '../../lib/styles';
+import { typography, layout } from '@/lib/styles';
 
 const WephcoPrivacyPolicy = () => {
   return (

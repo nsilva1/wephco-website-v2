@@ -102,6 +102,7 @@ export default function PropertyForm({ property, mode }: PropertyFormProps) {
       formData.append('tag', formState.tag)
       formData.append('imageUrls', JSON.stringify(imageUrls));
       formData.append('pdfUrl', pdfUrl)
+      formData.append('verified', 'true')
 
 
       if (mode === 'edit' && property?.id) {
@@ -214,7 +215,6 @@ export default function PropertyForm({ property, mode }: PropertyFormProps) {
                       <SelectContent>
                         <SelectItem value="NGN">NGN (₦)</SelectItem>
                         <SelectItem value="USD">USD ($)</SelectItem>
-                        <SelectItem value="GBP">GBP (£)</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -245,8 +245,8 @@ export default function PropertyForm({ property, mode }: PropertyFormProps) {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="pending">Pending</SelectItem>
-                      <SelectItem value="verified">Verified</SelectItem>
+                      <SelectItem value="local">Local</SelectItem>
+                      <SelectItem value="international">International</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -257,9 +257,9 @@ export default function PropertyForm({ property, mode }: PropertyFormProps) {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="available">Available</SelectItem>
-                      <SelectItem value="under offer">Under Offer</SelectItem>
-                      <SelectItem value="sold">Sold</SelectItem>
+                      <SelectItem value="Available">Available</SelectItem>
+                      <SelectItem value="Under Offer">Under Offer</SelectItem>
+                      <SelectItem value="Sold">Sold</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

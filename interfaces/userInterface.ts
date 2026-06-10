@@ -35,6 +35,11 @@ export interface IUserInfo {
   status?: 'Active' | 'Suspended';
   kycStatus?: 'pending' | 'verified' | 'flagged';
   kycFlagReason?: string;
+  state?: string;
+  city?: string;
+  country?: string;
+  address?: string;
+  phone: string;
 }
 
 export interface IBankInfo {
@@ -76,7 +81,6 @@ export interface IContactUs {
     email: string;
     phoneNumber: string;
     status: boolean;
-    message: string;
     createdAt?: Date;
 }
 

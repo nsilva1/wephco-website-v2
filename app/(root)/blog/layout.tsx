@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import '../globals.css';
+import '../../globals.css';
 import { Metadata } from 'next';
 import { BlogSidebar } from '@/components/blog/blog-sidebar';
 import { BlogPostSkeleton } from '@/components/blog/blog-post-skeleton';

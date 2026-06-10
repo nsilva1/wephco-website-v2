@@ -2,8 +2,6 @@
 
 import { db } from '@/firebase/firebaseConfig';
 import { ILead } from '@/interfaces/leadInterface';
-import { IUserInfo } from '@/interfaces/userInterface';
-import { IProperty } from '@/interfaces/propertyInterface';
 import { serializeDoc } from '@/lib/utils';
 
 export interface ILeadWithRelations extends Omit<ILead, 'createdAt' | 'updatedAt'> {

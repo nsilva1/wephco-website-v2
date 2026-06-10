@@ -22,7 +22,7 @@ export const formatCurrency = (number: number, currencyCode = 'USD', locale = 'e
       }).format(number);
     } catch (error) {
       console.error('Error formatting currency:', error);
-      return number.toLocaleString(locale, { maximumFractionDigits: 2 }); // Fallback to basic number formatting
+      return number.toLocaleString(locale, { maximumFractionDigits: 0 }); // Fallback to basic number formatting
     }
 }
 
