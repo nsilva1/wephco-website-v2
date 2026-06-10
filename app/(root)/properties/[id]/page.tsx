@@ -14,12 +14,8 @@ import {
   BiArea, 
   BiCar, 
   BiMap,  
-  BiCalendar, 
-  BiEnvelope,
   BiCheckCircle,
-  BiShareAlt,
-  BiGlobe,
-  BiRightArrowAlt
+  BiShareAlt
 } from 'react-icons/bi';
 
 export default function PropertyDetailsPage() {
