@@ -9,7 +9,7 @@ import KycControls from "./KycControls"
 
 export const revalidate = 0;
 
-export default async function KycDetailPage({ params }: { params: { id: string } }) {
+export default async function KycDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const data = await getUserById(id)
 

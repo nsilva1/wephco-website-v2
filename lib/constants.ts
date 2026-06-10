@@ -275,5 +275,6 @@ export const FIRESTORE_COLLECTIONS = {
     NOTIFICATIONS: 'notifications',
     ANALYTICS: 'analytics',
     KYC: 'kyc',
-    INQUIRY: 'inquiry'
+    INQUIRY: 'inquiry',
+    JOB_APPLICATIONS: 'job_applications',
 }

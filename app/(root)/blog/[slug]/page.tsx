@@ -1,121 +1,120 @@
 import { format } from 'date-fns';
-import { Clock, Eye, Calendar, User, ArrowLeft } from 'lucide-react';
+import { BiTimeFive, BiShow, BiCalendar, BiUser, BiArrowBack } from 'react-icons/bi';
 import Link from 'next/link';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { fetchPost } from '@/actions/blog';
+import Image from 'next/image';
 
 export default async function BlogPostPage({ params }: any) {
-  const post = await fetchPost(params.slug);
+  const { slug } = await params;
+  const post = await fetchPost(slug);
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-4">
-          <Link href="/blog">
-            <Button variant="ghost" size="sm" className="gap-2">
-              <ArrowLeft className="h-4 w-4" />
-              Back to Blog
-            </Button>
+    <div className="min-h-screen bg-background-dark text-slate-100 font-display pt-24 pb-20">
+      
+      {/* Header Back Button */}
+      <header className="border-b border-primary/10 bg-background-dark/50 backdrop-blur-sm sticky top-20 z-10">
+        <div className="container mx-auto px-6 py-4 max-w-4xl flex justify-between items-center">
+          <Link 
+            href="/blog"
+            className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary hover:text-white transition-colors"
+          >
+            <BiArrowBack className="text-lg" /> Back to Blog
           </Link>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8 max-w-4xl">
-        <article>
+      <main className="container mx-auto px-6 py-12 max-w-4xl">
+        <article className="space-y-8">
+          
           {/* Post Header */}
-          <header className="mb-8">
+          <header className="space-y-6">
             {post.category && (
-              <Badge
-                variant="secondary"
-                className="mb-4"
-                style={{
-                  backgroundColor: post.category.color + '20',
-                  color: 'black',
-                }}>
+              <span 
+                className="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded bg-[#022618]/30 border border-primary/10 text-primary w-fit inline-block"
+              >
                 {post.category.name}
-              </Badge>
+              </span>
             )}
 
-            <h1 className="text-4xl md:text-5xl font-bold text-balance mb-6 leading-tight">
+            <h1 className="text-4xl md:text-5xl font-light text-slate-100 leading-tight">
               {post.title}
             </h1>
 
             {post.excerpt && (
-              <p className="text-xl text-muted-foreground text-pretty mb-6 leading-relaxed">
+              <p className="text-lg text-slate-400 font-light leading-relaxed">
                 {post.excerpt}
               </p>
             )}
 
             {/* Post Meta */}
-            <div className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground">
-              <div className="flex items-center gap-2">
-                <User className="h-4 w-4" />
-                <span>{post.author?.name}</span>
-              </div>
+            <div className="flex flex-wrap items-center gap-6 text-xs text-slate-500 border-y border-primary/10 py-4">
+              <span className="flex items-center gap-2">
+                <BiUser className="text-primary text-base" />
+                <span>Wephco Executive Desk</span>
+              </span>
 
-              <div className="flex items-center gap-2">
-                <Calendar className="h-4 w-4" />
+              <span className="flex items-center gap-2 border-l border-primary/10 pl-6">
+                <BiCalendar className="text-primary text-base" />
                 <time>
-                  {format(new Date(post.publishedAt!), 'MMMM d, yyyy')}
+                  {post.publishedAt ? format(new Date(post.publishedAt), 'MMMM d, yyyy') : 'Draft'}
                 </time>
-              </div>
+              </span>
 
               {post.readTime && (
-                <div className="flex items-center gap-2">
-                  <Clock className="h-4 w-4" />
+                <span className="flex items-center gap-2 border-l border-primary/10 pl-6">
+                  <BiTimeFive className="text-primary text-base" />
                   <span>{post.readTime} min read</span>
-                </div>
+                </span>
               )}
 
-              <div className="flex items-center gap-2">
-                <Eye className="h-4 w-4" />
-                <span>{post.views} views</span>
-              </div>
+              <span className="flex items-center gap-2 border-l border-primary/10 pl-6">
+                <BiShow className="text-primary text-base" />
+                <span>{post.views || 0} views</span>
+              </span>
             </div>
           </header>
 
           {/* Cover Image */}
           {post.coverImage && (
-            <div className="mb-8 rounded-lg overflow-hidden">
-              <img
-                src={post.coverImage || '/placeholder.svg'}
+            <div className="relative aspect-video rounded-xl overflow-hidden border border-primary/10 shadow-2xl">
+              <Image
+                src={post.coverImage}
                 alt={post.title}
-                className="w-full h-64 md:h-96 object-cover"
+                fill
+                style={{ objectFit: 'cover' }}
+                priority
               />
             </div>
           )}
 
           {/* Post Content */}
-          <div className="prose prose-lg max-w-none">
+          <div className="prose prose-invert max-w-none text-slate-300 leading-loose text-base space-y-6 font-light">
             <div
               dangerouslySetInnerHTML={{
                 __html: post.content.replace(/\n/g, '<br />'),
               }}
-              className="leading-relaxed"
             />
           </div>
 
           {/* Tags */}
-          {post.tags.length > 0 && (
-            <div className="mt-8 pt-8 border-t">
-              <h3 className="text-sm font-medium text-muted-foreground mb-3">
+          {post.tags && post.tags.length > 0 && (
+            <div className="mt-12 pt-8 border-t border-primary/10">
+              <h3 className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-3">
                 Tags
               </h3>
               <div className="flex flex-wrap gap-2">
-                {post.tags.map((tag) => (
-                  <Link key={tag} href={`/blog?tag=${tag}`}>
-                    <Badge
-                      variant="outline"
-                      className="hover:bg-accent hover:text-accent-foreground">
-                      #{tag}
-                    </Badge>
-                  </Link>
+                {post.tags.map((tag: string) => (
+                  <span 
+                    key={tag} 
+                    className="text-[10px] uppercase font-mono tracking-wider text-slate-400 bg-neutral-dark/10 border border-primary/10 px-3 py-1 rounded"
+                  >
+                    #{tag}
+                  </span>
                 ))}
               </div>
             </div>
           )}
+          
         </article>
       </main>
     </div>

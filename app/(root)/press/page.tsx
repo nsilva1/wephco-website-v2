@@ -1,50 +1,55 @@
+'use client';
+
 import React from 'react';
 import { newsArticles } from '@/lib/constants';
 import Link from 'next/link';
-import { ChevronRight } from 'lucide-react';
-import { typography, layout } from '@/lib/styles';
+import { BiRightArrowAlt } from 'react-icons/bi';
 
-const PressPage = () => {
+export default function PressPage() {
   return (
-    <div>
-      <div className="p-8 my-20">
-        <h3 className="lg:text-5xl text-4xl font-bold text-black dark:text-white mb-5 text-center">
-          In the Press
-        </h3>
-        <p className="text-gray-500 mb-10 md:mb-20 text-center text-sm md:text-base">
-          See what’s got everyone talking. Enjoy featured stories about our
-          dynamic properties, agents, company,
-          <br /> and more as the most followed real estate brand in the country.
-        </p>
-        {/* <hr className='my-8' /> */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16">
+    <div className="min-h-screen bg-background-dark text-slate-100 font-display pt-28 pb-20">
+      <div className="max-w-7xl mx-auto px-6">
+        
+        {/* Header Section */}
+        <div className="text-center max-w-2xl mx-auto mb-16 space-y-4">
+          <span className="text-primary text-xs font-bold tracking-widest uppercase block">Media Room</span>
+          <h3 className="text-4xl md:text-5xl font-light text-slate-100 leading-tight">
+            In the <span className="text-primary font-extrabold italic">Press</span>
+          </h3>
+          <p className="text-slate-400 text-sm leading-relaxed font-light">
+            See what&apos;s got everyone talking. Enjoy featured stories about our dynamic properties, agents, and company as the premier luxury real estate network.
+          </p>
+        </div>
+
+        {/* Articles Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {newsArticles.map((article, index) => (
             <div
               key={index}
-              className={`p-4 flex flex-col gap-5 border-b md:border-b-0 md:border-r ${index === 2 ? 'border-b md:border-none' : ''}`}>
-              <h4
-                className={`${typography.subtitle} text-base font-semibold text-gray-500`}>
-                {article.publication}
-              </h4>
-              <q className={`${typography.heading3} text-black font-bold`}>
-                {article.title}
-              </q>
+              className="bg-[#022618]/15 border border-primary/10 rounded-2xl p-8 hover:border-primary/45 transition-all duration-300 flex flex-col justify-between h-full group"
+            >
+              <div className="space-y-4 mb-6">
+                <span className="text-primary text-[10px] font-bold uppercase tracking-widest block">
+                  {article.publication}
+                </span>
+                <q className="text-slate-100 text-lg font-light leading-relaxed italic block before:content-none after:content-none">
+                  &quot;{article.title}&quot;
+                </q>
+              </div>
+              
               <Link
                 href={article.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-black dark:text-white hover:underline hover:animate-bounce flex">
-                Read More
-                <span>
-                  <ChevronRight />
-                </span>
+                className="text-primary hover:text-white font-bold text-xs uppercase tracking-wider transition-colors flex items-center gap-1.5 mt-auto group-hover:translate-x-1 duration-300 w-fit"
+              >
+                Read More <BiRightArrowAlt className="text-lg" />
               </Link>
             </div>
           ))}
         </div>
+
       </div>
     </div>
   );
-};
-
-export default PressPage;
+}
