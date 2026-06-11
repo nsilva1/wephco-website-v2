@@ -29,6 +29,8 @@ export async function createProperty(formData: FormData) {
   const status = formData.get('status') as string || 'available';
   const tag = formData.get('tag') as string || 'pending';
   const category = formData.get('category') as string || '';
+  const bedroom = formData.get('bedroom') as string || '';
+  const bathroom = formData.get('bathroom') as string || '';
   const verified = formData.get('verified') === 'true';
   const interestsRaw = formData.get('interests');
   const interests = interestsRaw ? (typeof interestsRaw === 'string' && interestsRaw.startsWith('[') ? JSON.parse(interestsRaw) : formData.getAll('interests') as string[]) : [];
@@ -77,6 +79,8 @@ export async function createProperty(formData: FormData) {
     status,
     tag,
     category,
+    bedroom,
+    bathroom,
     verified,
     interests,
     pdfUrl,
@@ -100,6 +104,8 @@ export async function updateProperty(id: string, formData: FormData) {
   const status = formData.get('status') as string || 'available';
   const tag = formData.get('tag') as string || 'pending';
   const category = formData.get('category') as string || '';
+  const bedroom = formData.get('bedroom') as string || '';
+  const bathroom = formData.get('bathroom') as string || '';
   const verified = formData.get('verified') === 'true';
   const interestsRaw = formData.get('interests');
   const interests = interestsRaw ? (typeof interestsRaw === 'string' && interestsRaw.startsWith('[') ? JSON.parse(interestsRaw) : formData.getAll('interests') as string[]) : [];
@@ -150,6 +156,8 @@ export async function updateProperty(id: string, formData: FormData) {
     status,
     tag,
     category,
+    bedroom,
+    bathroom,
     verified,
     interests,
     pdfUrl,
@@ -202,4 +210,45 @@ export async function updatePropertyTag(id: string, tag: string) {
 export async function updatePropertyStatus(id: string, status: string) {
   await db.collection('properties').doc(id).update({ status, updatedAt: new Date().toISOString() });
   return { success: true };
+}
+
+export async function submitPropertyForSale(formData: FormData) {
+  const title = formData.get('title') as string;
+  const developer = formData.get('developer') as string || '';
+  const location = formData.get('location') as string;
+  const yieldValue = parseFloat(formData.get('yieldValue') as string) || 0;
+  const price = parseFloat(formData.get('price') as string) || 0;
+  const description = formData.get('description') as string || '';
+  const currency = formData.get('currency') as string || 'NGN';
+  const status = 'Available';
+  const tag = formData.get('tag') as string || 'Local';
+  const category = formData.get('category') as string || 'Sale';
+  const bedroom = formData.get('bedroom') as string || '';
+  const bathroom = formData.get('bathroom') as string || '';
+  const imageUrls: string[] = JSON.parse(formData.get('imageUrls') as string || '[]');
+  const pdfUrl = formData.get('pdfUrl') as string || '';
+
+  const propertyData = {
+    title,
+    developer,
+    location,
+    yieldValue,
+    price,
+    description,
+    currency,
+    status,
+    tag,
+    category,
+    bedroom,
+    bathroom,
+    verified: false,
+    interests: [],
+    pdfUrl,
+    images: imageUrls,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+
+  const docRef = await db.collection('properties').add(propertyData);
+  return { id: docRef.id, ...propertyData };
 }

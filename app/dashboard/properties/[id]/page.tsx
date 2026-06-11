@@ -11,7 +11,7 @@ import { formatCurrency } from "@/lib/utils"
 
 export const revalidate = 0;
 
-export default async function PropertyDetailPage({ params }: { params: { id: string } }) {
+export default async function PropertyDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const property = await getPropertyById(id)
 

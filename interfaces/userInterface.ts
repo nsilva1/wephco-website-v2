@@ -80,6 +80,7 @@ export interface IContactUs {
     name: string;
     email: string;
     phoneNumber: string;
+    message?: string;
     status: boolean;
     createdAt?: Date;
 }

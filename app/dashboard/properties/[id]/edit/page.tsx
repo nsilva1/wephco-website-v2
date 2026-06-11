@@ -4,7 +4,7 @@ import PropertyForm from "../../PropertyForm"
 
 export const revalidate = 0;
 
-export default async function EditPropertyPage({ params }: { params: { id: string } }) {
+export default async function EditPropertyPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const property = await getPropertyById(id)
 

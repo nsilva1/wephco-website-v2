@@ -1,93 +1,15 @@
-'use server'
+'use server';
 
-import { prisma } from "@/prisma/prisma"
-import { IUser } from "@/interfaces/userInterface"
-import { Role } from "@/interfaces/userInterface"
-import bcrypt from "bcryptjs"
-import { PrismaClientKnownRequestError } from "@/lib/generated/prisma/runtime/library"
-import {
-	createUserWithEmailAndPassword,
-	updateProfile,
-} from 'firebase/auth';
-import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import bcrypt from "bcryptjs";
 import { auth, db } from '../firebase/firebaseConfig';
-import type { INewUser, IUserInfo } from '../interfaces/userInterface';
+import type { IUserInfo } from '../interfaces/userInterface';
 
-type RegistrationResult = {
-  success: boolean;
-  user?: {
-    id: string;
-    name: string;
-    email: string;
-    role: Role
-  },
-  error?: string;
-}
-
-export const registerUser = async (user: Omit<IUser, 'id'>): Promise<RegistrationResult> => {
-    const { name, email, password, role } = user
-
-    if (!email || !password) {
-      return { success: false, error: 'Email and password are required' };
-    }
-
-    if (password.length < 6) {
-      return { success: false, error: 'Password must be at least 6 characters long' };
-    }
-
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return { success: false, error: 'Invalid email format' };
-    }
-
-    var userRole: Role  = role || Role.SUPPORT
-       
-    // Check if user exists
-  const existingUser = await prisma.user.findUnique({
-    where: { email }
-  });
-
-  if (existingUser) {
-    return { success: false, error: 'User with this email already exists' };
-  }
-
-  try {
-    const hashedPassword = await bcrypt.hash(password, 12);
-
-    const newUser = await prisma.user.create({
-      data: {
-          name,
-          email,
-          password: hashedPassword,
-          role: userRole as import("@/lib/generated/prisma").$Enums.Role, 
-      },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-      },
-  });
-
-  return { success: true, user: { ...newUser, role: newUser.role as Role } };
-  } catch (error) {
-    console.error("Registration Error:", error); // Log the full error for server-side debugging
-
-    if (error instanceof PrismaClientKnownRequestError) {
-      // This specific code should ideally not be reached if the `findUnique` check works,
-      // but it's a good safeguard for other potential unique constraint violations.
-      if (error.code === 'P2002') {
-        // error.meta.target can be an array of field names
-        const target = (error.meta?.target as string[])?.join(', ') || 'details';
-        return { success: false, error: `An account with these ${target} already exists.` };
-      }
-      // Handle other specific Prisma errors if needed
-      return { success: false, error: "A database error occurred during registration." };
-    }
-    
-    // For unexpected errors
-    return { success: false, error: 'Registration failed due to an unexpected error. Please try again.' };
-  }
-
+interface INewUser {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  role?: string;
 }
 
 export const registerBrokerageUser = async (userData: INewUser) => {
@@ -99,24 +21,19 @@ export const registerBrokerageUser = async (userData: INewUser) => {
 			throw new Error('Email and password are required');
 		}
 
-		// 2. Create User in Firebase Auth
-		const userCredential = await createUserWithEmailAndPassword(
-			auth,
-			email,
-			password
-		);
-		const user = userCredential.user;
-
 		const name = `${firstName} ${lastName}`.trim();
 
-		// 3. Update the User's Display Name (optional but recommended)
-		if (name) {
-			await updateProfile(user, { displayName: name });
-		}
+		// 2. Create User in Firebase Auth using Firebase Admin SDK
+		const userRecord = await auth.createUser({
+			email,
+			password,
+			displayName: name,
+		});
+		const uid = userRecord.uid;
 
-		// 4. Create Firestore Document in the "users" collection
-		const userData: IUserInfo = {
-			id: user.uid,
+		// 3. Create Firestore Document in the "users" collection
+		const userDocData: IUserInfo = {
+			id: uid,
 			email: email,
 			name: name ?? '',
 			role: role ?? 'Agent', // Default to 'Agent' if no role provided
@@ -130,16 +47,18 @@ export const registerBrokerageUser = async (userData: INewUser) => {
 				currency: 'USD',
 			},
 			transactions: [],
+			phone: '',
 		};
-		// We use setDoc + doc() to ensure the Firestore ID matches the Auth UID
-		await setDoc(doc(db, 'users', user.uid), {
-			...userData,
-			createdAt: serverTimestamp(),
+
+		// Use Admin SDK to set the document in Firestore
+		await db.collection('users').doc(uid).set({
+			...userDocData,
+			createdAt: new Date(),
 		});
 
-		return { uid: user.uid, success: true };
+		return { uid: uid, success: true };
 	} catch (error: any) {
 		console.error('Registration Error:', error.code, error.message);
-		throw error; // Re-throw to handle in the UI (e.g., showing an alert)
+		throw error; // Re-throw to handle in the UI
 	}
 };
