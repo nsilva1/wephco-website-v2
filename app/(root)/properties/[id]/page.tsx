@@ -47,7 +47,7 @@ export default function PropertyDetailsPage() {
           const data = docSnap.data();
           const mappedData = {
             id: docSnap.id,
-            title: data.title || data.name || 'Luxury Estate',
+            title: data.title,
             price: data.price || 0,
             description: data.description || '',
             location: data.location || (data.city && data.country ? `${data.city}, ${data.country}` : ''),
@@ -86,7 +86,7 @@ export default function PropertyDetailsPage() {
     fetchPropertyDetails();
   }, [id]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
     if (!name || !email || !phone) {
       toast.warning('Please fill in all required fields');
@@ -150,11 +150,6 @@ export default function PropertyDetailsPage() {
         {/* Breadcrumbs & Title Section */}
         <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <nav className="flex gap-2 text-xs font-semibold uppercase tracking-widest text-primary/60 mb-3">
-              <Link href="/properties">Properties</Link>
-              <span>/</span>
-              <span className="text-primary">{property.category}</span>
-            </nav>
             <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-2">{property.title}</h2>
             <div className="flex items-center gap-2 text-slate-400">
               <BiMap className="text-primary text-lg" />
@@ -171,7 +166,7 @@ export default function PropertyDetailsPage() {
 
         {/* Hero Gallery Section */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-12">
-          <div className="lg:col-span-3 aspect-[16/9] relative group overflow-hidden rounded-xl border border-primary/10">
+          <div className="lg:col-span-3 aspect-video relative group overflow-hidden rounded-xl border border-primary/10">
             {activeImage ? (
               <Image 
                 src={activeImage} 
@@ -184,7 +179,7 @@ export default function PropertyDetailsPage() {
             ) : (
               <div className="w-full h-full bg-neutral-dark/30 flex items-center justify-center text-slate-500">No Image Available</div>
             )}
-            <div className="absolute inset-0 bg-gradient-to-t from-background-dark/80 via-transparent to-transparent opacity-60"></div>
+            <div className="absolute inset-0 bg-linear-to-t from-background-dark/80 via-transparent to-transparent opacity-60"></div>
             <div className="absolute bottom-6 left-6 flex gap-3">
               <span className="px-3 py-1 bg-primary text-background-dark text-[10px] font-bold uppercase tracking-widest rounded-md">
                 {property.status}
@@ -231,26 +226,21 @@ export default function PropertyDetailsPage() {
           <div className="lg:col-span-2 space-y-12">
             
             {/* Key Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 p-8 bg-[#022618]/25 border border-primary/10 rounded-xl">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-6 p-8 bg-[#022618]/25 border border-primary/10 rounded-xl">
               <div className="flex flex-col items-center text-center">
                 <BiBed className="text-primary mb-2 text-3xl" />
                 <p className="text-xs font-semibold text-slate-400 uppercase tracking-tighter">Bedrooms</p>
-                <p className="text-xl font-bold">{property.beds.toString().padStart(2, '0')}</p>
+                <p className="text-xl font-bold">{property.beds.toString()}</p>
               </div>
               <div className="flex flex-col items-center text-center border-l border-primary/10">
                 <BiBath className="text-primary mb-2 text-3xl" />
                 <p className="text-xs font-semibold text-slate-400 uppercase tracking-tighter">Bathrooms</p>
-                <p className="text-xl font-bold">{property.baths.toString().padStart(2, '0')}</p>
+                <p className="text-xl font-bold">{property.baths.toString()}</p>
               </div>
               <div className="flex flex-col items-center text-center border-l border-primary/10">
                 <BiArea className="text-primary mb-2 text-3xl" />
                 <p className="text-xs font-semibold text-slate-400 uppercase tracking-tighter">Square Ft</p>
                 <p className="text-xl font-bold">{Number(property.sqft).toLocaleString()}</p>
-              </div>
-              <div className="flex flex-col items-center text-center border-l border-primary/10">
-                <BiCar className="text-primary mb-2 text-3xl" />
-                <p className="text-xs font-semibold text-slate-400 uppercase tracking-tighter">Garage</p>
-                <p className="text-xl font-bold">{property.garage}</p>
               </div>
             </div>
 
@@ -266,22 +256,22 @@ export default function PropertyDetailsPage() {
             </section>
 
             {/* Key Features Grid */}
-            <section>
+            {/* <section>
               <h3 className="text-2xl font-bold mb-6 flex items-center gap-3 text-primary">
                 Key Features &amp; Amenities
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {property.amenities.map((amenity: string, idx: number) => (
                   <div key={idx} className="flex items-center gap-4 p-4 rounded-lg bg-white/5 border border-white/5">
-                    <BiCheckCircle className="text-primary text-xl flex-shrink-0" />
+                    <BiCheckCircle className="text-primary text-xl shrink-0" />
                     <span className="text-slate-200 text-sm font-medium">{amenity}</span>
                   </div>
                 ))}
               </div>
-            </section>
+            </section> */}
 
             {/* Property History Timeline */}
-            <section>
+            {/* <section>
               <h3 className="text-2xl font-bold mb-8 flex items-center gap-3">
                 Property Registry History
               </h3>
@@ -300,25 +290,15 @@ export default function PropertyDetailsPage() {
                   </div>
                 ))}
               </div>
-            </section>
+            </section> */}
           </div>
 
           {/* Right Column: Sticky Sidebar Form */}
           <aside className="lg:sticky lg:top-28">
             <div className="bg-[#022618]/20 p-8 rounded-xl border border-primary/20 shadow-2xl backdrop-blur-md">
               <div className="flex items-center gap-4 mb-8">
-                <div className="h-14 w-14 rounded-full border border-primary/30 relative overflow-hidden bg-cover bg-center">
-                  <Image 
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuD2zsUa1k2hpNYY-0ZmLrEad_lZ-sn8pZiwnQ025-hmLDaKhGOVjJuy8QyZJOzkPAGjN4Y_RfQBYth-Ss2K5KeOYh3_Qkq3IXoNp4Jfy1nE-YeMeAerqlB4LP3x0QMlDTjaJFbICc0BEazBBdOFud7f5jOtxeP5tXI-591BGEa050UGIeVXA1YuP9Zw8R1MkGqHnLkEvNtLoTDn53xz7vEnsBSsdS1YIn6C2Y94gN9mVRvetgeOZLv3Amj1kpl5O2Zqd92nYLWqxebf"
-                    alt="Julian Sterling"
-                    fill
-                    style={{ objectFit: 'cover' }}
-                  />
-                </div>
                 <div>
-                  <p className="text-[10px] font-bold text-primary uppercase tracking-widest">Listing Agent</p>
-                  <h4 className="text-lg font-bold">Wephco Luxury Advisor</h4>
-                  <p className="text-[10px] text-slate-400">concierge@wephco.com</p>
+                  <h4 className="text-lg font-bold">Schedule Viewing</h4>
                 </div>
               </div>
 
@@ -380,7 +360,7 @@ export default function PropertyDetailsPage() {
                   disabled={submitting}
                   className="w-full bg-primary text-background-dark font-black uppercase tracking-[0.2em] py-4 rounded-lg hover:shadow-[0_0_20px_rgba(212,175,53,0.3)] hover:scale-[1.01] transition-all active:scale-95 text-[10px] cursor-pointer disabled:opacity-50"
                 >
-                  {submitting ? 'Scheduling...' : 'Schedule Viewing'}
+                  {submitting ? 'Submitting...' : 'Submit Request'}
                 </button>
               </form>
               
@@ -410,7 +390,7 @@ export default function PropertyDetailsPage() {
 
       </main>
 
-      {/* Map & Location Section */}
+      {/* Map & Location Section
       <div className="bg-[#022618]/10 mt-20 py-16 border-t border-primary/5">
         <div className="max-w-7xl mx-auto px-6">
           <h3 className="text-2xl font-bold mb-10 text-center uppercase tracking-widest">The Neighborhood</h3>
@@ -443,7 +423,8 @@ export default function PropertyDetailsPage() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
+
     </div>
   );
 }

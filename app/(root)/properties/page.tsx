@@ -155,7 +155,7 @@ export default function PropertyListingsPage() {
             <div className="w-full md:w-auto flex justify-between items-center md:block">
               <div>
                 <h3 className="text-2xl font-bold tracking-tight">
-                  {loading ? '...' : `${filteredProperties.length} Luxury Estates`}
+                  {loading ? '...' : `${filteredProperties.length} Listing(s)`}
                 </h3>
                 <p className="text-sm text-slate-400 font-medium">Wephco Premier Global Portfolio</p>
               </div>
