@@ -18,7 +18,7 @@ const ContactUs = () => {
     setPhone('');
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 
@@ -76,7 +76,7 @@ const ContactUs = () => {
                   target='_blank'
                   className='text-sm font-medium text-white hover:text-primary transition-colors'
                 >
-                  Message Concierge
+                  Chat With Us Now
                 </a>
               </div>
             </div>
