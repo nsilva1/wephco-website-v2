@@ -4,23 +4,23 @@ import React, { useState, useRef } from 'react';
 import { 
   Upload, 
   ImageIcon, 
-  FileText, 
-  Sparkles, 
+  FileText,
   Building2, 
-  MapPin, 
   DollarSign, 
   Bed, 
   Bath, 
   X,
-  Compass,
   TrendingUp,
   CheckCircle2
 } from 'lucide-react';
+import { BiArea } from 'react-icons/bi';
 import Image from 'next/image';
 import { toast } from 'react-toastify';
 import { Loader } from '@/components/Loader';
 import { uploadFile } from '@/lib/helperFunctions';
 import { submitPropertyForSale } from '@/actions/property-management';
+import { IProperty } from '@/interfaces/propertyInterface';
+
 
 export default function SellPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -42,7 +42,12 @@ export default function SellPage() {
     category: 'Sale',
     bedroom: '',
     bathroom: '',
+    square_foot: '',
   });
+
+  type Currency = 'USD' | 'NGN';
+  type Tag = 'Local' | 'International';
+  type Category = 'Rent' | 'Lease' | 'Sale';
 
   const handleChange = (field: string, value: string) => {
     setFormState((prev) => ({ ...prev, [field]: value }));
@@ -71,7 +76,7 @@ export default function SellPage() {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
 
     if (!formState.title || !formState.location || !formState.price) {
@@ -81,6 +86,15 @@ export default function SellPage() {
 
     if (selectedFiles.length === 0) {
       toast.warning('Please upload at least one image of your property');
+      return;
+    }
+
+    const numberOfBedrooms = Number(formState.bedroom);
+    const numberOfBathrooms = Number(formState.bathroom);
+    const squareFoot = Number(formState.square_foot);
+
+    if(isNaN(numberOfBedrooms) || isNaN(numberOfBathrooms) || isNaN(squareFoot)) {
+      toast.warning('Please enter valid numbers for bedrooms, bathrooms, and square footage');
       return;
     }
 
@@ -98,20 +112,25 @@ export default function SellPage() {
       }
 
       // 2. Prepare Form Data for Server Action
-      const formData = new FormData();
-      formData.append('title', formState.title);
-      formData.append('developer', formState.developer);
-      formData.append('location', formState.location);
-      formData.append('yieldValue', formState.yieldValue);
-      formData.append('price', formState.price);
-      formData.append('description', formState.description);
-      formData.append('currency', formState.currency);
-      formData.append('tag', formState.tag);
-      formData.append('category', formState.category);
-      formData.append('bedroom', formState.bedroom);
-      formData.append('bathroom', formState.bathroom);
-      formData.append('imageUrls', JSON.stringify(imageUrls));
-      formData.append('pdfUrl', pdfUrl);
+      const formData: IProperty = {
+        title: formState.title,
+        developer: formState.developer,
+        location: formState.location,
+        yieldValue: Number(formState.yieldValue),
+        price: Number(formState.price),
+        status: 'Available',
+        description: formState.description,
+        images: imageUrls,
+        currency: formState.currency as Currency,
+        tag: formState.tag as Tag,
+        category: formState.category as Category,
+        bedroom: numberOfBedrooms,
+        bathroom: numberOfBathrooms,
+        square_foot: squareFoot,
+        pdfUrl: pdfUrl,
+        verified: false,
+        interests: [],
+      }
 
       // 3. Submit
       await submitPropertyForSale(formData);
@@ -131,6 +150,7 @@ export default function SellPage() {
         category: 'Sale',
         bedroom: '',
         bathroom: '',
+        square_foot: ''
       });
       setSelectedFiles([]);
       setSelectedPdf(null);
@@ -154,9 +174,6 @@ export default function SellPage() {
           }}
         >
           <div className="max-w-3xl">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary mb-4 border border-primary/20 uppercase tracking-widest">
-              <Sparkles className="size-3.5" /> Sell With The Best
-            </span>
             <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-6">
               List Your Property With Us
             </h1>
@@ -237,13 +254,13 @@ export default function SellPage() {
                           onChange={(e) => handleChange('tag', e.target.value)}
                           className="w-full bg-slate-800/60 border border-primary/20 rounded-lg p-3 text-slate-100 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
                         >
-                          <option value="Local">Local (Africa/Nigeria)</option>
+                          <option value="Local">Local (Nigeria)</option>
                           <option value="International">International (Global)</option>
                         </select>
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-3 gap-4">
                       <div className="space-y-1">
                         <label className="text-xs font-semibold text-slate-400 flex items-center gap-1.5">
                           <Bed className="size-3.5 text-primary" /> Bedrooms
@@ -266,6 +283,19 @@ export default function SellPage() {
                           value={formState.bathroom}
                           onChange={(e) => handleChange('bathroom', e.target.value)}
                           placeholder="e.g. 5"
+                          className="w-full bg-slate-800/60 border border-primary/20 rounded-lg p-3 text-slate-100 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-semibold text-slate-400 flex items-center gap-1.5">
+                          <BiArea className="size-3.5 text-primary" /> Square Feet
+                        </label>
+                        <input
+                          type="number"
+                          value={formState.square_foot}
+                          onChange={(e) => handleChange('square_foot', e.target.value)}
+                          placeholder="e.g. 500"
                           className="w-full bg-slate-800/60 border border-primary/20 rounded-lg p-3 text-slate-100 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
                         />
                       </div>

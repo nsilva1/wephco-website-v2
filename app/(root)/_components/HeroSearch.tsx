@@ -64,7 +64,7 @@ const HeroSearch = () => {
 
       <button
         onClick={handleSearch}
-        className="w-full md:w-auto bg-primary hover:bg-white text-background-dark px-10 py-4 rounded-xl md:rounded-full font-bold transition-all duration-300 flex items-center justify-center gap-2 group cursor-pointer flex-shrink-0"
+        className="w-full md:w-auto bg-primary hover:bg-white text-background-dark px-10 py-4 rounded-xl md:rounded-full font-bold transition-all duration-300 flex items-center justify-center gap-2 group cursor-pointer shrink-0"
       >
         <span className="text-xs tracking-widest uppercase">Search</span>
         <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />

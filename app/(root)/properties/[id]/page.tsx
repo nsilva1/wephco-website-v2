@@ -12,9 +12,7 @@ import {
   BiBed, 
   BiBath, 
   BiArea, 
-  BiCar, 
   BiMap,  
-  BiCheckCircle,
   BiShareAlt
 } from 'react-icons/bi';
 

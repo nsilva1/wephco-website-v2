@@ -113,7 +113,7 @@ const InterestForm = ({ ...rest }: INewInterest) => {
                     <input
                       type="text"
                       ref={inputRef}
-                      className="p-2 rounded-l-md text-black flex-grow focus:outline-none font-bold"
+                      className="p-2 rounded-l-md text-black grow focus:outline-none font-bold"
                       placeholder="Enter your property address..."
                       name="address"
                       onChange={handleChange}

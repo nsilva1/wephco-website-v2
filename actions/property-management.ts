@@ -212,41 +212,28 @@ export async function updatePropertyStatus(id: string, status: string) {
   return { success: true };
 }
 
-export async function submitPropertyForSale(formData: FormData) {
-  const title = formData.get('title') as string;
-  const developer = formData.get('developer') as string || '';
-  const location = formData.get('location') as string;
-  const yieldValue = parseFloat(formData.get('yieldValue') as string) || 0;
-  const price = parseFloat(formData.get('price') as string) || 0;
-  const description = formData.get('description') as string || '';
-  const currency = formData.get('currency') as string || 'NGN';
-  const status = 'Available';
-  const tag = formData.get('tag') as string || 'Local';
-  const category = formData.get('category') as string || 'Sale';
-  const bedroom = formData.get('bedroom') as string || '';
-  const bathroom = formData.get('bathroom') as string || '';
-  const imageUrls: string[] = JSON.parse(formData.get('imageUrls') as string || '[]');
-  const pdfUrl = formData.get('pdfUrl') as string || '';
+export async function submitPropertyForSale(formData: IProperty) {
 
-  const propertyData = {
-    title,
-    developer,
-    location,
-    yieldValue,
-    price,
-    description,
-    currency,
-    status,
-    tag,
-    category,
-    bedroom,
-    bathroom,
-    verified: false,
-    interests: [],
-    pdfUrl,
-    images: imageUrls,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+  const propertyData: IProperty = {
+    title: formData.title,
+    developer: formData.developer,
+    location: formData.location,
+    yieldValue: formData.yieldValue,
+    price: formData.price,
+    description: formData.description,
+    currency: formData.currency,
+    status: formData.status,
+    tag: formData.tag,
+    category: formData.category,
+    bedroom: formData.bedroom,
+    square_foot: formData.square_foot,
+    bathroom: formData.bathroom,
+    pdfUrl: formData.pdfUrl,
+    images: formData.images,
+    verified: formData.verified,
+    interests: formData.interests,
+    createdAt: new Date(),
+    updatedAt: new Date(),
   };
 
   const docRef = await db.collection('properties').add(propertyData);

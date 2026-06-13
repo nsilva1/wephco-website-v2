@@ -14,6 +14,7 @@ export interface IProperty {
   category: 'Rent' | 'Lease' | 'Sale';
   bedroom: string | number;
   bathroom: string | number;
+  square_foot: string | number;
   verified: boolean;
   interests: string[];
   createdAt?: Date | null;
