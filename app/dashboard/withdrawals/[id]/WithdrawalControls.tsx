@@ -4,7 +4,6 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { approveWithdrawal, rejectWithdrawal } from "@/actions/transactions"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import {
@@ -26,7 +25,7 @@ interface WithdrawalControlsProps {
 
 export default function WithdrawalControls({ transactionId, amount, status }: WithdrawalControlsProps) {
   const router = useRouter()
-  const { user } = useAuth()
+  const { currentUser } = useAuth()
   const [isApproving, setIsApproving] = useState(false)
   const [isRejecting, setIsRejecting] = useState(false)
   const [rejectReason, setRejectReason] = useState("")
@@ -38,10 +37,10 @@ export default function WithdrawalControls({ transactionId, amount, status }: Wi
   }
 
   const handleApprove = async () => {
-    if (!user) return;
+    if (!currentUser) return;
     setIsApproving(true)
     try {
-      await approveWithdrawal(transactionId, user.uid)
+      await approveWithdrawal(transactionId, currentUser.id!)
       setIsApproveModalOpen(false)
       router.refresh()
     } catch (error) {
@@ -53,14 +52,14 @@ export default function WithdrawalControls({ transactionId, amount, status }: Wi
   }
 
   const handleReject = async () => {
-    if (!user) return;
+    if (!currentUser) return;
     if (!rejectReason.trim()) {
       alert("Please provide a reason for rejection")
       return
     }
     setIsRejecting(true)
     try {
-      await rejectWithdrawal(transactionId, user.uid, rejectReason)
+      await rejectWithdrawal(transactionId, currentUser.id!, rejectReason)
       setIsRejectModalOpen(false)
       router.refresh()
     } catch (error) {
