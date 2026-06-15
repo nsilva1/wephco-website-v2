@@ -33,10 +33,10 @@ export const navbarMenu = [
         label: 'Services',
         path: '/services'
     },
-    // {
-    //     label: 'Brokerage App',
-    //     path: '/brokerage'
-    // }
+    {
+        label: 'Events',
+        path: '/events'
+    }
 ]
 
 

@@ -1,8 +1,7 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { 
-  Upload, 
   ImageIcon, 
   FileText,
   Building2, 
@@ -10,7 +9,6 @@ import {
   Bed, 
   Bath, 
   X,
-  TrendingUp,
   CheckCircle2
 } from 'lucide-react';
 import { BiArea } from 'react-icons/bi';
@@ -20,7 +18,55 @@ import { Loader } from '@/components/Loader';
 import { uploadFile } from '@/lib/helperFunctions';
 import { submitPropertyForSale } from '@/actions/property-management';
 import { IProperty } from '@/interfaces/propertyInterface';
+import Select from 'react-select';
 
+const customSelectStyles = {
+  control: (base: any, state: any) => ({
+    ...base,
+    backgroundColor: 'rgba(30, 41, 59, 0.6)', // bg-slate-800/60
+    borderColor: state.isFocused ? 'var(--primary, #e2b857)' : 'rgba(226, 184, 87, 0.2)', // border-primary/20 or active border
+    color: '#f1f5f9',
+    padding: '2px',
+    borderRadius: '0.5rem',
+    boxShadow: 'none',
+    borderWidth: '1px',
+    '&:hover': {
+      borderColor: 'rgba(226, 184, 87, 0.5)',
+    }
+  }),
+  menu: (base: any) => ({
+    ...base,
+    backgroundColor: '#0f172a', // bg-slate-900
+    border: '1px solid rgba(226, 184, 87, 0.2)',
+    zIndex: 9999
+  }),
+  option: (base: any, state: any) => ({
+    ...base,
+    backgroundColor: state.isSelected 
+      ? 'rgba(226, 184, 87, 1)' 
+      : state.isFocused 
+        ? 'rgba(226, 184, 87, 0.15)' 
+        : 'transparent',
+    color: state.isSelected ? '#0f172a' : '#f1f5f9',
+    cursor: 'pointer',
+    '&:active': {
+      backgroundColor: 'rgba(226, 184, 87, 1)',
+      color: '#0f172a',
+    }
+  }),
+  singleValue: (base: any) => ({
+    ...base,
+    color: '#f1f5f9',
+  }),
+  input: (base: any) => ({
+    ...base,
+    color: '#f1f5f9',
+  }),
+  placeholder: (base: any) => ({
+    ...base,
+    color: '#94a3b8', // text-slate-400
+  })
+};
 
 export default function SellPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -44,6 +90,32 @@ export default function SellPage() {
     bathroom: '',
     square_foot: '',
   });
+
+  const [countriesData, setCountriesData] = useState<any[]>([]);
+  const [selectedCountry, setSelectedCountry] = useState<{ label: string; value: string } | null>(null);
+  const [selectedCity, setSelectedCity] = useState<{ label: string; value: string } | null>(null);
+  const [isLoadingCountries, setIsLoadingCountries] = useState(false);
+
+  useEffect(() => {
+    const fetchCountries = async () => {
+      setIsLoadingCountries(true);
+      try {
+        const res = await fetch('https://countriesnow.space/api/v0.1/countries');
+        const json = await res.json();
+        if (!json.error) {
+          setCountriesData(json.data);
+        } else {
+          toast.error('Failed to load countries list');
+        }
+      } catch (err) {
+        console.error('Error fetching countries:', err);
+        toast.error('Error fetching countries list');
+      } finally {
+        setIsLoadingCountries(false);
+      }
+    };
+    fetchCountries();
+  }, []);
 
   type Currency = 'USD' | 'NGN';
   type Tag = 'Local' | 'International';
@@ -76,10 +148,10 @@ export default function SellPage() {
     }
   };
 
-  const handleSubmit = async (e: React.SubmitEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formState.title || !formState.location || !formState.price) {
+    if (!formState.title || !selectedCountry || !selectedCity || !formState.price) {
       toast.warning('Please fill in all required fields');
       return;
     }
@@ -115,7 +187,7 @@ export default function SellPage() {
       const formData: IProperty = {
         title: formState.title,
         developer: formState.developer,
-        location: formState.location,
+        location: `${selectedCity.value}, ${selectedCountry.value}`,
         yieldValue: Number(formState.yieldValue),
         price: Number(formState.price),
         status: 'Available',
@@ -152,6 +224,8 @@ export default function SellPage() {
         bathroom: '',
         square_foot: ''
       });
+      setSelectedCountry(null);
+      setSelectedCity(null);
       setSelectedFiles([]);
       setSelectedPdf(null);
       setPdfFileName(null);
@@ -162,6 +236,16 @@ export default function SellPage() {
       setIsSubmitting(false);
     }
   };
+
+  const countryOptions = countriesData.map((c: any) => ({
+    label: c.country,
+    value: c.country
+  }));
+
+  const selectedCountryData = countriesData.find((c: any) => c.country === selectedCountry?.value);
+  const cityOptions = selectedCountryData 
+    ? selectedCountryData.cities.map((city: string) => ({ label: city, value: city }))
+    : [];
 
   return (
     <div className="relative min-h-screen bg-background-dark text-slate-100 font-sans">
@@ -210,27 +294,37 @@ export default function SellPage() {
                       />
                     </div>
 
-                    <div className="space-y-1">
-                      <label className="text-xs font-semibold text-slate-400">Developer (Optional)</label>
-                      <input
-                        type="text"
-                        value={formState.developer}
-                        onChange={(e) => handleChange('developer', e.target.value)}
-                        placeholder="e.g. Emaar, Damac"
-                        className="w-full bg-slate-800/60 border border-primary/20 rounded-lg p-3 text-slate-100 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
-                      />
-                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-1">
+                        <label className="text-xs font-semibold text-slate-400">Country *</label>
+                        <Select
+                          options={countryOptions}
+                          value={selectedCountry}
+                          onChange={(val) => {
+                            setSelectedCountry(val);
+                            setSelectedCity(null);
+                          }}
+                          placeholder={isLoadingCountries ? "Loading..." : "Select Country"}
+                          styles={customSelectStyles}
+                          isLoading={isLoadingCountries}
+                          isSearchable
+                          required
+                        />
+                      </div>
 
-                    <div className="space-y-1">
-                      <label className="text-xs font-semibold text-slate-400">Location *</label>
-                      <input
-                        type="text"
-                        value={formState.location}
-                        onChange={(e) => handleChange('location', e.target.value)}
-                        placeholder="e.g. Ikoyi, Lagos or Dubai Marina, UAE"
-                        className="w-full bg-slate-800/60 border border-primary/20 rounded-lg p-3 text-slate-100 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
-                        required
-                      />
+                      <div className="space-y-1">
+                        <label className="text-xs font-semibold text-slate-400">City *</label>
+                        <Select
+                          options={cityOptions}
+                          value={selectedCity}
+                          onChange={(val) => setSelectedCity(val)}
+                          placeholder="Select City"
+                          styles={customSelectStyles}
+                          isDisabled={!selectedCountry}
+                          isSearchable
+                          required
+                        />
+                      </div>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
@@ -308,7 +402,7 @@ export default function SellPage() {
               <div className="space-y-6">
                 <div>
                   <h3 className="text-lg font-bold text-primary mb-4 flex items-center gap-2">
-                    <DollarSign className="size-5" /> Pricing & Financials
+                    <DollarSign className="size-5" /> Financials
                   </h3>
                   <div className="space-y-4">
                     <div className="grid grid-cols-3 gap-3">
@@ -337,15 +431,12 @@ export default function SellPage() {
                     </div>
 
                     <div className="space-y-1">
-                      <label className="text-xs font-semibold text-slate-400 flex items-center gap-1.5">
-                        <TrendingUp className="size-3.5 text-primary" /> Projected Yield Value (%)
-                      </label>
+                      <label className="text-xs font-semibold text-slate-400">Developer (Optional)</label>
                       <input
-                        type="number"
-                        step="0.1"
-                        value={formState.yieldValue}
-                        onChange={(e) => handleChange('yieldValue', e.target.value)}
-                        placeholder="e.g. 7.5"
+                        type="text"
+                        value={formState.developer}
+                        onChange={(e) => handleChange('developer', e.target.value)}
+                        placeholder="e.g. Emaar, Damac"
                         className="w-full bg-slate-800/60 border border-primary/20 rounded-lg p-3 text-slate-100 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
                       />
                     </div>
