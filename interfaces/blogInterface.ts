@@ -1,4 +1,4 @@
-import { IUser } from "./userInterface";
+import { IAdminUser } from "./userInterface";
 import { Role } from "./userInterface";
 
 export enum PostStatus {
@@ -51,24 +51,24 @@ export interface IBlogPost {
    * These properties will only be present if you use `include` in your Prisma query.
    * e.g., `include: { author: true, category: true }`
    */
-  author?: IUser;
+  author?: IAdminUser;
   category?: IBlogCategory | null;
 }
 
-const sampleAuthors: IUser[] = [
+const sampleAuthors: IAdminUser[] = [
   {
     id: "user-001",
-    name: "Alice Johnson",
+    firstName: 'Alice',
+    lastName: "Johnson",
     email: "alice@example.com",
-    password: "hashed_password_1",
     role: Role.ADMIN,
     createdAt: new Date("2024-08-15T10:00:00Z"),
   },
   {
     id: "user-002",
-    name: "Bob Williams",
+    firstName: 'Bob',
+    lastName: "Williams",
     email: "bob@example.com",
-    password: "hashed_password_2",
     role: Role.SUPPORT,
     createdAt: new Date("2024-09-01T11:30:00Z"),
   },
