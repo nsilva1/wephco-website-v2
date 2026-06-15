@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback, useEffect, FormEvent } from "react"
+import { useState, useCallback, useEffect, SubmitEvent } from "react"
 import { useRouter } from "next/navigation"
 import { Save, Eye, ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -94,7 +94,7 @@ export function PostEditor({userId}: {userId: string | undefined}) {
     }
   }
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e: SubmitEvent) => {
     e.preventDefault()
 
     const validationErrors = validateForm(formData)

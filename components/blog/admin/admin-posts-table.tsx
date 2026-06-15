@@ -93,7 +93,7 @@ export function AdminPostsTable() {
                   <span className="text-muted-foreground">No category</span>
                 )}
               </TableCell>
-              <TableCell>{post.author?.name}</TableCell>
+              <TableCell>{post.author?.firstName + ' ' + post.author?.lastName}</TableCell>
               <TableCell>{post.views}</TableCell>
               <TableCell>{format(new Date(post.createdAt!), "MMM d, yyyy")}</TableCell>
               <TableCell>
