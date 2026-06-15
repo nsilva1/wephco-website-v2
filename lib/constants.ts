@@ -263,6 +263,7 @@ export const consultationServices = [
     { label: 'Private Real Estate Advisory' },
     { label: 'Investor Circle Access' },
     { label: 'Legacy & Wealth Structuring' },
+    { label: 'Private One-on-One Consultation' },
 ]
 
 export const FIRESTORE_COLLECTIONS = {

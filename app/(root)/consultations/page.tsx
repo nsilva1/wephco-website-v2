@@ -6,7 +6,6 @@ import {
   Calendar, 
   Clock, 
   User, 
-  Mail, 
   Briefcase, 
   Users, 
   Landmark, 
@@ -20,7 +19,6 @@ import {
   Star, 
   Wallet,
   MapPin,
-  MessageSquare,
   Sparkles,
   CheckCircle2
 } from 'lucide-react';
@@ -139,11 +137,8 @@ const ConsultationsPage = () => {
           }}
         >
           <div className="max-w-3xl">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary mb-4 border border-primary/20 uppercase tracking-widest">
-              <Sparkles className="size-3.5" /> Bespoke Advisory
-            </span>
             <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-6">
-              Schedule Your Private Consultation
+              Schedule Consultation
             </h1>
             <p className="text-slate-300 text-sm md:text-lg max-w-2xl mx-auto leading-relaxed">
               Experience tailormade real estate advisory configured to your unique lifestyle and investment goals. Our elite advisory partners are ready to guide you.
@@ -291,7 +286,7 @@ const ConsultationsPage = () => {
                           className="w-full bg-slate-800/60 border border-primary/20 rounded-lg p-3 text-slate-100 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
                         >
                           <option value="virtual">Virtual (Zoom, Google Meet, Teams)</option>
-                          <option value="physical">Physical (Our office)</option>
+                          <option value="physical">Physical</option>
                         </select>
                       </div>
 
@@ -386,8 +381,9 @@ const ConsultationsPage = () => {
                           onChange={handleChange}
                           className="w-full bg-slate-800/60 border border-primary/20 rounded-lg p-3 text-slate-100 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
                         >
+                          <option value="$200k - $1M">Price Range: $200k - $1M</option>
                           <option value="$2M - $5M">Price Range: $2M - $5M</option>
-                          <option value="$5M - $10M">Price Range: $5M - $10M</option>
+                          <option value="$5M - $10M">Price Range: $6M - $10M</option>
                           <option value="$10M+">Price Range: $10M+</option>
                           <option value="Not Applicable">Not Applicable</option>
                         </select>
@@ -477,31 +473,14 @@ const ConsultationsPage = () => {
                   <h4 className="text-xs font-bold mb-2 flex items-center gap-2 text-slate-200">
                     <Phone className="size-3.5 text-primary" /> Immediate Assistance?
                   </h4>
-                  <p className="text-[11px] text-slate-400 mb-3">Our concierge is available 24/7 for urgent inquiries.</p>
+                  <p className="text-[11px] text-slate-400 mb-3">Our concierge is available for urgent inquiries.</p>
                   <a className="text-primary font-bold text-base hover:underline" href="tel:+2349161246300">+234 (0) 916-124-6300</a>
                 </div>
               </div>
 
               <div className="pt-4 border-t border-primary/10">
                 <div className="flex items-center gap-3">
-                  <div className="flex -space-x-3">
-                    <img 
-                      alt="Consultant" 
-                      className="w-8 h-8 rounded-full border-2 border-background-dark" 
-                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnWWMvGDO8XiXmd3uCP32omitlZfNgPFYXbNs3kwFH8OFtfi2Gfd_74HdszXXxGc620fD4kbLREt_K5iBOYms2V2gZe6-hg465Xuy9j6BcRVuPmIGlRkO45eccd4e_mbCx4ak-oqMgBjlcC7fQqBRkc4s9L_u4c163FdXeID7-0ZNsr8Kva14ZMPVEIbvo40lHdXG1gjUOoIssHZnoEtA5gUZyotIivbPaWK3sTagFLTw_AJxFK-V-MrpP7wKh3VZ6tAnD03IiI97u"
-                    />
-                    <img 
-                      alt="Consultant" 
-                      className="w-8 h-8 rounded-full border-2 border-background-dark" 
-                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuCaFf3jl_t3xv9uf7QoVeZCBv0qVy4Yae8DTwwKm3mQfhuBajacGmVuPfKyoRoi3KIWpNYYCCqkYBxweEUwMOC6EkwJ6t4x7KRmg4OrdOuRp3tb_4Tq582UgYI_VWixFvyL9Oum2-XSqlsMnY723y4kIVg-P5QVhVtQIh0Cc-UrnX5rW2sO0C2SrW75srz-rFv838-liLuhqab7uIhcsxAevSd8L6wk1IvV9OAzDMnmy74QFX6dBqttj-_XqscQwHnzCA7Ix9zBI_bC"
-                    />
-                    <img 
-                      alt="Consultant" 
-                      className="w-8 h-8 rounded-full border-2 border-background-dark" 
-                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuBiYgl6z_tCyRQO2aZHFj_dfmPmGbYm_40xlssUe7r1hmCqPNxbl06neTpcT9QqrwjkkTlp2mEIW2Zy2nI8WSzbfsCDY1OHKfzdCJMXbi2HjSc2Gz502sBr6pJkaUQmli4WOFe4DrKIz_6-Z30w-fYOpj_OqGg3X-oDRKjTSOVGf5CxzzNCGqmyGZ6i_G4ll0MpS_N23x1rQlXQ0_gXNItquXFtWztc6MMVepVmBiNGguwnSj5H5Ge2_1VyF_1SYPcx-hoPuDFbH9XY"
-                    />
-                  </div>
-                  <p className="text-[10px] text-slate-400 uppercase font-bold tracking-widest">Global Elite Team</p>
+                  <p className="text-[10px] text-slate-400 uppercase font-bold tracking-widest">Wephco Global Elite Team</p>
                 </div>
               </div>
 

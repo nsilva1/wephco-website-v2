@@ -19,7 +19,7 @@ export default function ServicesPage() {
       
       {/* Hero Section */}
       <section className="relative w-full min-h-[60vh] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-background-dark/30 via-background-dark/70 to-background-dark z-10"></div>
+        <div className="absolute inset-0 bg-linear-to-b from-background-dark/30 via-background-dark/70 to-background-dark z-10"></div>
         <div className="absolute inset-0 scale-105">
           <Image 
             src="https://lh3.googleusercontent.com/aida-public/AB6AXuCggR4STnpUKYvKcmOgBv7THHB1NiiT36GQW7sPLPZdgS5ZAiO8rvcmHVkRr_e9ocDgcQjklSv4F5oHkjWUiegd4cRULtvabEATKG_5Kjxj4f1bPARau0zMbNFsmrU17jQqG8nGHyisrf1q935Fp49we0l8wBDh4yYooUPX4fcGZvX6dFBS5lmhPAFGbU8VwAAXhOr4B-uS50qANQbw0QRTFoECeWeSGTUkVuKmRV-s4tAjwjdWb-uIdccu4mVcNv-SWJeggRukgijh"
@@ -32,9 +32,6 @@ export default function ServicesPage() {
         </div>
         
         <div className="relative z-20 text-center px-6 max-w-4xl mx-auto mt-12 md:mt-0">
-          <span className="inline-block text-primary font-bold tracking-widest uppercase mb-4 text-xs px-5 py-2 rounded-full border border-primary/30 bg-primary/10">
-            Excellence in Real Estate
-          </span>
           <h1 className="text-white text-5xl md:text-7xl font-light leading-tight mb-6 tracking-tight">
             Bespoke <span className="text-primary font-black italic">Real Estate</span> Services
           </h1>
@@ -86,7 +83,7 @@ export default function ServicesPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {wephcoServices.international.map((service, idx) => (
                 <div key={idx} className="bg-neutral-dark/20 p-8 rounded-2xl border border-primary/10 hover:border-primary/30 transition-all duration-300 flex gap-5 items-start">
-                  <div className="bg-primary/15 text-primary p-3.5 rounded-xl flex-shrink-0">
+                  <div className="bg-primary/15 text-primary p-3.5 rounded-xl shrink-0">
                     <BiGlobe className="text-2xl" />
                   </div>
                   <div className="space-y-2">
@@ -107,7 +104,7 @@ export default function ServicesPage() {
                   Local <span className="font-extrabold text-primary">Services</span>
                 </h3>
               </div>
-              <p className="text-slate-400 text-xs italic">Unmatched security, management, and positioning within Africa.</p>
+              <p className="text-slate-400 text-xs italic">Unmatched security, management, and positioning within Nigeria.</p>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -169,7 +166,7 @@ export default function ServicesPage() {
             
             <div className="space-y-8">
               <div className="flex gap-6 items-start">
-                <div className="bg-primary/20 p-4 rounded-xl text-primary flex-shrink-0">
+                <div className="bg-primary/20 p-4 rounded-xl text-primary shrink-0">
                   <BiStar className="text-3xl" />
                 </div>
                 <div>
@@ -181,7 +178,7 @@ export default function ServicesPage() {
               </div>
 
               <div className="flex gap-6 items-start">
-                <div className="bg-primary/20 p-4 rounded-xl text-primary flex-shrink-0">
+                <div className="bg-primary/20 p-4 rounded-xl text-primary shrink-0">
                   <BiUserVoice className="text-3xl" />
                 </div>
                 <div>
@@ -195,7 +192,7 @@ export default function ServicesPage() {
           </div>
 
           <div className="w-full lg:w-1/2 relative flex justify-center">
-            <div className="w-full max-w-md aspect-[4/5] rounded-3xl overflow-hidden relative z-10 border border-primary/20 shadow-2xl">
+            <div className="w-full max-w-md aspect-4/5 rounded-3xl overflow-hidden relative z-10 border border-primary/20 shadow-2xl">
               <Image 
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8RBsFfm0ZMilxQ_z1S4xE3x0JVqynPAOH9_OYqualxAWi3ecsTuegrcbQ1bN2kSiw7axmDVVJjwHHUWEhcjIGNq788GU0IzFVC9rto7eRQCujQutAHaCIU4YyDAp0ZjPYptPG1pRBjVXhEJsltmYUULYp_KCsrDsmZL-8F6mRA92GehgJOhSk3eFXZDapk_Aawz-fd-51P6jG2cZ9d4JfKId-bk17eTweg2_yVxl3WxNjzXBt2zE-F8UbE793mGE0Ca7aZf4PlNwT"
                 alt="Client Relationship"
@@ -231,8 +228,8 @@ export default function ServicesPage() {
             
             {/* Testimonial 1 */}
             <div className="bg-neutral-dark/20 p-8 rounded-2xl border border-primary/10 flex flex-col h-full hover:border-primary/30 transition-all duration-300">
-              <BiSolidQuoteLeft className="text-primary text-4xl mb-6 flex-shrink-0" />
-              <p className="text-slate-300 text-sm leading-relaxed mb-8 italic flex-grow">
+              <BiSolidQuoteLeft className="text-primary text-4xl mb-6 shrink-0" />
+              <p className="text-slate-300 text-sm leading-relaxed mb-8 italic grow">
                 &quot;The discretion and deep market insight provided are unparalleled. They secured an off-market property that perfectly matched my lifestyle objectives.&quot;
               </p>
               <div className="flex items-center gap-4">
@@ -253,8 +250,8 @@ export default function ServicesPage() {
 
             {/* Testimonial 2 */}
             <div className="bg-neutral-dark/20 p-8 rounded-2xl border border-primary/10 flex flex-col h-full hover:border-primary/30 transition-all duration-300 md:translate-y-4">
-              <BiSolidQuoteLeft className="text-primary text-4xl mb-6 flex-shrink-0" />
-              <p className="text-slate-300 text-sm leading-relaxed mb-8 italic flex-grow">
+              <BiSolidQuoteLeft className="text-primary text-4xl mb-6 shrink-0" />
+              <p className="text-slate-300 text-sm leading-relaxed mb-8 italic grow">
                 &quot;The client-care isn&apos;t just a promise; it&apos;s their standard. Every detail of our international asset relocation was managed with absolute precision.&quot;
               </p>
               <div className="flex items-center gap-4">
@@ -275,8 +272,8 @@ export default function ServicesPage() {
 
             {/* Testimonial 3 */}
             <div className="bg-neutral-dark/20 p-8 rounded-2xl border border-primary/10 flex flex-col h-full hover:border-primary/30 transition-all duration-300">
-              <BiSolidQuoteLeft className="text-primary text-4xl mb-6 flex-shrink-0" />
-              <p className="text-slate-300 text-sm leading-relaxed mb-8 italic flex-grow">
+              <BiSolidQuoteLeft className="text-primary text-4xl mb-6 shrink-0" />
+              <p className="text-slate-300 text-sm leading-relaxed mb-8 italic grow">
                 &quot;A masterclass in wealth advisory. Their ability to acquire off-market placements in highly competitive climates is why they remain our only option.&quot;
               </p>
               <div className="flex items-center gap-4">
