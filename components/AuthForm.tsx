@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { Role } from '@/interfaces/userInterface';
 import { Loader } from './Loader';
 import { useRouter } from 'next/navigation';
 import { checkAuthenticationCode } from '@/lib/helperFunctions';

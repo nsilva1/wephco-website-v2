@@ -5,7 +5,6 @@ import { IProperty } from '@/interfaces/propertyInterface';
 import { getAllProperties } from '@/actions/properties';
 import { PropertyCard } from './PropertyCard';
 import { Loader } from './Loader';
-import { InterestForm } from './InterestForm';
 
 
 const Properties = ({showForm = false}: {showForm: boolean}) => {

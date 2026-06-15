@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { fetchCategories, fetchPosts } from "@/actions/blog"
+import { fetchCategories } from "@/actions/blog"
 import { useState, useCallback, useEffect } from "react"
 import { IBlogCategory } from "@/interfaces/blogInterface"
 

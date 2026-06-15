@@ -21,23 +21,18 @@ const PropertyForm = () => {
     const [imageProgress, setImageProgress] = useState(0);
     const [pdfProgress, setPdfProgress] = useState(0);
     const [imageUploading, setImageUploading] = useState(false);
+    const [country, setCountry] = useState('')
+    const [city, setCity] = useState('');
     const [pdfUploading, setPdfUploading] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [error, setError] = useState('')
     const [success, setSuccess] = useState('')
     const [previewImages, setPreviewImages] = useState<string[]>([])
-    const [formData, setFormData] = useState<Omit<IProperty, 'createdAt' | 'updatedAt'>>({
-      name: '',
+    const [formData, setFormData] = useState({
+      title: '',
       description: '',
-      images: [],
-      country: '',
-      city: '',
-      pdfUrl: ''
     })
     const [countries, setCountries] = useState<{label: string, value: string}[]>([])
-    // const [cities, setCities] = useState<{label: string}[]>([])
-    // const [countryCode, setCountryCode] = useState('')
-
 
     const fetchCountries = useCallback(async () => {
         try {
@@ -48,35 +43,15 @@ const PropertyForm = () => {
         }
     },[])
 
-
-    // const fetchCities = useCallback(async (code:string) => {
-        
-    //     try {
-    //         const data = await getCitiesByCountry(code)
-    //         setCities(data)
-    //     } catch (error) {
-    //         setError('Failed to fetch cities')
-    //     }
-    // }, [countryCode])
-
-
-    // const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    //     const selectedCountry = e.target.value
-    //     setFormData({...formData, country: selectedCountry})
-    //     setCountryCode(selectedCountry)
-    // }
-    
     const clearForm = () => {
         setFormData({
-          name: '',
+          title: '',
           description: '',
-          images: [],
-          country: '',
-          city: '',
-          pdfUrl: ''
         })
         setPreviewImages([])
         setSelectedFiles(null)
+        setCountry('')
+        setCity('')
         setError('')
         setSuccess('')
     }
@@ -103,7 +78,6 @@ const PropertyForm = () => {
         const pdfFile = pdfInputRef.current?.files[0]
         const imageURLs: string[] = [];
         const id = generateId()
-      
 
         try {
           // upload images and return image urls
@@ -115,10 +89,26 @@ const PropertyForm = () => {
           // upload pdf
           const pdfBlob = await uploadFile(id, pdfFile, setPdfProgress)
           
-          formData.images = imageURLs;
-          formData.pdfUrl = pdfBlob.url
+          const propertyData: Omit<IProperty, 'createdAt' | 'updatedAt'> = {
+            title: formData.title,
+            description: formData.description,
+            images: imageURLs,
+            pdfUrl: pdfBlob.url,
+            location: `${city}, ${country}`,
+            developer: '',
+            price: 0,
+            status: 'Available',
+            currency: 'USD',
+            tag: 'Local',
+            category: 'Sale',
+            bedroom: 0,
+            bathroom: 0,
+            square_foot: 0,
+            verified: false,
+            interests: []
+          }
 
-          await createProperty(formData)         
+          await createProperty(propertyData)         
 
           setSuccess('Property created successfully')
           clearForm()
@@ -183,9 +173,9 @@ const PropertyForm = () => {
           </label>
           <input
             type="text"
-            name="name"
-            value={formData.name}
-            onChange={(e) => setFormData({...formData, name: e.target.value})}
+            name="title"
+            value={formData.title}
+            onChange={(e) => setFormData({...formData, title: e.target.value})}
             required
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
@@ -280,13 +270,9 @@ const PropertyForm = () => {
           <Select 
             options={countries}
             onChange={(option) => {
-              setFormData({...formData, country: option!.label})
-              // setCountryCode(option!.value)
-              // fetchCities(option!.value)
-            }
-            }
+              setCountry(option!.label);
+            }}
           />
-          
         </div>
 
         <div className='my-3'>
@@ -301,8 +287,8 @@ const PropertyForm = () => {
           <input 
             type="text"
             name="city"
-            value={formData.city}
-            onChange={(e) => setFormData({...formData, city: e.target.value})}
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
             required
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />

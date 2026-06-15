@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { CgArrowRight } from 'react-icons/cg';
-import { typography, layout } from '@/lib/styles'; // Assuming you have a styles file for typography
+import { typography, layout } from '@/lib/styles';
 
 const Regions = () => {
   const [abudhabiOpen, setAbudhabiOpen] = useState(false);

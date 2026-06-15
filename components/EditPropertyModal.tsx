@@ -59,18 +59,14 @@ const EditPropertyModal = ({open, close, modalData, callback}: ModalProps<IPrope
                     <div className='grid grid-cols-1 gap-4'>
                         <div>
                             <label className='block mb-2 text-sm font-medium text-gray-700'>Name</label>
-                            <input type='text' className='p-2 border w-full border-gray-300 rounded-md' value={formData.name} name='name' onChange={handleInputChange} />
+                            <input type='text' className='p-2 border w-full border-gray-300 rounded-md' value={formData.title} name='title' onChange={handleInputChange} />
                         </div>
                         <div>
-                            <label className='block mb-2 text-sm font-medium text-gray-700'>Country</label>
-                            <input type='text' className='p-2 border w-full border-gray-300 rounded-md' value={formData.country} name='country' onChange={handleInputChange} />
+                            <label className='block mb-2 text-sm font-medium text-gray-700'>Location</label>
+                            <input type='text' className='p-2 border w-full border-gray-300 rounded-md' value={formData.location} name='location' onChange={handleInputChange} />
                         </div>
                     </div>
                     <div className='grid grid-cols-1 gap-4'>
-                        <div>
-                            <label className='block mb-2 text-sm font-medium text-gray-700'>City</label>
-                            <input type='text' className='p-2 border w-full border-gray-300 rounded-md' value={formData.city} name='city' onChange={handleInputChange} />
-                        </div>
                         <div>
                             <label className='block mb-2 text-sm font-medium text-gray-700'>Description</label>
                             <textarea className='p-2 border w-full border-gray-300 rounded-md' value={formData.description} rows={4} name='description' onChange={handleInputChange} />

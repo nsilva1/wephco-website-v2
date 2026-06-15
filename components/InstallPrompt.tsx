@@ -66,12 +66,12 @@ const ReloadPrompt = () => {
   if (!offlineReady && !needRefresh && !showInstallPrompt) return null;
 
   return (
-    <div className="fixed bottom-6 right-6 z-[100] flex flex-col gap-3 max-w-sm w-[calc(100vw-3rem)] pointer-events-none">
+    <div className="fixed bottom-6 right-6 z-100 flex flex-col gap-3 max-w-sm w-[calc(100vw-3rem)] pointer-events-none">
       
       {/* 1. Offline Ready Toast */}
       {offlineReady && (
         <div className="bg-white border-l-4 border-green-500 p-4 rounded-lg shadow-2xl flex items-center gap-3 animate-in fade-in slide-in-from-right-10 pointer-events-auto">
-          <CheckCircle2 className="text-green-500 flex-shrink-0" size={20} />
+          <CheckCircle2 className="text-green-500 shrink-0" size={20} />
           <p className="text-sm font-medium text-gray-700">App ready for offline use!</p>
         </div>
       )}

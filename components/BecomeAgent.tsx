@@ -3,7 +3,7 @@ import Link from 'next/link'
 import agent from '@/images/building2.jpg'
 import Image from 'next/image'
 import { BiArrowToRight } from 'react-icons/bi'
-import { typography, layout } from '@/lib/styles' // Assuming you have a styles file for typography
+import { typography, layout } from '@/lib/styles'
 
 const BecomeAgent = () => {
   return (

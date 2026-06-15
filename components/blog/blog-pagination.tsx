@@ -1,18 +1,5 @@
 "use client"
 
-import Link from "next/link"
-import { useSearchParams } from "next/navigation"
-import { ChevronLeft, ChevronRight } from "lucide-react"
-import { Button } from "@/components/ui/button"
-
-interface BlogPaginationProps {
-  pagination: {
-    page: number
-    totalPages: number
-    hasNext: boolean
-    hasPrev: boolean
-  }
-}
 
 interface PaginatedResponse<T> {
   posts?: T[];

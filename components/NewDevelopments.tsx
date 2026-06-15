@@ -3,8 +3,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { IProperty } from '@/interfaces/propertyInterface';
 import { NewDevelopmentCard } from './NewDevelopmentCard';
-import Link from 'next/link';
-import { BiArrowToRight } from 'react-icons/bi';
 import { typography, layout } from '@/lib/styles';
 import Select from 'react-select'
 import { getAllProperties } from '@/actions/properties';
@@ -40,7 +38,7 @@ const NewDevelopmentsSection = () => {
 
     // Create a list of unique countries for dropdown
   const countryOptions = useMemo(() => {
-    const countries = Array.from(new Set(properties.map((p) => p.country)));
+    const countries = Array.from(new Set(properties.map((p) => p.location.split(',')![1])));
     return countries.map((c) => ({ label: c, value: c }));
   }, [properties]);
 
@@ -48,7 +46,7 @@ const NewDevelopmentsSection = () => {
   // Filter properties by selectedCountry
   const filteredProperties = useMemo(() => {
     if (!selectedCountry) return [];
-    return properties.filter((p) => p.country === selectedCountry);
+    return properties.filter((p) => p.location.split(',')![1] === selectedCountry);
   }, [properties, selectedCountry]);
   
   
