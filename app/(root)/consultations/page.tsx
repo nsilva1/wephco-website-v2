@@ -19,7 +19,6 @@ import {
   Star, 
   Wallet,
   MapPin,
-  Sparkles,
   CheckCircle2
 } from 'lucide-react';
 import { Loader } from '@/components/Loader';
