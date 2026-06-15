@@ -13,15 +13,18 @@ import {
   BiEnvelope,
   BiPhoneCall
 } from 'react-icons/bi';
+import { FIRESTORE_COLLECTIONS } from '@/lib/constants';
 
 export default function AffiliatesPage() {
   const [name, setName] = useState('');
   const [experience, setExperience] = useState('');
   const [brokerage, setBrokerage] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [message, setMessage] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
     if (!name || !experience || !brokerage) {
       toast.warning('Please fill in all required fields');
@@ -32,11 +35,14 @@ export default function AffiliatesPage() {
       setSubmitting(true);
       
       // Save application details to 'agentApplications' collection in Firestore
-      await addDoc(collection(db, 'agentApplications'), {
+      await addDoc(collection(db, FIRESTORE_COLLECTIONS.AFFILIATES), {
         name,
         experience: Number(experience),
         currentBrokerage: brokerage,
+        phone,
+        email,
         message: message || 'I am interested in joining the network.',
+        verified: false,
         createdAt: new Date()
       });
 
@@ -47,6 +53,8 @@ export default function AffiliatesPage() {
       setExperience('');
       setBrokerage('');
       setMessage('');
+      setPhone('');
+      setEmail('');
     } catch (error) {
       console.error('Error submitting application: ', error);
       toast.error('Failed to submit application. Please try again.');
@@ -66,16 +74,13 @@ export default function AffiliatesPage() {
       {/* Hero Section */}
       <section className="relative h-[550px] flex items-center justify-center px-6 overflow-hidden">
         <div 
-          className="absolute inset-0 bg-cover bg-center brightness-[0.4] scale-103" 
+          className="absolute inset-0 bg-cover bg-center scale-103" 
           style={{ 
             backgroundImage: `linear-gradient(to right, rgba(2, 38, 24, 0.9), rgba(10, 15, 13, 0.85)), url('https://lh3.googleusercontent.com/aida-public/AB6AXuAOLGUwyUhxm-nLIji8OosXtupLJ3ECjoz5IZVmbj7-AfMy8MPcNvFChsrbZa_kdRxdCUMhD1XmRM7Ee2NCNozx_55eRUVUkcidxHhboEGzTyte8fyYSyaYNz4H9kmCcpfuzNFdpRidlqaKcFXbONMrbPVxWIXky9ES9gBt3CrR9WLUBGKZu-3oeIaPTz3OPZmVjJELjqKd7T3AooE8RSuFNsKfmC28wGg-tlE2STmXEG-eydvL1jT1xKLj4zcWQe9siVO4Id_JXc_c')` 
           }}
         ></div>
         
         <div className="relative z-10 max-w-4xl text-center space-y-6 mt-12 md:mt-0">
-          <span className="inline-block text-primary font-bold tracking-widest uppercase mb-2 text-xs px-5 py-2 rounded-full border border-primary/30 bg-primary/10">
-            Corporate Partnerships
-          </span>
           <h1 className="text-5xl md:text-7xl font-black text-slate-100 leading-tight">
             Join the <span className="text-primary italic">Elite</span> Network
           </h1>
@@ -223,7 +228,7 @@ export default function AffiliatesPage() {
               </div>
               <div className="flex items-center gap-3 text-primary">
                 <BiCheckCircle className="text-lg" />
-                <span className="text-slate-200 text-sm font-medium">24/7 Agent Desk Assistance</span>
+                <span className="text-slate-200 text-sm font-medium">Agent Desk Assistance</span>
               </div>
               <div className="flex items-center gap-3 text-primary">
                 <BiCheckCircle className="text-lg" />
@@ -255,6 +260,31 @@ export default function AffiliatesPage() {
                       placeholder="e.g. 5"
                       value={experience}
                       onChange={(e) => setExperience(e.target.value)}
+                      className="w-full bg-background-dark border border-white/10 rounded-lg px-4 py-3 text-slate-100 focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-slate-600 text-sm"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold uppercase tracking-widest text-primary/80">Email *</label>
+                    <input 
+                      required
+                      type="email"
+                      placeholder="john@example.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full bg-background-dark border border-white/10 rounded-lg px-4 py-3 text-slate-100 focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-slate-600 text-sm"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold uppercase tracking-widest text-primary/80">Phone Number *</label>
+                    <input 
+                      required
+                      type="tel"
+                      placeholder="e.g. 080123456789"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
                       className="w-full bg-background-dark border border-white/10 rounded-lg px-4 py-3 text-slate-100 focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-slate-600 text-sm"
                     />
                   </div>
@@ -309,11 +339,11 @@ export default function AffiliatesPage() {
           <div className="flex flex-wrap justify-center gap-6 pt-4">
             <div className="flex items-center gap-2 px-6 py-2 bg-background-dark/50 rounded-full border border-primary/20">
               <BiPhoneCall className="text-primary text-base" />
-              <span className="text-xs font-medium">+234 (0) 900 WEPHCO</span>
+              <span className="text-xs font-medium">+234 (0) 916 124 6300</span>
             </div>
             <div className="flex items-center gap-2 px-6 py-2 bg-background-dark/50 rounded-full border border-primary/20">
               <BiEnvelope className="text-primary text-base" />
-              <span className="text-xs font-medium">partnerships@wephco.com</span>
+              <span className="text-xs font-medium">contact@wephco.com</span>
             </div>
           </div>
         </div>

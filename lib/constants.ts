@@ -277,4 +277,5 @@ export const FIRESTORE_COLLECTIONS = {
     KYC: 'kyc',
     INQUIRY: 'inquiry',
     JOB_APPLICATIONS: 'job_applications',
+    AFFILIATES: 'affiliates',
 }
