@@ -6,7 +6,7 @@ import aldar from '@/images/aldar.png'
 import damac from '@/images/damac.svg'
 import sober from '@/images/sober.png'
 import aarano from '@/images/aarano.png'
-import { MdDashboard, MdChatBubble, MdAttachMoney, MdVerifiedUser, MdNotifications, MdAnalytics } from "react-icons/md";
+import { MdDashboard, MdChatBubble, MdAttachMoney, MdVerifiedUser, MdNotifications, MdAnalytics, MdEvent } from "react-icons/md";
 import { BiBuildings, BiSupport } from "react-icons/bi";
 import { BsPeopleFill } from "react-icons/bs";
 import { Role } from "@/interfaces/userInterface";
@@ -161,6 +161,11 @@ export const dashboardMenu = [
         icon: MdAnalytics,
         path: '/dashboard/analytics'
     },
+    {
+        label: 'Events',
+        icon: MdEvent,
+        path: '/dashboard/events'
+    },
 ]
 
 export const allowedRoles = [Role.ADMIN, Role.SUPERADMIN, Role.SUPPORT]
@@ -279,4 +284,5 @@ export const FIRESTORE_COLLECTIONS = {
     INQUIRY: 'inquiry',
     JOB_APPLICATIONS: 'job_applications',
     AFFILIATES: 'affiliates',
+    EVENTS: 'events',
 }
