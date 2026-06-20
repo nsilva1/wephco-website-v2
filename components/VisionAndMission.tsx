@@ -28,7 +28,7 @@ const VisionAndMission = () => {
 
           <div className="mt-8 flex gap-12 border-t border-primary/10 pt-8">
             <div>
-              <p className="text-primary text-3xl font-bold mb-1">$10M+</p>
+              <p className="text-primary text-3xl font-bold mb-1">$35M+</p>
               <p className="text-slate-500 text-[10px] uppercase tracking-widest font-bold">Total Sales</p>
             </div>
             <div>

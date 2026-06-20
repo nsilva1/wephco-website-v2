@@ -254,11 +254,11 @@ export default function SellPage() {
         <div 
           className="w-full h-[360px] md:h-[450px] bg-cover bg-center flex items-center justify-center p-6 text-center" 
           style={{
-            backgroundImage: `linear-gradient(rgba(32, 29, 18, 0.8), rgba(32, 29, 18, 0.95)), url('https://lh3.googleusercontent.com/aida-public/AB6AXuC3__jIO7Q6O8B4hGtEX2zv6aFO73APne6N5KPQiuAllL8trjOLsz4OmTMfTLsmgMkzgSFmnmmRrPfx-xuP1vZNL3sEW9Ar3g1RzOEuiLC5yD7uFOLEC5Cv3K60Ub8HXvwmX9GJZ3n8HQ2qlYkDsQ3aUElmYPKTJbE_4J0O5E1adCvVRjgbLhQBqa0IX7Lk7N5bikYezOw6enyf8flmujdmNLktGrms-ldkrGE_KmDlmUFoWYLl9Aqm7L4Yja7BmfmgtaGBL5xlcb7B')`
+            backgroundImage: `linear-gradient(rgba(32, 29, 18, 0.45), rgba(32, 29, 18, 0.75)), url('https://lh3.googleusercontent.com/aida-public/AB6AXuC3__jIO7Q6O8B4hGtEX2zv6aFO73APne6N5KPQiuAllL8trjOLsz4OmTMfTLsmgMkzgSFmnmmRrPfx-xuP1vZNL3sEW9Ar3g1RzOEuiLC5yD7uFOLEC5Cv3K60Ub8HXvwmX9GJZ3n8HQ2qlYkDsQ3aUElmYPKTJbE_4J0O5E1adCvVRjgbLhQBqa0IX7Lk7N5bikYezOw6enyf8flmujdmNLktGrms-ldkrGE_KmDlmUFoWYLl9Aqm7L4Yja7BmfmgtaGBL5xlcb7B')`
           }}
         >
           <div className="max-w-3xl">
-            <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-6">
+            <h1 className="text-2xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-white mb-6">
               List Your Property With Us
             </h1>
             <p className="text-slate-300 text-sm md:text-lg max-w-2xl mx-auto leading-relaxed">
@@ -270,7 +270,7 @@ export default function SellPage() {
 
       {/* Main Submission Form */}
       <section className="max-w-5xl mx-auto px-4 md:px-8 py-16 -mt-20 relative z-10">
-        <div className="bg-slate-900/60 backdrop-blur-md border border-primary/20 rounded-2xl shadow-2xl p-6 md:p-10">
+        <div className="bg-slate-900/60 backdrop-blur-md border border-primary/20 rounded-2xl shadow-2xl p-6 md:p-10 mt-20">
           <form onSubmit={handleSubmit} className="space-y-8">
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

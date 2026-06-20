@@ -72,11 +72,11 @@ export default function AffiliatesPage() {
     <div className="min-h-screen bg-background-dark text-slate-100 font-display pt-20">
       
       {/* Hero Section */}
-      <section className="relative h-[550px] flex items-center justify-center px-6 overflow-hidden">
+      <section className="relative h-[360px] md:h-[450px] flex items-center justify-center px-6 overflow-hidden">
         <div 
-          className="absolute inset-0 bg-cover bg-center scale-103" 
+          className="absolute inset-0 bg-cover bg-center scale-100" 
           style={{ 
-            backgroundImage: `linear-gradient(to right, rgba(2, 38, 24, 0.9), rgba(10, 15, 13, 0.85)), url('https://lh3.googleusercontent.com/aida-public/AB6AXuAOLGUwyUhxm-nLIji8OosXtupLJ3ECjoz5IZVmbj7-AfMy8MPcNvFChsrbZa_kdRxdCUMhD1XmRM7Ee2NCNozx_55eRUVUkcidxHhboEGzTyte8fyYSyaYNz4H9kmCcpfuzNFdpRidlqaKcFXbONMrbPVxWIXky9ES9gBt3CrR9WLUBGKZu-3oeIaPTz3OPZmVjJELjqKd7T3AooE8RSuFNsKfmC28wGg-tlE2STmXEG-eydvL1jT1xKLj4zcWQe9siVO4Id_JXc_c')` 
+            backgroundImage: `linear-gradient(to right, rgba(2, 38, 24, 0.45), rgba(10, 15, 13, 0.75)), url('https://images.unsplash.com/photo-1550565118-3a14e8d0386f?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')` 
           }}
         ></div>
         

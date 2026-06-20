@@ -40,7 +40,6 @@ const PropertyCard = ({ showModal, openModal, ...props }: PropertyCardProps) => 
             </div>
             <div className='absolute inset-0 bg-linear-to-t from-background-dark via-transparent to-transparent opacity-80 z-10'></div>
             <div className='absolute bottom-4 left-6 right-6 z-20'>
-              <p className='text-primary text-2xl font-black mb-0.5'>{format(props.price, props.currency)}</p>
               <h4 className='text-white text-lg font-light tracking-tight'>{props.title}</h4>
             </div>
           </div>
@@ -53,6 +52,8 @@ const PropertyCard = ({ showModal, openModal, ...props }: PropertyCardProps) => 
                 {props.location}
               </span>
             </div>
+
+            <p className='text-primary text-2xl font-black mb-0.5'>{format(props.price, props.currency)}</p>
 
             <Link
               href={`/properties/${props.id}`}

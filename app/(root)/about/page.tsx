@@ -14,9 +14,9 @@ export default function AboutPage() {
     <div className="min-h-screen bg-background-dark text-slate-100 font-display pt-20">
       
       {/* Hero Section */}
-      <section className="relative h-[65vh] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-linear-to-b from-black/60 to-background-dark/95 z-10"></div>
-        <div className="absolute inset-0 bg-cover bg-center scale-103 brightness-[0.7]">
+      <section className="relative h-[55vh] flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 bg-linear-to-b from-black/30 to-background-dark/75 z-10"></div>
+        <div className="absolute inset-0 bg-cover bg-center">
           <Image
             src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9XUxl8rW70qgs1CxkB4XT3TOYwJMK7mJJYSdBZxzqqoczpRBFCgiiPfBCvm-UEsZiNLerP_uk-D33GVBJaysIDSAZDHHg62E58Y3Js6MITBuMNp8HtuYDv_NhjwgvIUgOifMYuxrvUnsaQHFO56MYYcQpwxB7jftgeCuc74eQHGb3FB4xw-Uc3TCAi8ujdvk0Q39fHfzmKwgVdQKFL4pH8YZwdLm_zoFk3WxwR_H-5lHPa4JddRMWbDeECAn8HerEiTFuKgBYfjTI"
             alt="Modern architectural luxury mansion exterior"
@@ -26,9 +26,6 @@ export default function AboutPage() {
           />
         </div>
         <div className="relative z-20 max-w-4xl px-6 text-center space-y-6">
-          <span className="inline-block text-primary font-bold tracking-widest uppercase text-xs px-5 py-2 rounded-full border border-primary/30 bg-primary/10">
-            About Wephco
-          </span>
           <h1 className="text-4xl md:text-7xl font-light text-white leading-tight">
             Redefining <span className="text-primary font-extrabold italic">Luxury</span> Living
           </h1>
@@ -98,7 +95,7 @@ export default function AboutPage() {
             <div className="text-[10px] uppercase tracking-widest font-bold text-slate-400">Years Experience</div>
           </div>
           <div>
-            <div className="text-4xl font-black text-primary mb-2">$10M+</div>
+            <div className="text-4xl font-black text-primary mb-2">$35M+</div>
             <div className="text-[10px] uppercase tracking-widest font-bold text-slate-400">Total Sales</div>
           </div>
           <div>

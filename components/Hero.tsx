@@ -10,11 +10,11 @@ const Hero = () => {
         
         <div className='relative z-20 text-center text-white px-6 max-w-4xl pt-16 w-full'>
             <h1 className='text-4xl md:text-7xl font-light mb-6 tracking-tight leading-tight'>
-                Make A Move For<br />
-                Your <span className='font-extrabold italic text-primary'>Masterpiece Future</span>
+                Secure Your<br className="md:hidden"/>
+                <span className='font-extrabold italic text-primary'>Investment</span>
             </h1>
             <p className='text-slate-300 text-base md:text-xl max-w-2xl mx-auto font-light leading-relaxed mb-4'>
-                With Over $10 Million Sold — Wephco is the most reliable luxury real estate advisory, bridging ambition with generational legacy.
+                With Over $35 Million Sold — Wephco is the most reliable luxury real estate advisory, bridging ambition with generational legacy.
             </p>
             {/* <HeroSearch /> */}
         </div>

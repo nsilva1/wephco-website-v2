@@ -19,7 +19,7 @@ export default function ServicesPage() {
       
       {/* Hero Section */}
       <section className="relative w-full min-h-[60vh] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-linear-to-b from-background-dark/30 via-background-dark/70 to-background-dark z-10"></div>
+        <div className="absolute inset-0 bg-linear-to-b from-background-dark/10 via-background-dark/50 to-background-dark z-10"></div>
         <div className="absolute inset-0 scale-105">
           <Image 
             src="https://lh3.googleusercontent.com/aida-public/AB6AXuCggR4STnpUKYvKcmOgBv7THHB1NiiT36GQW7sPLPZdgS5ZAiO8rvcmHVkRr_e9ocDgcQjklSv4F5oHkjWUiegd4cRULtvabEATKG_5Kjxj4f1bPARau0zMbNFsmrU17jQqG8nGHyisrf1q935Fp49we0l8wBDh4yYooUPX4fcGZvX6dFBS5lmhPAFGbU8VwAAXhOr4B-uS50qANQbw0QRTFoECeWeSGTUkVuKmRV-s4tAjwjdWb-uIdccu4mVcNv-SWJeggRukgijh"
@@ -27,7 +27,7 @@ export default function ServicesPage() {
             fill
             style={{ objectFit: 'cover' }}
             priority
-            className="opacity-75"
+            className=""
           />
         </div>
         
@@ -55,7 +55,7 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      {/* Intro section using wephcoServices.intro */}
+      {/* Intro section using */}
       <section className="py-12 px-6 md:px-20 bg-background-dark">
         <div className="max-w-4xl mx-auto text-center bg-neutral-dark/20 p-8 md:p-12 rounded-3xl border border-primary/10 backdrop-blur-md">
           <p className="text-slate-300 text-lg md:text-xl font-light leading-relaxed">

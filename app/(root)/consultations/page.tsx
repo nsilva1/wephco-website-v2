@@ -57,7 +57,7 @@ const ConsultationsPage = () => {
     email: '',
     organizationName: '',
     name: '',
-    priceRange: '$2M - $5M',
+    priceRange: '$200k - $1M',
     details: '',
   });
 
@@ -132,7 +132,7 @@ const ConsultationsPage = () => {
         <div 
           className="w-full h-[360px] md:h-[450px] bg-cover bg-center flex items-center justify-center p-6 text-center" 
           style={{
-            backgroundImage: `linear-gradient(rgba(32, 29, 18, 0.8), rgba(32, 29, 18, 0.95)), url('https://lh3.googleusercontent.com/aida-public/AB6AXuC3__jIO7Q6O8B4hGtEX2zv6aFO73APne6N5KPQiuAllL8trjOLsz4OmTMfTLsmgMkzgSFmnmmRrPfx-xuP1vZNL3sEW9Ar3g1RzOEuiLC5yD7uFOLEC5Cv3K60Ub8HXvwmX9GJZ3n8HQ2qlYkDsQ3aUElmYPKTJbE_4J0O5E1adCvVRjgbLhQBqa0IX7Lk7N5bikYezOw6enyf8flmujdmNLktGrms-ldkrGE_KmDlmUFoWYLl9Aqm7L4Yja7BmfmgtaGBL5xlcb7B')`
+            backgroundImage: `linear-gradient(rgba(32, 29, 18, 0.3), rgba(32, 29, 18, 0.75)), url('https://lh3.googleusercontent.com/aida-public/AB6AXuC3__jIO7Q6O8B4hGtEX2zv6aFO73APne6N5KPQiuAllL8trjOLsz4OmTMfTLsmgMkzgSFmnmmRrPfx-xuP1vZNL3sEW9Ar3g1RzOEuiLC5yD7uFOLEC5Cv3K60Ub8HXvwmX9GJZ3n8HQ2qlYkDsQ3aUElmYPKTJbE_4J0O5E1adCvVRjgbLhQBqa0IX7Lk7N5bikYezOw6enyf8flmujdmNLktGrms-ldkrGE_KmDlmUFoWYLl9Aqm7L4Yja7BmfmgtaGBL5xlcb7B')`
           }}
         >
           <div className="max-w-3xl">
@@ -148,7 +148,7 @@ const ConsultationsPage = () => {
 
       {/* Main Form Content */}
       <section className="max-w-6xl mx-auto px-4 md:px-8 py-16 -mt-20 relative z-10">
-        <div className="bg-slate-900/60 backdrop-blur-md border border-primary/20 rounded-2xl shadow-2xl overflow-hidden">
+        <div className="bg-slate-900/60 backdrop-blur-md border border-primary/20 rounded-2xl shadow-2xl overflow-hidden mt-20">
           <div className="grid grid-cols-1 lg:grid-cols-3">
             
             {/* Form Steps Container */}
