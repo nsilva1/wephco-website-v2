@@ -31,7 +31,7 @@ export default async function KycDetailPage({ params }: { params: Promise<{ id: 
     <div className="flex-1 space-y-6 p-4 md:p-8 pt-6">
       <div className="flex items-center gap-4">
         <Link href="/dashboard/kyc">
-          <Button variant="outline" size="icon">
+          <Button variant="ghost" size="icon">
             <ArrowLeft className="h-4 w-4" />
           </Button>
         </Link>
@@ -43,9 +43,9 @@ export default async function KycDetailPage({ params }: { params: Promise<{ id: 
 
       <div className="grid gap-6 md:grid-cols-2">
         {/* Agent Info */}
-        <Card>
+        <Card className="bg-white">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-muted-foreground">
               <UserIcon className="h-5 w-5 text-muted-foreground" />
               Agent Information
             </CardTitle>
@@ -53,15 +53,15 @@ export default async function KycDetailPage({ params }: { params: Promise<{ id: 
           <CardContent className="space-y-4">
             <div className="flex justify-between border-b pb-2">
               <span className="text-muted-foreground">Name</span>
-              <span className="font-medium">{user.name}</span>
+              <span className="font-medium text-primary">{user.name}</span>
             </div>
             <div className="flex justify-between border-b pb-2">
               <span className="text-muted-foreground">Email</span>
-              <span className="font-medium">{user.email}</span>
+              <span className="font-medium text-primary">{user.email}</span>
             </div>
             <div className="flex justify-between border-b pb-2">
               <span className="text-muted-foreground">Role</span>
-              <span className="font-medium">{user.role}</span>
+              <span className="font-medium text-primary">{user.role}</span>
             </div>
             <div className="flex justify-between border-b pb-2">
               <span className="text-muted-foreground">Account Status</span>
@@ -73,9 +73,9 @@ export default async function KycDetailPage({ params }: { params: Promise<{ id: 
         </Card>
 
         {/* KYC Documents */}
-        <Card>
+        <Card className="bg-white">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-muted-foreground">
               <ShieldCheck className="h-5 w-5 text-muted-foreground" />
               Verification Documents
             </CardTitle>
@@ -84,7 +84,7 @@ export default async function KycDetailPage({ params }: { params: Promise<{ id: 
             <div className="flex justify-between items-center border-b pb-3">
               <div>
                 <span className="text-muted-foreground text-sm block">NIN (National ID Number)</span>
-                <span className="font-mono font-medium text-lg">
+                <span className="font-mono font-medium text-lg text-primary">
                   {user.bankInfo?.nin || '—'}
                 </span>
               </div>
@@ -97,7 +97,7 @@ export default async function KycDetailPage({ params }: { params: Promise<{ id: 
             <div className="flex justify-between items-center border-b pb-3">
               <div>
                 <span className="text-muted-foreground text-sm block">BVN (Bank Verification Number)</span>
-                <span className="font-mono font-medium text-lg">
+                <span className="font-mono font-medium text-lg text-primary">
                   {user.bankInfo?.bvn || '—'}
                 </span>
               </div>
@@ -114,15 +114,15 @@ export default async function KycDetailPage({ params }: { params: Promise<{ id: 
                 <div className="bg-muted p-4 rounded-md space-y-2 text-sm">
                   <div className="grid grid-cols-3">
                     <span className="text-muted-foreground">Bank:</span>
-                    <span className="col-span-2 font-medium">{user.bankInfo.bankName}</span>
+                    <span className="col-span-2 font-medium text-primary">{user.bankInfo.bankName}</span>
                   </div>
                   <div className="grid grid-cols-3">
                     <span className="text-muted-foreground">Acct Name:</span>
-                    <span className="col-span-2 font-medium">{user.bankInfo.bankAccountName}</span>
+                    <span className="col-span-2 font-medium text-primary">{user.bankInfo.bankAccountName}</span>
                   </div>
                   <div className="grid grid-cols-3">
                     <span className="text-muted-foreground">Acct No:</span>
-                    <span className="col-span-2 font-mono font-medium">{user.bankInfo.bankAccountNumber}</span>
+                    <span className="col-span-2 font-mono font-medium text-primary">{user.bankInfo.bankAccountNumber}</span>
                   </div>
                 </div>
               </div>
@@ -141,9 +141,9 @@ export default async function KycDetailPage({ params }: { params: Promise<{ id: 
       </div>
 
       {/* Actions */}
-      <Card>
+      <Card className="bg-white">
         <CardHeader>
-          <CardTitle className="text-lg">Actions</CardTitle>
+          <CardTitle className="text-lg text-muted-foreground">Actions</CardTitle>
         </CardHeader>
         <CardContent>
           <KycControls userId={user.id} currentStatus={kycStatus} />

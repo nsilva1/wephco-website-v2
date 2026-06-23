@@ -90,7 +90,7 @@ export function DataTable<TData, TValue>({
       </div>
       <div className="rounded-md border bg-white">
         <Table>
-          <TableHeader>
+          <TableHeader className="bg-black">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
@@ -114,6 +114,7 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  className="hover:bg-gray-50"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
@@ -134,7 +135,7 @@ export function DataTable<TData, TValue>({
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
         <Button
-          variant="outline"
+          variant="ghost"
           size="sm"
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
@@ -142,7 +143,7 @@ export function DataTable<TData, TValue>({
           Previous
         </Button>
         <Button
-          variant="outline"
+          variant="ghost"
           size="sm"
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}

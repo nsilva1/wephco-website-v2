@@ -89,7 +89,7 @@ export const columns: ColumnDef<IUserInfo>[] = [
       const user = row.original;
       return (
         <Link href={`/dashboard/kyc/${user.id}`}>
-          <Button variant="outline" size="sm" className="flex items-center gap-2">
+          <Button variant="default" size="sm" className="flex items-center gap-2">
             Review <ExternalLink className="h-4 w-4" />
           </Button>
         </Link>
