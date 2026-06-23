@@ -35,7 +35,7 @@ export default async function WithdrawalDetailsPage({ params }: { params: Promis
     <div className="flex-1 space-y-6 p-4 md:p-8 pt-6">
       <div className="flex items-center gap-4">
         <Link href="/dashboard/withdrawals">
-          <Button variant="outline" size="icon">
+          <Button variant="ghost" size="icon">
             <ArrowLeft className="h-4 w-4" />
           </Button>
         </Link>
@@ -46,9 +46,9 @@ export default async function WithdrawalDetailsPage({ params }: { params: Promis
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
-        <Card>
+        <Card className="bg-white">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-muted-foreground">
               <Banknote className="h-5 w-5 text-muted-foreground" />
               Request Information
             </CardTitle>
@@ -56,22 +56,22 @@ export default async function WithdrawalDetailsPage({ params }: { params: Promis
           <CardContent className="space-y-4">
             <div className="flex justify-between border-b pb-2">
               <span className="text-muted-foreground">Amount</span>
-              <span className="font-bold text-lg text-[#cfb53b]">{formattedAmount}</span>
+              <span className="font-bold text-lg text-primary">{formattedAmount}</span>
             </div>
             <div className="flex justify-between border-b pb-2">
               <span className="text-muted-foreground">Date Submitted</span>
-              <span className="font-medium">
+              <span className="font-medium text-primary">
                 {transaction.createdAt ? format(new Date(transaction.createdAt), 'PPpp') : 'N/A'}
               </span>
             </div>
             <div className="flex justify-between border-b pb-2">
               <span className="text-muted-foreground">Transaction ID</span>
-              <span className="font-mono text-sm">{transaction.id}</span>
+              <span className="font-mono text-sm text-primary">{transaction.id}</span>
             </div>
             {transaction.description && (
               <div className="pt-2">
                 <span className="text-muted-foreground text-sm block mb-1">Description</span>
-                <p className="text-sm">{transaction.description}</p>
+                <p className="text-sm text-primary">{transaction.description}</p>
               </div>
             )}
             
@@ -87,15 +87,15 @@ export default async function WithdrawalDetailsPage({ params }: { params: Promis
             {transaction.status === 'Completed' && transaction.approvedAt && (
               <div className="pt-2">
                 <span className="text-muted-foreground text-sm block mb-1">Approved On</span>
-                <p className="text-sm">{format(new Date(transaction.approvedAt), 'PPpp')}</p>
+                <p className="text-sm text-primary">{format(new Date(transaction.approvedAt), 'PPpp')}</p>
               </div>
             )}
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-white">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-muted-foreground">
               <UserIcon className="h-5 w-5 text-muted-foreground" />
               Agent Details
             </CardTitle>
@@ -105,19 +105,19 @@ export default async function WithdrawalDetailsPage({ params }: { params: Promis
               <>
                 <div className="flex justify-between border-b pb-2">
                   <span className="text-muted-foreground">Name</span>
-                  <span className="font-medium">{user.user.name}</span>
+                  <span className="font-medium text-primary">{user.user.name}</span>
                 </div>
                 <div className="flex justify-between border-b pb-2">
                   <span className="text-muted-foreground">Email</span>
-                  <span className="font-medium">{user.user.email}</span>
+                  <span className="font-medium text-primary">{user.user.email}</span>
                 </div>
                 <div className="flex justify-between border-b pb-2">
                   <span className="text-muted-foreground">Role</span>
-                  <span className="font-medium">{user.user.role}</span>
+                  <span className="font-medium text-primary">{user.user.role}</span>
                 </div>
                 
                 <div className="pt-4">
-                  <h4 className="font-semibold flex items-center gap-2 mb-3">
+                  <h4 className="font-semibold flex items-center gap-2 mb-3 text-muted-foreground">
                     <Building2 className="h-4 w-4 text-muted-foreground" />
                     Bank Information
                   </h4>
@@ -125,15 +125,15 @@ export default async function WithdrawalDetailsPage({ params }: { params: Promis
                     <div className="bg-muted p-4 rounded-md space-y-2 text-sm">
                       <div className="grid grid-cols-3">
                         <span className="text-muted-foreground">Bank:</span>
-                        <span className="col-span-2 font-medium">{user.user.bankInfo.bankName}</span>
+                        <span className="col-span-2 font-medium text-primary">{user.user.bankInfo.bankName}</span>
                       </div>
                       <div className="grid grid-cols-3">
                         <span className="text-muted-foreground">Acct Name:</span>
-                        <span className="col-span-2 font-medium">{user. user.bankInfo.bankAccountName}</span>
+                        <span className="col-span-2 font-medium text-primary">{user. user.bankInfo.bankAccountName}</span>
                       </div>
                       <div className="grid grid-cols-3">
                         <span className="text-muted-foreground">Acct No:</span>
-                        <span className="col-span-2 font-mono font-medium">{user.user.bankInfo.bankAccountNumber}</span>
+                        <span className="col-span-2 font-mono font-medium text-primary">{user.user.bankInfo.bankAccountNumber}</span>
                       </div>
                     </div>
                   ) : (

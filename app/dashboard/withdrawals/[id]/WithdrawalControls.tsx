@@ -81,7 +81,7 @@ export default function WithdrawalControls({ transactionId, amount, status }: Wi
         <DialogTrigger asChild>
           <Button className="bg-green-600 hover:bg-green-700 text-white">Approve Payout</Button>
         </DialogTrigger>
-        <DialogContent>
+        <DialogContent className="bg-white">
           <DialogHeader>
             <DialogTitle>Approve Withdrawal</DialogTitle>
             <DialogDescription>
@@ -101,7 +101,7 @@ export default function WithdrawalControls({ transactionId, amount, status }: Wi
         <DialogTrigger asChild>
           <Button variant="destructive">Reject Request</Button>
         </DialogTrigger>
-        <DialogContent>
+        <DialogContent className="bg-white">
           <DialogHeader>
             <DialogTitle>Reject Withdrawal</DialogTitle>
             <DialogDescription>
