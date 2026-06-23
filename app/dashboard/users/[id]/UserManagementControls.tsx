@@ -67,17 +67,17 @@ export function UserManagementControls({ user }: { user: IUserInfo }) {
             Credit Commission
           </Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[425px] bg-white">
           <form onSubmit={handleCredit}>
             <DialogHeader>
-              <DialogTitle>Credit Commission</DialogTitle>
+              <DialogTitle className="text-slate-500">Credit Commission</DialogTitle>
               <DialogDescription>
                 Manually add commission to this user's wallet. This action will create a transaction record.
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="amount" className="text-right">
+                <Label htmlFor="amount" className="text-right text-slate-500">
                   Amount ($)
                 </Label>
                 <Input
@@ -86,14 +86,14 @@ export function UserManagementControls({ user }: { user: IUserInfo }) {
                   step="0.01"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
-                  className="col-span-3"
+                  className="col-span-3 text-slate-500"
                   placeholder="e.g. 500"
                   required
                 />
               </div>
             </div>
             <DialogFooter>
-              <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
+              <Button type="button" variant="secondary" onClick={() => setIsDialogOpen(false)}>
                 Cancel
               </Button>
               <Button type="submit" disabled={isCrediting}>

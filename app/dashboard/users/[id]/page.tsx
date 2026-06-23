@@ -35,16 +35,16 @@ export default async function UserDetailsPage({ params }: { params: Promise<{ id
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Profile Card */}
-        <Card>
+        <Card className="bg-white">
           <CardHeader className="pb-3">
-            <CardTitle className="text-lg flex items-center gap-2">
+            <CardTitle className="text-lg flex items-center gap-2 text-blue-500">
               <User size={18} className="text-blue-500" /> Profile Overview
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
               <p className="text-sm text-gray-500">Role</p>
-              <Badge variant="outline">{user.role}</Badge>
+              <Badge variant="secondary">{user.role}</Badge>
             </div>
             <div>
               <p className="text-sm text-gray-500">Status</p>
@@ -55,25 +55,25 @@ export default async function UserDetailsPage({ params }: { params: Promise<{ id
             <div className="grid grid-cols-2 gap-4 pt-2">
               <div>
                 <p className="text-sm text-gray-500">Deals Closed</p>
-                <p className="font-semibold text-lg">{user.dealsClosed || 0}</p>
+                <p className="font-semibold text-lg text-primary">{user.dealsClosed || 0}</p>
               </div>
               <div>
                 <p className="text-sm text-gray-500">Active Leads</p>
-                <p className="font-semibold text-lg">{user.activeLeads || 0}</p>
+                <p className="font-semibold text-lg text-primary">{user.activeLeads || 0}</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
         {/* Verification Card */}
-        <Card>
+        <Card className="bg-white">
           <CardHeader className="pb-3">
-            <CardTitle className="text-lg flex items-center gap-2">
+            <CardTitle className="text-lg flex items-center gap-2 text-green-500">
               <ShieldCheck size={18} className="text-green-500" /> Verification Status
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+            <div className="flex justify-between items-center p-3 bg-gray-200 rounded-lg">
               <span className="font-medium text-slate-700">NIN Status</span>
               <Badge variant={hasNin ? "default" : "destructive"}>
                 {hasNin ? "Verified" : "Missing"}
@@ -83,7 +83,7 @@ export default async function UserDetailsPage({ params }: { params: Promise<{ id
               <p className="text-sm text-gray-600 px-1">NIN: <span className="font-mono">{user.bankInfo?.nin}</span></p>
             )}
 
-            <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+            <div className="flex justify-between items-center p-3 bg-gray-200 rounded-lg">
               <span className="font-medium text-slate-700">BVN Status</span>
               <Badge variant={hasBvn ? "default" : "destructive"}>
                 {hasBvn ? "Verified" : "Missing"}
@@ -96,10 +96,10 @@ export default async function UserDetailsPage({ params }: { params: Promise<{ id
         </Card>
 
         {/* Bank & Wallet Card */}
-        <Card>
+        <Card className="bg-white">
           <CardHeader className="pb-3">
-            <CardTitle className="text-lg flex items-center gap-2">
-              <Wallet size={18} className="text-[#cfb53b]" /> Financials
+            <CardTitle className="text-lg flex items-center gap-2 text-primary">
+              <Wallet size={18} className="text-primary" /> Financials
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -125,9 +125,9 @@ export default async function UserDetailsPage({ params }: { params: Promise<{ id
       </div>
 
       {/* Transaction History */}
-      <Card>
+      <Card className="bg-white">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 text-slate-500">
             <Activity size={18} className="text-slate-500" /> Transaction History
           </CardTitle>
           <CardDescription>Recent financial activity for this user.</CardDescription>

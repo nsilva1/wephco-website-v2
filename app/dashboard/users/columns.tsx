@@ -38,7 +38,7 @@ export const columns: ColumnDef<IUserInfo>[] = [
     accessorKey: "role",
     header: "Role",
     cell: ({ row }) => {
-      return <Badge variant="outline">{row.getValue("role")}</Badge>
+      return <Badge variant="secondary">{row.getValue("role")}</Badge>
     }
   },
   {
