@@ -1,19 +1,14 @@
 'use client';
 
-import React, { useState, FormEvent } from 'react';
+import React, { useState, SubmitEvent } from 'react';
 import { 
   Phone, 
   Calendar, 
   Clock, 
   User, 
-  Briefcase, 
-  Users, 
-  Landmark, 
-  GraduationCap, 
+  Users,  
   Building2, 
   Key, 
-  Paintbrush, 
-  ShoppingBag, 
   FileText, 
   Shield, 
   Star, 
@@ -29,17 +24,9 @@ import { consultationServices } from '@/lib/constants';
 // Match services to icons dynamically
 const getServiceIcon = (label: string) => {
   const normalized = label.toLowerCase();
-  if (normalized.includes('strategic') || normalized.includes('business')) return Briefcase;
-  if (normalized.includes('partnership') || normalized.includes('sponsorship')) return Users;
-  if (normalized.includes('investment') || normalized.includes('mortgage') || normalized.includes('financial')) return Landmark;
-  if (normalized.includes('training') || normalized.includes('capacity')) return GraduationCap;
-  if (normalized.includes('brokerage') || normalized.includes('property')) return Building2;
-  if (normalized.includes('leasing') || normalized.includes('management')) return Key;
-  if (normalized.includes('interior') || normalized.includes('design') || normalized.includes('renovation')) return Paintbrush;
-  if (normalized.includes('acquisition')) return ShoppingBag;
-  if (normalized.includes('coaching') || normalized.includes('deal')) return FileText;
-  if (normalized.includes('private') || normalized.includes('advisory')) return Shield;
-  if (normalized.includes('circle') || normalized.includes('investor')) return Star;
+  if (normalized.includes('brokerage')) return Building2;
+  if (normalized.includes('management')) return Key;
+  if (normalized.includes('consulting')) return Users;
   return Wallet;
 };
 
@@ -74,7 +61,7 @@ const ConsultationsPage = () => {
     setFormData((prev) => ({ ...prev, service: label }));
   };
 
-  const submitForm = async (e: FormEvent) => {
+  const submitForm = async (e: SubmitEvent) => {
     e.preventDefault();
 
     if (!formData.name || !formData.email || !formData.phoneNumber || !formData.meetingDate) {
@@ -213,8 +200,8 @@ const ConsultationsPage = () => {
                             }`}>
                               <Icon className="size-5" />
                             </div>
-                            <div>
-                              <p className="text-sm font-bold leading-tight">{service.label}</p>
+                            <div className="space-y-1">
+                              <p className="text-sm md:text-base font-bold leading-tight">{service.label}</p>
                             </div>
                           </div>
                         );

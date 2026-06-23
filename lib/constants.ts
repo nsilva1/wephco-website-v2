@@ -256,19 +256,9 @@ export const wephcoServices = {
 }
 
 export const consultationServices = [
-    { label: 'Business and strategic advisory' },
-    { label: 'Partnership and sponsorship ' },
-    { label: 'Investment / financial/ mortgage advisory' },
-    { label: 'Training/ capacity development ' },
-    { label: 'International/ Local  Property Brokerage' },
-    { label: 'Property management & Leasing' },
-    { label: 'Renovation & Interior/ Exterior design ' },
-    { label: 'Acquisition Consultation' },
-    { label: 'Deal Preparation & Coaching' },
-    { label: 'Private Real Estate Advisory' },
-    { label: 'Investor Circle Access' },
-    { label: 'Legacy & Wealth Structuring' },
-    { label: 'Private One-on-One Consultation' },
+    { label: 'Property Brokerage', features: ['International Property Brokerage', 'Local Property Brokerage', 'Luxury Apartments'] },
+    { label: 'Property Management', features: ['Property Management', 'Home Coming Investment', 'Investment Access', 'Global Investment Circle'] },
+    { label: 'Private Consulting', features: ['Legacy & Wealth Structuring', 'Acquisition Vetting', 'Deal Preparation', 'Webinar/Seminar'] },
 ]
 
 export const FIRESTORE_COLLECTIONS = {
