@@ -46,7 +46,7 @@ export const columns: ColumnDef<ISupportTicket>[] = [
     accessorKey: "category",
     header: "Category",
     cell: ({ row }) => {
-      return <Badge variant="outline" className="capitalize">{row.getValue("category")}</Badge>
+      return <Badge variant="secondary" className="capitalize">{row.getValue("category")}</Badge>
     },
     filterFn: (row, id, value) => {
       if (!value || value === 'all') return true
@@ -81,7 +81,7 @@ export const columns: ColumnDef<ISupportTicket>[] = [
       const ticket = row.original
       return (
         <Link href={`/dashboard/support/${ticket.id}`}>
-          <Button variant="outline" size="sm" className="flex items-center gap-2">
+          <Button variant="default" size="sm" className="flex items-center gap-2">
             View <ExternalLink className="h-4 w-4" />
           </Button>
         </Link>

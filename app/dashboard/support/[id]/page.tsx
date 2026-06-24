@@ -22,7 +22,7 @@ export default async function TicketDetailPage({ params }: { params: Promise<{ i
     <div className="flex-1 space-y-6 p-4 md:p-8 pt-6">
       <div className="flex items-center gap-4">
         <Link href="/dashboard/support">
-          <Button variant="outline" size="icon">
+          <Button variant="ghost" size="icon">
             <ArrowLeft className="h-4 w-4" />
           </Button>
         </Link>
@@ -41,9 +41,9 @@ export default async function TicketDetailPage({ params }: { params: Promise<{ i
 
       <div className="grid gap-6 md:grid-cols-2">
         {/* Ticket Content */}
-        <Card>
+        <Card className="bg-white">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-muted-foreground">
               <MessageSquare className="h-5 w-5 text-muted-foreground" />
               Ticket
             </CardTitle>
@@ -51,32 +51,32 @@ export default async function TicketDetailPage({ params }: { params: Promise<{ i
           <CardContent className="space-y-4">
             <div>
               <span className="text-muted-foreground text-sm block mb-1">Subject</span>
-              <p className="font-semibold text-lg">{ticket.subject}</p>
+              <p className="font-semibold text-lg text-muted-foreground">{ticket.subject}</p>
             </div>
             <div>
               <span className="text-muted-foreground text-sm block mb-1">Message</span>
-              <div className="bg-muted p-4 rounded-md text-sm whitespace-pre-wrap">
+              <div className="bg-gray-50 border border-gray-200 p-4 rounded-md text-sm whitespace-pre-wrap text-muted-foreground">
                 {ticket.message}
               </div>
             </div>
             <div className="flex justify-between border-t pt-3">
               <span className="text-muted-foreground text-sm">Submitted</span>
-              <span className="text-sm font-medium">
+              <span className="text-sm font-medium text-muted-foreground">
                 {ticket.createdAt ? format(new Date(ticket.createdAt), 'PPpp') : 'N/A'}
               </span>
             </div>
             <div className="flex justify-between border-t pt-3">
               <span className="text-muted-foreground text-sm">Ticket ID</span>
-              <span className="font-mono text-xs">{ticket.id}</span>
+              <span className="font-mono text-xs text-muted-foreground">{ticket.id}</span>
             </div>
           </CardContent>
         </Card>
 
         {/* User Info & Resolution */}
         <div className="space-y-6">
-          <Card>
+          <Card className="bg-white">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+              <CardTitle className="flex items-center gap-2 text-muted-foreground">
                 <UserIcon className="h-5 w-5 text-muted-foreground" />
                 Submitted By
               </CardTitle>
@@ -86,19 +86,19 @@ export default async function TicketDetailPage({ params }: { params: Promise<{ i
                 <>
                   <div className="flex justify-between border-b pb-2">
                     <span className="text-muted-foreground">Name</span>
-                    <span className="font-medium">{user.name}</span>
+                    <span className="font-medium text-muted-foreground">{user.name}</span>
                   </div>
                   <div className="flex justify-between border-b pb-2">
                     <span className="text-muted-foreground">Email</span>
-                    <span className="font-medium">{user.email}</span>
+                    <span className="font-medium text-muted-foreground">{user.email}</span>
                   </div>
                   <div className="flex justify-between border-b pb-2">
                     <span className="text-muted-foreground">Role</span>
-                    <span className="font-medium">{user.role}</span>
+                    <span className="font-medium text-muted-foreground">{user.role}</span>
                   </div>
                   <div className="pt-1">
                     <Link href={`/dashboard/users/${user.id}`}>
-                      <Button variant="outline" size="sm" className="w-full">
+                      <Button variant="default" size="sm" className="w-full">
                         View Full Profile
                       </Button>
                     </Link>
@@ -111,9 +111,9 @@ export default async function TicketDetailPage({ params }: { params: Promise<{ i
           </Card>
 
           {ticket.status === 'resolved' && (
-            <Card>
+            <Card className="bg-white">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2 text-green-600">
                   <CheckCircle2 className="h-5 w-5 text-green-600" />
                   Resolution
                 </CardTitle>
@@ -130,7 +130,7 @@ export default async function TicketDetailPage({ params }: { params: Promise<{ i
                 {ticket.resolvedAt && (
                   <div className="flex justify-between border-t pt-2">
                     <span className="text-muted-foreground text-sm">Resolved On</span>
-                    <span className="text-sm font-medium">{format(new Date(ticket.resolvedAt), 'PPpp')}</span>
+                    <span className="text-sm font-medium text-muted-foreground">{format(new Date(ticket.resolvedAt), 'PPpp')}</span>
                   </div>
                 )}
               </CardContent>
@@ -140,9 +140,9 @@ export default async function TicketDetailPage({ params }: { params: Promise<{ i
       </div>
 
       {/* Actions */}
-      <Card>
+      <Card className="bg-white">
         <CardHeader>
-          <CardTitle className="text-lg">Actions</CardTitle>
+          <CardTitle className="text-lg text-muted-foreground">Actions</CardTitle>
         </CardHeader>
         <CardContent>
           <TicketControls ticketId={ticket.id!} status={ticket.status} />

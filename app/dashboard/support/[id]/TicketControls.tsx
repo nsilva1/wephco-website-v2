@@ -73,27 +73,28 @@ export default function TicketControls({ ticketId, status }: TicketControlsProps
               Resolve Ticket
             </Button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className="bg-white">
             <DialogHeader>
-              <DialogTitle>Resolve Support Ticket</DialogTitle>
+              <DialogTitle className="text-black">Resolve Support Ticket</DialogTitle>
               <DialogDescription>
                 Provide your response notes or resolution details. This will be saved with the ticket and the status will be set to resolved.
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid gap-2">
-                <Label htmlFor="responseNotes">Response Notes</Label>
+                <Label htmlFor="responseNotes" className="text-black">Response Notes</Label>
                 <Textarea
                   id="responseNotes"
                   value={responseNotes}
                   onChange={(e) => setResponseNotes(e.target.value)}
                   placeholder="e.g., Issue has been resolved. The agent's wallet was credited manually..."
                   rows={4}
+                  className="text-black"
                 />
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setIsResolveModalOpen(false)}>Cancel</Button>
+              <Button variant="secondary" onClick={() => setIsResolveModalOpen(false)}>Cancel</Button>
               <Button className="bg-green-600 hover:bg-green-700 text-white" onClick={handleResolve} disabled={isLoading || !responseNotes.trim()}>
                 {isLoading ? "Resolving..." : "Confirm Resolution"}
               </Button>
