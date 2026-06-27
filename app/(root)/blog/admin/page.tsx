@@ -13,7 +13,7 @@ import { Loader } from '@/components/Loader';
 export default function BlogAdminPage() {
   const router = useRouter();
   const { user: currentUser, loading: sessionLoading } = useSessionUser();
-  const { role, loading: authLoading } = useAuth();
+  const { loading: authLoading } = useAuth();
 
   const [posts, setPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
