@@ -31,42 +31,12 @@ export async function createProperty(formData: FormData) {
   const category = formData.get('category') as string || '';
   const bedroom = formData.get('bedroom') as string || '';
   const bathroom = formData.get('bathroom') as string || '';
+  const square_foot = formData.get('square_foot') as string || '';
   const verified = formData.get('verified') === 'true';
   const interestsRaw = formData.get('interests');
   const interests = interestsRaw ? (typeof interestsRaw === 'string' && interestsRaw.startsWith('[') ? JSON.parse(interestsRaw) : formData.getAll('interests') as string[]) : [];
   const imageUrls: string[] = JSON.parse(formData.get('imageUrls') as string || '[]');
   const pdfUrl = formData.get('pdfUrl') as string || '';
-
-  // let imageUrls: string[] = [];
-  // let pdfUrl = '';
-
-  // const bucket = storage.bucket(process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET);
-
-  // for (const imageFile of imageFiles) {
-  //   if (imageFile && imageFile.size > 0) {
-  //     const fileName = `properties/${Date.now()}_${imageFile.name}`;
-  //     const file = bucket.file(fileName);
-  //     const buffer = Buffer.from(await imageFile.arrayBuffer());
-  //     await file.save(buffer, {
-  //       contentType: imageFile.type,
-  //       metadata: { firebaseStorageDownloadTokens: Date.now().toString() },
-  //     });
-  //     await file.makePublic();
-  //     imageUrls.push(`https://storage.googleapis.com/${bucket.name}/${fileName}`);
-  //   }
-  // }
-
-  // if (pdfFile && pdfFile.size > 0) {
-  //   const fileName = `properties/pdfs/${Date.now()}_${pdfFile.name}`;
-  //   const file = bucket.file(fileName);
-  //   const buffer = Buffer.from(await pdfFile.arrayBuffer());
-  //   await file.save(buffer, {
-  //     contentType: pdfFile.type,
-  //     metadata: { firebaseStorageDownloadTokens: Date.now().toString() },
-  //   });
-  //   await file.makePublic();
-  //   pdfUrl = `https://storage.googleapis.com/${bucket.name}/${fileName}`;
-  // }
 
   const propertyData = {
     title,
@@ -81,6 +51,7 @@ export async function createProperty(formData: FormData) {
     category,
     bedroom,
     bathroom,
+    square_foot,
     verified,
     interests,
     pdfUrl,
@@ -106,6 +77,7 @@ export async function updateProperty(id: string, formData: FormData) {
   const category = formData.get('category') as string || '';
   const bedroom = formData.get('bedroom') as string || '';
   const bathroom = formData.get('bathroom') as string || '';
+  const square_foot = formData.get('square_foot') as string || '';
   const verified = formData.get('verified') === 'true';
   const interestsRaw = formData.get('interests');
   const interests = interestsRaw ? (typeof interestsRaw === 'string' && interestsRaw.startsWith('[') ? JSON.parse(interestsRaw) : formData.getAll('interests') as string[]) : [];
@@ -158,6 +130,7 @@ export async function updateProperty(id: string, formData: FormData) {
     category,
     bedroom,
     bathroom,
+    square_foot,
     verified,
     interests,
     pdfUrl,

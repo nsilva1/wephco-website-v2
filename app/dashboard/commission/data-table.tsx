@@ -1,4 +1,4 @@
-"use client"
+'use client';
 
 import {
   ColumnDef,
@@ -10,7 +10,7 @@ import {
   getSortedRowModel,
   ColumnFiltersState,
   getFilteredRowModel,
-} from "@tanstack/react-table"
+} from '@tanstack/react-table';
 
 import {
   Table,
@@ -19,27 +19,27 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { useState } from "react"
+} from '@/components/ui/table';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { useState } from 'react';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from '@/components/ui/select';
 
 interface Agent {
-  id: string
-  name: string
+  id: string;
+  name: string;
 }
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
-  agents: Agent[]
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
+  agents: Agent[];
 }
 
 export function DataTable<TData, TValue>({
@@ -47,8 +47,10 @@ export function DataTable<TData, TValue>({
   data,
   agents,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = useState<SortingState>([{ id: "createdAt", desc: true }])
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [sorting, setSorting] = useState<SortingState>([
+    { id: 'createdAt', desc: true },
+  ]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
   const table = useReactTable({
     data,
@@ -63,41 +65,51 @@ export function DataTable<TData, TValue>({
       sorting,
       columnFilters,
     },
-  })
+  });
 
   return (
     <div>
       <div className="flex items-center gap-4 py-4 flex-wrap">
         <Input
           placeholder="Search by description..."
-          value={(table.getColumn("description")?.getFilterValue() as string) ?? ""}
+          value={
+            (table.getColumn('description')?.getFilterValue() as string) ?? ''
+          }
           onChange={(event) =>
-            table.getColumn("description")?.setFilterValue(event.target.value)
+            table.getColumn('description')?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
         <Select
-          value={(table.getColumn("agentName")?.getFilterValue() as string) ?? "all"}
-          onValueChange={(value) =>
-            table.getColumn("agentName")?.setFilterValue(value === "all" ? undefined : value)
+          value={
+            (table.getColumn('agentName')?.getFilterValue() as string) ?? 'all'
           }
-        >
+          onValueChange={(value) =>
+            table
+              .getColumn('agentName')
+              ?.setFilterValue(value === 'all' ? undefined : value)
+          }>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Filter by agent" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Agents</SelectItem>
             {agents.map((agent) => (
-              <SelectItem key={agent.id} value={agent.id}>{agent.name}</SelectItem>
+              <SelectItem key={agent.id} value={agent.id}>
+                {agent.name}
+              </SelectItem>
             ))}
           </SelectContent>
         </Select>
         <Select
-          value={(table.getColumn("status")?.getFilterValue() as string) ?? "all"}
-          onValueChange={(value) =>
-            table.getColumn("status")?.setFilterValue(value === "all" ? undefined : value)
+          value={
+            (table.getColumn('status')?.getFilterValue() as string) ?? 'all'
           }
-        >
+          onValueChange={(value) =>
+            table
+              .getColumn('status')
+              ?.setFilterValue(value === 'all' ? undefined : value)
+          }>
           <SelectTrigger className="w-[160px]">
             <SelectValue placeholder="Filter by status" />
           </SelectTrigger>
@@ -110,12 +122,17 @@ export function DataTable<TData, TValue>({
       </div>
       <div className="rounded-md border bg-white">
         <Table>
-          <TableHeader>
+          <TableHeader className="bg-slate-50 border-b [&_th]:text-slate-700 [&_th]:font-semibold">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <TableHead key={header.id}>
-                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                   </TableHead>
                 ))}
               </TableRow>
@@ -124,17 +141,22 @@ export function DataTable<TData, TValue>({
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id}>
+                <TableRow key={row.id} className="hover:bg-gray-50">
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
                     </TableCell>
                   ))}
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center">
                   No commission records found.
                 </TableCell>
               </TableRow>
@@ -147,14 +169,22 @@ export function DataTable<TData, TValue>({
           {table.getFilteredRowModel().rows.length} records
         </p>
         <div className="flex items-center space-x-2">
-          <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}>
             Previous
           </Button>
-          <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}>
             Next
           </Button>
         </div>
       </div>
     </div>
-  )
+  );
 }

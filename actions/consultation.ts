@@ -1,11 +1,22 @@
 'use server';
 
 import { IConsultation } from "@/interfaces/userInterface";
-import { createDocument, getAllDocuments } from "@/firebase/firebaseConfig";
+import { createDocument, getAllDocuments, updateDocument } from "@/firebase/firebaseConfig";
 import { serializeDoc } from "@/lib/utils";
 import { FIRESTORE_COLLECTIONS } from "@/lib/constants";
 
 const COLLECTION_NAME = FIRESTORE_COLLECTIONS.CONSULTATIONS;
+
+export const updateConsultation = async (id: string, data: Partial<IConsultation>): Promise<void> => {
+    try {
+        const payload = { ...data };
+        delete payload.id;
+        await updateDocument(COLLECTION_NAME, id, payload);
+    } catch (error) {
+        console.error(`Error updating consultation ${id}:`, error);
+        throw new Error("Failed to update consultation");
+    }
+};
 
 export const getConsultations = async (): Promise<IConsultation[]> => {
     try {

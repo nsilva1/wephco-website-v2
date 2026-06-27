@@ -1,31 +1,42 @@
-import { notFound } from "next/navigation"
-import { getUserById } from "@/actions/user-management"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, User as UserIcon, ShieldCheck, FileWarning, Info } from "lucide-react"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import KycControls from "./KycControls"
+import { notFound } from 'next/navigation';
+import { getUserById } from '@/actions/user-management';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import {
+  ArrowLeft,
+  User as UserIcon,
+  ShieldCheck,
+  FileWarning,
+  Info,
+} from 'lucide-react';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import KycControls from './KycControls';
 
 export const revalidate = 0;
 
-export default async function KycDetailPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function KycDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const { id } = await params;
-  const data = await getUserById(id)
+  const data = await getUserById(id);
 
-  if (!data) return notFound()
+  if (!data) return notFound();
 
-  const { user } = data
+  const { user } = data;
 
   const hasNin = !!user.bankInfo?.nin;
   const hasBvn = !!user.bankInfo?.bvn;
-  const kycStatus = user.kycStatus || (hasNin && hasBvn ? 'pending' : 'pending');
+  const kycStatus =
+    user.kycStatus || (hasNin && hasBvn ? 'pending' : 'pending');
 
   const statusColors: Record<string, string> = {
     verified: 'bg-green-500 hover:bg-green-600 text-white',
     flagged: 'bg-red-600 hover:bg-red-700 text-white',
     pending: 'bg-amber-500 hover:bg-amber-600 text-white',
-  }
+  };
 
   return (
     <div className="flex-1 space-y-6 p-4 md:p-8 pt-6">
@@ -36,7 +47,9 @@ export default async function KycDetailPage({ params }: { params: Promise<{ id: 
           </Button>
         </Link>
         <h2 className="text-3xl font-bold tracking-tight">KYC Review</h2>
-        <Badge variant="secondary" className={`ml-2 text-sm capitalize ${statusColors[kycStatus] || ''}`}>
+        <Badge
+          variant="secondary"
+          className={`ml-2 text-sm capitalize ${statusColors[kycStatus] || ''}`}>
           {kycStatus}
         </Badge>
       </div>
@@ -65,7 +78,10 @@ export default async function KycDetailPage({ params }: { params: Promise<{ id: 
             </div>
             <div className="flex justify-between border-b pb-2">
               <span className="text-muted-foreground">Account Status</span>
-              <Badge variant={user.status === 'Suspended' ? 'destructive' : 'secondary'}>
+              <Badge
+                variant={
+                  user.status === 'Suspended' ? 'destructive' : 'secondary'
+                }>
                 {user.status || 'Active'}
               </Badge>
             </div>
@@ -83,26 +99,34 @@ export default async function KycDetailPage({ params }: { params: Promise<{ id: 
           <CardContent className="space-y-4">
             <div className="flex justify-between items-center border-b pb-3">
               <div>
-                <span className="text-muted-foreground text-sm block">NIN (National ID Number)</span>
+                <span className="text-muted-foreground text-sm block">
+                  NIN (National ID Number)
+                </span>
                 <span className="font-mono font-medium text-lg text-primary">
                   {user.bankInfo?.nin || '—'}
                 </span>
               </div>
               {hasNin ? (
-                <Badge className="bg-green-500 hover:bg-green-600 text-white">Submitted</Badge>
+                <Badge className="bg-green-500 hover:bg-green-600 text-white">
+                  Submitted
+                </Badge>
               ) : (
                 <Badge variant="destructive">Missing</Badge>
               )}
             </div>
             <div className="flex justify-between items-center border-b pb-3">
               <div>
-                <span className="text-muted-foreground text-sm block">BVN (Bank Verification Number)</span>
+                <span className="text-muted-foreground text-sm block">
+                  BVN (Bank Verification Number)
+                </span>
                 <span className="font-mono font-medium text-lg text-primary">
                   {user.bankInfo?.bvn || '—'}
                 </span>
               </div>
               {hasBvn ? (
-                <Badge className="bg-green-500 hover:bg-green-600 text-white">Submitted</Badge>
+                <Badge className="bg-green-500 hover:bg-green-600 text-white">
+                  Submitted
+                </Badge>
               ) : (
                 <Badge variant="destructive">Missing</Badge>
               )}
@@ -110,19 +134,27 @@ export default async function KycDetailPage({ params }: { params: Promise<{ id: 
 
             {user.bankInfo && (
               <div className="pt-2">
-                <span className="text-muted-foreground text-sm block mb-2">Bank Details</span>
+                <span className="text-muted-foreground text-sm block mb-2">
+                  Bank Details
+                </span>
                 <div className="bg-muted p-4 rounded-md space-y-2 text-sm">
                   <div className="grid grid-cols-3">
                     <span className="text-muted-foreground">Bank:</span>
-                    <span className="col-span-2 font-medium text-primary">{user.bankInfo.bankName}</span>
+                    <span className="col-span-2 font-medium text-primary">
+                      {user.bankInfo.bankName}
+                    </span>
                   </div>
                   <div className="grid grid-cols-3">
                     <span className="text-muted-foreground">Acct Name:</span>
-                    <span className="col-span-2 font-medium text-primary">{user.bankInfo.bankAccountName}</span>
+                    <span className="col-span-2 font-medium text-primary">
+                      {user.bankInfo.bankAccountName}
+                    </span>
                   </div>
                   <div className="grid grid-cols-3">
                     <span className="text-muted-foreground">Acct No:</span>
-                    <span className="col-span-2 font-mono font-medium text-primary">{user.bankInfo.bankAccountNumber}</span>
+                    <span className="col-span-2 font-mono font-medium text-primary">
+                      {user.bankInfo.bankAccountNumber}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -133,7 +165,9 @@ export default async function KycDetailPage({ params }: { params: Promise<{ id: 
                 <span className="text-destructive font-semibold text-sm flex items-center gap-1 mb-1">
                   <FileWarning className="h-4 w-4" /> Flag Reason
                 </span>
-                <p className="text-sm text-destructive/90">{user.kycFlagReason}</p>
+                <p className="text-sm text-destructive/90">
+                  {user.kycFlagReason}
+                </p>
               </div>
             )}
           </CardContent>
@@ -143,12 +177,14 @@ export default async function KycDetailPage({ params }: { params: Promise<{ id: 
       {/* Actions */}
       <Card className="bg-white">
         <CardHeader>
-          <CardTitle className="text-lg text-muted-foreground">Actions</CardTitle>
+          <CardTitle className="text-lg text-muted-foreground">
+            Actions
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <KycControls userId={user.id} currentStatus={kycStatus} />
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

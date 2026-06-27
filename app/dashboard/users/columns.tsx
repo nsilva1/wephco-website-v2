@@ -1,9 +1,9 @@
-"use client"
+'use client';
 
-import { ColumnDef } from "@tanstack/react-table"
-import { IUserInfo } from "@/interfaces/userInterface"
-import { MoreHorizontal, ArrowUpDown } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { ColumnDef } from '@tanstack/react-table';
+import { IUserInfo } from '@/interfaces/userInterface';
+import { MoreHorizontal, ArrowUpDown } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,81 +11,84 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import Link from "next/link"
-import { Badge } from "@/components/ui/badge"
+} from '@/components/ui/dropdown-menu';
+import Link from 'next/link';
+import { Badge } from '@/components/ui/badge';
 
 export const columns: ColumnDef<IUserInfo>[] = [
   {
-    accessorKey: "name",
+    accessorKey: 'name',
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
           Name
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
   },
   {
-    accessorKey: "email",
-    header: "Email",
+    accessorKey: 'email',
+    header: 'Email',
   },
   {
-    accessorKey: "role",
-    header: "Role",
+    accessorKey: 'role',
+    header: 'Role',
     cell: ({ row }) => {
-      return <Badge variant="secondary">{row.getValue("role")}</Badge>
-    }
+      return <Badge variant="secondary">{row.getValue('role')}</Badge>;
+    },
   },
   {
-    id: "kyc",
-    header: "Verification (NIN/BVN)",
+    id: 'kyc',
+    header: 'Verification (NIN/BVN)',
     cell: ({ row }) => {
       const user = row.original;
       const hasNin = !!user.bankInfo?.nin;
       const hasBvn = !!user.bankInfo?.bvn;
-      
+
       return (
         <div className="flex flex-col gap-1">
-          <Badge variant={hasNin ? "secondary" : "destructive"} className={`w-fit ${hasNin ? "bg-green-500 hover:bg-green-600 text-white" : ""}`}>
-            NIN: {hasNin ? "Verified" : "Missing"}
+          <Badge
+            variant={hasNin ? 'secondary' : 'destructive'}
+            className={`w-fit ${hasNin ? 'bg-green-500 hover:bg-green-600 text-white' : ''}`}>
+            NIN: {hasNin ? 'Verified' : 'Missing'}
           </Badge>
-          <Badge variant={hasBvn ? "secondary" : "destructive"} className={`w-fit ${hasBvn ? "bg-green-500 hover:bg-green-600 text-white" : ""}`}>
-            BVN: {hasBvn ? "Verified" : "Missing"}
+          <Badge
+            variant={hasBvn ? 'secondary' : 'destructive'}
+            className={`w-fit ${hasBvn ? 'bg-green-500 hover:bg-green-600 text-white' : ''}`}>
+            BVN: {hasBvn ? 'Verified' : 'Missing'}
           </Badge>
         </div>
-      )
-    }
+      );
+    },
   },
   {
-    id: "walletBalance",
-    header: "Wallet Balance",
+    id: 'walletBalance',
+    header: 'Wallet Balance',
     cell: ({ row }) => {
       const balance = row.original.wallet?.availableBalance || 0;
-      return <div className="font-medium">${balance.toLocaleString()}</div>
-    }
+      return <div className="font-medium">${balance.toLocaleString()}</div>;
+    },
   },
   {
-    accessorKey: "status",
-    header: "Status",
+    accessorKey: 'status',
+    header: 'Status',
     cell: ({ row }) => {
-      const status = row.original.status || "Active";
+      const status = row.original.status || 'Active';
       return (
-        <Badge variant={status === "Active" ? "secondary" : "destructive"}>
+        <Badge variant={status === 'Active' ? 'secondary' : 'destructive'}>
           {status}
         </Badge>
-      )
-    }
+      );
+    },
   },
   {
-    id: "actions",
+    id: 'actions',
     cell: ({ row }) => {
-      const user = row.original
- 
+      const user = row.original;
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -97,8 +100,7 @@ export const columns: ColumnDef<IUserInfo>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(user.id)}
-            >
+              onClick={() => navigator.clipboard.writeText(user.id)}>
               Copy User ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
@@ -107,7 +109,7 @@ export const columns: ColumnDef<IUserInfo>[] = [
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      )
+      );
     },
   },
-]
+];

@@ -41,7 +41,19 @@ interface EventCardProps {
 }
 
 export function EventCard({ event, onApply }: EventCardProps) {
-  const { id, title, description, date, time, location, image, scope, format, seatsRemaining, isPast } = event;
+  const {
+    id,
+    title,
+    description,
+    date,
+    time,
+    location,
+    image,
+    scope,
+    format,
+    seatsRemaining,
+    isPast,
+  } = event;
 
   return (
     <div className="group relative bg-slate-900/40 backdrop-blur-sm border border-primary/10 rounded-2xl overflow-hidden shadow-xl hover:border-primary/30 transition-all duration-300 flex flex-col h-full">
@@ -56,7 +68,7 @@ export function EventCard({ event, onApply }: EventCardProps) {
         />
         {/* Soft Dark Vignette overlay */}
         <div className="absolute inset-0 bg-linear-to-t from-slate-950/80 to-transparent" />
-        
+
         {/* Category Badges */}
         <div className="absolute top-4 left-4 flex flex-wrap gap-2">
           <span className="px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase bg-primary text-background-dark shadow-sm">
@@ -80,13 +92,9 @@ export function EventCard({ event, onApply }: EventCardProps) {
           </div>
 
           <h3 className="text-lg font-bold text-white group-hover:text-primary transition-colors line-clamp-1">
-            {id ? (
-              <Link href={`/events/${id}`}>{title}</Link>
-            ) : (
-              title
-            )}
+            {id ? <Link href={`/events/${id}`}>{title}</Link> : title}
           </h3>
-          
+
           <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">
             {description}
           </p>
@@ -113,32 +121,28 @@ export function EventCard({ event, onApply }: EventCardProps) {
             event.hasGallery && id ? (
               <Link
                 href={`/events/${id}/gallery`}
-                className="w-full py-2.5 bg-primary/10 border border-primary/30 text-primary hover:bg-primary hover:text-background-dark transition-all duration-300 font-bold rounded-lg text-xs tracking-wider uppercase flex items-center justify-center gap-1 group/btn"
-              >
+                className="w-full py-2.5 bg-primary/10 border border-primary/30 text-primary hover:bg-primary hover:text-background-dark transition-all duration-300 font-bold rounded-lg text-xs tracking-wider uppercase flex items-center justify-center gap-1 group/btn">
                 <span>View Event Gallery</span>
                 <ArrowUpRight className="size-3.5 transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
               </Link>
             ) : (
               <button
                 disabled
-                className="w-full py-2.5 bg-slate-800/40 border border-slate-700/50 text-slate-500 font-bold rounded-lg text-xs tracking-wider uppercase"
-              >
+                className="w-full py-2.5 bg-slate-800/40 border border-slate-700/50 text-slate-500 font-bold rounded-lg text-xs tracking-wider uppercase">
                 Completed
               </button>
             )
           ) : id ? (
             <Link
               href={`/events/${id}`}
-              className="w-full py-2.5 bg-primary/10 border border-primary/30 text-primary hover:bg-primary hover:text-background-dark transition-all duration-300 font-bold rounded-lg text-xs tracking-wider uppercase flex items-center justify-center gap-1 group/btn"
-            >
+              className="w-full py-2.5 bg-primary/10 border border-primary/30 text-primary hover:bg-primary hover:text-background-dark transition-all duration-300 font-bold rounded-lg text-xs tracking-wider uppercase flex items-center justify-center gap-1 group/btn">
               <span>View Event Details</span>
               <ArrowUpRight className="size-3.5 transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
             </Link>
           ) : (
             <button
               onClick={() => onApply(event)}
-              className="w-full py-2.5 bg-primary/10 border border-primary/30 text-primary hover:bg-primary hover:text-background-dark transition-all duration-300 font-bold rounded-lg text-xs tracking-wider uppercase flex items-center justify-center gap-1 group/btn"
-            >
+              className="w-full py-2.5 bg-primary/10 border border-primary/30 text-primary hover:bg-primary hover:text-background-dark transition-all duration-300 font-bold rounded-lg text-xs tracking-wider uppercase flex items-center justify-center gap-1 group/btn">
               <span>Request Invitation</span>
               <ArrowUpRight className="size-3.5 transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
             </button>
@@ -148,4 +152,3 @@ export function EventCard({ event, onApply }: EventCardProps) {
     </div>
   );
 }
-

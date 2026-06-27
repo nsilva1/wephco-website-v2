@@ -1,64 +1,73 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { sendPushNotification, IAgentForNotification } from "@/actions/notifications"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Badge } from "@/components/ui/badge"
-import { Checkbox } from "@/components/ui/checkbox"
-import { useSessionUser } from "@/hooks/useSessionUser"
-import { Send, Users, UserCheck, Bell } from "lucide-react"
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import {
+  sendPushNotification,
+  IAgentForNotification,
+} from '@/actions/notifications';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Badge } from '@/components/ui/badge';
+import { Checkbox } from '@/components/ui/checkbox';
+import { useSessionUser } from '@/hooks/useSessionUser';
+import { Send, Users, UserCheck, Bell } from 'lucide-react';
 
 interface ComposeNotificationProps {
-  agents: IAgentForNotification[]
+  agents: IAgentForNotification[];
 }
 
-export default function ComposeNotification({ agents }: ComposeNotificationProps) {
-  const router = useRouter()
-  const { user: currentUser } = useSessionUser()
+export default function ComposeNotification({
+  agents,
+}: ComposeNotificationProps) {
+  const router = useRouter();
+  const { user: currentUser } = useSessionUser();
 
-  const [title, setTitle] = useState("")
-  const [body, setBody] = useState("")
-  const [targetType, setTargetType] = useState<'all' | 'specific'>('all')
-  const [selectedAgentIds, setSelectedAgentIds] = useState<string[]>([])
-  const [isSending, setIsSending] = useState(false)
-  const [result, setResult] = useState<{ successCount: number; failureCount: number; totalTokens: number } | null>(null)
+  const [title, setTitle] = useState('');
+  const [body, setBody] = useState('');
+  const [targetType, setTargetType] = useState<'all' | 'specific'>('all');
+  const [selectedAgentIds, setSelectedAgentIds] = useState<string[]>([]);
+  const [isSending, setIsSending] = useState(false);
+  const [result, setResult] = useState<{
+    successCount: number;
+    failureCount: number;
+    totalTokens: number;
+  } | null>(null);
 
-  const agentsWithToken = agents.filter(a => a.hasFcmToken)
+  const agentsWithToken = agents.filter((a) => a.hasFcmToken);
 
   const handleToggleAgent = (agentId: string) => {
-    setSelectedAgentIds(prev =>
+    setSelectedAgentIds((prev) =>
       prev.includes(agentId)
-        ? prev.filter(id => id !== agentId)
+        ? prev.filter((id) => id !== agentId)
         : [...prev, agentId]
-    )
-  }
+    );
+  };
 
   const handleSelectAll = () => {
     if (selectedAgentIds.length === agentsWithToken.length) {
-      setSelectedAgentIds([])
+      setSelectedAgentIds([]);
     } else {
-      setSelectedAgentIds(agentsWithToken.map(a => a.id))
+      setSelectedAgentIds(agentsWithToken.map((a) => a.id));
     }
-  }
+  };
 
   const handleSend = async () => {
-    if (!currentUser) return
+    if (!currentUser) return;
     if (!title.trim() || !body.trim()) {
-      alert("Please enter both a title and message body")
-      return
+      alert('Please enter both a title and message body');
+      return;
     }
     if (targetType === 'specific' && selectedAgentIds.length === 0) {
-      alert("Please select at least one agent")
-      return
+      alert('Please select at least one agent');
+      return;
     }
 
-    setIsSending(true)
-    setResult(null)
+    setIsSending(true);
+    setResult(null);
     try {
       const res = await sendPushNotification(
         title,
@@ -66,51 +75,59 @@ export default function ComposeNotification({ agents }: ComposeNotificationProps
         targetType,
         targetType === 'specific' ? selectedAgentIds : [],
         currentUser.id!
-      )
-      setResult({ successCount: res.successCount, failureCount: res.failureCount, totalTokens: res.totalTokens })
-      router.refresh()
+      );
+      setResult({
+        successCount: res.successCount,
+        failureCount: res.failureCount,
+        totalTokens: res.totalTokens,
+      });
+      router.refresh();
     } catch (error) {
-      console.error(error)
-      alert("Failed to send notification")
+      console.error(error);
+      alert('Failed to send notification');
     } finally {
-      setIsSending(false)
+      setIsSending(false);
     }
-  }
+  };
 
   const handleReset = () => {
-    setTitle("")
-    setBody("")
-    setTargetType('all')
-    setSelectedAgentIds([])
-    setResult(null)
-  }
+    setTitle('');
+    setBody('');
+    setTargetType('all');
+    setSelectedAgentIds([]);
+    setResult(null);
+  };
 
   return (
     <div className="grid gap-6 md:grid-cols-3">
       {/* Compose Form */}
-      <Card className="md:col-span-2">
+      <Card className="md:col-span-2 bg-white">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Bell className="h-5 w-5 text-muted-foreground" />
+          <CardTitle className="flex items-center gap-2 text-slate-800 font-bold">
+            <Bell className="h-5 w-5 text-slate-500" />
             Compose Notification
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid gap-2">
-            <Label htmlFor="title">Title *</Label>
+            <Label htmlFor="title" className="text-slate-700 font-semibold">
+              Title *
+            </Label>
             <Input
               id="title"
               value={title}
-              onChange={e => setTitle(e.target.value)}
+              onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g. New Property Listed!"
             />
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="body">Message *</Label>
+            <Label htmlFor="body" className="text-slate-700 font-semibold">
+              Message *
+            </Label>
             <Textarea
               id="body"
               value={body}
-              onChange={e => setBody(e.target.value)}
+              onChange={(e) => setBody(e.target.value)}
               placeholder="e.g. A new premium property has been added. Check it out in the app!"
               rows={4}
             />
@@ -118,14 +135,17 @@ export default function ComposeNotification({ agents }: ComposeNotificationProps
 
           {/* Target Selection */}
           <div className="grid gap-3">
-            <Label>Recipients</Label>
+            <Label className="text-slate-700 font-semibold">Recipients</Label>
             <div className="flex gap-3">
               <Button
                 type="button"
                 variant={targetType === 'all' ? 'default' : 'outline'}
                 onClick={() => setTargetType('all')}
-                className={targetType === 'all' ? 'bg-[#cfb53b] hover:bg-[#b89e2f] text-white' : ''}
-              >
+                className={
+                  targetType === 'all'
+                    ? 'bg-[#cfb53b] hover:bg-[#b89e2f] text-white'
+                    : ''
+                }>
                 <Users className="mr-2 h-4 w-4" />
                 All Agents ({agentsWithToken.length})
               </Button>
@@ -133,8 +153,11 @@ export default function ComposeNotification({ agents }: ComposeNotificationProps
                 type="button"
                 variant={targetType === 'specific' ? 'default' : 'outline'}
                 onClick={() => setTargetType('specific')}
-                className={targetType === 'specific' ? 'bg-[#cfb53b] hover:bg-[#b89e2f] text-white' : ''}
-              >
+                className={
+                  targetType === 'specific'
+                    ? 'bg-[#cfb53b] hover:bg-[#b89e2f] text-white'
+                    : ''
+                }>
                 <UserCheck className="mr-2 h-4 w-4" />
                 Specific Agents
               </Button>
@@ -147,33 +170,44 @@ export default function ComposeNotification({ agents }: ComposeNotificationProps
               <div className="flex items-center justify-between pb-2 border-b">
                 <span className="text-sm font-medium">Select agents</span>
                 <Button variant="ghost" size="sm" onClick={handleSelectAll}>
-                  {selectedAgentIds.length === agentsWithToken.length ? 'Deselect All' : 'Select All'}
+                  {selectedAgentIds.length === agentsWithToken.length
+                    ? 'Deselect All'
+                    : 'Select All'}
                 </Button>
               </div>
               {agentsWithToken.length > 0 ? (
-                agentsWithToken.map(agent => (
-                  <label key={agent.id} className="flex items-center gap-3 py-1.5 px-2 rounded hover:bg-muted cursor-pointer">
+                agentsWithToken.map((agent) => (
+                  <label
+                    key={agent.id}
+                    className="flex items-center gap-3 py-1.5 px-2 rounded hover:bg-muted cursor-pointer">
                     <Checkbox
                       checked={selectedAgentIds.includes(agent.id)}
                       onCheckedChange={() => handleToggleAgent(agent.id)}
                     />
                     <div className="flex-1">
                       <span className="text-sm font-medium">{agent.name}</span>
-                      <span className="text-xs text-muted-foreground ml-2">{agent.email}</span>
+                      <span className="text-xs text-muted-foreground ml-2">
+                        {agent.email}
+                      </span>
                     </div>
                   </label>
                 ))
               ) : (
-                <p className="text-sm text-muted-foreground py-2">No agents with push tokens available.</p>
+                <p className="text-sm text-muted-foreground py-2">
+                  No agents with push tokens available.
+                </p>
               )}
             </div>
           )}
 
           {/* Result Banner */}
           {result && (
-            <div className={`p-4 rounded-lg border ${result.failureCount === 0 ? 'bg-green-50 border-green-200' : 'bg-amber-50 border-amber-200'}`}>
+            <div
+              className={`p-4 rounded-lg border ${result.failureCount === 0 ? 'bg-green-50 border-green-200' : 'bg-amber-50 border-amber-200'}`}>
               <p className="text-sm font-medium">
-                Notification sent! ✅ {result.successCount} delivered, {result.failureCount} failed out of {result.totalTokens} recipients.
+                Notification sent! ✅ {result.successCount} delivered,{' '}
+                {result.failureCount} failed out of {result.totalTokens}{' '}
+                recipients.
               </p>
             </div>
           )}
@@ -182,10 +216,9 @@ export default function ComposeNotification({ agents }: ComposeNotificationProps
             <Button
               onClick={handleSend}
               disabled={isSending || !title.trim() || !body.trim()}
-              className="bg-[#cfb53b] hover:bg-[#b89e2f] text-white flex-1"
-            >
+              className="bg-[#cfb53b] hover:bg-[#b89e2f] text-white flex-1">
               <Send className="mr-2 h-4 w-4" />
-              {isSending ? "Sending..." : "Send Notification"}
+              {isSending ? 'Sending...' : 'Send Notification'}
             </Button>
             {result && (
               <Button variant="outline" onClick={handleReset}>
@@ -198,33 +231,47 @@ export default function ComposeNotification({ agents }: ComposeNotificationProps
 
       {/* Stats Sidebar */}
       <div className="space-y-4">
-        <Card>
+        <Card className="bg-white">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Total Agents</CardTitle>
+            <CardTitle className="text-sm font-medium text-slate-500">
+              Total Agents
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold">{agents.length}</p>
+            <p className="text-2xl font-bold text-slate-800">{agents.length}</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="bg-white">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">With Push Token</CardTitle>
+            <CardTitle className="text-sm font-medium text-slate-500">
+              With Push Token
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold text-green-600">{agentsWithToken.length}</p>
-            <p className="text-xs text-muted-foreground">Can receive notifications</p>
+            <p className="text-2xl font-bold text-green-600">
+              {agentsWithToken.length}
+            </p>
+            <p className="text-xs text-muted-foreground">
+              Can receive notifications
+            </p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="bg-white">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Without Push Token</CardTitle>
+            <CardTitle className="text-sm font-medium text-slate-500">
+              Without Push Token
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold text-muted-foreground">{agents.length - agentsWithToken.length}</p>
-            <p className="text-xs text-muted-foreground">Haven&apos;t opened the app</p>
+            <p className="text-2xl font-bold text-slate-500">
+              {agents.length - agentsWithToken.length}
+            </p>
+            <p className="text-xs text-muted-foreground">
+              Haven&apos;t opened the app
+            </p>
           </CardContent>
         </Card>
       </div>
     </div>
-  )
+  );
 }

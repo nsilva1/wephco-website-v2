@@ -1,11 +1,11 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { resolveTicket, reopenTicket } from "@/actions/support-tickets"
-import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
-import { Label } from "@/components/ui/label"
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { resolveTicket, reopenTicket } from '@/actions/support-tickets';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
 import {
   Dialog,
   DialogContent,
@@ -14,54 +14,57 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { useSessionUser } from "@/hooks/useSessionUser"
-import { CheckCircle2, RotateCcw } from "lucide-react"
+} from '@/components/ui/dialog';
+import { useSessionUser } from '@/hooks/useSessionUser';
+import { CheckCircle2, RotateCcw } from 'lucide-react';
 
 interface TicketControlsProps {
-  ticketId: string
-  status: string
+  ticketId: string;
+  status: string;
 }
 
-export default function TicketControls({ ticketId, status }: TicketControlsProps) {
-  const router = useRouter()
-  const { user } = useSessionUser()
-  const [isLoading, setIsLoading] = useState(false)
-  const [responseNotes, setResponseNotes] = useState("")
-  const [isResolveModalOpen, setIsResolveModalOpen] = useState(false)
+export default function TicketControls({
+  ticketId,
+  status,
+}: TicketControlsProps) {
+  const router = useRouter();
+  const { user } = useSessionUser();
+  const [isLoading, setIsLoading] = useState(false);
+  const [responseNotes, setResponseNotes] = useState('');
+  const [isResolveModalOpen, setIsResolveModalOpen] = useState(false);
 
   const handleResolve = async () => {
-    if (!user) return
+    if (!user) return;
     if (!responseNotes.trim()) {
-      alert("Please provide response notes")
-      return
+      alert('Please provide response notes');
+      return;
     }
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      await resolveTicket(ticketId, user.id!, responseNotes)
-      setIsResolveModalOpen(false)
-      setResponseNotes("")
-      router.refresh()
+      await resolveTicket(ticketId, user.id!, responseNotes);
+      setIsResolveModalOpen(false);
+      setResponseNotes('');
+      router.refresh();
     } catch (error) {
-      console.error(error)
-      alert("Failed to resolve ticket")
+      console.error(error);
+      alert('Failed to resolve ticket');
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const handleReopen = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      await reopenTicket(ticketId)
-      router.refresh()
+      await reopenTicket(ticketId);
+      router.refresh();
     } catch (error) {
-      console.error(error)
-      alert("Failed to reopen ticket")
+      console.error(error);
+      alert('Failed to reopen ticket');
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <div className="flex items-center gap-3 flex-wrap">
@@ -75,14 +78,19 @@ export default function TicketControls({ ticketId, status }: TicketControlsProps
           </DialogTrigger>
           <DialogContent className="bg-white">
             <DialogHeader>
-              <DialogTitle className="text-black">Resolve Support Ticket</DialogTitle>
+              <DialogTitle className="text-black">
+                Resolve Support Ticket
+              </DialogTitle>
               <DialogDescription>
-                Provide your response notes or resolution details. This will be saved with the ticket and the status will be set to resolved.
+                Provide your response notes or resolution details. This will be
+                saved with the ticket and the status will be set to resolved.
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid gap-2">
-                <Label htmlFor="responseNotes" className="text-black">Response Notes</Label>
+                <Label htmlFor="responseNotes" className="text-black">
+                  Response Notes
+                </Label>
                 <Textarea
                   id="responseNotes"
                   value={responseNotes}
@@ -94,9 +102,16 @@ export default function TicketControls({ ticketId, status }: TicketControlsProps
               </div>
             </div>
             <DialogFooter>
-              <Button variant="secondary" onClick={() => setIsResolveModalOpen(false)}>Cancel</Button>
-              <Button className="bg-green-600 hover:bg-green-700 text-white" onClick={handleResolve} disabled={isLoading || !responseNotes.trim()}>
-                {isLoading ? "Resolving..." : "Confirm Resolution"}
+              <Button
+                variant="secondary"
+                onClick={() => setIsResolveModalOpen(false)}>
+                Cancel
+              </Button>
+              <Button
+                className="bg-green-600 hover:bg-green-700 text-white"
+                onClick={handleResolve}
+                disabled={isLoading || !responseNotes.trim()}>
+                {isLoading ? 'Resolving...' : 'Confirm Resolution'}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -110,5 +125,5 @@ export default function TicketControls({ ticketId, status }: TicketControlsProps
         </Button>
       )}
     </div>
-  )
+  );
 }

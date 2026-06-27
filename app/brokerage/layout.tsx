@@ -3,9 +3,9 @@ import '../globals.css';
 import { AuthProvider } from '@/context/AuthContext';
 
 export const metadata: Metadata = {
-  title: "Wephco Brokerage App - Your Gateway to Global Real Estate",
-  manifest: "/manifest.json",
-}
+  title: 'Wephco Brokerage App - Your Gateway to Global Real Estate',
+  manifest: '/manifest.json',
+};
 
 export default function BrokerageLayout({
   children,
@@ -15,9 +15,7 @@ export default function BrokerageLayout({
   return (
     <html lang="en">
       <body className={`antialiased`}>
-        <AuthProvider>
-          {children}
-        </AuthProvider>
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );

@@ -3,16 +3,11 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { 
-  BiShieldQuarter, 
-  BiCheckDouble, 
-  BiTargetLock,
-} from 'react-icons/bi';
+import { BiShieldQuarter, BiCheckDouble, BiTargetLock } from 'react-icons/bi';
 
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-background-dark text-slate-100 font-display pt-20">
-      
       {/* Hero Section */}
       <section className="relative h-[55vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-linear-to-b from-black/30 to-background-dark/75 z-10"></div>
@@ -27,10 +22,14 @@ export default function AboutPage() {
         </div>
         <div className="relative z-20 max-w-4xl px-6 text-center space-y-6">
           <h1 className="text-4xl md:text-7xl font-light text-white leading-tight">
-            Redefining <span className="text-primary font-extrabold italic">Luxury</span> Living
+            Redefining{' '}
+            <span className="text-primary font-extrabold italic">Luxury</span>{' '}
+            Living
           </h1>
           <p className="text-base md:text-xl text-slate-200 max-w-2xl mx-auto font-light leading-relaxed">
-            Experience the pinnacle of architectural excellence and sophisticated lifestyle with Wephco, where your vision of home becomes a masterpiece.
+            Experience the pinnacle of architectural excellence and
+            sophisticated lifestyle with Wephco, where your vision of home
+            becomes a masterpiece.
           </p>
         </div>
       </section>
@@ -40,42 +39,62 @@ export default function AboutPage() {
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div className="space-y-8 text-center lg:text-left">
             <div>
-              <span className="text-primary text-xs font-bold tracking-widest uppercase block mb-3">Our Heritage</span>
+              <span className="text-primary text-xs font-bold tracking-widest uppercase block mb-3">
+                Our Heritage
+              </span>
               <h3 className="text-3xl md:text-4xl font-light mb-6">
-                A Legacy of <span className="font-extrabold text-primary">Curated Excellence</span>
+                A Legacy of{' '}
+                <span className="font-extrabold text-primary">
+                  Curated Excellence
+                </span>
               </h3>
               <p className="text-slate-400 leading-loose font-light text-sm">
-                Founded on the principles of trust, excellence, and innovation, Wephco has been at the forefront of the luxury real estate market. We don&apos;t just sell properties; we curate lifestyles for the world&apos;s most discerning clients. Our journey began with a single vision: to transform the acquisition of high-end real estate into an art form.
+                Founded on the principles of trust, excellence, and innovation,
+                Wephco has been at the forefront of the luxury real estate
+                market. We don&apos;t just sell properties; we curate lifestyles
+                for the world&apos;s most discerning clients. Our journey began
+                with a single vision: to transform the acquisition of high-end
+                real estate into an art form.
               </p>
             </div>
-            
+
             <div className="grid sm:grid-cols-3 gap-6 text-left">
               {/* Trust */}
               <div className="p-6 rounded-xl border border-primary/10 bg-[#022618]/10">
                 <BiShieldQuarter className="text-primary mb-3 text-2xl" />
                 <h4 className="font-bold text-sm text-slate-100 mb-1">Trust</h4>
-                <p className="text-[10px] text-slate-500 font-light leading-relaxed">Unyielding integrity in every deal.</p>
+                <p className="text-[10px] text-slate-500 font-light leading-relaxed">
+                  Unyielding integrity in every deal.
+                </p>
               </div>
-              
+
               {/* Excellence */}
               <div className="p-6 rounded-xl border border-primary/10 bg-[#022618]/10">
                 <BiCheckDouble className="text-primary mb-3 text-2xl" />
-                <h4 className="font-bold text-sm text-slate-100 mb-1">Excellence</h4>
-                <p className="text-[10px] text-slate-500 font-light leading-relaxed">Setting the global standard.</p>
+                <h4 className="font-bold text-sm text-slate-100 mb-1">
+                  Excellence
+                </h4>
+                <p className="text-[10px] text-slate-500 font-light leading-relaxed">
+                  Setting the global standard.
+                </p>
               </div>
-              
+
               {/* Innovation */}
               <div className="p-6 rounded-xl border border-primary/10 bg-[#022618]/10">
                 <BiTargetLock className="text-primary mb-3 text-2xl" />
-                <h4 className="font-bold text-sm text-slate-100 mb-1">Innovation</h4>
-                <p className="text-[10px] text-slate-500 font-light leading-relaxed">Pioneering modern real estate.</p>
+                <h4 className="font-bold text-sm text-slate-100 mb-1">
+                  Innovation
+                </h4>
+                <p className="text-[10px] text-slate-500 font-light leading-relaxed">
+                  Pioneering modern real estate.
+                </p>
               </div>
             </div>
           </div>
-          
+
           <div className="relative flex justify-center w-full">
             <div className="w-full max-w-md aspect-4/5 rounded-2xl overflow-hidden shadow-2xl relative border border-primary/20">
-              <Image 
+              <Image
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuCeXue5B843DVVBPkpBCjiwRTvW7kwnPciaNPjFlNNUEqLoSBT9pUXNUwI1uumJcTy3b7_ncqPcj9LhArU-AKSPJceB8cYPE9x_wqWTwwA5SqlPq6goJFXkpw6nydKTVQ9roSk1BDQtDKy1ADRqW1_QAvSX82HKhZWwW2ZGDWJNH3A_oaAA5r5im07BU_KovZOmB0bMZSyTf4QrvcUGqimZwKOwMSj7Ez73cFkFOjfmnKdGcss-Pty5761WTL9xIz3nq_Ij9ON_QFzv"
                 alt="Luxury penthouse interior"
                 fill
@@ -92,19 +111,27 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center font-mono">
           <div>
             <div className="text-4xl font-black text-primary mb-2">9+</div>
-            <div className="text-[10px] uppercase tracking-widest font-bold text-slate-400">Years Experience</div>
+            <div className="text-[10px] uppercase tracking-widest font-bold text-slate-400">
+              Years Experience
+            </div>
           </div>
           <div>
             <div className="text-4xl font-black text-primary mb-2">$35M+</div>
-            <div className="text-[10px] uppercase tracking-widest font-bold text-slate-400">Total Sales</div>
+            <div className="text-[10px] uppercase tracking-widest font-bold text-slate-400">
+              Total Sales
+            </div>
           </div>
           <div>
             <div className="text-4xl font-black text-primary mb-2">50+</div>
-            <div className="text-[10px] uppercase tracking-widest font-bold text-slate-400">Luxury Listings</div>
+            <div className="text-[10px] uppercase tracking-widest font-bold text-slate-400">
+              Luxury Listings
+            </div>
           </div>
           <div>
             <div className="text-4xl font-black text-primary mb-2">11</div>
-            <div className="text-[10px] uppercase tracking-widest font-bold text-slate-400">Global Awards</div>
+            <div className="text-[10px] uppercase tracking-widest font-bold text-slate-400">
+              Global Awards
+            </div>
           </div>
         </div>
       </section>
@@ -119,7 +146,6 @@ export default function AboutPage() {
         </div> */}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          
           {/* Team Member 1 */}
           {/* <div className="group text-center lg:text-left">
             <div className="aspect-3/4 rounded-xl overflow-hidden mb-6 relative border border-primary/10">
@@ -190,28 +216,30 @@ export default function AboutPage() {
       <section className="py-24 px-6 border-t border-primary/10">
         <div className="max-w-5xl mx-auto rounded-3xl overflow-hidden relative p-12 text-center bg-neutral-dark/10 border border-primary/25">
           <div className="relative z-10 space-y-6">
-            <h2 className="text-3xl md:text-4xl font-light">Begin Your Journey <span className="font-extrabold text-primary">Home</span></h2>
+            <h2 className="text-3xl md:text-4xl font-light">
+              Begin Your Journey{' '}
+              <span className="font-extrabold text-primary">Home</span>
+            </h2>
             <p className="text-slate-400 max-w-2xl mx-auto text-sm leading-relaxed font-light">
-              Ready to find your next architectural masterpiece? Our elite agents are standing by to guide you through a bespoke real estate experience.
+              Ready to find your next architectural masterpiece? Our elite
+              agents are standing by to guide you through a bespoke real estate
+              experience.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/contact-us"
-                className="bg-primary text-background-dark px-10 py-4 rounded-lg font-bold text-xs uppercase tracking-wider hover:bg-primary/95 transition-all cursor-pointer"
-              >
+                className="bg-primary text-background-dark px-10 py-4 rounded-lg font-bold text-xs uppercase tracking-wider hover:bg-primary/95 transition-all cursor-pointer">
                 Work With Us
               </Link>
               <Link
                 href="/properties"
-                className="border border-primary text-primary px-10 py-4 rounded-lg font-bold text-xs uppercase tracking-wider hover:bg-primary hover:text-background-dark transition-all cursor-pointer"
-              >
+                className="border border-primary text-primary px-10 py-4 rounded-lg font-bold text-xs uppercase tracking-wider hover:bg-primary hover:text-background-dark transition-all cursor-pointer">
                 View Portfolio
               </Link>
             </div>
           </div>
         </div>
       </section>
-
     </div>
   );
 }

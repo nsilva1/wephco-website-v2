@@ -1,56 +1,71 @@
-import { notFound } from "next/navigation"
-import { getPropertyById } from "@/actions/property-management"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, Building2, MapPin, DollarSign, TrendingUp } from "lucide-react"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import Image from "next/image"
-import PropertyControls from "./PropertyControls"
-import { formatCurrency } from "@/lib/utils"
+import { notFound } from 'next/navigation';
+import { getPropertyById } from '@/actions/property-management';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import {
+  ArrowLeft,
+  Building2,
+  MapPin,
+  DollarSign,
+  TrendingUp,
+  Download,
+} from 'lucide-react';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import Image from 'next/image';
+import PropertyControls from './PropertyControls';
+import { formatCurrency } from '@/lib/utils';
 
 export const revalidate = 0;
 
-export default async function PropertyDetailPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function PropertyDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const { id } = await params;
-  const property = await getPropertyById(id)
+  const property = await getPropertyById(id);
 
-  if (!property) return notFound()
+  if (!property) return notFound();
 
   const tagColors: Record<string, string> = {
     verified: 'bg-green-500 hover:bg-green-600 text-white',
     pending: 'bg-amber-500 hover:bg-amber-600 text-white',
-  }
+  };
 
   const statusColors: Record<string, string> = {
     available: 'bg-green-500 hover:bg-green-600 text-white',
     'under offer': 'bg-blue-500 hover:bg-blue-600 text-white',
     sold: 'bg-slate-600 hover:bg-slate-700 text-white',
-  }
+  };
 
   return (
     <div className="flex-1 space-y-6 p-4 md:p-8 pt-6">
       <div className="flex items-center gap-4">
         <Link href="/dashboard/properties">
-          <Button variant="outline" size="icon">
+          <Button variant="ghost" size="icon">
             <ArrowLeft className="h-4 w-4" />
           </Button>
         </Link>
         <h2 className="text-3xl font-bold tracking-tight">{property.title}</h2>
-        <Badge variant="secondary" className={`capitalize ${tagColors[property.tag] || ''}`}>
+        <Badge
+          variant="secondary"
+          className={`capitalize ${tagColors[property.tag] || ''}`}>
           {property.tag || 'pending'}
         </Badge>
-        <Badge variant="secondary" className={`capitalize ${statusColors[property.status] || ''}`}>
+        <Badge
+          variant="secondary"
+          className={`capitalize ${statusColors[property.status] || ''}`}>
           {property.status || 'available'}
         </Badge>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
         {/* Image & Details */}
-        <Card>
+        <Card className="bg-white">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Building2 className="h-5 w-5 text-muted-foreground" />
+            <CardTitle className="flex items-center gap-2 text-slate-800 font-bold">
+              <Building2 className="h-5 w-5 text-slate-500" />
               Property Information
             </CardTitle>
           </CardHeader>
@@ -58,32 +73,59 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
             {property.images && property.images.length > 0 && (
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                 {property.images.map((img, idx) => (
-                  <div key={idx} className="relative w-full h-40 rounded-lg overflow-hidden">
-                    <Image src={img} alt={`${property.title} - ${idx + 1}`} fill className="object-cover" sizes="(max-width: 768px) 50vw, 33vw" />
+                  <div
+                    key={idx}
+                    className="relative w-full h-40 rounded-lg overflow-hidden">
+                    <Image
+                      src={img}
+                      alt={`${property.title} - ${idx + 1}`}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 50vw, 33vw"
+                    />
                   </div>
                 ))}
               </div>
             )}
-            <div className="flex justify-between border-b pb-2">
-              <span className="text-muted-foreground flex items-center gap-1"><MapPin className="h-4 w-4" /> Location</span>
-              <span className="font-medium">{property.location}</span>
+            <div className="flex justify-between border-b pb-2 text-sm">
+              <span className="text-slate-500 flex items-center gap-1">
+                <MapPin className="h-4 w-4" /> Location
+              </span>
+              <span className="font-semibold text-slate-800">
+                {property.location}
+              </span>
             </div>
-            <div className="flex justify-between border-b pb-2">
-              <span className="text-muted-foreground">Developer</span>
-              <span className="font-medium">{property.developer}</span>
+            <div className="flex justify-between border-b pb-2 text-sm">
+              <span className="text-slate-500">Developer</span>
+              <span className="font-semibold text-slate-800">
+                {property.developer}
+              </span>
             </div>
-            <div className="flex justify-between border-b pb-2">
-              <span className="text-muted-foreground flex items-center gap-1"><DollarSign className="h-4 w-4" /> Price</span>
-              <span className="font-bold text-lg text-[#cfb53b]">{formatCurrency(property.price, property.currency)}</span>
+            <div className="flex justify-between border-b pb-2 text-sm">
+              <span className="text-slate-500 flex items-center gap-1">
+                <DollarSign className="h-4 w-4" /> Price
+              </span>
+              <span className="font-bold text-lg text-[#cfb53b]">
+                {formatCurrency(property.price, property.currency)}
+              </span>
             </div>
-            <div className="flex justify-between border-b pb-2">
-              <span className="text-muted-foreground flex items-center gap-1"><TrendingUp className="h-4 w-4" /> Yield</span>
-              <span className="font-medium">{property.yieldValue}%</span>
+            <div className="flex justify-between border-b pb-2 text-sm">
+              <span className="text-slate-500 flex items-center gap-1">
+                <TrendingUp className="h-4 w-4" /> Yield
+              </span>
+              <span className="font-semibold text-slate-800">
+                {property.yieldValue}%
+              </span>
             </div>
             {property.pdfUrl && (
               <div className="flex justify-between border-b pb-2">
                 <span className="text-muted-foreground">PDF Brochure</span>
-                <a href={property.pdfUrl} target="_blank" rel="noreferrer" className="text-blue-600 underline text-sm">
+                <a
+                  href={property.pdfUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex gap-2 items-center text-[#cfb53b] hover:underline text-sm font-medium">
+                  <Download className="h-4 w-4" />
                   Download
                 </a>
               </div>
@@ -92,12 +134,14 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
         </Card>
 
         {/* Description */}
-        <Card>
+        <Card className="bg-white">
           <CardHeader>
-            <CardTitle>Description</CardTitle>
+            <CardTitle className="text-slate-800 font-bold">
+              Description
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm leading-relaxed whitespace-pre-wrap">
+            <p className="text-sm leading-relaxed whitespace-pre-wrap text-slate-700">
               {property.description || 'No description provided.'}
             </p>
           </CardContent>
@@ -105,9 +149,11 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
       </div>
 
       {/* Controls */}
-      <Card>
+      <Card className="bg-white">
         <CardHeader>
-          <CardTitle className="text-lg">Actions</CardTitle>
+          <CardTitle className="text-lg text-muted-foreground">
+            Actions
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <PropertyControls
@@ -118,5 +164,5 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

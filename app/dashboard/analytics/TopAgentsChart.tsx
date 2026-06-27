@@ -34,8 +34,12 @@ export function TopAgentsChart({ data }: Props) {
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
       <div className="mb-6">
-        <h4 className="text-lg font-bold text-slate-800">Top Performing Agents</h4>
-        <p className="text-sm text-gray-500 mt-1">Ranked by total deals closed</p>
+        <h4 className="text-lg font-bold text-slate-800">
+          Top Performing Agents
+        </h4>
+        <p className="text-sm text-gray-500 mt-1">
+          Ranked by total deals closed
+        </p>
       </div>
 
       {data.length === 0 ? (
@@ -47,9 +51,12 @@ export function TopAgentsChart({ data }: Props) {
           <BarChart
             data={data}
             layout="vertical"
-            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-          >
-            <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" horizontal={false} />
+            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+            <CartesianGrid
+              strokeDasharray="3 3"
+              stroke="#f1f5f9"
+              horizontal={false}
+            />
             <XAxis
               type="number"
               tick={{ fontSize: 12, fill: '#94a3b8' }}
@@ -73,9 +80,14 @@ export function TopAgentsChart({ data }: Props) {
                 boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
                 padding: '12px 16px',
               }}
-              labelStyle={{ fontWeight: 700, color: '#1e293b', marginBottom: 4 }}
+              labelStyle={{
+                fontWeight: 700,
+                color: '#1e293b',
+                marginBottom: 4,
+              }}
               formatter={(value: any, name: any) => {
-                const label = name === 'dealsClosed' ? 'Deals Closed' : 'Active Leads';
+                const label =
+                  name === 'dealsClosed' ? 'Deals Closed' : 'Active Leads';
                 return [value, label];
               }}
             />
@@ -83,10 +95,12 @@ export function TopAgentsChart({ data }: Props) {
               dataKey="dealsClosed"
               radius={[0, 8, 8, 0]}
               barSize={24}
-              name="dealsClosed"
-            >
+              name="dealsClosed">
               {data.map((_, index) => (
-                <Cell key={index} fill={GOLD_PALETTE[index % GOLD_PALETTE.length]} />
+                <Cell
+                  key={index}
+                  fill={GOLD_PALETTE[index % GOLD_PALETTE.length]}
+                />
               ))}
             </Bar>
           </BarChart>
@@ -104,21 +118,30 @@ export function TopAgentsChart({ data }: Props) {
           {data.slice(0, 5).map((agent, idx) => (
             <div
               key={idx}
-              className="grid grid-cols-3 text-sm py-2.5 px-2 rounded-lg hover:bg-gray-50 transition-colors"
-            >
+              className="grid grid-cols-3 text-sm py-2.5 px-2 rounded-lg hover:bg-gray-50 transition-colors">
               <div className="flex items-center gap-2">
-                <span className={`flex items-center justify-center w-6 h-6 rounded-full text-[10px] font-bold ${
-                  idx === 0 ? 'bg-[#cfb53b]/20 text-[#cfb53b]' :
-                  idx === 1 ? 'bg-slate-200 text-slate-600' :
-                  idx === 2 ? 'bg-orange-100 text-orange-600' :
-                  'bg-gray-100 text-gray-500'
-                }`}>
+                <span
+                  className={`flex items-center justify-center w-6 h-6 rounded-full text-[10px] font-bold ${
+                    idx === 0
+                      ? 'bg-[#cfb53b]/20 text-[#cfb53b]'
+                      : idx === 1
+                        ? 'bg-slate-200 text-slate-600'
+                        : idx === 2
+                          ? 'bg-orange-100 text-orange-600'
+                          : 'bg-gray-100 text-gray-500'
+                  }`}>
                   {idx + 1}
                 </span>
-                <span className="font-medium text-slate-700 truncate">{agent.name}</span>
+                <span className="font-medium text-slate-700 truncate">
+                  {agent.name}
+                </span>
               </div>
-              <span className="text-center font-bold text-slate-800">{agent.dealsClosed}</span>
-              <span className="text-center text-gray-500">{agent.activeLeads}</span>
+              <span className="text-center font-bold text-slate-800">
+                {agent.dealsClosed}
+              </span>
+              <span className="text-center text-gray-500">
+                {agent.activeLeads}
+              </span>
             </div>
           ))}
         </div>

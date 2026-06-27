@@ -1,5 +1,11 @@
 import { format } from 'date-fns';
-import { BiTimeFive, BiShow, BiCalendar, BiUser, BiArrowBack } from 'react-icons/bi';
+import {
+  BiTimeFive,
+  BiShow,
+  BiCalendar,
+  BiUser,
+  BiArrowBack,
+} from 'react-icons/bi';
 import Link from 'next/link';
 import { fetchPost } from '@/actions/blog';
 import Image from 'next/image';
@@ -10,14 +16,12 @@ export default async function BlogPostPage({ params }: any) {
 
   return (
     <div className="min-h-screen bg-background-dark text-slate-100 font-display pt-24 pb-20">
-      
       {/* Header Back Button */}
       <header className="border-b border-primary/10 bg-background-dark/50 backdrop-blur-sm sticky top-20 z-10">
         <div className="container mx-auto px-6 py-4 max-w-4xl flex justify-between items-center">
-          <Link 
+          <Link
             href="/blog"
-            className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary hover:text-white transition-colors"
-          >
+            className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary hover:text-white transition-colors">
             <BiArrowBack className="text-lg" /> Back to Blog
           </Link>
         </div>
@@ -25,13 +29,10 @@ export default async function BlogPostPage({ params }: any) {
 
       <main className="container mx-auto px-6 py-12 max-w-4xl">
         <article className="space-y-8">
-          
           {/* Post Header */}
           <header className="space-y-6">
             {post.category && (
-              <span 
-                className="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded bg-[#022618]/30 border border-primary/10 text-primary w-fit inline-block"
-              >
+              <span className="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded bg-[#022618]/30 border border-primary/10 text-primary w-fit inline-block">
                 {post.category.name}
               </span>
             )}
@@ -56,7 +57,9 @@ export default async function BlogPostPage({ params }: any) {
               <span className="flex items-center gap-2 border-l border-primary/10 pl-6">
                 <BiCalendar className="text-primary text-base" />
                 <time>
-                  {post.publishedAt ? format(new Date(post.publishedAt), 'MMMM d, yyyy') : 'Draft'}
+                  {post.publishedAt
+                    ? format(new Date(post.publishedAt), 'MMMM d, yyyy')
+                    : 'Draft'}
                 </time>
               </span>
 
@@ -104,17 +107,15 @@ export default async function BlogPostPage({ params }: any) {
               </h3>
               <div className="flex flex-wrap gap-2">
                 {post.tags.map((tag: string) => (
-                  <span 
-                    key={tag} 
-                    className="text-[10px] uppercase font-mono tracking-wider text-slate-400 bg-neutral-dark/10 border border-primary/10 px-3 py-1 rounded"
-                  >
+                  <span
+                    key={tag}
+                    className="text-[10px] uppercase font-mono tracking-wider text-slate-400 bg-neutral-dark/10 border border-primary/10 px-3 py-1 rounded">
                     #{tag}
                   </span>
                 ))}
               </div>
             </div>
           )}
-          
         </article>
       </main>
     </div>

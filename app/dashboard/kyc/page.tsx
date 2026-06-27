@@ -1,6 +1,6 @@
-import { getAllUsersForKyc } from "@/actions/user-management";
-import { columns } from "./columns";
-import { DataTable } from "./data-table";
+import { getAllUsersForKyc } from '@/actions/user-management';
+import { columns } from './columns';
+import { DataTable } from './data-table';
 
 export const revalidate = 0;
 

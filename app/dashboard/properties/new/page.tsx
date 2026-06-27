@@ -1,4 +1,4 @@
-import PropertyForm from "../PropertyForm";
+import PropertyForm from '../PropertyForm';
 
 export default function NewPropertyPage() {
   return <PropertyForm mode="create" />;

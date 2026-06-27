@@ -1,11 +1,11 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { approveWithdrawal, rejectWithdrawal } from "@/actions/transactions"
-import { Button } from "@/components/ui/button"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { approveWithdrawal, rejectWithdrawal } from '@/actions/transactions';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Dialog,
   DialogContent,
@@ -14,23 +14,27 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { useAuth } from "@/context/AuthContext"
+} from '@/components/ui/dialog';
+import { useAuth } from '@/context/AuthContext';
 
 interface WithdrawalControlsProps {
-  transactionId: string
-  amount: number
-  status: string
+  transactionId: string;
+  amount: number;
+  status: string;
 }
 
-export default function WithdrawalControls({ transactionId, amount, status }: WithdrawalControlsProps) {
-  const router = useRouter()
-  const { currentUser } = useAuth()
-  const [isApproving, setIsApproving] = useState(false)
-  const [isRejecting, setIsRejecting] = useState(false)
-  const [rejectReason, setRejectReason] = useState("")
-  const [isApproveModalOpen, setIsApproveModalOpen] = useState(false)
-  const [isRejectModalOpen, setIsRejectModalOpen] = useState(false)
+export default function WithdrawalControls({
+  transactionId,
+  amount,
+  status,
+}: WithdrawalControlsProps) {
+  const router = useRouter();
+  const { currentUser } = useAuth();
+  const [isApproving, setIsApproving] = useState(false);
+  const [isRejecting, setIsRejecting] = useState(false);
+  const [rejectReason, setRejectReason] = useState('');
+  const [isApproveModalOpen, setIsApproveModalOpen] = useState(false);
+  const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
 
   if (status !== 'Pending') {
     return null; // Don't show controls if not pending
@@ -38,60 +42,71 @@ export default function WithdrawalControls({ transactionId, amount, status }: Wi
 
   const handleApprove = async () => {
     if (!currentUser) return;
-    setIsApproving(true)
+    setIsApproving(true);
     try {
-      await approveWithdrawal(transactionId, currentUser.id!)
-      setIsApproveModalOpen(false)
-      router.refresh()
+      await approveWithdrawal(transactionId, currentUser.id!);
+      setIsApproveModalOpen(false);
+      router.refresh();
     } catch (error) {
-      console.error(error)
-      alert("Failed to approve withdrawal")
+      console.error(error);
+      alert('Failed to approve withdrawal');
     } finally {
-      setIsApproving(false)
+      setIsApproving(false);
     }
-  }
+  };
 
   const handleReject = async () => {
     if (!currentUser) return;
     if (!rejectReason.trim()) {
-      alert("Please provide a reason for rejection")
-      return
+      alert('Please provide a reason for rejection');
+      return;
     }
-    setIsRejecting(true)
+    setIsRejecting(true);
     try {
-      await rejectWithdrawal(transactionId, currentUser.id!, rejectReason)
-      setIsRejectModalOpen(false)
-      router.refresh()
+      await rejectWithdrawal(transactionId, currentUser.id!, rejectReason);
+      setIsRejectModalOpen(false);
+      router.refresh();
     } catch (error) {
-      console.error(error)
-      alert("Failed to reject withdrawal")
+      console.error(error);
+      alert('Failed to reject withdrawal');
     } finally {
-      setIsRejecting(false)
+      setIsRejecting(false);
     }
-  }
+  };
 
-  const formattedAmount = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  }).format(amount)
+  const formattedAmount = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  }).format(amount);
 
   return (
     <div className="flex items-center gap-4 mt-6">
       <Dialog open={isApproveModalOpen} onOpenChange={setIsApproveModalOpen}>
         <DialogTrigger asChild>
-          <Button className="bg-green-600 hover:bg-green-700 text-white">Approve Payout</Button>
+          <Button className="bg-green-600 hover:bg-green-700 text-white">
+            Approve Payout
+          </Button>
         </DialogTrigger>
         <DialogContent className="bg-white">
           <DialogHeader>
             <DialogTitle>Approve Withdrawal</DialogTitle>
             <DialogDescription>
-              Are you sure you want to approve this withdrawal request for {formattedAmount}? This will mark the transaction as completed and finalize the escrow deduction.
+              Are you sure you want to approve this withdrawal request for{' '}
+              {formattedAmount}? This will mark the transaction as completed and
+              finalize the escrow deduction.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsApproveModalOpen(false)}>Cancel</Button>
-            <Button className="bg-green-600 hover:bg-green-700 text-white" onClick={handleApprove} disabled={isApproving}>
-              {isApproving ? "Approving..." : "Confirm Approval"}
+            <Button
+              variant="outline"
+              onClick={() => setIsApproveModalOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              className="bg-green-600 hover:bg-green-700 text-white"
+              onClick={handleApprove}
+              disabled={isApproving}>
+              {isApproving ? 'Approving...' : 'Confirm Approval'}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -105,7 +120,9 @@ export default function WithdrawalControls({ transactionId, amount, status }: Wi
           <DialogHeader>
             <DialogTitle>Reject Withdrawal</DialogTitle>
             <DialogDescription>
-              Please provide a reason for rejecting this withdrawal. The {formattedAmount} will be refunded from escrow back to the agent's available balance.
+              Please provide a reason for rejecting this withdrawal. The{' '}
+              {formattedAmount} will be refunded from escrow back to the agent's
+              available balance.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
@@ -120,13 +137,20 @@ export default function WithdrawalControls({ transactionId, amount, status }: Wi
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsRejectModalOpen(false)}>Cancel</Button>
-            <Button variant="destructive" onClick={handleReject} disabled={isRejecting || !rejectReason.trim()}>
-              {isRejecting ? "Rejecting..." : "Confirm Rejection"}
+            <Button
+              variant="outline"
+              onClick={() => setIsRejectModalOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleReject}
+              disabled={isRejecting || !rejectReason.trim()}>
+              {isRejecting ? 'Rejecting...' : 'Confirm Rejection'}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>
-  )
+  );
 }

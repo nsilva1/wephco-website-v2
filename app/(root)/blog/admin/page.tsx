@@ -24,8 +24,8 @@ export default function BlogAdminPage() {
       const data = await fetchPosts();
       setPosts(data);
     } catch (error) {
-      console.error("Failed to fetch admin stats posts:", error);
-      toast.error("Failed to load blog dashboard data");
+      console.error('Failed to fetch admin stats posts:', error);
+      toast.error('Failed to load blog dashboard data');
     } finally {
       setLoading(false);
     }
@@ -34,7 +34,7 @@ export default function BlogAdminPage() {
   useEffect(() => {
     if (!sessionLoading && !authLoading) {
       if (!currentUser) {
-        toast.error("Please login to access the blog admin dashboard");
+        toast.error('Please login to access the blog admin dashboard');
         router.push('/auth/login');
       } else {
         loadData();
@@ -53,7 +53,9 @@ export default function BlogAdminPage() {
   return (
     <div className="space-y-6 p-6 max-w-7xl mx-auto min-h-screen bg-background-dark text-slate-100 pt-28">
       <div>
-        <h1 className="text-3xl font-light">Blog <span className="font-extrabold text-primary">Dashboard</span></h1>
+        <h1 className="text-3xl font-light">
+          Blog <span className="font-extrabold text-primary">Dashboard</span>
+        </h1>
         <p className="text-slate-400 text-sm">
           Overview of your blog performance and content
         </p>
@@ -79,7 +81,7 @@ export default function BlogAdminPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {posts?.filter(p => p.status === 'PUBLISHED').length || 0}
+              {posts?.filter((p) => p.status === 'PUBLISHED').length || 0}
             </div>
             <p className="text-xs text-slate-400">Live on your blog</p>
           </CardContent>
@@ -92,7 +94,7 @@ export default function BlogAdminPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {posts?.filter(p => p.status === 'DRAFT').length || 0}
+              {posts?.filter((p) => p.status === 'DRAFT').length || 0}
             </div>
             <p className="text-xs text-slate-400">Unpublished posts</p>
           </CardContent>
@@ -105,7 +107,10 @@ export default function BlogAdminPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {posts?.reduce((prevPost, post) => prevPost + (post.views || 0), 0)}
+              {posts?.reduce(
+                (prevPost, post) => prevPost + (post.views || 0),
+                0
+              )}
             </div>
             <p className="text-xs text-slate-400">All time views</p>
           </CardContent>
@@ -125,13 +130,16 @@ export default function BlogAdminPage() {
             {posts?.slice(0, 5).map((post) => (
               <div
                 key={post.id}
-                className="flex items-center justify-between p-4 border border-primary/15 rounded-lg bg-neutral-dark/10"
-              >
+                className="flex items-center justify-between p-4 border border-primary/15 rounded-lg bg-neutral-dark/10">
                 <div>
-                  <h3 className="font-bold text-sm text-slate-200">{post.title}</h3>
+                  <h3 className="font-bold text-sm text-slate-200">
+                    {post.title}
+                  </h3>
                   <p className="text-xs text-slate-400 mt-1">
                     {post.status} • {post.views || 0} views •{' '}
-                    {post.createdAt ? new Date(post.createdAt).toLocaleDateString() : 'N/A'}
+                    {post.createdAt
+                      ? new Date(post.createdAt).toLocaleDateString()
+                      : 'N/A'}
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
@@ -140,15 +148,16 @@ export default function BlogAdminPage() {
                       post.status === 'PUBLISHED'
                         ? 'bg-primary/20 text-primary border border-primary/30'
                         : 'bg-yellow-500/20 text-yellow-500 border border-yellow-500/30'
-                    }`}
-                  >
+                    }`}>
                     {post.status}
                   </span>
                 </div>
               </div>
             ))}
             {posts.length === 0 && (
-              <p className="text-center py-6 text-slate-400 text-sm font-light">No posts found in database.</p>
+              <p className="text-center py-6 text-slate-400 text-sm font-light">
+                No posts found in database.
+              </p>
             )}
           </div>
         </CardContent>

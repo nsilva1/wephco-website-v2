@@ -1,9 +1,9 @@
-import { getProperties } from "@/actions/property-management";
-import { columns } from "./columns";
-import { DataTable } from "./data-table";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { getProperties } from '@/actions/property-management';
+import { columns } from './columns';
+import { DataTable } from './data-table';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Plus } from 'lucide-react';
 
 export const revalidate = 0;
 

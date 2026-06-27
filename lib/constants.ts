@@ -6,7 +6,7 @@ import aldar from '@/images/aldar.png'
 import damac from '@/images/damac.svg'
 import sober from '@/images/sober.png'
 import aarano from '@/images/aarano.png'
-import { MdDashboard, MdChatBubble, MdAttachMoney, MdVerifiedUser, MdNotifications, MdAnalytics, MdEvent } from "react-icons/md";
+import { MdDashboard, MdChatBubble, MdAttachMoney, MdVerifiedUser, MdNotifications, MdAnalytics, MdEvent, MdContactPhone } from "react-icons/md";
 import { BiBuildings, BiSupport } from "react-icons/bi";
 import { BsPeopleFill } from "react-icons/bs";
 import { Role } from "@/interfaces/userInterface";
@@ -127,14 +127,9 @@ export const dashboardMenu = [
         path: '/dashboard/withdrawals'
     },
     {
-        label: 'KYC',
-        icon: MdVerifiedUser,
-        path: '/dashboard/kyc'
-    },
-    {
-        label: 'Support',
-        icon: BiSupport,
-        path: '/dashboard/support'
+        label: 'Consultations',
+        icon: MdContactPhone,
+        path: '/dashboard/consultations'
     },
     {
         label: 'Properties',
@@ -145,6 +140,11 @@ export const dashboardMenu = [
         label: 'Leads',
         icon: MdChatBubble,
         path: '/dashboard/leads'
+    },
+    {
+        label: 'Support',
+        icon: BiSupport,
+        path: '/dashboard/support'
     },
     {
         label: 'Commission',
@@ -165,6 +165,11 @@ export const dashboardMenu = [
         label: 'Events',
         icon: MdEvent,
         path: '/dashboard/events'
+    },
+    {
+        label: 'KYC',
+        icon: MdVerifiedUser,
+        path: '/dashboard/kyc'
     },
 ]
 

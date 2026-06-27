@@ -20,16 +20,20 @@ export default async function SettingsPage() {
             <Settings className="h-6 w-6 text-[#cfb53b]" />
           </div>
           <div>
-            <h2 className="text-3xl font-bold tracking-tight text-slate-800">Account Settings</h2>
-            <p className="text-muted-foreground mt-1">Manage your profile, payment methods, and account security.</p>
+            <h2 className="text-3xl font-bold tracking-tight text-slate-800">
+              Account Settings
+            </h2>
+            <p className="text-muted-foreground mt-1">
+              Manage your profile, payment methods, and account security.
+            </p>
           </div>
         </div>
       </div>
 
       <div className="mt-8">
-        <SettingsForm 
-          initialGlobalSettings={globalSettings} 
-          globalCommission={globalCommission} 
+        <SettingsForm
+          initialGlobalSettings={globalSettings}
+          globalCommission={globalCommission}
         />
       </div>
     </div>

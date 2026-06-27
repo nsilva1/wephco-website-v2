@@ -1,41 +1,59 @@
 import React from 'react';
 import { db } from '@/firebase/firebaseConfig';
-import { Users, Briefcase, TrendingUp, DollarSign, Clock, Activity, CheckCircle } from 'lucide-react';
+import {
+  Users,
+  Briefcase,
+  TrendingUp,
+  DollarSign,
+  Clock,
+  Activity,
+  CheckCircle,
+} from 'lucide-react';
 import { IUserInfo, ITransaction } from '@/interfaces/userInterface';
 
 export const revalidate = 0; // ensure it's dynamic
 
 const formatDate = (date: any) => {
   if (!date) return 'Recent';
-  if (typeof date === 'string' || typeof date === 'number') return new Date(date).toLocaleDateString();
+  if (typeof date === 'string' || typeof date === 'number')
+    return new Date(date).toLocaleDateString();
   if (date.toDate) return date.toDate().toLocaleDateString(); // Firestore Timestamp
   return 'Recent';
 };
 
 const page = async () => {
-  
-
   // Fetch users for Agents count and active leads / deals closed
   const usersSnapshot = await db.collection('users').get();
-  const users = usersSnapshot.docs.map(doc => doc.data() as IUserInfo);
+  const users = usersSnapshot.docs.map((doc) => doc.data() as IUserInfo);
 
   // Calculate metrics
-  const totalAgents = users.filter(u => u.role === 'Agent' || u.role === 'AFFILIATE').length;
+  const totalAgents = users.filter(
+    (u) => u.role === 'Agent' || u.role === 'AFFILIATE'
+  ).length;
   const activeLeads = users.reduce((sum, u) => sum + (u.activeLeads || 0), 0);
-  const totalDealsClosed = users.reduce((sum, u) => sum + (u.dealsClosed || 0), 0);
+  const totalDealsClosed = users.reduce(
+    (sum, u) => sum + (u.dealsClosed || 0),
+    0
+  );
 
   // Fetch transactions for commissions, withdrawals, and recent activity
-  const transactionsSnapshot = await db.collection('transactions').orderBy('createdAt', 'desc').limit(50).get();
-  const allTransactions = transactionsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as ITransaction));
+  const transactionsSnapshot = await db
+    .collection('transactions')
+    .orderBy('createdAt', 'desc')
+    .limit(50)
+    .get();
+  const allTransactions = transactionsSnapshot.docs.map(
+    (doc) => ({ id: doc.id, ...doc.data() }) as ITransaction
+  );
 
   // Commission paid out: Withdrawal completed
   const totalCommissionPaid = allTransactions
-    .filter(t => t.type === 'Withdrawal' && t.status === 'Completed')
+    .filter((t) => t.type === 'Withdrawal' && t.status === 'Completed')
     .reduce((sum, t) => sum + (t.amount || 0), 0);
 
   // Pending withdrawals
   const pendingWithdrawals = allTransactions
-    .filter(t => t.type === 'Withdrawal' && t.status === 'Pending')
+    .filter((t) => t.type === 'Withdrawal' && t.status === 'Pending')
     .reduce((sum, t) => sum + (t.amount || 0), 0);
 
   // Recent activity
@@ -44,8 +62,12 @@ const page = async () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-2">
-        <h3 className="text-3xl font-bold text-slate-800">Dashboard Overview</h3>
-        <p className="text-gray-500">Welcome to your dashboard. Here's what's happening today.</p>
+        <h3 className="text-3xl font-bold text-slate-800">
+          Dashboard Overview
+        </h3>
+        <p className="text-gray-500">
+          Welcome to your dashboard. Here's what's happening today.
+        </p>
       </div>
 
       {/* Metrics Grid */}
@@ -78,8 +100,12 @@ const page = async () => {
             <CheckCircle size={24} />
           </div>
           <div>
-            <p className="text-sm font-medium text-gray-500">Total Deals Closed</p>
-            <h4 className="text-2xl font-bold text-slate-800">{totalDealsClosed}</h4>
+            <p className="text-sm font-medium text-gray-500">
+              Total Deals Closed
+            </p>
+            <h4 className="text-2xl font-bold text-slate-800">
+              {totalDealsClosed}
+            </h4>
           </div>
         </div>
 
@@ -89,8 +115,12 @@ const page = async () => {
             <TrendingUp size={24} />
           </div>
           <div>
-            <p className="text-sm font-medium text-gray-500">Total Commission Paid</p>
-            <h4 className="text-2xl font-bold text-slate-800">${totalCommissionPaid.toLocaleString()}</h4>
+            <p className="text-sm font-medium text-gray-500">
+              Total Commission Paid
+            </p>
+            <h4 className="text-2xl font-bold text-slate-800">
+              ${totalCommissionPaid.toLocaleString()}
+            </h4>
           </div>
         </div>
 
@@ -100,8 +130,12 @@ const page = async () => {
             <Clock size={24} />
           </div>
           <div>
-            <p className="text-sm font-medium text-gray-500">Pending Withdrawals</p>
-            <h4 className="text-2xl font-bold text-slate-800">${pendingWithdrawals.toLocaleString()}</h4>
+            <p className="text-sm font-medium text-gray-500">
+              Pending Withdrawals
+            </p>
+            <h4 className="text-2xl font-bold text-slate-800">
+              ${pendingWithdrawals.toLocaleString()}
+            </h4>
           </div>
         </div>
       </div>
@@ -115,31 +149,47 @@ const page = async () => {
           {recentActivity.length > 0 ? (
             <ul className="divide-y divide-gray-100">
               {recentActivity.map((activity, idx) => (
-                <li key={idx} className="p-6 hover:bg-gray-50 transition-colors flex items-center justify-between">
+                <li
+                  key={idx}
+                  className="p-6 hover:bg-gray-50 transition-colors flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className={`p-3 rounded-full ${
-                      activity.type === 'Withdrawal' ? 'bg-orange-100 text-orange-600' :
-                      activity.type === 'Income' ? 'bg-green-100 text-green-600' :
-                      'bg-blue-100 text-blue-600'
-                    }`}>
-                      {activity.type === 'Withdrawal' ? <DollarSign size={20} /> : <Briefcase size={20} />}
+                    <div
+                      className={`p-3 rounded-full ${
+                        activity.type === 'Withdrawal'
+                          ? 'bg-orange-100 text-orange-600'
+                          : activity.type === 'Income'
+                            ? 'bg-green-100 text-green-600'
+                            : 'bg-blue-100 text-blue-600'
+                      }`}>
+                      {activity.type === 'Withdrawal' ? (
+                        <DollarSign size={20} />
+                      ) : (
+                        <Briefcase size={20} />
+                      )}
                     </div>
                     <div>
-                      <p className="text-sm font-semibold text-slate-800">{activity.description || `${activity.type} Request`}</p>
+                      <p className="text-sm font-semibold text-slate-800">
+                        {activity.description || `${activity.type} Request`}
+                      </p>
                       <p className="text-xs text-gray-500">
                         {formatDate(activity.createdAt)}
                       </p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className={`text-sm font-bold ${activity.transactionType === 'Credit' ? 'text-green-600' : 'text-slate-800'}`}>
-                      {activity.transactionType === 'Credit' ? '+' : '-'}${activity.amount?.toLocaleString() || 0}
+                    <p
+                      className={`text-sm font-bold ${activity.transactionType === 'Credit' ? 'text-green-600' : 'text-slate-800'}`}>
+                      {activity.transactionType === 'Credit' ? '+' : '-'}$
+                      {activity.amount?.toLocaleString() || 0}
                     </p>
-                    <span className={`text-[10px] uppercase font-bold px-2 py-1 rounded-full ${
-                      activity.status === 'Completed' ? 'bg-green-100 text-green-700' :
-                      activity.status === 'Pending' ? 'bg-orange-100 text-orange-700' :
-                      'bg-red-100 text-red-700'
-                    }`}>
+                    <span
+                      className={`text-[10px] uppercase font-bold px-2 py-1 rounded-full ${
+                        activity.status === 'Completed'
+                          ? 'bg-green-100 text-green-700'
+                          : activity.status === 'Pending'
+                            ? 'bg-orange-100 text-orange-700'
+                            : 'bg-red-100 text-red-700'
+                      }`}>
                       {activity.status}
                     </span>
                   </div>

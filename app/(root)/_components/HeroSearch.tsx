@@ -39,11 +39,22 @@ const HeroSearch = () => {
           <select
             value={type}
             onChange={(e) => setType(e.target.value)}
-            className="bg-transparent border-none outline-none focus:ring-0 text-white w-full p-0 text-sm font-medium appearance-none cursor-pointer"
-          >
-            <option value="Modern Villa" className="bg-background-dark text-white">Modern Villa</option>
-            <option value="Sky Penthouse" className="bg-background-dark text-white">Sky Penthouse</option>
-            <option value="Coastal Mansion" className="bg-background-dark text-white">Coastal Mansion</option>
+            className="bg-transparent border-none outline-none focus:ring-0 text-white w-full p-0 text-sm font-medium appearance-none cursor-pointer">
+            <option
+              value="Modern Villa"
+              className="bg-background-dark text-white">
+              Modern Villa
+            </option>
+            <option
+              value="Sky Penthouse"
+              className="bg-background-dark text-white">
+              Sky Penthouse
+            </option>
+            <option
+              value="Coastal Mansion"
+              className="bg-background-dark text-white">
+              Coastal Mansion
+            </option>
           </select>
         </div>
 
@@ -64,10 +75,12 @@ const HeroSearch = () => {
 
       <button
         onClick={handleSearch}
-        className="w-full md:w-auto bg-primary hover:bg-white text-background-dark px-10 py-4 rounded-xl md:rounded-full font-bold transition-all duration-300 flex items-center justify-center gap-2 group cursor-pointer shrink-0"
-      >
+        className="w-full md:w-auto bg-primary hover:bg-white text-background-dark px-10 py-4 rounded-xl md:rounded-full font-bold transition-all duration-300 flex items-center justify-center gap-2 group cursor-pointer shrink-0">
         <span className="text-xs tracking-widest uppercase">Search</span>
-        <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+        <ArrowRight
+          size={16}
+          className="group-hover:translate-x-1 transition-transform"
+        />
       </button>
     </div>
   );

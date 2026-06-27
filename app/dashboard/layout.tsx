@@ -11,14 +11,14 @@ export default async function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-      <div>
-        <AuthProvider>
-          <MainLayout>
-            {children}
-            <ToastContainer />
-            <Toaster />
-          </MainLayout>
-        </AuthProvider>
-      </div>
+    <div>
+      <AuthProvider>
+        <MainLayout>
+          {children}
+          <ToastContainer />
+          <Toaster />
+        </MainLayout>
+      </AuthProvider>
+    </div>
   );
 }

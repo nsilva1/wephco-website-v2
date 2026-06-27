@@ -4,6 +4,7 @@ export enum Role {
     AFFILIATE = "AFFILIATE",
     ADMIN = "ADMIN",
     SUPPORT = "SUPPORT",
+    MANAGER = "MANAGER",
     SUPERADMIN = "SUPERADMIN",
 }
 
@@ -17,6 +18,7 @@ export interface IAdminUser {
   role: Role;
   createdAt?: Date | string;
   updatedAt?: Date | string;
+  status?: string;
 }
 
 
@@ -98,6 +100,7 @@ export interface IConsultation {
     preferredModeOfContact: string;
     status: boolean;
     createdAt?: Date;
+    notes?: string[];
 }
 
 export interface IAffiliate {

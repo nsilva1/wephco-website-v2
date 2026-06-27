@@ -30,8 +30,12 @@ export function LeadsStatusChart({ data }: Props) {
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
       <div className="mb-6">
-        <h4 className="text-lg font-bold text-slate-800">Leads by Status Over Time</h4>
-        <p className="text-sm text-gray-500 mt-1">Monthly breakdown of lead pipeline progression</p>
+        <h4 className="text-lg font-bold text-slate-800">
+          Leads by Status Over Time
+        </h4>
+        <p className="text-sm text-gray-500 mt-1">
+          Monthly breakdown of lead pipeline progression
+        </p>
       </div>
 
       {data.length === 0 ? (
@@ -40,10 +44,18 @@ export function LeadsStatusChart({ data }: Props) {
         </div>
       ) : (
         <ResponsiveContainer width="100%" height={350}>
-          <AreaChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+          <AreaChart
+            data={data}
+            margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
             <defs>
               {Object.entries(STATUS_COLORS).map(([status, color]) => (
-                <linearGradient key={status} id={`gradient-${status}`} x1="0" y1="0" x2="0" y2="1">
+                <linearGradient
+                  key={status}
+                  id={`gradient-${status}`}
+                  x1="0"
+                  y1="0"
+                  x2="0"
+                  y2="1">
                   <stop offset="5%" stopColor={color} stopOpacity={0.3} />
                   <stop offset="95%" stopColor={color} stopOpacity={0.02} />
                 </linearGradient>
@@ -70,7 +82,11 @@ export function LeadsStatusChart({ data }: Props) {
                 boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
                 padding: '12px 16px',
               }}
-              labelStyle={{ fontWeight: 700, color: '#1e293b', marginBottom: 8 }}
+              labelStyle={{
+                fontWeight: 700,
+                color: '#1e293b',
+                marginBottom: 8,
+              }}
               itemStyle={{ fontSize: 13, padding: '2px 0' }}
             />
             <Legend

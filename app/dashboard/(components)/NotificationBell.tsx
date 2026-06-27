@@ -17,8 +17,11 @@ export const NotificationBell = () => {
         if (activities.length > 0) {
           const latest = activities[0].timestamp;
           const lastSeen = localStorage.getItem('lastCheckedActivities');
-          
-          if (!lastSeen || new Date(latest).getTime() > new Date(lastSeen).getTime()) {
+
+          if (
+            !lastSeen ||
+            new Date(latest).getTime() > new Date(lastSeen).getTime()
+          ) {
             setHasNew(true);
           }
         }
@@ -45,7 +48,10 @@ export const NotificationBell = () => {
   return (
     <Link href="/dashboard/notifications/view">
       <button className="p-2.5 bg-white rounded-full shadow-sm relative hover:bg-gray-200 transition-colors text-gray-600 group">
-        <Bell size={18} className="group-hover:rotate-12 transition-transform" />
+        <Bell
+          size={18}
+          className="group-hover:rotate-12 transition-transform"
+        />
         {hasNew && (
           <span className="absolute top-2.5 right-2.5 h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-white animate-pulse"></span>
         )}

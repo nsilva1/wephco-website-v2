@@ -1,21 +1,19 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { getAffiliates } from '@/actions/affiliates';
 import { Loader } from '@/components/Loader';
 import { IAffiliate } from '@/interfaces/userInterface';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { useSessionUser } from '@/hooks/useSessionUser';
-import { Role } from '@/interfaces/userInterface';
-import { toast } from 'react-toastify';
 import { Trash2 } from 'lucide-react';
 import { Tooltip } from '@/components/Tooltip';
 
 const DashboardPropertiesPage = () => {
   const router = useRouter();
 
-  const { role, loading: authLoading, logout } = useAuth();
+  const { loading: authLoading, logout } = useAuth();
   const { user: currentUser } = useSessionUser();
 
   const [affiliates, setAffiliates] = useState<IAffiliate[]>([]);
@@ -33,28 +31,6 @@ const DashboardPropertiesPage = () => {
       setLoading(false);
     }
   }, []);
-
-  const checkAuthStatus = useCallback(() => {
-    if (authLoading) return;
-    if (
-      !currentUser ||
-      (role !== Role.ADMIN && role !== Role.SUPPORT)
-    ) {
-      toast.error(
-        'You are not authorized to view this page. Please log in with an admin or support account.'
-      );
-      logout().then(() => router.push('/brokerage/auth/login'));
-    } else {
-      // User is authenticated and has the right role
-      fetchAffiliates();
-    }
-  }, [authLoading, currentUser, role, fetchAffiliates, logout, router]);
-
-  useEffect(() => {
-    if (!authLoading) {
-      checkAuthStatus();
-    }
-  }, [authLoading, checkAuthStatus]);
 
   if (loading || authLoading) {
     return (

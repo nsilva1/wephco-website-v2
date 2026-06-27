@@ -1,7 +1,23 @@
 'use server';
 
 import { auth, db, storage } from '@/firebase/firebaseConfig';
-import { IAdminUser } from '@/interfaces/userInterface';
+import { IAdminUser, Role } from '@/interfaces/userInterface';
+// import { checkAuthenticationCode } from '@/lib/helperFunctions';
+
+export async function updateUserRole(userId: string, newRole: Role) {
+  try {
+    
+    await db.collection('users').doc(userId).update({
+      role: newRole,
+      updatedAt: new Date().toISOString(),
+    });
+
+    return { success: true };
+  } catch (error: any) {
+    console.error('Failed to update user role:', error);
+    return { success: false, message: error.message || 'Failed to update user role' };
+  }
+}
 
 export async function updateUserProfile(userId: string, formData: FormData) {
   try {

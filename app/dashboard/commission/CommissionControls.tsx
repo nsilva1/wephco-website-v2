@@ -1,14 +1,19 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { setGlobalCommissionRate, setAgentCommissionRate, logCommission, IAgentWithRate } from "@/actions/commission"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Badge } from "@/components/ui/badge"
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import {
+  setGlobalCommissionRate,
+  setAgentCommissionRate,
+  logCommission,
+  IAgentWithRate,
+} from '@/actions/commission';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Badge } from '@/components/ui/badge';
 import {
   Dialog,
   DialogContent,
@@ -17,115 +22,124 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
+} from '@/components/ui/dialog';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { useSessionUser } from "@/hooks/useSessionUser"
-import { Settings, Percent, DollarSign, PenLine } from "lucide-react"
+} from '@/components/ui/select';
+import { useSessionUser } from '@/hooks/useSessionUser';
+import { Settings, Percent, DollarSign, PenLine } from 'lucide-react';
 
 interface CommissionControlsProps {
-  globalRate: number
-  agents: IAgentWithRate[]
+  globalRate: number;
+  agents: IAgentWithRate[];
 }
 
-export default function CommissionControls({ globalRate, agents }: CommissionControlsProps) {
-  const router = useRouter()
-  const { user: currentUser } = useSessionUser()
+export default function CommissionControls({
+  globalRate,
+  agents,
+}: CommissionControlsProps) {
+  const router = useRouter();
+  const { user: currentUser } = useSessionUser();
 
   // Global rate state
-  const [newGlobalRate, setNewGlobalRate] = useState(globalRate.toString())
-  const [isSavingGlobal, setIsSavingGlobal] = useState(false)
+  const [newGlobalRate, setNewGlobalRate] = useState(globalRate.toString());
+  const [isSavingGlobal, setIsSavingGlobal] = useState(false);
 
   // Agent rate state
-  const [editingAgentId, setEditingAgentId] = useState<string | null>(null)
-  const [agentRate, setAgentRate] = useState("")
-  const [isSavingAgent, setIsSavingAgent] = useState(false)
+  const [editingAgentId, setEditingAgentId] = useState<string | null>(null);
+  const [agentRate, setAgentRate] = useState('');
+  const [isSavingAgent, setIsSavingAgent] = useState(false);
 
   // Log commission state
-  const [isLogDialogOpen, setIsLogDialogOpen] = useState(false)
-  const [logAgentId, setLogAgentId] = useState("")
-  const [logAmount, setLogAmount] = useState("")
-  const [logDescription, setLogDescription] = useState("")
-  const [isLogging, setIsLogging] = useState(false)
+  const [isLogDialogOpen, setIsLogDialogOpen] = useState(false);
+  const [logAgentId, setLogAgentId] = useState('');
+  const [logAmount, setLogAmount] = useState('');
+  const [logDescription, setLogDescription] = useState('');
+  const [isLogging, setIsLogging] = useState(false);
 
   const handleSaveGlobalRate = async () => {
-    const rate = parseFloat(newGlobalRate)
+    const rate = parseFloat(newGlobalRate);
     if (isNaN(rate) || rate < 0 || rate > 100) {
-      alert("Please enter a valid rate between 0 and 100")
-      return
+      alert('Please enter a valid rate between 0 and 100');
+      return;
     }
-    setIsSavingGlobal(true)
+    setIsSavingGlobal(true);
     try {
-      await setGlobalCommissionRate(rate)
-      router.refresh()
+      await setGlobalCommissionRate(rate);
+      router.refresh();
     } catch (error) {
-      console.error(error)
-      alert("Failed to update global rate")
+      console.error(error);
+      alert('Failed to update global rate');
     } finally {
-      setIsSavingGlobal(false)
+      setIsSavingGlobal(false);
     }
-  }
+  };
 
   const handleSaveAgentRate = async (agentId: string) => {
-    const rate = parseFloat(agentRate)
+    const rate = parseFloat(agentRate);
     if (isNaN(rate) || rate < 0 || rate > 100) {
-      alert("Please enter a valid rate between 0 and 100")
-      return
+      alert('Please enter a valid rate between 0 and 100');
+      return;
     }
-    setIsSavingAgent(true)
+    setIsSavingAgent(true);
     try {
-      await setAgentCommissionRate(agentId, rate)
-      setEditingAgentId(null)
-      setAgentRate("")
-      router.refresh()
+      await setAgentCommissionRate(agentId, rate);
+      setEditingAgentId(null);
+      setAgentRate('');
+      router.refresh();
     } catch (error) {
-      console.error(error)
-      alert("Failed to update agent rate")
+      console.error(error);
+      alert('Failed to update agent rate');
     } finally {
-      setIsSavingAgent(false)
+      setIsSavingAgent(false);
     }
-  }
+  };
 
   const handleLogCommission = async () => {
-    if (!currentUser) return
-    if (!logAgentId) { alert("Please select an agent"); return }
-    const amount = parseFloat(logAmount)
-    if (isNaN(amount) || amount <= 0) { alert("Please enter a valid amount"); return }
-
-    setIsLogging(true)
-    try {
-      await logCommission(logAgentId, amount, logDescription, currentUser.id!)
-      setIsLogDialogOpen(false)
-      setLogAgentId("")
-      setLogAmount("")
-      setLogDescription("")
-      router.refresh()
-    } catch (error) {
-      console.error(error)
-      alert("Failed to log commission")
-    } finally {
-      setIsLogging(false)
+    if (!currentUser) return;
+    if (!logAgentId) {
+      alert('Please select an agent');
+      return;
     }
-  }
+    const amount = parseFloat(logAmount);
+    if (isNaN(amount) || amount <= 0) {
+      alert('Please enter a valid amount');
+      return;
+    }
+
+    setIsLogging(true);
+    try {
+      await logCommission(logAgentId, amount, logDescription, currentUser.id!);
+      setIsLogDialogOpen(false);
+      setLogAgentId('');
+      setLogAmount('');
+      setLogDescription('');
+      router.refresh();
+    } catch (error) {
+      console.error(error);
+      alert('Failed to log commission');
+    } finally {
+      setIsLogging(false);
+    }
+  };
 
   return (
     <div className="space-y-6">
       <div className="grid gap-6 md:grid-cols-2">
         {/* Global Rate Card */}
-        <Card>
+        <Card className="bg-white">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Settings className="h-5 w-5 text-muted-foreground" />
+            <CardTitle className="flex items-center gap-2 text-slate-800 font-bold">
+              <Settings className="h-5 w-5 text-slate-500" />
               Global Commission Rate
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-slate-600">
               This rate applies to all agents unless overridden individually.
             </p>
             <div className="flex items-center gap-3">
@@ -136,7 +150,7 @@ export default function CommissionControls({ globalRate, agents }: CommissionCon
                   min="0"
                   max="100"
                   value={newGlobalRate}
-                  onChange={e => setNewGlobalRate(e.target.value)}
+                  onChange={(e) => setNewGlobalRate(e.target.value)}
                   className="pr-8"
                 />
                 <Percent className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -144,24 +158,23 @@ export default function CommissionControls({ globalRate, agents }: CommissionCon
               <Button
                 onClick={handleSaveGlobalRate}
                 disabled={isSavingGlobal}
-                className="bg-[#cfb53b] hover:bg-[#b89e2f] text-white"
-              >
-                {isSavingGlobal ? "Saving..." : "Save"}
+                className="bg-[#cfb53b] hover:bg-[#b89e2f] text-white">
+                {isSavingGlobal ? 'Saving...' : 'Save'}
               </Button>
             </div>
           </CardContent>
         </Card>
 
         {/* Log Commission Card */}
-        <Card>
+        <Card className="bg-white">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <DollarSign className="h-5 w-5 text-muted-foreground" />
+            <CardTitle className="flex items-center gap-2 text-slate-800 font-bold">
+              <DollarSign className="h-5 w-5 text-slate-500" />
               Log Commission
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-slate-600">
               Manually credit commission to an agent for a closed deal.
             </p>
             <Dialog open={isLogDialogOpen} onOpenChange={setIsLogDialogOpen}>
@@ -175,7 +188,8 @@ export default function CommissionControls({ globalRate, agents }: CommissionCon
                 <DialogHeader>
                   <DialogTitle>Log Commission</DialogTitle>
                   <DialogDescription>
-                    Credit commission to an agent&apos;s wallet. This creates a transaction record.
+                    Credit commission to an agent&apos;s wallet. This creates a
+                    transaction record.
                   </DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
@@ -186,7 +200,7 @@ export default function CommissionControls({ globalRate, agents }: CommissionCon
                         <SelectValue placeholder="Select an agent" />
                       </SelectTrigger>
                       <SelectContent>
-                        {agents.map(agent => (
+                        {agents.map((agent) => (
                           <SelectItem key={agent.id} value={agent.id}>
                             {agent.name} ({agent.email})
                           </SelectItem>
@@ -200,7 +214,7 @@ export default function CommissionControls({ globalRate, agents }: CommissionCon
                       type="number"
                       step="0.01"
                       value={logAmount}
-                      onChange={e => setLogAmount(e.target.value)}
+                      onChange={(e) => setLogAmount(e.target.value)}
                       placeholder="e.g. 500"
                     />
                   </div>
@@ -208,20 +222,23 @@ export default function CommissionControls({ globalRate, agents }: CommissionCon
                     <Label>Description</Label>
                     <Textarea
                       value={logDescription}
-                      onChange={e => setLogDescription(e.target.value)}
+                      onChange={(e) => setLogDescription(e.target.value)}
                       placeholder="e.g. Commission for 3-bed apartment deal at Lekki"
                       rows={3}
                     />
                   </div>
                 </div>
                 <DialogFooter>
-                  <Button variant="outline" onClick={() => setIsLogDialogOpen(false)}>Cancel</Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => setIsLogDialogOpen(false)}>
+                    Cancel
+                  </Button>
                   <Button
                     onClick={handleLogCommission}
                     disabled={isLogging || !logAgentId || !logAmount}
-                    className="bg-[#cfb53b] hover:bg-[#b89e2f] text-white"
-                  >
-                    {isLogging ? "Processing..." : "Confirm Credit"}
+                    className="bg-[#cfb53b] hover:bg-[#b89e2f] text-white">
+                    {isLogging ? 'Processing...' : 'Confirm Credit'}
                   </Button>
                 </DialogFooter>
               </DialogContent>
@@ -231,28 +248,32 @@ export default function CommissionControls({ globalRate, agents }: CommissionCon
       </div>
 
       {/* Per-Agent Rates Table */}
-      <Card>
+      <Card className="bg-white">
         <CardHeader>
-          <CardTitle>Agent Commission Rates</CardTitle>
+          <CardTitle className="text-slate-800 font-bold">
+            Agent Commission Rates
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b bg-muted/50">
-                  <th className="p-3 text-left font-medium">Agent</th>
-                  <th className="p-3 text-left font-medium">Email</th>
-                  <th className="p-3 text-left font-medium">Commission Rate</th>
-                  <th className="p-3 text-left font-medium">Total Earnings</th>
-                  <th className="p-3 text-left font-medium">Deals Closed</th>
-                  <th className="p-3 text-left font-medium">Actions</th>
+                <tr className="border-b bg-slate-50 [&_th]:text-slate-700 [&_th]:font-semibold">
+                  <th className="p-3 text-left">Agent</th>
+                  <th className="p-3 text-left">Email</th>
+                  <th className="p-3 text-left">Commission Rate</th>
+                  <th className="p-3 text-left">Total Earnings</th>
+                  <th className="p-3 text-left">Deals Closed</th>
+                  <th className="p-3 text-left">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {agents.map(agent => (
+                {agents.map((agent) => (
                   <tr key={agent.id} className="border-b hover:bg-muted/30">
-                    <td className="p-3 font-medium">{agent.name}</td>
-                    <td className="p-3 text-muted-foreground">{agent.email}</td>
+                    <td className="p-3 font-medium text-slate-800">
+                      {agent.name}
+                    </td>
+                    <td className="p-3 text-slate-600">{agent.email}</td>
                     <td className="p-3">
                       {editingAgentId === agent.id ? (
                         <div className="flex items-center gap-2">
@@ -260,47 +281,51 @@ export default function CommissionControls({ globalRate, agents }: CommissionCon
                             type="number"
                             step="0.1"
                             value={agentRate}
-                            onChange={e => setAgentRate(e.target.value)}
+                            onChange={(e) => setAgentRate(e.target.value)}
                             className="w-20 h-8"
                           />
-                          <span className="text-xs text-muted-foreground">%</span>
+                          <span className="text-xs text-muted-foreground">
+                            %
+                          </span>
                           <Button
                             size="sm"
                             onClick={() => handleSaveAgentRate(agent.id)}
                             disabled={isSavingAgent}
-                            className="h-8 bg-[#cfb53b] hover:bg-[#b89e2f] text-white"
-                          >
+                            className="h-8 bg-[#cfb53b] hover:bg-[#b89e2f] text-white">
                             Save
                           </Button>
                           <Button
                             size="sm"
                             variant="ghost"
-                            onClick={() => { setEditingAgentId(null); setAgentRate("") }}
-                            className="h-8"
-                          >
+                            onClick={() => {
+                              setEditingAgentId(null);
+                              setAgentRate('');
+                            }}
+                            className="h-8">
                             Cancel
                           </Button>
                         </div>
                       ) : (
                         <Badge variant="outline" className="font-mono">
-                          {agent.commissionRate > 0 ? `${agent.commissionRate}%` : `${globalRate}% (global)`}
+                          {agent.commissionRate > 0
+                            ? `${agent.commissionRate}%`
+                            : `${globalRate}% (global)`}
                         </Badge>
                       )}
                     </td>
                     <td className="p-3 font-bold text-[#cfb53b]">
                       ${agent.totalEarnings.toLocaleString()}
                     </td>
-                    <td className="p-3">{agent.dealsClosed}</td>
+                    <td className="p-3 text-slate-800">{agent.dealsClosed}</td>
                     <td className="p-3">
                       {editingAgentId !== agent.id && (
                         <Button
                           variant="ghost"
                           size="sm"
                           onClick={() => {
-                            setEditingAgentId(agent.id)
-                            setAgentRate(agent.commissionRate.toString())
-                          }}
-                        >
+                            setEditingAgentId(agent.id);
+                            setAgentRate(agent.commissionRate.toString());
+                          }}>
                           <PenLine className="h-4 w-4" />
                         </Button>
                       )}
@@ -309,7 +334,11 @@ export default function CommissionControls({ globalRate, agents }: CommissionCon
                 ))}
                 {agents.length === 0 && (
                   <tr>
-                    <td colSpan={6} className="text-center py-8 text-muted-foreground">No agents found.</td>
+                    <td
+                      colSpan={6}
+                      className="text-center py-8 text-muted-foreground">
+                      No agents found.
+                    </td>
                   </tr>
                 )}
               </tbody>
@@ -318,5 +347,5 @@ export default function CommissionControls({ globalRate, agents }: CommissionCon
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

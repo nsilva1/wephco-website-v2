@@ -9,7 +9,9 @@ import { BiFilterAlt, BiGridAlt, BiMap, BiX } from 'react-icons/bi';
 
 export default function PropertyListingsPage() {
   const [properties, setProperties] = useState<PropertyCardProps[]>([]);
-  const [filteredProperties, setFilteredProperties] = useState<PropertyCardProps[]>([]);
+  const [filteredProperties, setFilteredProperties] = useState<
+    PropertyCardProps[]
+  >([]);
   const [loading, setLoading] = useState(true);
 
   // Filter states (price only)
@@ -32,7 +34,11 @@ export default function PropertyListingsPage() {
             title: data.title || data.name || '',
             price: data.price || 0,
             description: data.description || '',
-            location: data.location || (data.city && data.country ? `${data.city}, ${data.country}` : ''),
+            location:
+              data.location ||
+              (data.city && data.country
+                ? `${data.city}, ${data.country}`
+                : ''),
             category: data.category || data.type || '',
             images: data.images || [],
             pdfUrl: data.pdfUrl || '',
@@ -45,10 +51,10 @@ export default function PropertyListingsPage() {
             beds: data.beds || data.bedrooms || 0,
             baths: data.baths || data.bathrooms || 0,
             sqft: data.sqft || data.square_foot || 0,
-            amenities: data.amenities || []
+            amenities: data.amenities || [],
           };
         }) as any[];
-        
+
         setProperties(propertiesData);
         setFilteredProperties(propertiesData);
       } catch (error) {
@@ -95,26 +101,26 @@ export default function PropertyListingsPage() {
   return (
     <div className="min-h-screen bg-background-dark text-slate-100 flex flex-col font-display pt-20">
       <div className="flex flex-1 overflow-hidden relative">
-        
         {/* Sidebar Filters - Desktop & Mobile overlay */}
-        <aside className={`
+        <aside
+          className={`
           fixed inset-y-0 left-0 z-50 w-80 bg-background-dark/95 border-r border-primary/10 flex flex-col transition-transform duration-300 transform
           md:static md:translate-x-0 md:bg-neutral-dark/40
           ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
         `}>
           <div className="p-6 border-b border-primary/10 flex justify-between items-center mt-16 md:mt-0">
-            <h2 className="font-bold text-lg uppercase tracking-wider text-slate-100">Refine Search</h2>
+            <h2 className="font-bold text-lg uppercase tracking-wider text-slate-100">
+              Refine Search
+            </h2>
             <div className="flex items-center gap-4">
-              <button 
+              <button
                 onClick={clearFilters}
-                className="text-xs text-primary hover:underline uppercase font-bold cursor-pointer"
-              >
+                className="text-xs text-primary hover:underline uppercase font-bold cursor-pointer">
                 Reset
               </button>
-              <button 
+              <button
                 onClick={() => setSidebarOpen(false)}
-                className="md:hidden text-slate-400 hover:text-white"
-              >
+                className="md:hidden text-slate-400 hover:text-white">
                 <BiX className="text-2xl" />
               </button>
             </div>
@@ -125,7 +131,9 @@ export default function PropertyListingsPage() {
             <div className="space-y-4">
               <label className="text-xs font-bold uppercase tracking-widest text-primary flex justify-between">
                 Max Price (USD)
-                <span className="font-mono text-white">{formatCurrency(priceRange, 'USD')}</span>
+                <span className="font-mono text-white">
+                  {formatCurrency(priceRange, 'USD')}
+                </span>
               </label>
               <div className="px-2">
                 <input
@@ -149,7 +157,6 @@ export default function PropertyListingsPage() {
 
         {/* Listings Grid Area */}
         <section className="flex-1 flex flex-col bg-background-dark overflow-y-auto custom-scrollbar">
-          
           {/* Controls Bar */}
           <div className="p-6 flex flex-col md:flex-row justify-between items-center border-b border-primary/10 gap-4 sticky top-0 bg-background-dark/95 backdrop-blur z-40">
             <div className="w-full md:w-auto flex justify-between items-center md:block">
@@ -157,12 +164,13 @@ export default function PropertyListingsPage() {
                 <h3 className="text-2xl font-bold tracking-tight">
                   {loading ? '...' : `${filteredProperties.length} Listing(s)`}
                 </h3>
-                <p className="text-sm text-slate-400 font-medium">Wephco Premier Global Portfolio</p>
+                <p className="text-sm text-slate-400 font-medium">
+                  Wephco Premier Global Portfolio
+                </p>
               </div>
               <button
                 onClick={() => setSidebarOpen(true)}
-                className="md:hidden flex items-center gap-2 px-4 py-2 border border-primary/30 text-primary rounded-lg text-sm font-bold active:scale-95 transition-transform"
-              >
+                className="md:hidden flex items-center gap-2 px-4 py-2 border border-primary/30 text-primary rounded-lg text-sm font-bold active:scale-95 transition-transform">
                 <BiFilterAlt /> Filter
               </button>
             </div>
@@ -173,17 +181,19 @@ export default function PropertyListingsPage() {
                 <button
                   onClick={() => setViewMode('grid')}
                   className={`flex items-center gap-2 px-4 py-1.5 rounded-md font-bold text-sm transition-all cursor-pointer ${
-                    viewMode === 'grid' ? 'bg-primary text-background-dark' : 'text-slate-400 hover:text-slate-100'
-                  }`}
-                >
+                    viewMode === 'grid'
+                      ? 'bg-primary text-background-dark'
+                      : 'text-slate-400 hover:text-slate-100'
+                  }`}>
                   <BiGridAlt className="text-lg" /> Grid
                 </button>
                 <button
                   onClick={() => setViewMode('map')}
                   className={`flex items-center gap-2 px-4 py-1.5 rounded-md font-bold text-sm transition-all cursor-pointer ${
-                    viewMode === 'map' ? 'bg-primary text-background-dark' : 'text-slate-400 hover:text-slate-100'
-                  }`}
-                >
+                    viewMode === 'map'
+                      ? 'bg-primary text-background-dark'
+                      : 'text-slate-400 hover:text-slate-100'
+                  }`}>
                   <BiMap className="text-lg" /> Map
                 </button>
               </div>
@@ -193,14 +203,21 @@ export default function PropertyListingsPage() {
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="appearance-none bg-primary/5 border border-primary/20 rounded-lg pl-4 pr-10 py-2.5 text-sm text-slate-200 focus:ring-1 focus:ring-primary focus:border-primary outline-none cursor-pointer"
-                >
-                  <option className="bg-background-dark">Newest Listings</option>
-                  <option className="bg-background-dark">Price: High to Low</option>
-                  <option className="bg-background-dark">Price: Low to High</option>
+                  className="appearance-none bg-primary/5 border border-primary/20 rounded-lg pl-4 pr-10 py-2.5 text-sm text-slate-200 focus:ring-1 focus:ring-primary focus:border-primary outline-none cursor-pointer">
+                  <option className="bg-background-dark">
+                    Newest Listings
+                  </option>
+                  <option className="bg-background-dark">
+                    Price: High to Low
+                  </option>
+                  <option className="bg-background-dark">
+                    Price: Low to High
+                  </option>
                   <option className="bg-background-dark">Most Iconic</option>
                 </select>
-                <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-primary font-bold">▾</span>
+                <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-primary font-bold">
+                  ▾
+                </span>
               </div>
             </div>
           </div>
@@ -214,9 +231,13 @@ export default function PropertyListingsPage() {
             ) : viewMode === 'map' ? (
               <div className="w-full h-[60vh] rounded-xl border border-primary/10 bg-neutral-dark/30 flex flex-col items-center justify-center p-6 text-center">
                 <BiMap className="text-6xl text-primary mb-4 animate-bounce" />
-                <h4 className="text-xl font-bold mb-2">Interactive Location Map</h4>
+                <h4 className="text-xl font-bold mb-2">
+                  Interactive Location Map
+                </h4>
                 <p className="text-slate-400 text-sm max-w-md">
-                  Browse Wephco properties using our immersive geographic mapping layer. Map views are available for premium verified estates.
+                  Browse Wephco properties using our immersive geographic
+                  mapping layer. Map views are available for premium verified
+                  estates.
                 </p>
               </div>
             ) : (
@@ -224,18 +245,21 @@ export default function PropertyListingsPage() {
               <>
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 justify-items-center">
                   {filteredProperties.map((property) => (
-                    <div key={property.id} className="w-full flex justify-center">
+                    <div
+                      key={property.id}
+                      className="w-full flex justify-center">
                       <PropertyCard {...property} />
                     </div>
                   ))}
                 </div>
                 {filteredProperties.length === 0 && (
                   <div className="text-center py-24 border border-dashed border-primary/10 rounded-xl bg-neutral-dark/10">
-                    <p className="text-slate-400 text-base">No luxury properties match your active search filters.</p>
+                    <p className="text-slate-400 text-base">
+                      No luxury properties match your active search filters.
+                    </p>
                     <button
                       onClick={clearFilters}
-                      className="mt-4 px-6 py-2 border border-primary/30 text-primary hover:bg-primary hover:text-background-dark text-xs uppercase tracking-wider font-bold rounded-md transition-all duration-300"
-                    >
+                      className="mt-4 px-6 py-2 border border-primary/30 text-primary hover:bg-primary hover:text-background-dark text-xs uppercase tracking-wider font-bold rounded-md transition-all duration-300">
                       Reset Filter
                     </button>
                   </div>

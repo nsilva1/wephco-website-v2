@@ -52,7 +52,8 @@ export default async function AnalyticsPage() {
       <div className="flex flex-col gap-2">
         <h3 className="text-3xl font-bold text-slate-800">Analytics</h3>
         <p className="text-gray-500">
-          Comprehensive insights into your leads pipeline, agent performance, and financial activity.
+          Comprehensive insights into your leads pipeline, agent performance,
+          and financial activity.
         </p>
       </div>
 
@@ -61,14 +62,17 @@ export default async function AnalyticsPage() {
         {summaryCards.map((card) => (
           <div
             key={card.title}
-            className={`bg-white rounded-xl shadow-sm border border-gray-100 border-l-4 ${card.accent} p-5 flex items-center gap-4 transition-all duration-200 hover:shadow-md hover:-translate-y-0.5`}
-          >
+            className={`bg-white rounded-xl shadow-sm border border-gray-100 border-l-4 ${card.accent} p-5 flex items-center gap-4 transition-all duration-200 hover:shadow-md hover:-translate-y-0.5`}>
             <div className={`${card.bgColor} p-3 rounded-lg ${card.iconColor}`}>
               <card.icon size={22} />
             </div>
             <div>
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">{card.title}</p>
-              <h4 className="text-xl font-bold text-slate-800 mt-0.5">{card.value}</h4>
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                {card.title}
+              </p>
+              <h4 className="text-xl font-bold text-slate-800 mt-0.5">
+                {card.value}
+              </h4>
             </div>
           </div>
         ))}

@@ -7,8 +7,6 @@ import { ToastContainer } from 'react-toastify';
 import { WhatsAppWidget } from '@/components/WhatsappWidget';
 import '../globals.css';
 
-
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -21,6 +19,6 @@ export default function RootLayout({
       {children}
       <WhatsAppWidget />
       <Footer />
-    </>      
+    </>
   );
 }

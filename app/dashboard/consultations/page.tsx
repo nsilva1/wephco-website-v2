@@ -4,20 +4,11 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { getConsultations } from '@/actions/consultation';
 import { Loader } from '@/components/Loader';
 import { IConsultation } from '@/interfaces/userInterface';
-import { useAuth } from '@/context/AuthContext';
-import { useSessionUser } from '@/hooks/useSessionUser';
-import { Role } from '@/interfaces/userInterface';
-import { useRouter } from 'next/navigation';
-import { toast } from 'react-toastify';
-import { allowedRoles } from '@/lib/constants';
-import { Tooltip } from '@/components/Tooltip';
-import { Contact, NotebookPen } from 'lucide-react';
+import { NotebookPen } from 'lucide-react';
+import { columns } from './columns';
+import { DataTable } from './data-table';
 
 const ConsultationsPage = () => {
-  const router = useRouter();
-  const { role, loading: authLoading, logout } = useAuth();
-  const { user: currentUser } = useSessionUser();
-
   const [consultations, setConsultations] = useState<IConsultation[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -34,31 +25,13 @@ const ConsultationsPage = () => {
     }
   }, []);
 
-  const checkAuthStatus = useCallback(() => {
-    if (authLoading) return;
-    if (
-      !currentUser ||
-      !allowedRoles.includes(role as Role)
-    ) {
-      toast.error(
-        'You are not authorized to view this page. Please log in with an admin or support account.'
-      );
-      logout().then(() => router.push('/brokerage/auth/login'));
-    } else {
-      // User is authenticated and has the right role
-      fetchConsultations();
-    }
-  }, [authLoading, currentUser, role, fetchConsultations, logout, router]);
-
   useEffect(() => {
-    if (!authLoading) {
-      checkAuthStatus();
-    }
-  }, [authLoading, checkAuthStatus]);
+    fetchConsultations();
+  }, [fetchConsultations]);
 
-  if (loading || authLoading) {
+  if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen">
+      <div className="flex justify-center items-center h-screen bg-slate-50">
         <Loader />
       </div>
     );
@@ -66,74 +39,38 @@ const ConsultationsPage = () => {
 
   if (error) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <h3 className="text-2xl text-red-500">{error}</h3>
+      <div className="flex justify-center items-center h-screen bg-slate-50">
+        <h3 className="text-2xl text-red-500 font-semibold">{error}</h3>
       </div>
     );
   }
-
-  if (consultations.length === 0) {
-    return (
-      <div className="flex flex-col gap-8 justify-center items-center h-screen">
-        <h3 className="text-2xl">No Consultations yet</h3>
-      </div>
-    );
-  }
-
-  let tableHead = (
-    <thead>
-      <tr>
-        <th className="p-4 text-left font-semibold">Actions</th>
-        <th className="p-4 text-left font-semibold">Service</th>
-        <th className="p-4 text-left font-semibold">Meeting Date</th>
-        <th className="p-4 text-left font-semibold">Meeting Location</th>
-        <th className="p-4 text-left font-semibold">Phone</th>
-        <th className="p-4 text-left font-semibold">Email</th>
-        <th className="p-4 text-left font-semibold">Organisation</th>
-        <th className="p-4 text-left font-semibold">Contact Name</th>
-        <th className="p-4 text-left font-semibold">Mode of Contact</th>
-        <th className="p-4 text-left font-semibold">Details</th>
-      </tr>
-    </thead>
-  );
-
-  let tableBody = (
-    <tbody>
-      {consultations.map((consultation, index) => (
-        <tr
-          key={consultation.id}
-          className={`${index % 2 === 0 ? 'bg-gray-200' : 'bg-white'}`}>
-          <td className="flex gap-2 p-4">
-            <Tooltip text="Contact Customer" position="top">
-              <Contact className="text-blue-500 hover:text-blue-700 cursor-pointer" />
-            </Tooltip>
-            <Tooltip text="Add a Note" position="top">
-              <NotebookPen className="text-green-500 hover:text-green-700 cursor-pointer" />
-            </Tooltip>
-          </td>
-          <td className="p-4">{consultation.service}</td>
-          <td className="p-4">
-            {new Date(consultation.meetingDate).toDateString()}
-          </td>
-          <td className="p-4">{consultation.meetingLocation}</td>
-          <td className="p-4">{consultation.phoneNumber}</td>
-          <td className="p-4">{consultation.email}</td>
-          <td className="p-4">{consultation.organizationName}</td>
-          <td className="p-4">{consultation.name}</td>
-          <td className="p-4">{consultation.preferredModeOfContact}</td>
-          <td className="p-4">{consultation.details}</td>
-        </tr>
-      ))}
-    </tbody>
-  );
 
   return (
-    <div className="flex flex-col items-center h-screen overflow-x-scroll p-5">
-      <table className="w-full leading-normal mt-10 text-sm">
-        <caption className="text-2xl font-bold mb-4">Consultations</caption>
-        {tableHead}
-        {tableBody}
-      </table>
+    <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 bg-slate-50 min-h-screen">
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-3xl font-bold tracking-tight text-slate-800">
+            Consultations
+          </h2>
+          <p className="text-slate-600 mt-1">
+            Manage and respond to client consultation requests
+          </p>
+        </div>
+      </div>
+
+      {consultations.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-20 text-center bg-white rounded-xl border border-gray-100 shadow-sm mt-6">
+          <NotebookPen className="h-12 w-12 text-slate-300 mb-4" />
+          <h3 className="text-xl font-bold text-slate-700">
+            No Consultations Yet
+          </h3>
+          <p className="text-slate-500 mt-1">
+            Submissions from the consultation form will appear here.
+          </p>
+        </div>
+      ) : (
+        <DataTable columns={columns} data={consultations} />
+      )}
     </div>
   );
 };

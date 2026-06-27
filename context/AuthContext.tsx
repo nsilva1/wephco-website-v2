@@ -7,7 +7,7 @@ import {
 	useState,
 	type ReactNode,
 } from 'react';
-import type { IUserInfo, IAdminUser } from '../interfaces/userInterface';
+import type { IAdminUser } from '../interfaces/userInterface';
 import { 
     signInWithEmailAndPassword, 
     createUserWithEmailAndPassword, 
@@ -15,7 +15,8 @@ import {
     onAuthStateChanged, 
     sendPasswordResetEmail,
     GoogleAuthProvider,
-    signInWithPopup
+    signInWithPopup,
+    updateProfile
 } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { auth, db } from '@/firebase/firebaseClient';
@@ -25,9 +26,9 @@ import { useSessionUser } from '@/hooks/useSessionUser';
 interface AuthContextType {
 	currentUser: IAdminUser | null;
 	loading: boolean;
-	role: string | null;
+	// role: string | null;
 	isAuthenticated: boolean;
-	userInfo: IUserInfo | null;
+	// userInfo: IUserInfo | null;
 	signup: (email: string, password: string, fullName: string) => Promise<any>;
 	login: (email: string, password: string) => Promise<any>;
 	logout: () => Promise<void>;
@@ -47,9 +48,9 @@ export const useAuth = (): AuthContextType => {
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
 	const [currentUser, setCurrentUser] = useState<IAdminUser | null>(null);
-	const [role, setRole] = useState<string | null>(null);
+	// const [role, setRole] = useState<string | null>(null);
 	const [loading, setLoading] = useState(true);
-	const [userInfo, setUserInfo] = useState<IUserInfo | null>(null);
+	// const [userInfo, setUserInfo] = useState<IUserInfo | null>(null);
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     const { deleteSessionUser } = useSessionUser();
@@ -66,28 +67,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                     emailVerified: firebaseUser.emailVerified,
                     photoURL: firebaseUser.photoURL,
                 } as IAdminUser));
-
-                try {
-                    const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
-                    if (userDoc.exists()) {
-                        const data = userDoc.data();
-                        setRole(data.role || null);
-                        setUserInfo({
-                            ...data,
-                            id: userDoc.id,
-                            createdAt: data.createdAt?.toDate?.()?.toISOString() || data.createdAt || '',
-                        } as IUserInfo);
-                    } else {
-                        setRole(null);
-                        setUserInfo(null);
-                    }
-                } catch (error) {
-                    console.error("Error fetching user data:", error);
-                }
             } else {
                 setCurrentUser(null);
-                setRole(null);
-                setUserInfo(null);
             }
             setLoading(false);
         });
@@ -100,6 +81,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const user = userCredential.user;
 
         const roleToSet = Role.SUPPORT;
+
+        await updateProfile(user, { displayName: fullName });
 
         const userData: IAdminUser = {
 			id: user.uid,
@@ -173,9 +156,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 	const value: AuthContextType = {
 		currentUser,
 		loading,
-		role,
 		isAuthenticated,
-		userInfo,
 		signup,
 		login,
 		logout,

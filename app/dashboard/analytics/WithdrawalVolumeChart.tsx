@@ -28,8 +28,12 @@ export function WithdrawalVolumeChart({ data }: Props) {
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
       <div className="mb-6">
-        <h4 className="text-lg font-bold text-slate-800">Withdrawal Volume Over Time</h4>
-        <p className="text-sm text-gray-500 mt-1">Monthly breakdown of withdrawal amounts by status</p>
+        <h4 className="text-lg font-bold text-slate-800">
+          Withdrawal Volume Over Time
+        </h4>
+        <p className="text-sm text-gray-500 mt-1">
+          Monthly breakdown of withdrawal amounts by status
+        </p>
       </div>
 
       {data.length === 0 ? (
@@ -38,9 +42,16 @@ export function WithdrawalVolumeChart({ data }: Props) {
         </div>
       ) : (
         <ResponsiveContainer width="100%" height={350}>
-          <ComposedChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+          <ComposedChart
+            data={data}
+            margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
             <defs>
-              <linearGradient id="gradient-completed" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient
+                id="gradient-completed"
+                x1="0"
+                y1="0"
+                x2="0"
+                y2="1">
                 <stop offset="5%" stopColor="#22c55e" stopOpacity={0.8} />
                 <stop offset="95%" stopColor="#22c55e" stopOpacity={0.4} />
               </linearGradient>
@@ -70,10 +81,18 @@ export function WithdrawalVolumeChart({ data }: Props) {
                 boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
                 padding: '12px 16px',
               }}
-              labelStyle={{ fontWeight: 700, color: '#1e293b', marginBottom: 8 }}
+              labelStyle={{
+                fontWeight: 700,
+                color: '#1e293b',
+                marginBottom: 8,
+              }}
               formatter={(value: any, name: any) => {
-                const label = name === 'completed' ? 'Completed' :
-                  name === 'pending' ? 'Pending' : 'Failed';
+                const label =
+                  name === 'completed'
+                    ? 'Completed'
+                    : name === 'pending'
+                      ? 'Pending'
+                      : 'Failed';
                 return [`₦${Number(value).toLocaleString()}`, label];
               }}
             />
@@ -85,7 +104,11 @@ export function WithdrawalVolumeChart({ data }: Props) {
                   pending: 'Pending',
                   failed: 'Failed',
                 };
-                return <span className="capitalize text-slate-600">{labels[value] || value}</span>;
+                return (
+                  <span className="capitalize text-slate-600">
+                    {labels[value] || value}
+                  </span>
+                );
               }}
             />
             <Bar

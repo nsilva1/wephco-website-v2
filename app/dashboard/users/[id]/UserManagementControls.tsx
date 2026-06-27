@@ -1,8 +1,8 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { IUserInfo } from "@/interfaces/userInterface"
-import { Button } from "@/components/ui/button"
+import { useState } from 'react';
+import { IUserInfo } from '@/interfaces/userInterface';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -11,68 +11,78 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { creditUserWallet, toggleUserSuspension } from "@/actions/user-management"
-import { useRouter } from "next/navigation"
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  creditUserWallet,
+  toggleUserSuspension,
+} from '@/actions/user-management';
+import { useRouter } from 'next/navigation';
 
 export function UserManagementControls({ user }: { user: IUserInfo }) {
-  const [amount, setAmount] = useState("")
-  const [isCrediting, setIsCrediting] = useState(false)
-  const [isTogglingStatus, setIsTogglingStatus] = useState(false)
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const router = useRouter()
+  const [amount, setAmount] = useState('');
+  const [isCrediting, setIsCrediting] = useState(false);
+  const [isTogglingStatus, setIsTogglingStatus] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const router = useRouter();
 
   const handleCredit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    const numAmount = parseFloat(amount)
-    if (isNaN(numAmount) || numAmount <= 0) return
+    e.preventDefault();
+    const numAmount = parseFloat(amount);
+    if (isNaN(numAmount) || numAmount <= 0) return;
 
-    setIsCrediting(true)
+    setIsCrediting(true);
     try {
-      await creditUserWallet(user.id, numAmount)
-      setIsDialogOpen(false)
-      setAmount("")
-      alert("Commission credited successfully")
-      router.refresh()
+      await creditUserWallet(user.id, numAmount);
+      setIsDialogOpen(false);
+      setAmount('');
+      alert('Commission credited successfully');
+      router.refresh();
     } catch (error) {
-      console.error(error)
-      alert("Failed to credit commission")
+      console.error(error);
+      alert('Failed to credit commission');
     } finally {
-      setIsCrediting(false)
+      setIsCrediting(false);
     }
-  }
+  };
 
   const handleToggleStatus = async () => {
-    setIsTogglingStatus(true)
-    const isCurrentlySuspended = user.status === 'Suspended'
+    setIsTogglingStatus(true);
+    const isCurrentlySuspended = user.status === 'Suspended';
     try {
-      await toggleUserSuspension(user.id, !isCurrentlySuspended)
-      alert(`User account ${isCurrentlySuspended ? 'activated' : 'suspended'} successfully`)
-      router.refresh()
+      await toggleUserSuspension(user.id, !isCurrentlySuspended);
+      alert(
+        `User account ${isCurrentlySuspended ? 'activated' : 'suspended'} successfully`
+      );
+      router.refresh();
     } catch (error) {
-      console.error(error)
-      alert("Failed to update account status")
+      console.error(error);
+      alert('Failed to update account status');
     } finally {
-      setIsTogglingStatus(false)
+      setIsTogglingStatus(false);
     }
-  }
+  };
 
   return (
     <div className="flex flex-wrap items-center gap-4">
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
-          <Button variant="default" className="bg-[#cfb53b] hover:bg-[#b09a32] text-white">
+          <Button
+            variant="default"
+            className="bg-[#cfb53b] hover:bg-[#b09a32] text-white">
             Credit Commission
           </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px] bg-white">
           <form onSubmit={handleCredit}>
             <DialogHeader>
-              <DialogTitle className="text-slate-500">Credit Commission</DialogTitle>
+              <DialogTitle className="text-slate-500">
+                Credit Commission
+              </DialogTitle>
               <DialogDescription>
-                Manually add commission to this user's wallet. This action will create a transaction record.
+                Manually add commission to this user's wallet. This action will
+                create a transaction record.
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
@@ -93,24 +103,30 @@ export function UserManagementControls({ user }: { user: IUserInfo }) {
               </div>
             </div>
             <DialogFooter>
-              <Button type="button" variant="secondary" onClick={() => setIsDialogOpen(false)}>
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => setIsDialogOpen(false)}>
                 Cancel
               </Button>
               <Button type="submit" disabled={isCrediting}>
-                {isCrediting ? "Crediting..." : "Confirm Credit"}
+                {isCrediting ? 'Crediting...' : 'Confirm Credit'}
               </Button>
             </DialogFooter>
           </form>
         </DialogContent>
       </Dialog>
 
-      <Button 
-        variant={user.status === 'Suspended' ? "outline" : "destructive"}
+      <Button
+        variant={user.status === 'Suspended' ? 'outline' : 'destructive'}
         onClick={handleToggleStatus}
-        disabled={isTogglingStatus}
-      >
-        {isTogglingStatus ? "Updating..." : user.status === 'Suspended' ? "Reactivate Account" : "Suspend Account"}
+        disabled={isTogglingStatus}>
+        {isTogglingStatus
+          ? 'Updating...'
+          : user.status === 'Suspended'
+            ? 'Reactivate Account'
+            : 'Suspend Account'}
       </Button>
     </div>
-  )
+  );
 }
