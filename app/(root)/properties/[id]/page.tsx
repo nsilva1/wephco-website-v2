@@ -9,6 +9,7 @@ import { db } from '@/firebase/firebaseClient';
 import { formatCurrency } from '@/lib/utils';
 import { toast } from 'react-toastify';
 import { BiBed, BiBath, BiArea, BiMap, BiShareAlt } from 'react-icons/bi';
+import { CountryFlag } from '@/components/CountryFlag';
 
 export default function PropertyDetailsPage() {
   const params = useParams();
@@ -167,6 +168,7 @@ export default function PropertyDetailsPage() {
             <div className="flex items-center gap-2 text-slate-400">
               <BiMap className="text-primary text-lg" />
               <p className="text-sm md:text-base">{property.location}</p>
+              <CountryFlag countryName={property.location.split(' ')[1]} />
             </div>
           </div>
           <div className="text-left md:text-right">
@@ -269,7 +271,7 @@ export default function PropertyDetailsPage() {
             {/* Description Section */}
             <section>
               <h3 className="text-2xl font-bold mb-6 flex items-center gap-3">
-                <span className="w-8 h-[2px] bg-primary"></span>
+                <span className="w-8 h-0.5 bg-primary"></span>
                 The Experience
               </h3>
               <div className="text-slate-300 leading-relaxed text-base space-y-4 font-light">

@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { IProperty } from '@/interfaces/propertyInterface';
 import { formatCurrency as format } from '@/lib/utils';
 import Link from 'next/link';
+import { CountryFlag } from './CountryFlag';
 
 export interface PropertyCardProps extends IProperty {
   showModal?: () => void;
@@ -13,10 +14,11 @@ export interface PropertyCardProps extends IProperty {
 
 const PropertyCard = ({ showModal, openModal, ...props }: PropertyCardProps) => {
 
+  const country = props.location.split(' ')[1];
 
   return (
     <div
-      className='w-full max-w-xs sm:max-w-sm md:w-96 h-[460px] font-display z-10'
+      className='w-full max-w-xs sm:max-w-sm md:w-96 h-115 font-display z-10'
     >
       <div
         className='relative w-full h-full transition-transform duration-500 [transform-3d]'
@@ -49,7 +51,7 @@ const PropertyCard = ({ showModal, openModal, ...props }: PropertyCardProps) => 
             <div className="flex justify-between items-center text-slate-400 text-xs font-semibold">
               <span className='flex items-center gap-1.5 font-mono uppercase tracking-wider text-[10px]'>
                 <span className="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
-                {props.location}
+                {props.location} <CountryFlag countryName={country} />
               </span>
             </div>
 
