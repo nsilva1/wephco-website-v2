@@ -126,7 +126,7 @@ const ConsultationsPage = () => {
       {/* Hero Header */}
       <section className="relative">
         <div
-          className="w-full h-[360px] md:h-[450px] bg-cover bg-center flex items-center justify-center p-6 text-center"
+          className="w-full h-90 md:h-112.5 bg-cover bg-center flex items-center justify-center p-6 text-center"
           style={{
             backgroundImage: `linear-gradient(rgba(32, 29, 18, 0.3), rgba(32, 29, 18, 0.75)), url('https://lh3.googleusercontent.com/aida-public/AB6AXuC3__jIO7Q6O8B4hGtEX2zv6aFO73APne6N5KPQiuAllL8trjOLsz4OmTMfTLsmgMkzgSFmnmmRrPfx-xuP1vZNL3sEW9Ar3g1RzOEuiLC5yD7uFOLEC5Cv3K60Ub8HXvwmX9GJZ3n8HQ2qlYkDsQ3aUElmYPKTJbE_4J0O5E1adCvVRjgbLhQBqa0IX7Lk7N5bikYezOw6enyf8flmujdmNLktGrms-ldkrGE_KmDlmUFoWYLl9Aqm7L4Yja7BmfmgtaGBL5xlcb7B')`,
           }}>
@@ -180,7 +180,7 @@ const ConsultationsPage = () => {
               </div>
 
               {/* Form Content */}
-              <form onSubmit={submitForm}>
+              <form onSubmit={submitForm} className=''>
                 {/* STEP 1: SELECT SERVICE */}
                 {activeStep === 1 && (
                   <div className="space-y-6 animate-fadeIn">
@@ -193,7 +193,7 @@ const ConsultationsPage = () => {
                       </h3>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-h-[420px] overflow-y-auto pr-2 custom-scrollbar">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-h-105 overflow-y-auto p-2 custom-scrollbar">
                       {consultationServices.map((service) => {
                         const Icon = getServiceIcon(service.label);
                         const isSelected = formData.service === service.label;
@@ -206,18 +206,18 @@ const ConsultationsPage = () => {
                                 ? 'bg-primary text-background-dark border-primary shadow-lg shadow-primary/10'
                                 : 'border-primary/20 bg-slate-800/40 text-slate-300 hover:border-primary/50'
                             }`}>
-                            <div
-                              className={`p-2.5 rounded-lg ${
-                                isSelected
-                                  ? 'bg-background-dark/15 text-background-dark'
-                                  : 'bg-primary/10 text-primary'
-                              }`}>
-                              <Icon className="size-5" />
-                            </div>
+                            
                             <div className="space-y-1">
                               <p className="text-sm md:text-base font-bold leading-tight">
                                 {service.label}
                               </p>
+                              <ul className="list-disc list-outside pl-5 text-xs">
+                                {
+                                  service.features.map((feature, idx) => (
+                                    <li key={idx}>{feature}</li>
+                                  ))
+                                }
+                              </ul>
                             </div>
                           </div>
                         );
