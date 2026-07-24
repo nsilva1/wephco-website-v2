@@ -39,7 +39,7 @@ const VisionAndMission = () => {
         </div>
 
         {/* Column 2: Grayscale Offset Image */}
-        <div className="order-1 md:order-2 relative w-full h-[320px] md:h-[500px]">
+        <div className="order-1 md:order-2 relative w-full h-80 md:h-125">
           <div className="absolute -top-4 -right-4 w-full h-full border border-primary/20 rounded-xl z-0"></div>
           <div className="relative w-full h-full z-10 rounded-xl overflow-hidden shadow-2xl">
             <Image

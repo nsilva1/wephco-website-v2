@@ -139,7 +139,7 @@ export default function EventsListClient({
           {filteredEvents.map((event) => (
             <Card
               key={event.id}
-              className="overflow-hidden flex flex-col h-full hover:shadow-md transition-shadow">
+              className="overflow-hidden flex flex-col h-full hover:shadow-md transition-shadow bg-white">
               {/* Cover Image */}
               <div className="relative aspect-video w-full">
                 <Image
@@ -202,9 +202,9 @@ export default function EventsListClient({
                     href={`/dashboard/events/${event.id}/edit`}
                     className="flex-1">
                     <Button
-                      variant="outline"
+                      variant="default"
                       size="sm"
-                      className="w-full text-[#cfb53b] hover:text-[#cfb53b]/80">
+                      className="w-full text-black hover:text-black/80 cursor-pointer">
                       <Edit2 className="h-3.5 w-3.5 mr-1.5" />
                       Edit Details
                     </Button>

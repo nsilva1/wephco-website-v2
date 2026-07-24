@@ -328,6 +328,7 @@ export default function EventForm({ event, mode }: EventFormProps) {
                     value={formState.title}
                     onChange={(e) => handleChange('title', e.target.value)}
                     placeholder="e.g. VIP Investment Summit"
+                    className='text-black'
                     required
                   />
                 </div>
@@ -344,6 +345,7 @@ export default function EventForm({ event, mode }: EventFormProps) {
                       handleChange('description', e.target.value)
                     }
                     placeholder="Brief summary shown on lists..."
+                    className='text-black'
                     rows={2}
                     required
                   />
@@ -361,6 +363,7 @@ export default function EventForm({ event, mode }: EventFormProps) {
                       handleChange('longDescription', e.target.value)
                     }
                     placeholder="Detailed page information about the event..."
+                    className='text-black'
                     rows={5}
                   />
                 </div>
@@ -387,6 +390,7 @@ export default function EventForm({ event, mode }: EventFormProps) {
                         value={formState.date}
                         onChange={(e) => handleChange('date', e.target.value)}
                         placeholder="e.g. Oct 24, 2026 or 2026-10-24"
+                        className='text-black'
                         required
                       />
                     </div>
@@ -402,6 +406,7 @@ export default function EventForm({ event, mode }: EventFormProps) {
                       value={formState.time}
                       onChange={(e) => handleChange('time', e.target.value)}
                       placeholder="e.g. 10:00 AM WAT"
+                      className='text-black'
                       required
                     />
                   </div>
@@ -418,6 +423,7 @@ export default function EventForm({ event, mode }: EventFormProps) {
                     value={formState.location}
                     onChange={(e) => handleChange('location', e.target.value)}
                     placeholder="e.g. Eko Hotels & Suites, Lagos"
+                    className='text-black'
                     required
                   />
                 </div>
@@ -429,9 +435,10 @@ export default function EventForm({ event, mode }: EventFormProps) {
                     </Label>
                     <Select
                       value={formState.scope}
-                      onValueChange={(v) => handleChange('scope', v)}>
-                      <SelectTrigger>
-                        <SelectValue />
+                      onValueChange={(v) => handleChange('scope', v)}
+                      >
+                      <SelectTrigger className='text-black'>
+                        <SelectValue className='text-black' />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="Local">Local</SelectItem>
@@ -448,8 +455,8 @@ export default function EventForm({ event, mode }: EventFormProps) {
                     <Select
                       value={formState.format}
                       onValueChange={(v) => handleChange('format', v)}>
-                      <SelectTrigger>
-                        <SelectValue />
+                      <SelectTrigger className='text-black'>
+                        <SelectValue className='text-black' />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="Physical">Physical</SelectItem>
@@ -470,6 +477,7 @@ export default function EventForm({ event, mode }: EventFormProps) {
                       id="seatsRemaining"
                       type="number"
                       value={formState.seatsRemaining}
+                      className='text-black'
                       onChange={(e) =>
                         handleChange('seatsRemaining', e.target.value)
                       }
@@ -500,7 +508,7 @@ export default function EventForm({ event, mode }: EventFormProps) {
                       onChange={(e) =>
                         handleChange('hasGallery', e.target.checked)
                       }
-                      className="h-4 w-4 rounded border-gray-300 text-[#cfb53b] focus:ring-[#cfb53b] cursor-pointer"
+                      className="h-4 w-4 rounded border-gray-300 text-black focus:ring-black cursor-pointer"
                     />
                     <Label
                       htmlFor="hasGallery"
@@ -524,6 +532,7 @@ export default function EventForm({ event, mode }: EventFormProps) {
                   <Input
                     value={newHighlight}
                     onChange={(e) => setNewHighlight(e.target.value)}
+                    className='text-black'
                     placeholder="Add a key highlight of the event"
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
@@ -620,6 +629,7 @@ export default function EventForm({ event, mode }: EventFormProps) {
                     <Input
                       placeholder="Time (e.g. 09:00 - 10:00)"
                       value={newAgenda.time}
+                      className='text-black'
                       onChange={(e) =>
                         setNewAgenda((prev) => ({
                           ...prev,
@@ -630,6 +640,7 @@ export default function EventForm({ event, mode }: EventFormProps) {
                     <Input
                       placeholder="Title (e.g. Registration)"
                       value={newAgenda.title}
+                      className='text-black'
                       onChange={(e) =>
                         setNewAgenda((prev) => ({
                           ...prev,
@@ -641,6 +652,7 @@ export default function EventForm({ event, mode }: EventFormProps) {
                   <Input
                     placeholder="Short Description (optional)"
                     value={newAgenda.description}
+                    className='text-black'
                     onChange={(e) =>
                       setNewAgenda((prev) => ({
                         ...prev,
@@ -702,6 +714,7 @@ export default function EventForm({ event, mode }: EventFormProps) {
                     <Input
                       placeholder="Name"
                       value={newHost.name}
+                      className='text-black'
                       onChange={(e) =>
                         setNewHost((prev) => ({
                           ...prev,
@@ -712,6 +725,7 @@ export default function EventForm({ event, mode }: EventFormProps) {
                     <Input
                       placeholder="Role/Title"
                       value={newHost.role}
+                      className='text-black'
                       onChange={(e) =>
                         setNewHost((prev) => ({
                           ...prev,
@@ -726,7 +740,7 @@ export default function EventForm({ event, mode }: EventFormProps) {
                       className="border-2 border-dashed rounded-lg p-3 text-center cursor-pointer hover:border-[#cfb53b] transition-colors flex-1"
                       onClick={() => hostImageInputRef.current?.click()}>
                       {newHost.imagePreview ? (
-                        <div className="relative h-12 w-full max-w-[120px] mx-auto rounded overflow-hidden">
+                        <div className="relative h-12 w-full max-w-30 mx-auto rounded overflow-hidden">
                           <Image
                             src={newHost.imagePreview}
                             alt="Host Preview"

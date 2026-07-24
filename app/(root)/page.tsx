@@ -9,8 +9,8 @@ export default function Home() {
   return (
     <div className="bg-background-dark text-white font-display overflow-hidden">
       <Hero />
-      <FeaturedProperties numberOfProperties={3} viewMore={true} />
       <VisionAndMission />
+      <FeaturedProperties numberOfProperties={3} viewMore={true} />
       <Partners />
       <FAQ />
       <ContactUs />

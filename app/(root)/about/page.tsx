@@ -106,6 +106,8 @@ export default function AboutPage() {
         </div>
       </section>
 
+      
+
       {/* Stats Section */}
       <section className="bg-primary/10 py-16 border-y border-primary/5">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center font-mono">
