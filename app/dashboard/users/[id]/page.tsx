@@ -1,14 +1,6 @@
 import { getUserById } from '@/actions/user-management';
 import { notFound } from 'next/navigation';
-import { Badge } from '@/components/ui/badge';
 import { UserManagementControls } from './UserManagementControls';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from '@/components/ui/card';
 import { ITransaction } from '@/interfaces/userInterface';
 import { ArrowLeft, User, Wallet, ShieldCheck, Activity } from 'lucide-react';
 import Link from 'next/link';
@@ -47,25 +39,25 @@ export default async function UserDetailsPage({
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Profile Card */}
-        <Card className="bg-white">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-lg flex items-center gap-2 text-blue-500">
+        <div className="rounded-xl border bg-white text-card-foreground shadow-sm">
+          <div className="flex flex-col space-y-1.5 p-6 pb-3">
+            <h3 className="font-semibold leading-none tracking-tight text-lg flex items-center gap-2 text-blue-500">
               <User size={18} className="text-blue-500" /> Profile Overview
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+            </h3>
+          </div>
+          <div className="p-6 pt-0 space-y-4">
             <div>
               <p className="text-sm text-gray-500">Role</p>
-              <Badge variant="secondary">{user.role}</Badge>
+              <span className="inline-flex items-center rounded-full bg-slate-100 text-slate-900 border-transparent px-2.5 py-0.5 text-xs font-semibold">{user.role}</span>
             </div>
             <div>
               <p className="text-sm text-gray-500">Status</p>
-              <Badge
-                variant={
-                  user.status === 'Suspended' ? 'destructive' : 'secondary'
-                }>
+              <span
+                className={`inline-flex items-center rounded-full border-transparent px-2.5 py-0.5 text-xs font-semibold ${
+                  user.status === 'Suspended' ? 'bg-red-500 text-white' : 'bg-slate-100 text-slate-950'
+                }`}>
                 {user.status || 'Active'}
-              </Badge>
+              </span>
             </div>
             <div className="grid grid-cols-2 gap-4 pt-2">
               <div>
@@ -81,23 +73,23 @@ export default async function UserDetailsPage({
                 </p>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
         {/* Verification Card */}
-        <Card className="bg-white">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-lg flex items-center gap-2 text-green-500">
+        <div className="rounded-xl border bg-white text-card-foreground shadow-sm">
+          <div className="flex flex-col space-y-1.5 p-6 pb-3">
+            <h3 className="font-semibold leading-none tracking-tight text-lg flex items-center gap-2 text-green-500">
               <ShieldCheck size={18} className="text-green-500" /> Verification
               Status
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+            </h3>
+          </div>
+          <div className="p-6 pt-0 space-y-4">
             <div className="flex justify-between items-center p-3 bg-gray-200 rounded-lg">
               <span className="font-medium text-slate-700">NIN Status</span>
-              <Badge variant={hasNin ? 'default' : 'destructive'}>
+              <span className={`inline-flex items-center rounded-full border-transparent px-2.5 py-0.5 text-xs font-semibold ${hasNin ? 'bg-slate-900 text-white' : 'bg-red-500 text-white'}`}>
                 {hasNin ? 'Verified' : 'Missing'}
-              </Badge>
+              </span>
             </div>
             {hasNin && (
               <p className="text-sm text-gray-600 px-1">
@@ -107,26 +99,26 @@ export default async function UserDetailsPage({
 
             <div className="flex justify-between items-center p-3 bg-gray-200 rounded-lg">
               <span className="font-medium text-slate-700">BVN Status</span>
-              <Badge variant={hasBvn ? 'default' : 'destructive'}>
+              <span className={`inline-flex items-center rounded-full border-transparent px-2.5 py-0.5 text-xs font-semibold ${hasBvn ? 'bg-slate-900 text-white' : 'bg-red-500 text-white'}`}>
                 {hasBvn ? 'Verified' : 'Missing'}
-              </Badge>
+              </span>
             </div>
             {hasBvn && (
               <p className="text-sm text-gray-600 px-1">
                 BVN: <span className="font-mono">{user.bankInfo?.bvn}</span>
               </p>
             )}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
         {/* Bank & Wallet Card */}
-        <Card className="bg-white">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-lg flex items-center gap-2 text-primary">
+        <div className="rounded-xl border bg-white text-card-foreground shadow-sm">
+          <div className="flex flex-col space-y-1.5 p-6 pb-3">
+            <h3 className="font-semibold leading-none tracking-tight text-lg flex items-center gap-2 text-primary">
               <Wallet size={18} className="text-primary" /> Financials
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+            </h3>
+          </div>
+          <div className="p-6 pt-0 space-y-4">
             <div className="bg-[#cfb53b]/10 p-4 rounded-lg">
               <p className="text-sm text-[#b09a32] font-medium">
                 Available Balance
@@ -161,22 +153,22 @@ export default async function UserDetailsPage({
                 </p>
               )}
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
 
       {/* Transaction History */}
-      <Card className="bg-white">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-slate-500">
+      <div className="rounded-xl border bg-white text-card-foreground shadow-sm">
+        <div className="flex flex-col space-y-1.5 p-6">
+          <h3 className="font-semibold leading-none tracking-tight flex items-center gap-2 text-slate-500">
             <Activity size={18} className="text-slate-500" /> Transaction
             History
-          </CardTitle>
-          <CardDescription>
+          </h3>
+          <p className="text-sm text-muted-foreground">
             Recent financial activity for this user.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
+          </p>
+        </div>
+        <div className="p-6 pt-0">
           {transactions.length > 0 ? (
             <div className="overflow-x-auto">
               <table className="w-full text-sm text-left text-gray-500">
@@ -209,16 +201,16 @@ export default async function UserDetailsPage({
                         {t.amount?.toLocaleString()}
                       </td>
                       <td className="px-4 py-3 text-right">
-                        <Badge
-                          variant={
+                        <span
+                          className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${
                             t.status === 'Completed'
-                              ? 'secondary'
+                              ? 'bg-slate-100 text-slate-900'
                               : t.status === 'Pending'
-                                ? 'outline'
-                                : 'destructive'
-                          }>
+                                ? 'border border-slate-300 text-slate-700'
+                                : 'bg-red-500 text-white'
+                          }`}>
                           {t.status}
-                        </Badge>
+                        </span>
                       </td>
                     </tr>
                   ))}
@@ -230,8 +222,8 @@ export default async function UserDetailsPage({
               No transactions found for this user.
             </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }

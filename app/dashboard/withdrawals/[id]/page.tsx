@@ -1,25 +1,15 @@
 import { notFound } from 'next/navigation';
 import { getWithdrawalById } from '@/actions/transactions';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
 import {
   ArrowLeft,
   User as UserIcon,
   Building2,
   Banknote,
-  Calendar,
   Info,
 } from 'lucide-react';
 import Link from 'next/link';
 import WithdrawalControls from './WithdrawalControls';
-import { Button } from '@/components/ui/button';
 import { getUserById } from '@/actions/user-management';
 
 export const revalidate = 0;
@@ -39,13 +29,6 @@ export default async function WithdrawalDetailsPage({
   const { userId } = transaction;
   const user = await getUserById(userId);
 
-  const statusVariant =
-    transaction.status === 'Completed'
-      ? 'default'
-      : transaction.status === 'Pending'
-        ? 'secondary'
-        : 'destructive';
-
   const formattedAmount = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
@@ -55,29 +38,34 @@ export default async function WithdrawalDetailsPage({
     <div className="flex-1 space-y-6 p-4 md:p-8 pt-6">
       <div className="flex items-center gap-4">
         <Link href="/dashboard/withdrawals">
-          <Button variant="ghost" size="icon">
+          <button className="flex items-center justify-center h-10 w-10 rounded-md bg-transparent hover:bg-slate-100 hover:text-slate-900 transition-colors">
             <ArrowLeft className="h-4 w-4" />
-          </Button>
+          </button>
         </Link>
         <h2 className="text-3xl font-bold tracking-tight">
           Withdrawal Details
         </h2>
-        <Badge
-          variant={statusVariant}
-          className={`ml-2 text-sm ${transaction.status === 'Completed' ? 'bg-green-500 hover:bg-green-600 text-white' : transaction.status === 'Pending' ? 'bg-amber-500 hover:bg-amber-600 text-white' : ''}`}>
+        <span
+          className={`ml-2 inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold text-white ${
+            transaction.status === 'Completed'
+              ? 'bg-green-500 hover:bg-green-600'
+              : transaction.status === 'Pending'
+                ? 'bg-amber-500 hover:bg-amber-600'
+                : 'bg-red-500 hover:bg-red-600'
+          }`}>
           {transaction.status}
-        </Badge>
+        </span>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
-        <Card className="bg-white">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-slate-800 font-bold">
+        <div className="rounded-xl border bg-white text-card-foreground shadow-sm">
+          <div className="flex flex-col space-y-1.5 p-6">
+            <h3 className="leading-none tracking-tight flex items-center gap-2 text-slate-800 font-bold">
               <Banknote className="h-5 w-5 text-slate-500" />
               Request Information
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+            </h3>
+          </div>
+          <div className="p-6 pt-0 space-y-4">
             <div className="flex justify-between border-b pb-2 text-sm">
               <span className="text-slate-500 font-medium">Amount</span>
               <span className="font-bold text-lg text-slate-900">
@@ -130,17 +118,17 @@ export default async function WithdrawalDetailsPage({
                 </p>
               </div>
             )}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
-        <Card className="bg-white">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-slate-800 font-bold">
+        <div className="rounded-xl border bg-white text-card-foreground shadow-sm">
+          <div className="flex flex-col space-y-1.5 p-6">
+            <h3 className="font-semibold leading-none tracking-tight flex items-center gap-2 text-slate-800">
               <UserIcon className="h-5 w-5 text-slate-500" />
               Agent Details
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+            </h3>
+          </div>
+          <div className="p-6 pt-0 space-y-4">
             {user ? (
               <>
                 <div className="flex justify-between border-b pb-2 text-sm">
@@ -183,7 +171,7 @@ export default async function WithdrawalDetailsPage({
                       </div>
                       <div className="grid grid-cols-3">
                         <span className="text-slate-500">Acct No:</span>
-                        <span className="col-span-2 font-mono font-medium text-slate-850">
+                        <span className="col-span-2 font-mono font-medium text-slate-855">
                           {user.user.bankInfo.bankAccountNumber}
                         </span>
                       </div>
@@ -200,8 +188,8 @@ export default async function WithdrawalDetailsPage({
                 User information could not be loaded.
               </p>
             )}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
 
       <WithdrawalControls

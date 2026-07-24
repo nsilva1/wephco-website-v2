@@ -1,7 +1,5 @@
 import { notFound } from 'next/navigation';
 import { getPropertyById } from '@/actions/property-management';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import {
   ArrowLeft,
   Building2,
@@ -11,7 +9,6 @@ import {
   Download,
 } from 'lucide-react';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import PropertyControls from './PropertyControls';
 import { formatCurrency } from '@/lib/utils';
@@ -43,33 +40,31 @@ export default async function PropertyDetailPage({
     <div className="flex-1 space-y-6 p-4 md:p-8 pt-6">
       <div className="flex items-center gap-4">
         <Link href="/dashboard/properties">
-          <Button variant="ghost" size="icon">
+          <button className="flex items-center justify-center h-10 w-10 rounded-md bg-transparent hover:bg-slate-100 hover:text-slate-900 transition-colors">
             <ArrowLeft className="h-4 w-4" />
-          </Button>
+          </button>
         </Link>
         <h2 className="text-3xl font-bold tracking-tight">{property.title}</h2>
-        <Badge
-          variant="secondary"
-          className={`capitalize ${tagColors[property.tag] || ''}`}>
+        <span
+          className={`capitalize inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold border-transparent ${tagColors[property.tag] || ''}`}>
           {property.tag || 'pending'}
-        </Badge>
-        <Badge
-          variant="secondary"
-          className={`capitalize ${statusColors[property.status] || ''}`}>
+        </span>
+        <span
+          className={`capitalize inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold border-transparent ${statusColors[property.status] || ''}`}>
           {property.status || 'available'}
-        </Badge>
+        </span>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
         {/* Image & Details */}
-        <Card className="bg-white">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-slate-800 font-bold">
+        <div className="rounded-xl border bg-white text-card-foreground shadow-sm">
+          <div className="flex flex-col space-y-1.5 p-6">
+            <h3 className="leading-none tracking-tight flex items-center gap-2 text-slate-800 font-bold">
               <Building2 className="h-5 w-5 text-slate-500" />
               Property Information
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+            </h3>
+          </div>
+          <div className="p-6 pt-0 space-y-4">
             {property.images && property.images.length > 0 && (
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                 {property.images.map((img, idx) => (
@@ -130,39 +125,39 @@ export default async function PropertyDetailPage({
                 </a>
               </div>
             )}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
         {/* Description */}
-        <Card className="bg-white">
-          <CardHeader>
-            <CardTitle className="text-slate-800 font-bold">
+        <div className="rounded-xl border bg-white text-card-foreground shadow-sm">
+          <div className="flex flex-col space-y-1.5 p-6">
+            <h3 className="leading-none tracking-tight text-slate-800 font-bold">
               Description
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
+            </h3>
+          </div>
+          <div className="p-6 pt-0">
             <p className="text-sm leading-relaxed whitespace-pre-wrap text-slate-700">
               {property.description || 'No description provided.'}
             </p>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
 
       {/* Controls */}
-      <Card className="bg-white">
-        <CardHeader>
-          <CardTitle className="text-lg text-muted-foreground">
+      <div className="rounded-xl border bg-white text-card-foreground shadow-sm">
+        <div className="flex flex-col space-y-1.5 p-6">
+          <h3 className="font-semibold leading-none tracking-tight text-lg text-muted-foreground">
             Actions
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+          </h3>
+        </div>
+        <div className="p-6 pt-0">
           <PropertyControls
             propertyId={property.id!}
             currentTag={property.tag || 'pending'}
             currentStatus={property.status || 'available'}
           />
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }

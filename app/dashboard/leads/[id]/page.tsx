@@ -1,7 +1,5 @@
 import { notFound } from 'next/navigation';
 import { getLeadById } from '@/actions/leads';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
 import {
   ArrowLeft,
@@ -13,7 +11,6 @@ import {
   FileText,
 } from 'lucide-react';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
 import { formatCurrency } from '@/lib/utils';
 
 export const revalidate = 0;
@@ -41,28 +38,27 @@ export default async function LeadDetailPage({
     <div className="flex-1 space-y-6 p-4 md:p-8 pt-6">
       <div className="flex items-center gap-4">
         <Link href="/dashboard/leads">
-          <Button variant="ghost" size="icon">
+          <button className="flex items-center justify-center h-10 w-10 rounded-md bg-transparent hover:bg-slate-100 hover:text-slate-900 transition-colors">
             <ArrowLeft className="h-4 w-4" />
-          </Button>
+          </button>
         </Link>
         <h2 className="text-3xl font-bold tracking-tight">Lead Details</h2>
-        <Badge
-          variant="secondary"
-          className={`capitalize ${statusStyles[lead.status?.toLowerCase()] || 'bg-gray-400 text-white'}`}>
+        <span
+          className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors capitalize ${statusStyles[lead.status?.toLowerCase()] || 'bg-gray-400 text-white'}`}>
           {lead.status || 'New'}
-        </Badge>
+        </span>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
         {/* Lead Info */}
-        <Card className="bg-white">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-muted-foreground">
+        <div className="rounded-xl border bg-white text-card-foreground shadow-sm">
+          <div className="flex flex-col space-y-1.5 p-6">
+            <h3 className="font-semibold leading-none tracking-tight flex items-center gap-2 text-muted-foreground">
               <UserIcon className="h-5 w-5 text-muted-foreground" />
               Lead Information
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
+            </h3>
+          </div>
+          <div className="p-6 pt-0 space-y-3">
             <div className="flex justify-between border-b pb-2">
               <span className="text-muted-foreground">Name</span>
               <span className="font-semibold text-primary">{lead.name}</span>
@@ -89,9 +85,9 @@ export default async function LeadDetailPage({
             </div>
             <div className="flex justify-between border-b pb-2">
               <span className="text-muted-foreground">Source</span>
-              <Badge variant="default" className="capitalize">
+              <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold bg-slate-900 text-white capitalize">
                 {lead.source || 'N/A'}
-              </Badge>
+              </span>
             </div>
             <div className="flex justify-between border-b pb-2">
               <span className="text-muted-foreground">Created</span>
@@ -109,19 +105,19 @@ export default async function LeadDetailPage({
                   : 'N/A'}
               </span>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
         <div className="space-y-6">
           {/* Agent */}
-          <Card className="bg-white">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-muted-foreground">
+          <div className="rounded-xl border bg-white text-card-foreground shadow-sm">
+            <div className="flex flex-col space-y-1.5 p-6">
+              <h3 className="font-semibold leading-none tracking-tight flex items-center gap-2 text-muted-foreground">
                 <UserIcon className="h-5 w-5 text-muted-foreground" />
                 Assigned Agent
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
+              </h3>
+            </div>
+            <div className="p-6 pt-0 space-y-3">
               {lead.agent ? (
                 <>
                   <div className="flex justify-between border-b pb-2">
@@ -137,9 +133,9 @@ export default async function LeadDetailPage({
                     </span>
                   </div>
                   <Link href={`/dashboard/users/${lead.agent.id}`}>
-                    <Button variant="outline" size="sm" className="w-full mt-2">
+                    <button className="w-full mt-2 border border-slate-200 bg-white hover:bg-slate-100 h-9 rounded-md px-3 text-xs inline-flex items-center justify-center font-medium transition-colors">
                       View Agent Profile
-                    </Button>
+                    </button>
                   </Link>
                 </>
               ) : (
@@ -147,18 +143,18 @@ export default async function LeadDetailPage({
                   Agent information not available.
                 </p>
               )}
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
           {/* Property */}
-          <Card className="bg-white">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-muted-foreground">
+          <div className="rounded-xl border bg-white text-card-foreground shadow-sm">
+            <div className="flex flex-col space-y-1.5 p-6">
+              <h3 className="font-semibold leading-none tracking-tight flex items-center gap-2 text-muted-foreground">
                 <Building2 className="h-5 w-5 text-muted-foreground" />
                 Associated Property
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
+              </h3>
+            </div>
+            <div className="p-6 pt-0 space-y-3">
               {lead.property ? (
                 <>
                   <div className="flex justify-between border-b pb-2">
@@ -174,9 +170,9 @@ export default async function LeadDetailPage({
                     </span>
                   </div>
                   <Link href={`/dashboard/properties/${lead.property.id}`}>
-                    <Button variant="outline" size="sm" className="w-full mt-2">
+                    <button className="w-full mt-2 border border-slate-200 bg-white hover:bg-slate-100 h-9 rounded-md px-3 text-xs inline-flex items-center justify-center font-medium transition-colors">
                       View Property
-                    </Button>
+                    </button>
                   </Link>
                 </>
               ) : (
@@ -184,26 +180,26 @@ export default async function LeadDetailPage({
                   No property associated.
                 </p>
               )}
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Notes */}
       {lead.notes && (
-        <Card className="bg-white">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-muted-foreground">
+        <div className="rounded-xl border bg-white text-card-foreground shadow-sm">
+          <div className="flex flex-col space-y-1.5 p-6">
+            <h3 className="font-semibold leading-none tracking-tight flex items-center gap-2 text-muted-foreground">
               <FileText className="h-5 w-5 text-muted-foreground" />
               Notes
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
+            </h3>
+          </div>
+          <div className="p-6 pt-0">
             <div className="p-4 rounded-md text-sm whitespace-pre-wrap text-slate-800">
               {lead.notes}
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       )}
     </div>
   );

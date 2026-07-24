@@ -1,17 +1,13 @@
 import { notFound } from 'next/navigation';
 import { getSupportTicketById } from '@/actions/support-tickets';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
 import {
   ArrowLeft,
   User as UserIcon,
   MessageSquare,
   CheckCircle2,
-  Info,
 } from 'lucide-react';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
 import TicketControls from './TicketControls';
 
 export const revalidate = 0;
@@ -32,35 +28,34 @@ export default async function TicketDetailPage({
     <div className="flex-1 space-y-6 p-4 md:p-8 pt-6">
       <div className="flex items-center gap-4">
         <Link href="/dashboard/support">
-          <Button variant="ghost" size="icon">
+          <button className="flex items-center justify-center h-10 w-10 rounded-md bg-transparent hover:bg-slate-100 hover:text-slate-900 transition-colors">
             <ArrowLeft className="h-4 w-4" />
-          </Button>
+          </button>
         </Link>
         <h2 className="text-3xl font-bold tracking-tight">Ticket Details</h2>
-        <Badge
-          variant={ticket.status === 'resolved' ? 'secondary' : 'default'}
-          className={`ml-2 text-sm ${
+        <span
+          className={`ml-2 inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold text-white ${
             ticket.status === 'resolved'
-              ? 'bg-green-500 hover:bg-green-600 text-white'
-              : 'bg-amber-500 hover:bg-amber-600 text-white'
+              ? 'bg-green-500 hover:bg-green-600'
+              : 'bg-amber-500 hover:bg-amber-600'
           }`}>
           {ticket.status === 'resolved' ? 'Resolved' : 'Open'}
-        </Badge>
-        <Badge variant="outline" className="capitalize">
+        </span>
+        <span className="inline-flex items-center rounded-full border border-slate-300 px-2.5 py-0.5 text-xs font-semibold text-slate-700 capitalize">
           {ticket.category}
-        </Badge>
+        </span>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
         {/* Ticket Content */}
-        <Card className="bg-white">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-muted-foreground">
+        <div className="rounded-xl border bg-white text-card-foreground shadow-sm">
+          <div className="flex flex-col space-y-1.5 p-6">
+            <h3 className="font-semibold leading-none tracking-tight flex items-center gap-2 text-muted-foreground">
               <MessageSquare className="h-5 w-5 text-muted-foreground" />
               Ticket
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+            </h3>
+          </div>
+          <div className="p-6 pt-0 space-y-4">
             <div>
               <span className="text-muted-foreground text-sm block mb-1">
                 Subject
@@ -91,19 +86,19 @@ export default async function TicketDetailPage({
                 {ticket.id}
               </span>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
         {/* User Info & Resolution */}
         <div className="space-y-6">
-          <Card className="bg-white">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-muted-foreground">
+          <div className="rounded-xl border bg-white text-card-foreground shadow-sm">
+            <div className="flex flex-col space-y-1.5 p-6">
+              <h3 className="font-semibold leading-none tracking-tight flex items-center gap-2 text-muted-foreground">
                 <UserIcon className="h-5 w-5 text-muted-foreground" />
                 Submitted By
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
+              </h3>
+            </div>
+            <div className="p-6 pt-0 space-y-3">
               {user ? (
                 <>
                   <div className="flex justify-between border-b pb-2">
@@ -126,9 +121,9 @@ export default async function TicketDetailPage({
                   </div>
                   <div className="pt-1">
                     <Link href={`/dashboard/users/${user.id}`}>
-                      <Button variant="default" size="sm" className="w-full">
+                      <button className="w-full bg-slate-900 hover:bg-slate-900/90 text-white h-9 rounded-md px-3 text-xs inline-flex items-center justify-center font-medium transition-colors">
                         View Full Profile
-                      </Button>
+                      </button>
                     </Link>
                   </div>
                 </>
@@ -137,18 +132,18 @@ export default async function TicketDetailPage({
                   User information could not be loaded.
                 </p>
               )}
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
           {ticket.status === 'resolved' && (
-            <Card className="bg-white">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-green-600">
+            <div className="rounded-xl border bg-white text-card-foreground shadow-sm">
+              <div className="flex flex-col space-y-1.5 p-6">
+                <h3 className="font-semibold leading-none tracking-tight flex items-center gap-2 text-green-600">
                   <CheckCircle2 className="h-5 w-5 text-green-600" />
                   Resolution
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
+                </h3>
+              </div>
+              <div className="p-6 pt-0 space-y-3">
                 {ticket.responseNotes && (
                   <div>
                     <span className="text-muted-foreground text-sm block mb-1">
@@ -169,23 +164,23 @@ export default async function TicketDetailPage({
                     </span>
                   </div>
                 )}
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           )}
         </div>
       </div>
 
       {/* Actions */}
-      <Card className="bg-white">
-        <CardHeader>
-          <CardTitle className="text-lg text-muted-foreground">
+      <div className="rounded-xl border bg-white text-card-foreground shadow-sm">
+        <div className="flex flex-col space-y-1.5 p-6">
+          <h3 className="font-semibold leading-none tracking-tight text-lg text-muted-foreground">
             Actions
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+          </h3>
+        </div>
+        <div className="p-6 pt-0">
           <TicketControls ticketId={ticket.id!} status={ticket.status} />
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }
