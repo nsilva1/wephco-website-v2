@@ -280,4 +280,5 @@ export const FIRESTORE_COLLECTIONS = {
     JOB_APPLICATIONS: 'job_applications',
     AFFILIATES: 'affiliates',
     EVENTS: 'events',
+    MAGAZINES: 'magazines',
 }

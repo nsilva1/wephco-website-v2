@@ -30,6 +30,8 @@ const getServiceIcon = (label: string) => {
   return Wallet;
 };
 
+const privateConsultationPaymentLink = 'https://sandbox.flutterwave.com/pay/jhawafmnzuoc'
+
 const ConsultationsPage = () => {
   const [loading, setLoading] = useState(false);
   const [activeStep, setActiveStep] = useState<number>(1);
@@ -96,6 +98,10 @@ const ConsultationsPage = () => {
       toast.success(
         'Your private consultation request has been scheduled successfully!'
       );
+
+      if (formData.service === 'Private Consulting') {
+        window.location.href = privateConsultationPaymentLink;
+      }
 
       // Reset form
       setFormData({
@@ -218,6 +224,13 @@ const ConsultationsPage = () => {
                                   ))
                                 }
                               </ul>
+                              {service.label === 'Private Consulting' && (
+                                <p className={`text-[11px] mt-2 font-medium ${
+                                  isSelected ? 'text-slate-800' : 'text-primary'
+                                }`}>
+                                  This is a paid service
+                                </p>
+                              )}
                             </div>
                           </div>
                         );
@@ -443,7 +456,7 @@ const ConsultationsPage = () => {
                           <Loader />
                         ) : (
                           <>
-                            <span>Confirm Booking</span>
+                            <span>{formData.service === 'Private Consulting' ? 'Reserve Private Consultation' : 'Confirm Booking'}</span>
                             <CheckCircle2 className="size-4" />
                           </>
                         )}
