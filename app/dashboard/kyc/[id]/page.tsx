@@ -1,16 +1,12 @@
 import { notFound } from 'next/navigation';
 import { getUserById } from '@/actions/user-management';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import {
   ArrowLeft,
   User as UserIcon,
   ShieldCheck,
-  FileWarning,
-  Info,
+  FileWarning
 } from 'lucide-react';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
 import KycControls from './KycControls';
 
 export const revalidate = 0;
@@ -42,28 +38,27 @@ export default async function KycDetailPage({
     <div className="flex-1 space-y-6 p-4 md:p-8 pt-6">
       <div className="flex items-center gap-4">
         <Link href="/dashboard/kyc">
-          <Button variant="ghost" size="icon">
+          <button className="flex items-center justify-center h-10 w-10 rounded-md bg-transparent hover:bg-slate-100 hover:text-slate-900 transition-colors">
             <ArrowLeft className="h-4 w-4" />
-          </Button>
+          </button>
         </Link>
         <h2 className="text-3xl font-bold tracking-tight">KYC Review</h2>
-        <Badge
-          variant="secondary"
-          className={`ml-2 text-sm capitalize ${statusColors[kycStatus] || ''}`}>
+        <span
+          className={`ml-2 inline-flex items-center rounded-full border border-transparent px-2.5 py-0.5 text-xs font-semibold transition-colors capitalize ${statusColors[kycStatus] || ''}`}>
           {kycStatus}
-        </Badge>
+        </span>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
         {/* Agent Info */}
-        <Card className="bg-white">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-muted-foreground">
+        <div className="rounded-xl border bg-white text-card-foreground shadow-sm">
+          <div className="flex flex-col space-y-1.5 p-6">
+            <h3 className="font-semibold leading-none tracking-tight flex items-center gap-2 text-muted-foreground">
               <UserIcon className="h-5 w-5 text-muted-foreground" />
               Agent Information
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+            </h3>
+          </div>
+          <div className="p-6 pt-0 space-y-4">
             <div className="flex justify-between border-b pb-2">
               <span className="text-muted-foreground">Name</span>
               <span className="font-medium text-primary">{user.name}</span>
@@ -78,25 +73,25 @@ export default async function KycDetailPage({
             </div>
             <div className="flex justify-between border-b pb-2">
               <span className="text-muted-foreground">Account Status</span>
-              <Badge
-                variant={
-                  user.status === 'Suspended' ? 'destructive' : 'secondary'
-                }>
+              <span
+                className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${
+                  user.status === 'Suspended' ? 'bg-red-500 text-white' : 'bg-slate-100 text-slate-950'
+                }`}>
                 {user.status || 'Active'}
-              </Badge>
+              </span>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
         {/* KYC Documents */}
-        <Card className="bg-white">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-muted-foreground">
+        <div className="rounded-xl border bg-white text-card-foreground shadow-sm">
+          <div className="flex flex-col space-y-1.5 p-6">
+            <h3 className="font-semibold leading-none tracking-tight flex items-center gap-2 text-muted-foreground">
               <ShieldCheck className="h-5 w-5 text-muted-foreground" />
               Verification Documents
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+            </h3>
+          </div>
+          <div className="p-6 pt-0 space-y-4">
             <div className="flex justify-between items-center border-b pb-3">
               <div>
                 <span className="text-muted-foreground text-sm block">
@@ -107,11 +102,13 @@ export default async function KycDetailPage({
                 </span>
               </div>
               {hasNin ? (
-                <Badge className="bg-green-500 hover:bg-green-600 text-white">
+                <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold bg-green-500 text-white">
                   Submitted
-                </Badge>
+                </span>
               ) : (
-                <Badge variant="destructive">Missing</Badge>
+                <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold bg-red-500 text-white">
+                  Missing
+                </span>
               )}
             </div>
             <div className="flex justify-between items-center border-b pb-3">
@@ -124,11 +121,13 @@ export default async function KycDetailPage({
                 </span>
               </div>
               {hasBvn ? (
-                <Badge className="bg-green-500 hover:bg-green-600 text-white">
+                <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold bg-green-500 text-white">
                   Submitted
-                </Badge>
+                </span>
               ) : (
-                <Badge variant="destructive">Missing</Badge>
+                <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold bg-red-500 text-white">
+                  Missing
+                </span>
               )}
             </div>
 
@@ -170,21 +169,21 @@ export default async function KycDetailPage({
                 </p>
               </div>
             )}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
 
       {/* Actions */}
-      <Card className="bg-white">
-        <CardHeader>
-          <CardTitle className="text-lg text-muted-foreground">
+      <div className="rounded-xl border bg-white text-card-foreground shadow-sm">
+        <div className="flex flex-col space-y-1.5 p-6">
+          <h3 className="font-semibold leading-none tracking-tight text-lg text-muted-foreground">
             Actions
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+          </h3>
+        </div>
+        <div className="p-6 pt-0">
           <KycControls userId={user.id} currentStatus={kycStatus} />
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }
