@@ -32,6 +32,8 @@ const getServiceIcon = (label: string) => {
 
 const privateConsultationPaymentLink = 'https://sandbox.flutterwave.com/pay/jhawafmnzuoc'
 
+
+
 const ConsultationsPage = () => {
   const [loading, setLoading] = useState(false);
   const [activeStep, setActiveStep] = useState<number>(1);
@@ -102,6 +104,16 @@ const ConsultationsPage = () => {
       if (formData.service === 'Private Consulting') {
         window.location.href = privateConsultationPaymentLink;
       }
+
+      // TODO: send email to the user confirming the consultation booking
+      //  - Name
+      //  - Email
+      //  - Phone Number
+      //  - Preferred Mode of Contact
+      //  - Details
+      //  - Status
+
+
 
       // Reset form
       setFormData({

@@ -30,6 +30,7 @@ const Footer = () => {
                     <h5 className='uppercase text-gray-500 font-semibold font-roboto hidden md:flex'>Resources</h5>
                     <Link className='font-semibold text-white text-sm uppercase leading-6 hover:underline' href='/blog'>Blog</Link>
                     <Link className='font-semibold text-white text-sm uppercase leading-6 hover:underline' href='/privacy-policy'>Privacy Policy</Link>
+                    <Link className='font-semibold text-white text-sm uppercase leading-6 hover:underline' href='/refund-policy'>Refund Policy</Link>
                     <Link className='font-semibold text-white text-sm uppercase leading-6 hover:underline' href='/terms-of-service'>Terms of Service</Link>
                 </div>
             </div>
