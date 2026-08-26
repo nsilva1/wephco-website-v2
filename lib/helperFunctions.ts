@@ -6,6 +6,7 @@ import { upload } from "@vercel/blob/client";
 import { differenceInMonths } from "date-fns";
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage } from '@/firebase/firebaseClient';
+// import { v4 as uuidv4 } from 'uuid';
 
 export async function uploadFile(file: File, path: string): Promise<string> {
   const fileRef = ref(storage, `${path}/${Date.now()}_${file.name}`);
@@ -311,4 +312,25 @@ export const calculateAdvancedReadTime = (content: string, wordsPerMinute: numbe
   const totalReadTime = Math.ceil(textReadTimeInMinutes + imageReadTimeInMinutes);
 
   return totalReadTime;
+};
+
+
+export const generateUniqueID = (prefix?: string, length: number = 10): string => {
+  const randomPart = Math.random().toString(36).substring(2, 2 + length).toUpperCase()
+  return prefix ? `${prefix}-${randomPart}` : randomPart
+}
+
+
+export const formatMeetingDate = (date: string) => {
+  if (!date) return "";
+
+  const [year, month, day] = date.split("-").map(Number);
+
+  const formattedDate = new Date(year, month - 1, day);
+
+  return formattedDate.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
 };
