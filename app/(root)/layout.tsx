@@ -4,7 +4,7 @@ import Navbar from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { ToastContainer } from 'react-toastify';
 // import Script from 'next/script';
-import { WhatsAppWidget } from '@/components/WhatsappWidget';
+import ChatWidget from '@/components/ChatWidget';
 import '../globals.css';
 
 export default function RootLayout({
@@ -17,7 +17,7 @@ export default function RootLayout({
       <ToastContainer />
       <Navbar />
       {children}
-      <WhatsAppWidget />
+      <ChatWidget />
       <Footer />
     </>
   );

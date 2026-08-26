@@ -282,3 +282,9 @@ export const FIRESTORE_COLLECTIONS = {
     EVENTS: 'events',
     MAGAZINES: 'magazines',
 }
+
+export const EMAIL_TEMPLATE_IDS = {
+    CONSULTATION: '997873ab-0faf-4d49-b2c2-a3532434a668',
+    PROPERTY_UPLOAD: '27bb4afd-efab-439f-afa4-13b6e83ebb35',
+    PROPERTY_INQUIRY: '611d3795-4ada-4454-a7ba-85fc3fc3ce5f'
+}
