@@ -20,6 +20,8 @@ import { Loader } from '@/components/Loader';
 import { toast } from 'react-toastify';
 import { createConsultation } from '@/actions/consultation';
 import { consultationServices } from '@/lib/constants';
+import { sendBookingConfirmationEmail } from '@/actions/email';
+import { formatMeetingDate } from '@/lib/helperFunctions';
 
 // Match services to icons dynamically
 const getServiceIcon = (label: string) => {
@@ -84,7 +86,7 @@ const ConsultationsPage = () => {
       // Structure details nicely to save all details into the DB schema
       const fullDetails = `Price Range: ${formData.priceRange}\nPreferred Time: ${formData.meetingTime}\nOrganization: ${formData.organizationName || 'None'}\n\nMessage: ${formData.details}`;
 
-      await createConsultation({
+      const consultation = await createConsultation({
         service: formData.service,
         meetingDate: new Date(formData.meetingDate),
         meetingLocation: formData.meetingLocation,
@@ -105,15 +107,19 @@ const ConsultationsPage = () => {
         window.location.href = privateConsultationPaymentLink;
       }
 
-      // TODO: send email to the user confirming the consultation booking
-      //  - Name
-      //  - Email
-      //  - Phone Number
-      //  - Preferred Mode of Contact
-      //  - Details
-      //  - Status
-
-
+      // send email to the user confirming the consultation booking
+      await sendBookingConfirmationEmail({
+        toEmail: formData.email,
+        props: {
+          customerName: formData.name,
+          bookingId: consultation.id,
+          serviceName: formData.service,
+          bookingDate: formatMeetingDate(formData.meetingDate),
+          bookingTime: formData.meetingTime,
+          meetingLocation: formData.meetingLocation === 'virtual' ? 'Virtual (Google Meet)' : 'Physical',
+          meetingLink: formData.meetingLocation === 'virtual' ? 'https://meet.google.com/vfg-kjnq-jqa?hs=186' : 'Los Angeles Mall, Kado, Abuja',
+        },
+      })
 
       // Reset form
       setFormData({
@@ -292,7 +298,7 @@ const ConsultationsPage = () => {
                       <div className="space-y-2">
                         <label className="text-sm font-medium text-slate-400 flex items-center gap-2">
                           <Clock className="size-4 text-primary" /> Select Time
-                          (GMT)
+                          (GMT+1)
                         </label>
                         <select
                           name="meetingTime"
@@ -317,7 +323,7 @@ const ConsultationsPage = () => {
                           onChange={handleChange}
                           className="w-full bg-slate-800/60 border border-primary/20 rounded-lg p-3 text-slate-100 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary">
                           <option value="virtual">
-                            Virtual (Zoom, Google Meet, Teams)
+                            Virtual (Google Meet)
                           </option>
                           <option value="physical">Physical</option>
                         </select>

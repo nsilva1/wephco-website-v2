@@ -1,19 +1,10 @@
 import * as React from 'react';
 import {
   Body,
-  Button,
-  Container,
   Head,
-  Heading,
-  Hr,
   Html,
-  Img,
   Link,
   Preview,
-  Row,
-  Column,
-  Section,
-  Text,
   Tailwind,
 } from '@react-email/components';
 
@@ -37,25 +28,26 @@ export interface BookingConfirmationEmailProps {
 
 export const BookingConfirmationEmail = ({
   customerName = 'Sarah Jenkins',
-  customerEmail = 'sarah.jenkins@example.com',
+  // customerEmail = 'sarah.jenkins@example.com',
   bookingId = 'WPH-BK-89420',
-  serviceName = 'Real Estate Investment Advisory',
+  serviceName = 'Real Estate Private Consultation',
   bookingDate = 'Friday, August 14, 2026',
   bookingTime = '02:00 PM EST',
-  meetingLocation = 'Virtual Meeting (Google Meet)',
+  meetingLocation = 'Virtual Meeting',
   meetingLink = 'https://meet.google.com/abc-defg-hij',
-  consultantName = 'David Miller',
-  consultantRole = 'Senior Portfolio Manager',
+  consultantName = 'Wisdom Nwachukwu',
+  consultantRole = 'Founder, WEPHCO',
   notes = 'Please have your current investment portfolio and target location preferences ready for discussion.',
   companyName = 'WEPHCO',
   supportEmail = 'support@wephco.com',
   companyWebsite = 'https://wephco.com',
-  logoUrl = 'https://wephco.com/images/logo.png',
+  logoUrl,
 }: BookingConfirmationEmailProps) => {
+  const currentYear = new Date().getFullYear();
   const previewText = `Your booking for ${serviceName} on ${bookingDate} is confirmed (${bookingId})`;
 
   return (
-    <Html>
+    <Html lang="en">
       <Head />
       <Preview>{previewText}</Preview>
       <Tailwind
@@ -63,209 +55,303 @@ export const BookingConfirmationEmail = ({
           theme: {
             extend: {
               colors: {
-                brand: '#013220',
-                'brand-dark': '#011a11',
-                gold: '#d4af35',
-                'gold-dark': '#cfb53b',
-                surface: '#f8f7f6',
+                brand: '#003f2d',
+                gold: '#d6ad3d',
+                'gold-light': '#e0b53f',
+                'gold-dark': '#b18420',
+                'gold-muted': '#8c6418',
+              },
+              fontFamily: {
+                serif: ['Georgia', 'serif'],
               },
             },
           },
         }}
       >
-        <Body className="bg-[#f4f5f7] font-sans my-auto mx-auto font-normal text-slate-700">
-          <Container className="border border-solid border-[#e5e7eb] rounded-xl my-[40px] mx-auto p-[0px] max-w-[600px] bg-white overflow-hidden shadow-sm">
-            {/* Top Brand Header */}
-            <Section className="bg-[#013220] p-6 text-center border-b-4 border-solid border-[#d4af35]">
-              <Row>
-                <Column align="center">
-                    <Img
-                     src={logoUrl}
-                     alt={companyName}
-                     width={100}
-                     height={100}
-                     className="rounded-full"
-                    />
-                  <Heading className="text-white text-2xl font-bold tracking-tight m-0 uppercase">
-                    {companyName}
-                  </Heading>
-                  <Text className="text-[#d4af35] text-xs font-semibold tracking-widest uppercase m-0 mt-1">
-                    Premium Real Estate Solutions
-                  </Text>
-                </Column>
-              </Row>
-            </Section>
+        <Body className="bg-[#f4f5f3] font-sans my-0 mx-0 p-0 text-[#17212b]">
+          <div className="w-full bg-[#f4f5f3] py-[30px] px-0">
+            <table
+              role="presentation"
+              className="max-w-[680px] w-[680px] bg-white mx-auto my-0 p-0 border-collapse"
+              align="center"
+              cellPadding="0"
+              cellSpacing="0"
+            >
+              <tbody>
+                <tr>
+                  <td>
+                    {/* Hero Header */}
+                    <div className="bg-[#003f2d] pt-[34px] px-[35px] pb-[30px] text-center border-b-[5px] border-solid border-[#d6ad3d]">
+                      <div className="font-serif text-[62px] leading-none text-[#e0b53f]">
+                        W
+                      </div>
+                      <div className="font-serif text-[28px] tracking-[7px] text-white font-bold uppercase">
+                        {companyName}
+                      </div>
+                      <div className="text-[12px] tracking-[3px] text-[#e0b53f] mt-[10px] uppercase font-semibold">
+                        PREMIUM REAL ESTATE SOLUTIONS
+                      </div>
+                      <div className="font-serif text-[35px] leading-[1.15] text-white mt-[34px] mb-[4px]">
+                        Your Investor Consultation<br />
+                        <span className="text-[#e0b53f]">is Confirmed.</span>
+                      </div>
+                      <div className="text-[14px] text-[#e8eee9] tracking-[0.4px]">
+                        Strategic Guidance. Global Opportunities. Lasting Wealth.
+                      </div>
+                    </div>
 
-            {/* Confirmation Header Badge */}
-            <Section className="p-8 pb-4 text-center">
-              <div className="inline-block bg-emerald-50 text-emerald-700 px-4 py-1.5 rounded-full text-xs font-bold tracking-wide uppercase mb-3 border border-emerald-200">
-                ✓ Booking Confirmed
-              </div>
-              <Heading className="text-2xl font-extrabold text-slate-900 m-0 tracking-tight">
-                Appointment Confirmation
-              </Heading>
-              <Text className="text-slate-500 text-sm mt-2 mb-0">
-                Booking Reference:{' '}
-                <span className="font-mono font-bold text-slate-800">
-                  {bookingId}
-                </span>
-              </Text>
-            </Section>
+                    {/* Main Content */}
+                    <div className="p-[38px_42px]">
+                      <table role="presentation" className="w-full border-collapse">
+                        <tbody>
+                          <tr>
+                            <td className="w-[56%] align-top pr-[20px]">
+                              <p className="text-[22px] font-bold text-[#003f2d] my-0 mb-[18px]">
+                                Dear {customerName},
+                              </p>
+                              <p className="text-[15px] leading-[1.75] text-[#4b5660] my-0">
+                                Thank you for choosing {companyName} for your real estate investment journey.
+                                Your consultation has been successfully scheduled. We look forward to
+                                providing strategic insights and tailored opportunities aligned with
+                                your wealth objectives.
+                              </p>
+                              <div className="font-serif italic text-[25px] text-[#174c3c] mt-[20px]">
+                                The {companyName} Advisory Team
+                              </div>
+                              <div className="text-[11px] tracking-[2px] text-[#7b8388] mt-[5px] uppercase">
+                                EXCELLENCE &nbsp;•&nbsp; TRUST &nbsp;•&nbsp; RESULTS
+                              </div>
+                            </td>
+                            <td className="w-[44%] align-top">
+                              <div className="bg-[#fafaf8] border border-solid border-[#e4dcc7] rounded-[12px] p-[24px] text-center">
+                                <div className="text-[12px] tracking-[2px] text-[#b18420] font-bold uppercase">
+                                  BOOKING CONFIRMED
+                                </div>
+                                <div className="text-[11px] text-[#687179] mt-[15px]">
+                                  Booking Reference
+                                </div>
+                                <div className="text-[22px] font-bold tracking-[1px] text-[#17212b] mt-[10px]">
+                                  {bookingId}
+                                </div>
+                                <div className="text-[11px] text-[#687179] mt-[12px]">
+                                  Please retain this reference for your records.
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
 
-            {/* Personalized Greeting */}
-            <Section className="px-8 py-2">
-              <Text className="text-slate-700 text-base leading-relaxed m-0">
-                Hi <span className="font-semibold text-slate-900">{customerName}</span>,
-              </Text>
-              <Text className="text-slate-600 text-sm leading-relaxed mt-2">
-                Thank you for scheduling a consultation with {companyName}. Your session has been successfully booked. Below are the full details for your upcoming appointment:
-              </Text>
-            </Section>
+                      <div className="text-[16px] tracking-[1px] text-[#003f2d] font-bold border-b border-solid border-[#ded7c7] pb-[10px] mt-[35px] mb-[20px] uppercase">
+                        YOUR APPOINTMENT DETAILS
+                      </div>
 
-            {/* Booking Details Card */}
-            <Section className="px-8 py-4">
-              <div className="bg-[#f8f9fa] rounded-xl border border-solid border-slate-200 p-6">
-                <Text className="text-xs font-bold uppercase tracking-wider text-slate-400 m-0 mb-4">
-                  Reservation Details
-                </Text>
+                      <table role="presentation" className="w-full border-collapse">
+                        <tbody>
+                          <tr>
+                            <td className="w-1/4 align-top text-center p-[10px_12px] border-r border-solid border-[#e6dfd2]">
+                              <div className="w-[42px] h-[42px] border border-solid border-[#c9992f] rounded-full mx-auto mb-[10px] leading-[42px] text-[#b18420] text-[20px]">
+                                ▣
+                              </div>
+                              <div className="text-[10px] tracking-[1.5px] text-[#6c747a] font-bold uppercase">
+                                DATE &amp; TIME
+                              </div>
+                              <div className="text-[14px] leading-[1.45] text-[#17212b] font-bold mt-[7px]">
+                                {bookingDate}
+                              </div>
+                              <div className="text-[12px] leading-[1.45] text-[#667078] mt-[4px]">
+                                {bookingTime}
+                              </div>
+                            </td>
+                            <td className="w-1/4 align-top text-center p-[10px_12px] border-r border-solid border-[#e6dfd2]">
+                              <div className="w-[42px] h-[42px] border border-solid border-[#c9992f] rounded-full mx-auto mb-[10px] leading-[42px] text-[#b18420] text-[20px]">
+                                ◉
+                              </div>
+                              <div className="text-[10px] tracking-[1.5px] text-[#6c747a] font-bold uppercase">
+                                LOCATION
+                              </div>
+                              <div className="text-[14px] leading-[1.45] text-[#17212b] font-bold mt-[7px]">
+                                {meetingLocation}
+                              </div>
+                              <div className="text-[12px] leading-[1.45] text-[#667078] mt-[4px]">
+                                Google Meet
+                              </div>
+                              {meetingLink && (
+                                <div className="mt-[9px]">
+                                  <Link
+                                    href={meetingLink}
+                                    className="text-[#003f2d] text-[11px] font-bold no-underline"
+                                  >
+                                    Join Meeting →
+                                  </Link>
+                                </div>
+                              )}
+                            </td>
+                            <td className="w-1/4 align-top text-center p-[10px_12px] border-r border-solid border-[#e6dfd2]">
+                              <div className="w-[42px] h-[42px] border border-solid border-[#c9992f] rounded-full mx-auto mb-[10px] leading-[42px] text-[#b18420] text-[20px]">
+                                ●
+                              </div>
+                              <div className="text-[10px] tracking-[1.5px] text-[#6c747a] font-bold uppercase">
+                                ADVISOR
+                              </div>
+                              <div className="text-[14px] leading-[1.45] text-[#17212b] font-bold mt-[7px]">
+                                {consultantName}
+                              </div>
+                              {consultantRole && (
+                                <div className="text-[12px] leading-[1.45] text-[#667078] mt-[4px]">
+                                  {consultantRole}
+                                </div>
+                              )}
+                            </td>
+                            <td className="w-1/4 align-top text-center p-[10px_12px]">
+                              <div className="w-[42px] h-[42px] border border-solid border-[#c9992f] rounded-full mx-auto mb-[10px] leading-[42px] text-[#b18420] text-[20px]">
+                                □
+                              </div>
+                              <div className="text-[10px] tracking-[1.5px] text-[#6c747a] font-bold uppercase">
+                                SERVICE
+                              </div>
+                              <div className="text-[14px] leading-[1.45] text-[#17212b] font-bold mt-[7px]">
+                                {serviceName}
+                              </div>
+                              <div className="text-[12px] leading-[1.45] text-[#667078] mt-[4px]">
+                                One-on-One Consultation
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
 
-                {/* Service */}
-                <Row className="mb-3">
-                  <Column className="w-1/3">
-                    <Text className="text-xs font-semibold text-slate-500 m-0 uppercase">
-                      Service
-                    </Text>
-                  </Column>
-                  <Column className="w-2/3">
-                    <Text className="text-sm font-bold text-slate-900 m-0">
-                      {serviceName}
-                    </Text>
-                  </Column>
-                </Row>
+                      {/* Preparation / Notes Darkbox */}
+                      <div className="bg-[#003f2d] rounded-[12px] p-[22px_24px] text-white mt-[30px]">
+                        <table role="presentation" className="w-full border-collapse">
+                          <tbody>
+                            <tr>
+                              <td className="w-[48%] align-top pr-[20px]">
+                                <div className="text-[14px] tracking-[1px] text-[#e0b53f] font-bold uppercase">
+                                  BE PREPARED FOR A PRODUCTIVE SESSION
+                                </div>
+                                <div className="text-[13px] leading-[1.6] text-[#e8eee9] mt-[8px]">
+                                  To maximize the value of your consultation, please have the following ready for discussion.
+                                </div>
+                                {notes && (
+                                  <div className="text-[12px] italic text-[#e0b53f] mt-[12px]">
+                                    Note: {notes}
+                                  </div>
+                                )}
+                              </td>
+                              <td className="w-[52%] align-top">
+                                <div className="text-[13px] leading-[1.9] text-white">
+                                  <span className="text-[#e0b53f] font-bold mr-1">✓</span> Current investment portfolio, if available
+                                </div>
+                                <div className="text-[13px] leading-[1.9] text-white">
+                                  <span className="text-[#e0b53f] font-bold mr-1">✓</span> Target location preferences
+                                </div>
+                                <div className="text-[13px] leading-[1.9] text-white">
+                                  <span className="text-[#e0b53f] font-bold mr-1">✓</span> Investment goals and timeline
+                                </div>
+                                <div className="text-[13px] leading-[1.9] text-white">
+                                  <span className="text-[#e0b53f] font-bold mr-1">✓</span> Budget range, if you are comfortable sharing
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
 
-                {/* Date & Time */}
-                <Row className="mb-3">
-                  <Column className="w-1/3">
-                    <Text className="text-xs font-semibold text-slate-500 m-0 uppercase">
-                      Date & Time
-                    </Text>
-                  </Column>
-                  <Column className="w-2/3">
-                    <Text className="text-sm font-semibold text-slate-800 m-0">
-                      {bookingDate}
-                    </Text>
-                    <Text className="text-xs text-slate-600 font-medium m-0">
-                      {bookingTime}
-                    </Text>
-                  </Column>
-                </Row>
+                      {/* Important Reminders */}
+                      <div className="bg-[#fbf7e9] border-l-[5px] border-solid border-[#d6ad3d] p-[20px_22px] mt-[18px]">
+                        <div className="text-[13px] tracking-[1px] text-[#8c6418] font-bold uppercase">
+                          IMPORTANT REMINDERS
+                        </div>
+                        <div className="text-[13px] leading-[1.7] text-[#535b60] mt-[7px]">
+                          Please join the meeting 5 minutes before your scheduled time.<br />
+                          If you need to reschedule or cancel, please notify our team at least 24 hours in advance.
+                        </div>
+                        {meetingLink && (
+                          <div className="mt-[14px]">
+                            <Link
+                              href={meetingLink}
+                              className="bg-[#003f2d] text-white text-[12px] font-bold tracking-[0.7px] px-[24px] py-[13px] rounded-[5px] inline-block no-underline"
+                            >
+                              MANAGE APPOINTMENT
+                            </Link>
+                          </div>
+                        )}
+                      </div>
+                    </div>
 
-                {/* Location / Meeting */}
-                <Row className="mb-3">
-                  <Column className="w-1/3">
-                    <Text className="text-xs font-semibold text-slate-500 m-0 uppercase">
-                      Location
-                    </Text>
-                  </Column>
-                  <Column className="w-2/3">
-                    <Text className="text-sm font-medium text-slate-800 m-0">
-                      {meetingLocation}
-                    </Text>
-                  </Column>
-                </Row>
+                    {/* Trust Banner */}
+                    <table role="presentation" className="w-full bg-[#003f2d] text-white p-[24px_32px] border-collapse">
+                      <tbody>
+                        <tr>
+                          <td className="w-1/4 align-top px-[12px] py-0 border-r border-solid border-white/25">
+                            <div className="text-[11px] text-[#e0b53f] font-bold mb-[6px] uppercase">
+                              TRUSTED EXPERTISE
+                            </div>
+                            <div className="text-[10px] leading-[1.5] text-[#e8eee9]">
+                              Professional guidance across global real estate markets.
+                            </div>
+                          </td>
+                          <td className="w-1/4 align-top px-[12px] py-0 border-r border-solid border-white/25">
+                            <div className="text-[11px] text-[#e0b53f] font-bold mb-[6px] uppercase">
+                              GLOBAL ACCESS
+                            </div>
+                            <div className="text-[10px] leading-[1.5] text-[#e8eee9]">
+                              Access to opportunities across prime international markets.
+                            </div>
+                          </td>
+                          <td className="w-1/4 align-top px-[12px] py-0 border-r border-solid border-white/25">
+                            <div className="text-[11px] text-[#e0b53f] font-bold mb-[6px] uppercase">
+                              TAILORED GUIDANCE
+                            </div>
+                            <div className="text-[10px] leading-[1.5] text-[#e8eee9]">
+                              Investment strategies aligned with your objectives.
+                            </div>
+                          </td>
+                          <td className="w-1/4 align-top px-[12px] py-0">
+                            <div className="text-[11px] text-[#e0b53f] font-bold mb-[6px] uppercase">
+                              CONFIDENTIAL &amp; SECURE
+                            </div>
+                            <div className="text-[10px] leading-[1.5] text-[#e8eee9]">
+                              Your information is handled with discretion.
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
 
-                {/* Advisor / Host */}
-                {consultantName && (
-                  <Row className="mb-3">
-                    <Column className="w-1/3">
-                      <Text className="text-xs font-semibold text-slate-500 m-0 uppercase">
-                        Advisor
-                      </Text>
-                    </Column>
-                    <Column className="w-2/3">
-                      <Text className="text-sm font-semibold text-slate-800 m-0">
-                        {consultantName}
-                      </Text>
-                      {consultantRole && (
-                        <Text className="text-xs text-slate-500 m-0">
-                          {consultantRole}
-                        </Text>
-                      )}
-                    </Column>
-                  </Row>
-                )}
-
-                {/* Notes */}
-                {notes && (
-                  <Row className="pt-2 border-t border-solid border-slate-200 mt-3">
-                    <Column className="w-full">
-                      <Text className="text-xs font-semibold text-slate-500 m-0 uppercase mb-1">
-                        Additional Notes
-                      </Text>
-                      <Text className="text-xs text-slate-600 bg-white p-3 rounded-lg border border-slate-200 m-0 italic">
-                        "{notes}"
-                      </Text>
-                    </Column>
-                  </Row>
-                )}
-              </div>
-            </Section>
-
-            {/* Action CTA Button */}
-            {meetingLink && (
-              <Section className="px-8 py-4 text-center">
-                <Button
-                  className="bg-[#013220] hover:bg-[#012417] text-[#d4af35] font-bold text-sm px-6 py-3.5 rounded-lg text-center block w-full shadow-md"
-                  href={meetingLink}
-                >
-                  Join Meeting / View Appointment
-                </Button>
-              </Section>
-            )}
-
-            {/* Next Steps / Preparation Tips */}
-            <Section className="px-8 py-4">
-              <div className="border-l-4 border-solid border-[#d4af35] bg-amber-50/50 p-4 rounded-r-lg">
-                <Text className="text-xs font-bold text-amber-900 uppercase tracking-wide m-0 mb-1">
-                  Important Reminders
-                </Text>
-                <Text className="text-xs text-amber-800 m-0 leading-relaxed">
-                  • Please join or arrive 5 minutes prior to your scheduled time.<br />
-                  • If you need to reschedule or cancel, please notify us at least 24 hours in advance.
-                </Text>
-              </div>
-            </Section>
-
-            <Hr className="border-slate-200 my-6 mx-8" />
-
-            {/* Footer */}
-            <Section className="px-8 pb-8 text-center">
-              <Text className="text-xs text-slate-500 leading-relaxed m-0">
-                Have questions or need assistance with your booking?
-              </Text>
-              <Text className="text-xs text-slate-500 m-0 mt-1">
-                Contact our support team at{' '}
-                <Link
-                  href={`mailto:${supportEmail}`}
-                  className="text-[#013220] font-semibold underline"
-                >
-                  {supportEmail}
-                </Link>{' '}
-                or visit{' '}
-                <Link
-                  href={companyWebsite}
-                  className="text-[#013220] font-semibold underline"
-                >
-                  {companyWebsite.replace(/^https?:\/\//, '')}
-                </Link>
-              </Text>
-
-              <Text className="text-[11px] text-slate-400 mt-6 m-0">
-                © {new Date().getFullYear()} {companyName}. All rights reserved.<br />
-                This email was sent to {customerEmail} regarding your booking confirmation.
-              </Text>
-            </Section>
-          </Container>
+                    {/* Footer */}
+                    <div className="p-[28px_42px] text-center bg-white">
+                      <div className="font-serif tracking-[5px] font-bold text-[#003f2d] text-[19px] uppercase">
+                        {companyName}
+                      </div>
+                      <div className="text-[10px] tracking-[2px] text-[#9a7a32] mt-[6px] uppercase">
+                        PREMIUM REAL ESTATE SOLUTIONS
+                      </div>
+                      <div className="text-[11px] leading-[1.6] text-[#6c747a] mt-[14px]">
+                        Need assistance with your booking?<br />
+                        <Link
+                          href={`mailto:${supportEmail}`}
+                          className="text-[#003f2d] font-bold no-underline"
+                        >
+                          {supportEmail}
+                        </Link>
+                        &nbsp; | &nbsp;
+                        <Link
+                          href={companyWebsite}
+                          className="text-[#003f2d] font-bold no-underline"
+                        >
+                          {companyWebsite.replace(/^https?:\/\//, '')}
+                        </Link>
+                        <br /><br />
+                        © {currentYear} {companyName}. All rights reserved.
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </Body>
       </Tailwind>
     </Html>

@@ -1,15 +1,16 @@
 'use server';
 
 import { Resend } from 'resend';
-import { BookingConfirmationEmail, BookingConfirmationEmailProps } from '@/emails/BookingConfirmationEmail';
+import { BookingConfirmationEmailProps } from '@/emails/BookingConfirmationEmail';
 
 const resendApiKey = process.env.RESEND_API_KEY || process.env.RESEND_DEV_API_KEY;
+
 
 // Initialize Resend client
 const resend = new Resend(resendApiKey);
 
 // Default sender email (Use onboard@resend.dev during testing or custom domain when verified)
-const DEFAULT_FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'WEPHCO <onboarding@resend.dev>';
+const DEFAULT_FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'WEPHCO <support@wephco.com>';
 
 export interface SendBookingEmailParams {
   toEmail: string;
@@ -29,9 +30,7 @@ export interface SendEmailResult {
  */
 export async function sendBookingConfirmationEmail({
   toEmail,
-  props,
-  subject,
-  fromEmail,
+  props
 }: SendBookingEmailParams): Promise<SendEmailResult> {
   try {
     if (!resendApiKey) {
@@ -49,18 +48,31 @@ export async function sendBookingConfirmationEmail({
       };
     }
 
-    const emailSubject =
-      subject ||
-      `Booking Confirmation - ${props.bookingId || props.serviceName || 'WEPHCO Consultation'}`;
-
-    const sender = fromEmail || DEFAULT_FROM_EMAIL;
+    console.log('Sending Email...')
 
     const { data, error } = await resend.emails.send({
-      from: sender,
-      to: [toEmail],
-      subject: emailSubject,
-      react: BookingConfirmationEmail(props),
+      // from: sender,
+      to: toEmail,
+      // subject: emailSubject,
+      // react: BookingConfirmationEmail(props),
+      template: {
+        id: '997873ab-0faf-4d49-b2c2-a3532434a668',
+        variables: {
+          customerName: props.customerName as string,
+          bookingID: props.bookingId as string,
+          serviceName: props.serviceName as string,
+          appointmentDate: props.bookingDate as string,
+          appointmentTime: props.bookingTime as string,
+          meetingLocation: props.meetingLocation as string,
+          meetingLink: props.meetingLink as string,
+          advisorName: props.consultantName as string,
+          advisorRole: props.consultantRole as string,
+          year: '2026',
+        },
+      },
     });
+
+    console.log('Email sent:', data);
 
     if (error) {
       console.error('Error sending booking confirmation email via Resend:', error);
