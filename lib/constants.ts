@@ -21,6 +21,14 @@ export const navbarMenu = [
         label: 'Sell',
         path: '/sell'
     },
+    // {
+    //     label: 'Property Management',
+    //     path: '/property-management'
+    // },
+    {
+        label: 'Services',
+        path: '/services'
+    },
     {
         label: 'Affiliates',
         path: '/affiliates'
@@ -28,10 +36,6 @@ export const navbarMenu = [
     {
         label: 'About Us',
         path: '/about'
-    },
-    {
-        label: 'Services',
-        path: '/services'
     },
     {
         label: 'Events',
