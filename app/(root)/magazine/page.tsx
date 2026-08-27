@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { User, Mail, MapPin, BookOpen, ArrowRight, IdCard } from 'lucide-react';
+import { User, Mail, MapPin, BookOpen, ArrowRight, IdCard, Globe } from 'lucide-react';
 import { Loader } from '@/components/Loader';
 import { toast } from 'react-toastify';
 import { createMagazineSubscription } from '@/actions/magazine';
@@ -12,6 +12,7 @@ const PHYSICAL_PAYMENT_LINK = 'https://sandbox.flutterwave.com/pay/yvxd7gzfe3bu'
 export default function MagazineSubscriptionPage() {
   const [loading, setLoading] = useState(false);
   const [subType, setSubType] = useState<'Physical' | 'Online'>('Online');
+  const [language, setLanguage] = useState<'English' | 'French'>('English');
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -46,9 +47,10 @@ export default function MagazineSubscriptionPage() {
         email: formData.email,
         deliveryAddress: subType === 'Physical' ? formData.deliveryAddress : '',
         fee,
+        language,
       });
 
-      toast.success('Subscription registered successfully! Redirecting to payment...');
+      toast.success(`Subscription (${language} Edition) registered successfully! Redirecting to payment...`);
 
       const paymentLink = subType === 'Physical' ? PHYSICAL_PAYMENT_LINK : ONLINE_PAYMENT_LINK;
       
@@ -68,13 +70,13 @@ export default function MagazineSubscriptionPage() {
       {/* Hero Header */}
       <section className="relative">
         <div
-          className="w-full h-90 md:h-112.5 bg-cover bg-center flex items-center justify-center p-6 text-center"
+          className="w-full h-[360px] md:h-[450px] bg-cover bg-center flex items-center justify-center p-6 text-center"
           style={{
             backgroundImage: `linear-gradient(rgba(32, 29, 18, 0.4), rgba(32, 29, 18, 0.8)), url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80')`,
           }}>
           <div className="max-w-3xl">
             <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-6">
-              Wephco Luxe Magazine
+              Wephco Wimoa Magazine
             </h1>
             <p className="text-slate-300 text-sm md:text-lg max-w-2xl mx-auto leading-relaxed">
               Subscribe to the premier publication covering global luxury real estate, design masterpieces, and wealth preservation.
@@ -89,57 +91,105 @@ export default function MagazineSubscriptionPage() {
           <div className="flex flex-col md:flex-row gap-8">
             
             {/* Left: Option Selection */}
-            <div className="flex-1 flex flex-col gap-6">
-              <h3 className="text-xl font-bold text-primary flex items-center gap-2">
-                <BookOpen className="size-5 text-primary" /> Choose Subscription Type
-              </h3>
-              
-              <div className="grid grid-cols-1 gap-4">
-                {/* Online Subscription Option */}
-                <div
-                  onClick={() => setSubType('Online')}
-                  className={`cursor-pointer border rounded-xl p-5 flex flex-col justify-between transition-all hover:scale-[1.01] ${
-                    subType === 'Online'
-                      ? 'bg-primary text-background-dark border-primary shadow-lg shadow-primary/10'
-                      : 'border-primary/20 bg-slate-800/40 text-slate-300 hover:border-primary/50'
-                  }`}
-                >
-                  <div className="flex justify-between items-start mb-2">
-                    <span className="font-bold text-lg">Digital Edition</span>
-                    <span className={`text-xs px-2 py-1 rounded font-bold uppercase ${
-                      subType === 'Online' ? 'bg-background-dark/20 text-background-dark' : 'bg-primary/20 text-primary'
-                    }`}>Online</span>
+            <div className="flex-1 flex flex-col gap-8">
+              {/* Choose Subscription Type */}
+              <div className="space-y-4">
+                <h3 className="text-xl font-bold text-primary flex items-center gap-2">
+                  <BookOpen className="size-5 text-primary" /> Choose Subscription Type
+                </h3>
+                
+                <div className="grid grid-cols-1 gap-4">
+                  {/* Online Subscription Option */}
+                  <div
+                    onClick={() => setSubType('Online')}
+                    className={`cursor-pointer border rounded-xl p-5 flex flex-col justify-between transition-all hover:scale-[1.01] ${
+                      subType === 'Online'
+                        ? 'bg-primary text-background-dark border-primary shadow-lg shadow-primary/10'
+                        : 'border-primary/20 bg-slate-800/40 text-slate-300 hover:border-primary/50'
+                    }`}
+                  >
+                    <div className="flex justify-between items-start mb-2">
+                      <span className="font-bold text-lg">Digital Edition</span>
+                      <span className={`text-xs px-2 py-1 rounded font-bold uppercase ${
+                        subType === 'Online' ? 'bg-background-dark/20 text-background-dark' : 'bg-primary/20 text-primary'
+                      }`}>Online</span>
+                    </div>
+                    <p className="text-xs mb-4 opacity-85 leading-relaxed">
+                      Instant access to digital issues, premium interactive reports, and early investor circle releases.
+                    </p>
+                    <p className="font-extrabold text-xl">₦1,000</p>
                   </div>
-                  <p className="text-xs mb-4 opacity-85 leading-relaxed">
-                    Instant access to digital issues, premium interactive reports, and early investor circle releases.
-                  </p>
-                  <p className="font-extrabold text-xl">₦1,000</p>
+
+                  {/* Physical Subscription Option */}
+                  <div
+                    onClick={() => setSubType('Physical')}
+                    className={`cursor-pointer border rounded-xl p-5 flex flex-col justify-between transition-all hover:scale-[1.01] ${
+                      subType === 'Physical'
+                        ? 'bg-primary text-background-dark border-primary shadow-lg shadow-primary/10'
+                        : 'border-primary/20 bg-slate-800/40 text-slate-300 hover:border-primary/50'
+                    }`}
+                  >
+                    <div className="flex justify-between items-start mb-2">
+                      <span className="font-bold text-lg">Premium Print Edition</span>
+                      <span className={`text-xs px-2 py-1 rounded font-bold uppercase ${
+                        subType === 'Physical' ? 'bg-background-dark/20 text-background-dark' : 'bg-primary/20 text-primary'
+                      }`}>Physical</span>
+                    </div>
+                    <p className="text-xs mb-4 opacity-85 leading-relaxed">
+                      Luxe high-grammage physical copies delivered to your address, plus complete digital edition access.
+                    </p>
+                    <p className="font-extrabold text-xl">₦5,000</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Choose Language Toggle Switch */}
+              <div className="space-y-4 pt-2 border-t border-primary/10">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-xl font-bold text-primary flex items-center gap-2">
+                    <Globe className="size-5 text-primary" /> Edition Language
+                  </h3>
+                  <span className="text-xs font-bold text-primary uppercase tracking-wider bg-primary/10 border border-primary/20 px-2.5 py-1 rounded-full">
+                    {language}
+                  </span>
                 </div>
 
-                {/* Physical Subscription Option */}
-                <div
-                  onClick={() => setSubType('Physical')}
-                  className={`cursor-pointer border rounded-xl p-5 flex flex-col justify-between transition-all hover:scale-[1.01] ${
-                    subType === 'Physical'
-                      ? 'bg-primary text-background-dark border-primary shadow-lg shadow-primary/10'
-                      : 'border-primary/20 bg-slate-800/40 text-slate-300 hover:border-primary/50'
-                  }`}
-                >
-                  <div className="flex justify-between items-start mb-2">
-                    <span className="font-bold text-lg">Premium Print Edition</span>
-                    <span className={`text-xs px-2 py-1 rounded font-bold uppercase ${
-                      subType === 'Physical' ? 'bg-background-dark/20 text-background-dark' : 'bg-primary/20 text-primary'
-                    }`}>Physical</span>
-                  </div>
-                  <p className="text-xs mb-4 opacity-85 leading-relaxed">
-                    Luxe high-grammage physical copies delivered to your address, plus complete digital edition access.
-                  </p>
-                  <p className="font-extrabold text-xl">₦5,000</p>
+                <p className="text-xs text-slate-400">
+                  Select your preferred reading language edition for Wephco Luxe Magazine.
+                </p>
+
+                {/* Interactive Segmented Switch Control */}
+                <div className="relative p-1.5 bg-slate-800/80 border border-primary/20 rounded-xl flex items-center">
+                  <button
+                    type="button"
+                    onClick={() => setLanguage('English')}
+                    className={`flex-1 py-3 px-4 rounded-lg font-extrabold text-xs md:text-sm transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer ${
+                      language === 'English'
+                        ? 'bg-primary text-background-dark shadow-lg shadow-primary/20 scale-[1.02]'
+                        : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    <span className="text-base">🇬🇧</span>
+                    <span>English</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setLanguage('French')}
+                    className={`flex-1 py-3 px-4 rounded-lg font-extrabold text-xs md:text-sm transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer ${
+                      language === 'French'
+                        ? 'bg-primary text-background-dark shadow-lg shadow-primary/20 scale-[1.02]'
+                        : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    <span className="text-base">🇫🇷</span>
+                    <span>French</span>
+                  </button>
                 </div>
               </div>
             </div>
 
-            {/* Right: Subscription Form */}
+            {/* Right: Subscriber Form */}
             <div className="flex-1 flex flex-col gap-6 border-t md:border-t-0 md:border-l border-primary/15 pt-8 md:pt-0 md:pl-8">
               <h3 className="text-xl font-bold text-primary flex items-center gap-2">
                 <IdCard className="size-5 text-primary" /> Subscriber Information
@@ -203,7 +253,7 @@ export default function MagazineSubscriptionPage() {
                       <Loader />
                     ) : (
                       <>
-                        <span>Subscribe</span>
+                        <span>Subscribe ({language})</span>
                         <ArrowRight className="size-4" />
                       </>
                     )}

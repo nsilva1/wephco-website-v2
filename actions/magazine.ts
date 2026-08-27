@@ -13,6 +13,7 @@ export interface IMagazineSubscription {
   email: string;
   deliveryAddress?: string;
   fee: number;
+  language?: 'English' | 'French';
   status: 'pending' | 'paid' | 'cancelled';
   createdAt?: Date | string;
 }
@@ -25,6 +26,7 @@ export const createMagazineSubscription = async (data: Omit<IMagazineSubscriptio
       email: data.email,
       deliveryAddress: data.deliveryAddress || "",
       fee: data.fee,
+      language: data.language || 'English',
       status: 'pending' as const,
       createdAt: new Date(),
     };

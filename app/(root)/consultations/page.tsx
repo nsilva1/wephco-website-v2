@@ -208,27 +208,24 @@ const ConsultationsPage = () => {
                 <button
                   key={step}
                   onClick={() => step < activeStep && setActiveStep(step)}
-                  className={`flex items-center gap-3 transition-all cursor-pointer ${
-                    step >= activeStep ? 'cursor-default' : ''
-                  }`}
+                  className={`flex items-center gap-3 transition-all cursor-pointer ${step >= activeStep ? 'cursor-default' : ''
+                    }`}
                   disabled={step >= activeStep}
                 >
                   <span
-                    className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-extrabold border transition-all ${
-                      activeStep === step
+                    className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-extrabold border transition-all ${activeStep === step
                         ? 'bg-primary text-background-dark border-primary shadow-lg shadow-primary/30 scale-105'
                         : activeStep > step
-                        ? 'bg-primary/20 text-primary border-primary/40'
-                        : 'bg-slate-800 text-slate-500 border-slate-700'
-                    }`}
+                          ? 'bg-primary/20 text-primary border-primary/40'
+                          : 'bg-slate-800 text-slate-500 border-slate-700'
+                      }`}
                   >
                     {activeStep > step ? '✓' : step}
                   </span>
                   <div className="text-left hidden sm:block">
                     <p
-                      className={`text-xs uppercase font-extrabold tracking-wider ${
-                        activeStep === step ? 'text-primary' : 'text-slate-400'
-                      }`}
+                      className={`text-xs uppercase font-extrabold tracking-wider ${activeStep === step ? 'text-primary' : 'text-slate-400'
+                        }`}
                     >
                       Step {step}
                     </p>
@@ -270,11 +267,10 @@ const ConsultationsPage = () => {
                         <div
                           key={service.label}
                           onClick={() => handleServiceSelect(service.label)}
-                          className={`cursor-pointer rounded-2xl p-6 border transition-all duration-200 flex flex-col justify-between items-start gap-4 ${
-                            isSelected
+                          className={`cursor-pointer rounded-2xl p-6 border transition-all duration-200 flex flex-col justify-between items-start gap-4 ${isSelected
                               ? 'bg-primary/15 border-2 border-primary shadow-xl shadow-primary/20 text-white scale-[1.02]'
                               : 'border-primary/20 bg-slate-900/60 text-slate-300 hover:border-primary/50 hover:bg-slate-900/90'
-                          }`}
+                            }`}
                         >
                           <div className="w-full flex justify-between items-center">
                             <div className={`p-3 rounded-xl ${isSelected ? 'bg-primary text-background-dark' : 'bg-primary/15 text-primary'}`}>
@@ -353,11 +349,10 @@ const ConsultationsPage = () => {
                       type="button"
                       onClick={() => setActiveStep(2)}
                       disabled={!formData.service}
-                      className={`px-8 py-3.5 font-extrabold rounded-xl transition-all flex items-center gap-2 text-xs uppercase tracking-wider ${
-                        !formData.service
+                      className={`px-8 py-3.5 font-extrabold rounded-xl transition-all flex items-center gap-2 text-xs uppercase tracking-wider ${!formData.service
                           ? 'bg-slate-800 text-slate-500 border border-slate-700 cursor-not-allowed opacity-50'
                           : 'bg-primary text-background-dark hover:bg-primary/95 shadow-lg shadow-primary/20 cursor-pointer'
-                      }`}
+                        }`}
                     >
                       <span>Continue to Schedule</span>
                       <ArrowRight className="w-4 h-4" />

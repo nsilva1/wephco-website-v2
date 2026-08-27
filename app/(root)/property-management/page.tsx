@@ -158,33 +158,30 @@ export default function PropertyManagementPage() {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => setActiveDashboardTab('overview')}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
-                      activeDashboardTab === 'overview'
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${activeDashboardTab === 'overview'
                         ? 'bg-primary text-background-dark shadow'
                         : 'text-slate-400 hover:text-white'
-                    }`}
+                      }`}
                   >
                     <LayoutDashboard className="w-3.5 h-3.5" />
                     <span>Real-Time Dashboard</span>
                   </button>
                   <button
                     onClick={() => setActiveDashboardTab('maintenance')}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
-                      activeDashboardTab === 'maintenance'
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${activeDashboardTab === 'maintenance'
                         ? 'bg-primary text-background-dark shadow'
                         : 'text-slate-400 hover:text-white'
-                    }`}
+                      }`}
                   >
                     <Wrench className="w-3.5 h-3.5" />
                     <span>Maintenance Center</span>
                   </button>
                   <button
                     onClick={() => setActiveDashboardTab('yield')}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
-                      activeDashboardTab === 'yield'
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${activeDashboardTab === 'yield'
                         ? 'bg-primary text-background-dark shadow'
                         : 'text-slate-400 hover:text-white'
-                    }`}
+                      }`}
                   >
                     <TrendingUp className="w-3.5 h-3.5" />
                     <span>Yield &amp; Valuation</span>
@@ -417,11 +414,10 @@ export default function PropertyManagementPage() {
             <div className="bg-slate-900/90 p-1.5 rounded-2xl border border-primary/20 inline-flex flex-col sm:flex-row gap-2 max-w-full">
               <button
                 onClick={() => setActiveTab('owners')}
-                className={`px-6 py-3.5 rounded-xl text-xs md:text-sm font-extrabold transition-all flex items-center justify-center gap-2.5 cursor-pointer ${
-                  activeTab === 'owners'
+                className={`px-6 py-3.5 rounded-xl text-xs md:text-sm font-extrabold transition-all flex items-center justify-center gap-2.5 cursor-pointer ${activeTab === 'owners'
                     ? 'bg-primary text-background-dark shadow-xl shadow-primary/20 scale-102'
                     : 'text-slate-400 hover:text-white'
-                }`}
+                  }`}
               >
                 <Building2 className="w-4 h-4" />
                 <span>For Property Owners (16 Features)</span>
@@ -429,11 +425,10 @@ export default function PropertyManagementPage() {
 
               <button
                 onClick={() => setActiveTab('tenants')}
-                className={`px-6 py-3.5 rounded-xl text-xs md:text-sm font-extrabold transition-all flex items-center justify-center gap-2.5 cursor-pointer ${
-                  activeTab === 'tenants'
+                className={`px-6 py-3.5 rounded-xl text-xs md:text-sm font-extrabold transition-all flex items-center justify-center gap-2.5 cursor-pointer ${activeTab === 'tenants'
                     ? 'bg-primary text-background-dark shadow-xl shadow-primary/20 scale-102'
                     : 'text-slate-400 hover:text-white'
-                }`}
+                  }`}
               >
                 <Smartphone className="w-4 h-4" />
                 <span>For Tenants (6 Features)</span>
@@ -441,11 +436,10 @@ export default function PropertyManagementPage() {
 
               <button
                 onClick={() => setActiveTab('security')}
-                className={`px-6 py-3.5 rounded-xl text-xs md:text-sm font-extrabold transition-all flex items-center justify-center gap-2.5 cursor-pointer ${
-                  activeTab === 'security'
+                className={`px-6 py-3.5 rounded-xl text-xs md:text-sm font-extrabold transition-all flex items-center justify-center gap-2.5 cursor-pointer ${activeTab === 'security'
                     ? 'bg-primary text-background-dark shadow-xl shadow-primary/20 scale-102'
                     : 'text-slate-400 hover:text-white'
-                }`}
+                  }`}
               >
                 <ShieldCheck className="w-4 h-4" />
                 <span>Security &amp; Infrastructure</span>

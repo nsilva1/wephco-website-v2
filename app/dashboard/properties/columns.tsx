@@ -134,7 +134,7 @@ export const columns: ColumnDef<IProperty>[] = [
       </Button>
     ),
     cell: ({ row }) => (
-      <div className="font-semibold max-w-[200px] truncate">
+      <div className="font-semibold max-w-50 truncate">
         {row.getValue('title')}
       </div>
     ),

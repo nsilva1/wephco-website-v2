@@ -78,9 +78,8 @@ export const ChatWidget = ({
         >
           {/* Label Tooltip */}
           <span
-            className={`bg-background-dark/95 text-white border border-wephco/40 text-xs font-semibold px-3 py-1.5 rounded-full shadow-lg whitespace-nowrap backdrop-blur-md transition-all duration-200 ${
-              isOpen ? 'opacity-90 group-hover:opacity-100 group-hover:scale-105' : 'opacity-0'
-            }`}
+            className={`bg-background-dark/95 text-white border border-wephco/40 text-xs font-semibold px-3 py-1.5 rounded-full shadow-lg whitespace-nowrap backdrop-blur-md transition-all duration-200 ${isOpen ? 'opacity-90 group-hover:opacity-100 group-hover:scale-105' : 'opacity-0'
+              }`}
           >
             Email
           </span>
@@ -108,9 +107,8 @@ export const ChatWidget = ({
         >
           {/* Label Tooltip */}
           <span
-            className={`bg-background-dark/95 text-white border border-[#25D366]/40 text-xs font-semibold px-3 py-1.5 rounded-full shadow-lg whitespace-nowrap backdrop-blur-md transition-all duration-200 ${
-              isOpen ? 'opacity-90 group-hover:opacity-100 group-hover:scale-105' : 'opacity-0'
-            }`}
+            className={`bg-background-dark/95 text-white border border-[#25D366]/40 text-xs font-semibold px-3 py-1.5 rounded-full shadow-lg whitespace-nowrap backdrop-blur-md transition-all duration-200 ${isOpen ? 'opacity-90 group-hover:opacity-100 group-hover:scale-105' : 'opacity-0'
+              }`}
           >
             WhatsApp
           </span>
@@ -130,11 +128,10 @@ export const ChatWidget = ({
         {/* Main Trigger Button with Chat Icon */}
         <button
           onClick={toggleMenu}
-          className={`relative w-15 h-15 rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 z-50 cursor-pointer ${
-            isOpen
+          className={`relative w-15 h-15 rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 z-50 cursor-pointer ${isOpen
               ? 'bg-[#012417] text-wephco border-2 border-wephco rotate-90 scale-105 shadow-wephco/20'
               : 'bg-linear-to-r from-wephco via-[#e5c158] to-[#b38f28] text-background-dark hover:scale-110 hover:shadow-wephco/40 border-2 border-white/30'
-          }`}
+            }`}
           aria-label={isOpen ? 'Close chat menu' : 'Open contact options'}
           aria-expanded={isOpen}
         >

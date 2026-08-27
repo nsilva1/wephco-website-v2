@@ -59,29 +59,26 @@ export default function EventsClient({ events }: EventsClientProps) {
           <div className="inline-flex p-1 bg-slate-900/80 border border-primary/15 rounded-xl backdrop-blur-md">
             <button
               onClick={() => setActiveTab('upcoming')}
-              className={`px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-300 ${
-                activeTab === 'upcoming'
+              className={`px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-300 ${activeTab === 'upcoming'
                   ? 'bg-primary text-background-dark shadow-md'
                   : 'text-slate-400 hover:text-slate-200'
-              }`}>
+                }`}>
               Upcoming Shows
             </button>
             <button
               onClick={() => setActiveTab('virtual')}
-              className={`px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-300 ${
-                activeTab === 'virtual'
+              className={`px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-300 ${activeTab === 'virtual'
                   ? 'bg-primary text-background-dark shadow-md'
                   : 'text-slate-400 hover:text-slate-200'
-              }`}>
+                }`}>
               Virtual Roadshows
             </button>
             <button
               onClick={() => setActiveTab('past')}
-              className={`px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-300 ${
-                activeTab === 'past'
+              className={`px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-300 ${activeTab === 'past'
                   ? 'bg-primary text-background-dark shadow-md'
                   : 'text-slate-400 hover:text-slate-200'
-              }`}>
+                }`}>
               Past Exhibitions
             </button>
           </div>

@@ -212,7 +212,7 @@ export default function AboutPage() {
                 <span className="font-black text-primary">Creating Lasting Value</span>
               </h2>
             </div>
-            
+
             <div className="space-y-4 text-slate-300 font-light text-base leading-relaxed">
               <p>
                 WEPHCO is a brokerage and investment advisory firm committed to helping individuals, businesses, and institutional investors build sustainable wealth through carefully selected local and international real estate opportunities.
@@ -253,8 +253,8 @@ export default function AboutPage() {
                 src="/images/pdf-about/ceo_harvey_nwachukwu.png"
                 alt="Harvey Nwachukwu - CEO and Group Chairman"
                 fill
-                // objectFit='cover'
-                // className='scale-x-110'
+              // objectFit='cover'
+              // className='scale-x-110'
               />
             </div>
 
@@ -561,7 +561,7 @@ export default function AboutPage() {
               <p className="text-slate-300 text-sm md:text-base font-light leading-relaxed">
                 For decades, global investors have looked to mature markets for stability. Today, the world&apos;s attention is shifting toward Africa, a continent experiencing rapid urban expansion, youthful demographics, and unprecedented economic transformation.
               </p>
-              
+
               <div className="space-y-4 pt-2">
                 {[
                   { title: 'Rapid Urbanization', desc: 'Millions moving into cities every year, fueling housing & commercial demand.' },
@@ -880,7 +880,7 @@ export default function AboutPage() {
               <p className="text-slate-300 text-sm leading-relaxed font-light">
                 At WEPHCO, we are building a connected investment ecosystem that brings together investors, real estate developers, Realtors, affiliate marketers, banks, law firms, and PropTech innovators.
               </p>
-              
+
               <div className="relative w-full aspect-video rounded-2xl overflow-hidden border border-primary/30 shadow-xl my-4">
                 <Image
                   src="/images/pdf-about/call_for_partners_handshake.png"
@@ -911,7 +911,7 @@ export default function AboutPage() {
                   <CheckCircle2 className="w-3.5 h-3.5 text-primary shrink-0" /> PropTech Companies
                 </span>
               </div>
-              
+
               <div className="pt-4">
                 <Link
                   href="/affiliates"

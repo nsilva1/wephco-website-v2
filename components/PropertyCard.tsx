@@ -47,7 +47,7 @@ const PropertyCard = ({ showModal, openModal, ...props }: PropertyCardProps) => 
           </div>
           <div className='p-6 flex flex-col gap-4 flex-1 justify-between'>
             <p className='text-slate-300 text-sm font-light line-clamp-2 leading-relaxed'>{props.description}</p>
-            
+
             <div className="flex justify-between items-center text-slate-400 text-xs font-semibold">
               <span className='flex items-center gap-1.5 font-mono uppercase tracking-wider text-[10px]'>
                 <span className="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>

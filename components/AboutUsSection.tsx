@@ -6,7 +6,7 @@ const AboutUsSection = () => {
   return (
     <section className="py-24 px-6 bg-background-dark font-display z-10 border-t border-primary/5">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-        
+
         {/* Column 1: Content - 7 cols on large screens */}
         <div className="lg:col-span-7 flex flex-col gap-6">
           <div>
@@ -18,7 +18,7 @@ const AboutUsSection = () => {
             </h2>
             <div className="h-1 w-20 bg-primary mt-6"></div>
           </div>
-          
+
           <div className="space-y-6 text-slate-300 font-light leading-relaxed text-sm md:text-base">
             <p>
               Founded with a clear vision to connect discerning clients with the world's most prestigious property markets, Wephco has grown to become a trusted global authority in luxury real estate. Headquartered in Nigeria, we provide tailored, exclusive access to rare assets across the UAE, UK, Monaco, USA, Turkey, and Australia.
@@ -29,7 +29,7 @@ const AboutUsSection = () => {
           </div>
 
           <div className="mt-4">
-            <Link 
+            <Link
               href="/about"
               className="inline-flex items-center justify-center bg-primary hover:bg-primary/95 text-background-dark font-medium px-8 py-4 rounded-lg transition-all duration-300 transform hover:-translate-y-0.5 hover:shadow-lg cursor-pointer text-sm tracking-wider uppercase"
             >

@@ -234,9 +234,8 @@ export default function PropertyDetailsPage() {
               <div
                 key={idx}
                 onClick={() => setActiveImage(img)}
-                className={`rounded-lg overflow-hidden relative group cursor-pointer border ${
-                  activeImage === img ? 'border-primary' : 'border-primary/10'
-                }`}>
+                className={`rounded-lg overflow-hidden relative group cursor-pointer border ${activeImage === img ? 'border-primary' : 'border-primary/10'
+                  }`}>
                 <Image
                   src={img}
                   alt={`${property.title} gallery ${idx + 1}`}

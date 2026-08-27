@@ -376,8 +376,8 @@ export default function EventDetailPage() {
                   {event.isPast
                     ? 'This showcase has ended. Apply below to request notifications for upcoming shows.'
                     : isSoldOut
-                    ? 'All VIP seats for this event are currently reserved.'
-                    : 'Select your seat quantity and submit your details to reserve your spot.'}
+                      ? 'All VIP seats for this event are currently reserved.'
+                      : 'Select your seat quantity and submit your details to reserve your spot.'}
                 </p>
               </div>
 
@@ -483,10 +483,10 @@ export default function EventDetailPage() {
                     {submitting
                       ? 'Reserving Seat...'
                       : isSoldOut
-                      ? 'Fully Reserved'
-                      : event.isPast
-                      ? 'Event Concluded'
-                      : `Reserve ${seatsToReserve} Seat(s)`}
+                        ? 'Fully Reserved'
+                        : event.isPast
+                          ? 'Event Concluded'
+                          : `Reserve ${seatsToReserve} Seat(s)`}
                   </span>
                 </button>
               </form>

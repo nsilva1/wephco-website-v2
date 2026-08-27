@@ -303,9 +303,9 @@ export default function SellPage() {
   );
   const cityOptions = selectedCountryData
     ? selectedCountryData.cities.map((city: string) => ({
-        label: city,
-        value: city,
-      }))
+      label: city,
+      value: city,
+    }))
     : [];
 
   return (
