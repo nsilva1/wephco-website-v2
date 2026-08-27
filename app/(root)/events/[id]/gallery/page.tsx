@@ -11,13 +11,48 @@ import {
   Image as ImageIcon,
 } from 'lucide-react';
 import { MOCK_EVENTS } from '../../data';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '@/firebase/firebaseClient';
 
 export default function EventGalleryPage() {
   const params = useParams();
   const id = params.id as string;
-  const event = MOCK_EVENTS.find((e) => e.id === id);
 
+  const [event, setEvent] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
   const [activePhotoIndex, setActivePhotoIndex] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (!id) return;
+    const fetchEvent = async () => {
+      try {
+        setLoading(true);
+        const docRef = doc(db, 'events', id);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setEvent({
+            id: docSnap.id,
+            title: data.title || '',
+            hasGallery: data.hasGallery || false,
+            galleryImages: data.galleryImages || [],
+          });
+        } else {
+          const mock = MOCK_EVENTS.find((e) => e.id === id);
+          setEvent(mock || null);
+        }
+      } catch (err) {
+        console.error('Error fetching event gallery from Firestore:', err);
+        const mock = MOCK_EVENTS.find((e) => e.id === id);
+        setEvent(mock || null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEvent();
+  }, [id]);
 
   // Keyboard navigation for Lightbox
   useEffect(() => {
@@ -34,6 +69,14 @@ export default function EventGalleryPage() {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [activePhotoIndex, event]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background-dark text-slate-100 flex items-center justify-center pt-24">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-primary"></div>
+      </div>
+    );
+  }
 
   if (!event) {
     return (
@@ -115,7 +158,7 @@ export default function EventGalleryPage() {
 
         {/* Masonry Layout Grid */}
         <div className="columns-1 sm:columns-2 md:columns-3 gap-4 space-y-4">
-          {images.map((src, index) => (
+          {images.map((src: string, index: number) => (
             <div
               key={index}
               onClick={() => setActivePhotoIndex(index)}

@@ -13,28 +13,87 @@ import {
   Shield,
   CheckCircle2,
   Clock,
+  Ticket,
 } from 'lucide-react';
 import { MOCK_EVENTS } from '../data';
-import { collection, addDoc } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/firebase/firebaseClient';
+import { reserveEventSeat } from '@/actions/events';
 import { toast } from 'react-toastify';
 
 export default function EventDetailPage() {
   const params = useParams();
   const id = params.id as string;
-  const event = MOCK_EVENTS.find((e) => e.id === id);
+
+  const [event, setEvent] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
+  const [seatsToReserve, setSeatsToReserve] = useState('1');
   const [investmentTier, setInvestmentTier] = useState('$200k - $1M');
   const [preferences, setPreferences] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
-  // Scroll to top on load
+  // Fetch Event from Firestore (or fallback to MOCK_EVENTS)
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+
+    if (!id) return;
+
+    const fetchEvent = async () => {
+      try {
+        setLoading(true);
+        // Try fetching from Firestore 'events' collection
+        const docRef = doc(db, 'events', id);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setEvent({
+            id: docSnap.id,
+            title: data.title || '',
+            description: data.description || '',
+            longDescription: data.longDescription || data.description || '',
+            date: data.date || '',
+            time: data.time || '',
+            location: data.location || '',
+            image: data.image || '',
+            scope: data.scope || 'Local',
+            format: data.format || 'Physical',
+            seatsRemaining: data.seatsRemaining !== undefined && data.seatsRemaining !== null ? Number(data.seatsRemaining) : null,
+            isPast: data.isPast || false,
+            highlights: data.highlights || [],
+            agenda: data.agenda || [],
+            hosts: data.hosts || [],
+            hasGallery: data.hasGallery || false,
+            galleryImages: data.galleryImages || [],
+          });
+        } else {
+          // Fallback to MOCK_EVENTS if not in Firestore
+          const mock = MOCK_EVENTS.find((e) => e.id === id);
+          setEvent(mock || null);
+        }
+      } catch (err) {
+        console.error('Error fetching event details from Firestore:', err);
+        const mock = MOCK_EVENTS.find((e) => e.id === id);
+        setEvent(mock || null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEvent();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background-dark text-slate-100 flex items-center justify-center pt-24">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-primary"></div>
+      </div>
+    );
+  }
 
   if (!event) {
     return (
@@ -49,6 +108,8 @@ export default function EventDetailPage() {
     );
   }
 
+  const isSoldOut = event.seatsRemaining !== null && event.seatsRemaining !== undefined && event.seatsRemaining <= 0;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !email || !phone) {
@@ -56,34 +117,52 @@ export default function EventDetailPage() {
       return;
     }
 
+    if (isSoldOut) {
+      toast.warning('Sorry, this event is fully reserved.');
+      return;
+    }
+
     try {
       setSubmitting(true);
 
-      // Save RSVP to Firestore 'eventRSVPs' collection
-      await addDoc(collection(db, 'eventRSVPs'), {
+      const count = Number(seatsToReserve) || 1;
+
+      // Reserve seat via server action which updates Firestore seatsRemaining and adds RSVP record
+      const res = await reserveEventSeat({
         eventId: event.id,
-        eventTitle: event.title,
+        seatsCount: count,
         attendeeName: name,
         email: email,
         phone: phone,
         investmentTier: investmentTier,
-        preferences: preferences || 'No special preferences requested.',
-        verified: false,
-        createdAt: new Date(),
+        preferences: preferences,
       });
 
-      toast.success(
-        'Your VIP invitation request has been submitted successfully! Our concierge team will contact you shortly.'
-      );
+      if (res.success) {
+        // Update local event state to reflect new remaining seats
+        if (res.remainingSeats !== undefined) {
+          setEvent((prev: any) => ({
+            ...prev,
+            seatsRemaining: res.remainingSeats,
+          }));
+        }
 
-      // Reset form
-      setName('');
-      setEmail('');
-      setPhone('');
-      setInvestmentTier('$200k - $1M');
-      setPreferences('');
+        toast.success(
+          `Successfully reserved ${count} VIP seat(s) for ${event.title}! Our concierge team will contact you shortly.`
+        );
+
+        // Reset form
+        setName('');
+        setEmail('');
+        setPhone('');
+        setSeatsToReserve('1');
+        setInvestmentTier('$200k - $1M');
+        setPreferences('');
+      } else {
+        toast.error(res.error || 'Failed to reserve seat. Please try again.');
+      }
     } catch (error) {
-      console.error('Error submitting RSVP: ', error);
+      console.error('Error reserving seat: ', error);
       toast.error('Failed to submit request. Please try again.');
     } finally {
       setSubmitting(false);
@@ -117,11 +196,15 @@ export default function EventDetailPage() {
               <span className="px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase bg-slate-900 border border-primary/20 text-primary">
                 {event.format}
               </span>
-              {event.isPast && (
+              {event.isPast ? (
                 <span className="px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase bg-red-950/80 text-red-400 border border-red-900/30">
                   Completed
                 </span>
-              )}
+              ) : isSoldOut ? (
+                <span className="px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase bg-red-900/80 text-white border border-red-500">
+                  Fully Reserved
+                </span>
+              ) : null}
             </div>
 
             <h1 className="text-3xl md:text-5xl font-black tracking-tight text-white leading-tight">
@@ -144,30 +227,32 @@ export default function EventDetailPage() {
             </div>
           </div>
 
-          {!event.isPast && event.seatsRemaining !== undefined && (
-            <div className="bg-amber-950/30 border border-amber-500/20 px-5 py-3 rounded-xl">
-              <p className="text-[10px] font-bold text-amber-500 uppercase tracking-widest mb-1">
+          {!event.isPast && event.seatsRemaining !== undefined && event.seatsRemaining !== null && (
+            <div className={`px-5 py-3 rounded-xl border ${isSoldOut ? 'bg-red-950/30 border-red-500/30' : 'bg-amber-950/30 border-amber-500/20'}`}>
+              <p className={`text-[10px] font-bold uppercase tracking-widest mb-1 ${isSoldOut ? 'text-red-400' : 'text-amber-500'}`}>
                 Availability
               </p>
               <p className="text-lg font-black text-white flex items-center gap-2">
-                <Users className="size-5 text-amber-500" />
-                <span>{event.seatsRemaining} VIP Seats Left</span>
+                <Users className={`size-5 ${isSoldOut ? 'text-red-400' : 'text-amber-500'}`} />
+                <span>{isSoldOut ? 'Fully Reserved' : `${event.seatsRemaining} VIP Seats Left`}</span>
               </p>
             </div>
           )}
         </div>
 
         {/* Feature Gallery Banner */}
-        <div className="relative w-full aspect-video md:h-[480px] overflow-hidden rounded-2xl border border-primary/10 shadow-2xl">
-          <Image
-            src={event.image}
-            alt={event.title}
-            fill
-            priority
-            className="object-cover"
-          />
-          <div className="absolute inset-0 bg-linear-to-t from-slate-950/80 via-transparent to-transparent" />
-        </div>
+        {event.image && (
+          <div className="relative w-full aspect-video md:h-[480px] overflow-hidden rounded-2xl border border-primary/10 shadow-2xl">
+            <Image
+              src={event.image}
+              alt={event.title}
+              fill
+              priority
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-linear-to-t from-slate-950/80 via-transparent to-transparent" />
+          </div>
+        )}
 
         {/* Main Details Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start pt-4">
@@ -191,7 +276,7 @@ export default function EventDetailPage() {
                   Exhibition Highlights
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {event.highlights.map((highlight, index) => (
+                  {event.highlights.map((highlight: string, index: number) => (
                     <div
                       key={index}
                       className="flex gap-3 p-4 rounded-xl bg-slate-900/50 border border-primary/5">
@@ -212,7 +297,7 @@ export default function EventDetailPage() {
                   Event Agenda
                 </h3>
                 <div className="space-y-6 relative before:absolute before:inset-0 before:left-[11px] before:w-[2px] before:bg-primary/20">
-                  {event.agenda.map((item, index) => (
+                  {event.agenda.map((item: any, index: number) => (
                     <div key={index} className="relative pl-10">
                       <div className="absolute left-0 top-1 w-6 h-6 rounded-full bg-primary flex items-center justify-center shadow-lg shadow-primary/20">
                         <div className="w-2 h-2 rounded-full bg-slate-950"></div>
@@ -243,17 +328,23 @@ export default function EventDetailPage() {
                   Hosted By
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  {event.hosts.map((host, index) => (
+                  {event.hosts.map((host: any, index: number) => (
                     <div
                       key={index}
                       className="flex items-center gap-4 p-4 rounded-xl bg-slate-900/50 border border-primary/5">
                       <div className="relative w-16 h-16 rounded-full overflow-hidden border border-primary/20 shrink-0">
-                        <Image
-                          src={host.image}
-                          alt={host.name}
-                          fill
-                          className="object-cover"
-                        />
+                        {host.image ? (
+                          <Image
+                            src={host.image}
+                            alt={host.name}
+                            fill
+                            className="object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-slate-800 flex items-center justify-center text-xs text-slate-400">
+                            Host
+                          </div>
+                        )}
                       </div>
                       <div className="space-y-0.5">
                         <h4 className="font-bold text-sm text-white">
@@ -277,13 +368,16 @@ export default function EventDetailPage() {
           <aside className="lg:sticky lg:top-28">
             <div className="bg-slate-900/60 backdrop-blur-md border border-primary/20 p-8 rounded-2xl shadow-2xl space-y-6">
               <div className="space-y-1">
-                <h3 className="text-lg font-bold text-white">
-                  {event.isPast ? 'Showcase Concluded' : 'Request Invitation'}
+                <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                  <Ticket className="size-5 text-primary" />
+                  {event.isPast ? 'Showcase Concluded' : isSoldOut ? 'Event Fully Reserved' : 'Reserve Your Seat'}
                 </h3>
                 <p className="text-xs text-slate-400">
                   {event.isPast
                     ? 'This showcase has ended. Apply below to request notifications for upcoming shows.'
-                    : 'Submit your profile to apply for private invitation access.'}
+                    : isSoldOut
+                    ? 'All VIP seats for this event are currently reserved.'
+                    : 'Select your seat quantity and submit your details to reserve your spot.'}
                 </p>
               </div>
 
@@ -295,10 +389,11 @@ export default function EventDetailPage() {
                   <input
                     required
                     type="text"
+                    disabled={isSoldOut || event.isPast}
                     placeholder="John Doe"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full bg-slate-800/50 border border-white/10 rounded-lg px-4 py-2.5 text-xs text-white focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-slate-600"
+                    className="w-full bg-slate-800/50 border border-white/10 rounded-lg px-4 py-2.5 text-xs text-white focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-slate-600 disabled:opacity-50"
                   />
                 </div>
                 <div className="space-y-1">
@@ -308,10 +403,11 @@ export default function EventDetailPage() {
                   <input
                     required
                     type="email"
+                    disabled={isSoldOut || event.isPast}
                     placeholder="john@example.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full bg-slate-800/50 border border-white/10 rounded-lg px-4 py-2.5 text-xs text-white focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-slate-600"
+                    className="w-full bg-slate-800/50 border border-white/10 rounded-lg px-4 py-2.5 text-xs text-white focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-slate-600 disabled:opacity-50"
                   />
                 </div>
                 <div className="space-y-1">
@@ -321,28 +417,47 @@ export default function EventDetailPage() {
                   <input
                     required
                     type="tel"
+                    disabled={isSoldOut || event.isPast}
                     placeholder="+234..."
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    className="w-full bg-slate-800/50 border border-white/10 rounded-lg px-4 py-2.5 text-xs text-white focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-slate-600"
+                    className="w-full bg-slate-800/50 border border-white/10 rounded-lg px-4 py-2.5 text-xs text-white focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-slate-600 disabled:opacity-50"
                   />
                 </div>
 
-                <div className="space-y-1">
-                  <label className="text-xs font-semibold text-slate-400">
-                    Target Portfolio Range
-                  </label>
-                  <select
-                    value={investmentTier}
-                    onChange={(e) => setInvestmentTier(e.target.value)}
-                    className="w-full bg-slate-800/50 border border-white/10 rounded-lg px-4 py-2.5 text-xs text-white focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all">
-                    <option value="$200k - $1M">
-                      Price Range: $200k - $1M
-                    </option>
-                    <option value="$2M - $5M">Price Range: $2M - $5M</option>
-                    <option value="$6M - $10M">Price Range: $6M - $10M</option>
-                    <option value="$10M+">Price Range: $10M+</option>
-                  </select>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="text-xs font-semibold text-slate-400">
+                      Seats to Reserve *
+                    </label>
+                    <select
+                      value={seatsToReserve}
+                      disabled={isSoldOut || event.isPast}
+                      onChange={(e) => setSeatsToReserve(e.target.value)}
+                      className="w-full bg-slate-800/50 border border-white/10 rounded-lg px-3 py-2.5 text-xs text-white focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all disabled:opacity-50">
+                      <option value="1">1 Seat</option>
+                      <option value="2">2 Seats</option>
+                      <option value="3">3 Seats</option>
+                      <option value="4">4 Seats</option>
+                      <option value="5">5 Seats</option>
+                    </select>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-xs font-semibold text-slate-400">
+                      Target Portfolio
+                    </label>
+                    <select
+                      value={investmentTier}
+                      disabled={isSoldOut || event.isPast}
+                      onChange={(e) => setInvestmentTier(e.target.value)}
+                      className="w-full bg-slate-800/50 border border-white/10 rounded-lg px-3 py-2.5 text-xs text-white focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all disabled:opacity-50">
+                      <option value="$200k - $1M">$200k - $1M</option>
+                      <option value="$2M - $5M">$2M - $5M</option>
+                      <option value="$6M - $10M">$6M - $10M</option>
+                      <option value="$10M+">$10M+</option>
+                    </select>
+                  </div>
                 </div>
 
                 <div className="space-y-1">
@@ -350,21 +465,28 @@ export default function EventDetailPage() {
                     Special Preferences
                   </label>
                   <textarea
+                    disabled={isSoldOut || event.isPast}
                     placeholder="Dietary requests, transport coordinates, airport concierge requirements..."
                     rows={3}
                     value={preferences}
                     onChange={(e) => setPreferences(e.target.value)}
-                    className="w-full bg-slate-800/50 border border-white/10 rounded-lg px-4 py-2.5 text-xs text-white focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-slate-600 resize-none"
+                    className="w-full bg-slate-800/50 border border-white/10 rounded-lg px-4 py-2.5 text-xs text-white focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-slate-600 resize-none disabled:opacity-50"
                   />
                 </div>
 
                 <button
                   type="submit"
-                  disabled={submitting}
+                  disabled={submitting || isSoldOut || event.isPast}
                   className="w-full bg-primary text-background-dark font-extrabold uppercase py-3 rounded-lg hover:shadow-lg hover:shadow-primary/10 transition-all text-xs cursor-pointer disabled:opacity-50 flex items-center justify-center gap-1.5">
-                  <Award className="size-4 shrink-0" />
+                  <Ticket className="size-4 shrink-0" />
                   <span>
-                    {submitting ? 'Submitting VIP RSVP...' : 'Submit Request'}
+                    {submitting
+                      ? 'Reserving Seat...'
+                      : isSoldOut
+                      ? 'Fully Reserved'
+                      : event.isPast
+                      ? 'Event Concluded'
+                      : `Reserve ${seatsToReserve} Seat(s)`}
                   </span>
                 </button>
               </form>
