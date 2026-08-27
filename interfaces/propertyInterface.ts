@@ -1,3 +1,9 @@
+export interface IPropertyAgent {
+  name: string;
+  email: string;
+  phone: string;
+}
+
 export interface IProperty {
   id?: string;
   title: string;
@@ -16,6 +22,8 @@ export interface IProperty {
   bathroom: string | number;
   square_foot: string | number;
   verified: boolean;
+  featured?: boolean | null;
+  agent?: IPropertyAgent | null;
   interests: string[];
   createdAt?: Date | null;
   updatedAt?: Date | null;
@@ -37,7 +45,7 @@ export interface IPropertyEnquiry {
   name: string;
   email: string;
   phone: string;
-  property?: IProperty
+  property?: IProperty;
   propertyId: string;
   createdAt?: Date;
 }

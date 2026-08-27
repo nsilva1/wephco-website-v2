@@ -4,6 +4,7 @@ import React from 'react';
 import { Resend } from 'resend';
 import { BookingConfirmationEmailProps } from '@/emails/BookingConfirmationEmail';
 import { WaitlistConfirmationEmail, WaitlistConfirmationEmailProps } from '@/emails/WaitlistConfirmationEmail';
+import { EMAIL_TEMPLATE_IDS } from '@/lib/constants';
 
 const resendApiKey = process.env.RESEND_API_KEY || process.env.RESEND_DEV_API_KEY;
 
@@ -116,6 +117,65 @@ export async function sendWaitlistEmail({
     react: React.createElement(WaitlistConfirmationEmail, props),
     from: fromEmail,
   });
+}
+
+/**
+ * Server action to send email after a user uploads a property
+ */
+export async function sendPropertyUploadEmail({
+  toEmail,
+  username
+}: { toEmail: string, username: string }): Promise<SendEmailResult> {
+  try {
+    if (!resendApiKey) {
+      console.error('Resend API key is missing. Please check RESEND_API_KEY or RESEND_DEV_API_KEY in .env');
+      return {
+        success: false,
+        error: 'Email service configuration error: Missing Resend API key',
+      };
+    }
+
+    if (!toEmail) {
+      return {
+        success: false,
+        error: 'Recipient email (toEmail) is required.',
+      };
+    }
+
+    console.log('Sending Email...');
+
+    const { data, error } = await resend.emails.send({
+      to: toEmail,
+      template: {
+        id: EMAIL_TEMPLATE_IDS.PROPERTY_UPLOAD,
+        variables: {
+          username: username,
+        },
+      },
+    });
+
+    console.log('Email sent:', data);
+
+    if (error) {
+      console.error('Error sending property upload email via Resend:', error);
+      return {
+        success: false,
+        error: error.message || 'Failed to send email via Resend',
+      };
+    }
+
+    console.log(`Property Upload email sent successfully to ${toEmail}. Message ID: ${data?.id}`);
+    return {
+      success: true,
+      messageId: data?.id,
+    };
+  } catch (err: any) {
+    console.error('Unexpected error in sendPropertyUploadEmail:', err);
+    return {
+      success: false,
+      error: err?.message || 'An unexpected error occurred while sending email',
+    };
+  }
 }
 
 export interface GenericSendEmailParams {

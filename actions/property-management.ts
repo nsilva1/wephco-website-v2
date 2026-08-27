@@ -1,7 +1,7 @@
 'use server';
 
 import { db, storage } from '@/firebase/firebaseConfig';
-import { IProperty } from '@/interfaces/propertyInterface';
+import { IProperty, IPropertyAgent } from '@/interfaces/propertyInterface';
 import { serializeDoc } from '@/lib/utils';
 
 export async function getProperties() {
@@ -33,6 +33,9 @@ export async function createProperty(formData: FormData) {
   const bathroom = formData.get('bathroom') as string || '';
   const square_foot = formData.get('square_foot') as string || '';
   const verified = formData.get('verified') === 'true';
+  const featured = formData.get('featured') === 'true';
+  const agentRaw = formData.get('agent') as string;
+  const agent: IPropertyAgent | null = agentRaw ? JSON.parse(agentRaw) : null;
   const interestsRaw = formData.get('interests');
   const interests = interestsRaw ? (typeof interestsRaw === 'string' && interestsRaw.startsWith('[') ? JSON.parse(interestsRaw) : formData.getAll('interests') as string[]) : [];
   const imageUrls: string[] = JSON.parse(formData.get('imageUrls') as string || '[]');
@@ -53,6 +56,8 @@ export async function createProperty(formData: FormData) {
     bathroom,
     square_foot,
     verified,
+    featured: featured || false,
+    agent,
     interests,
     pdfUrl,
     images: imageUrls,
@@ -79,6 +84,8 @@ export async function updateProperty(id: string, formData: FormData) {
   const bathroom = formData.get('bathroom') as string || '';
   const square_foot = formData.get('square_foot') as string || '';
   const verified = formData.get('verified') === 'true';
+  const agentRaw = formData.get('agent') as string;
+  const agent: IPropertyAgent | null = agentRaw ? JSON.parse(agentRaw) : null;
   const interestsRaw = formData.get('interests');
   const interests = interestsRaw ? (typeof interestsRaw === 'string' && interestsRaw.startsWith('[') ? JSON.parse(interestsRaw) : formData.getAll('interests') as string[]) : [];
   const imageFiles = formData.getAll('images') as File[];
@@ -117,7 +124,7 @@ export async function updateProperty(id: string, formData: FormData) {
     pdfUrl = `https://storage.googleapis.com/${bucket.name}/${fileName}`;
   }
 
-  const updateData = {
+  const updateData: Record<string, any> = {
     title,
     developer,
     location,
@@ -137,6 +144,10 @@ export async function updateProperty(id: string, formData: FormData) {
     images: imageUrls,
     updatedAt: new Date().toISOString(),
   };
+
+  if (agent) {
+    updateData.agent = agent;
+  }
 
   await db.collection('properties').doc(id).update(updateData);
   return { id, ...updateData };
@@ -185,8 +196,27 @@ export async function updatePropertyStatus(id: string, status: string) {
   return { success: true };
 }
 
-export async function submitPropertyForSale(formData: IProperty) {
+export async function updatePropertyFeatured(id: string, featured: boolean) {
+  if (featured) {
+    const snapshot = await db.collection('properties').where('featured', '==', true).get();
+    const otherFeaturedDocs = snapshot.docs.filter(doc => doc.id !== id);
+    if (otherFeaturedDocs.length >= 3) {
+      return {
+        success: false,
+        error: 'Maximum of 3 properties can be featured at a time. Please unfeature another property first.',
+      };
+    }
+  }
 
+  await db.collection('properties').doc(id).update({
+    featured,
+    updatedAt: new Date().toISOString(),
+  });
+
+  return { success: true };
+}
+
+export async function submitPropertyForSale(formData: IProperty) {
   const propertyData: IProperty = {
     title: formData.title,
     developer: formData.developer,
@@ -204,6 +234,8 @@ export async function submitPropertyForSale(formData: IProperty) {
     pdfUrl: formData.pdfUrl,
     images: formData.images,
     verified: formData.verified,
+    featured: formData.featured || false,
+    agent: formData.agent || null,
     interests: formData.interests,
     createdAt: new Date(),
     updatedAt: new Date(),

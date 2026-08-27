@@ -10,6 +10,9 @@ import {
   Bath,
   X,
   CheckCircle2,
+  User,
+  Mail,
+  Phone,
 } from 'lucide-react';
 import { BiArea } from 'react-icons/bi';
 import Image from 'next/image';
@@ -17,6 +20,7 @@ import { toast } from 'react-toastify';
 import { Loader } from '@/components/Loader';
 import { uploadFile } from '@/lib/helperFunctions';
 import { submitPropertyForSale } from '@/actions/property-management';
+import { sendPropertyUploadEmail } from '@/actions/email';
 import { IProperty } from '@/interfaces/propertyInterface';
 import Select from 'react-select';
 
@@ -93,6 +97,9 @@ export default function SellPage() {
     bedroom: '',
     bathroom: '',
     square_foot: '',
+    agentName: '',
+    agentEmail: '',
+    agentPhone: '',
   });
 
   const [countriesData, setCountriesData] = useState<any[]>([]);
@@ -170,9 +177,12 @@ export default function SellPage() {
       !formState.title ||
       !selectedCountry ||
       !selectedCity ||
-      !formState.price
+      !formState.price ||
+      !formState.agentName ||
+      !formState.agentEmail ||
+      !formState.agentPhone
     ) {
-      toast.warning('Please fill in all required fields');
+      toast.warning('Please fill in all required fields including Agent contact details');
       return;
     }
 
@@ -209,7 +219,7 @@ export default function SellPage() {
         pdfUrl = await uploadFile(selectedPdf, 'properties/pdfs');
       }
 
-      // 2. Prepare Form Data for Server Action
+      // 2. Prepare Form Data for Server Action with Agent Information
       const formData: IProperty = {
         title: formState.title,
         developer: formState.developer,
@@ -227,11 +237,26 @@ export default function SellPage() {
         square_foot: squareFoot,
         pdfUrl: pdfUrl,
         verified: false,
+        agent: {
+          name: formState.agentName,
+          email: formState.agentEmail,
+          phone: formState.agentPhone,
+        },
         interests: [],
       };
 
-      // 3. Submit
+      // 3. Submit Property to Firestore
       await submitPropertyForSale(formData);
+
+      // 4. Send Confirmation Email via sendPropertyUploadEmail
+      try {
+        await sendPropertyUploadEmail({
+          toEmail: formState.agentEmail,
+          username: formState.agentName,
+        });
+      } catch (emailErr) {
+        console.warn('Failed to send property upload confirmation email:', emailErr);
+      }
 
       toast.success(
         'Your property listing has been submitted successfully for admin review!'
@@ -251,6 +276,9 @@ export default function SellPage() {
         bedroom: '',
         bathroom: '',
         square_foot: '',
+        agentName: '',
+        agentEmail: '',
+        agentPhone: '',
       });
       setSelectedCountry(null);
       setSelectedCity(null);
@@ -306,6 +334,56 @@ export default function SellPage() {
       <section className="max-w-5xl mx-auto px-4 md:px-8 py-16 -mt-20 relative z-10">
         <div className="bg-slate-900/60 backdrop-blur-md border border-primary/20 rounded-2xl shadow-2xl p-6 md:p-10 mt-20">
           <form onSubmit={handleSubmit} className="space-y-8">
+            {/* Agent Contact Information Section */}
+            <div className="space-y-4 pb-6 border-b border-primary/10">
+              <h3 className="text-lg font-bold text-primary flex items-center gap-2">
+                <User className="size-5" /> Listing Agent / Seller Contact Details
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="space-y-1">
+                  <label className="text-xs font-semibold text-slate-400 flex items-center gap-1.5">
+                    <User className="size-3.5 text-primary" /> Full Name *
+                  </label>
+                  <input
+                    type="text"
+                    value={formState.agentName}
+                    onChange={(e) => handleChange('agentName', e.target.value)}
+                    placeholder="e.g. Sarah Jenkins"
+                    className="w-full bg-slate-800/60 border border-primary/20 rounded-lg p-3 text-slate-100 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
+                    required
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-xs font-semibold text-slate-400 flex items-center gap-1.5">
+                    <Mail className="size-3.5 text-primary" /> Email Address *
+                  </label>
+                  <input
+                    type="email"
+                    value={formState.agentEmail}
+                    onChange={(e) => handleChange('agentEmail', e.target.value)}
+                    placeholder="e.g. sarah@example.com"
+                    className="w-full bg-slate-800/60 border border-primary/20 rounded-lg p-3 text-slate-100 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
+                    required
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-xs font-semibold text-slate-400 flex items-center gap-1.5">
+                    <Phone className="size-3.5 text-primary" /> Phone Number *
+                  </label>
+                  <input
+                    type="tel"
+                    value={formState.agentPhone}
+                    onChange={(e) => handleChange('agentPhone', e.target.value)}
+                    placeholder="e.g. +234 801 234 5678"
+                    className="w-full bg-slate-800/60 border border-primary/20 rounded-lg p-3 text-slate-100 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* Left Column - Details */}
               <div className="space-y-6">
@@ -633,7 +711,7 @@ export default function SellPage() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full md:w-auto px-10 py-4 bg-primary text-background-dark font-extrabold rounded-lg hover:bg-primary/95 transition-all text-lg shadow-xl shadow-primary/10 flex items-center justify-center gap-2 disabled:opacity-50">
+                className="w-full md:w-auto px-10 py-4 bg-primary text-background-dark font-extrabold rounded-lg hover:bg-primary/95 transition-all text-lg shadow-xl shadow-primary/10 flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer">
                 {isSubmitting ? (
                   <Loader />
                 ) : (

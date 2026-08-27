@@ -12,7 +12,7 @@ interface PropertyProps extends React.ComponentPropsWithoutRef<'div'> {
   viewMore?: boolean;
 }
 
-const FeaturedProperties = ({numberOfProperties = 3, viewMore = true, ...rest}: PropertyProps) => {
+const FeaturedProperties = ({ numberOfProperties = 3, viewMore = true, ...rest }: PropertyProps) => {
   const [properties, setProperties] = useState<PropertyCardProps[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -21,23 +21,48 @@ const FeaturedProperties = ({numberOfProperties = 3, viewMore = true, ...rest}: 
       try {
         setLoading(true);
         const querySnapshot = await getDocs(collection(db, 'properties'));
-        const propertiesData = querySnapshot.docs.map(doc => {
+
+        const allProperties: PropertyCardProps[] = querySnapshot.docs.map(doc => {
           const data = doc.data();
           return {
             id: doc.id,
             openModal: false,
-            // Map Firestore document attributes to PropertyCard properties
             title: data.title || data.name || '',
-            price: data.price || '',
+            developer: data.developer || '',
+            price: data.price || 0,
             description: data.description || '',
             location: data.location || (data.city && data.country ? `${data.city}, ${data.country}` : ''),
-            category: data.category || data.type || '',
+            category: data.category || data.type || 'Sale',
+            tag: data.tag || 'Local',
+            status: data.status || 'Available',
+            currency: data.currency || 'USD',
+            bedroom: data.bedroom || data.beds || 0,
+            bathroom: data.bathroom || data.baths || 0,
+            square_foot: data.square_foot || data.sqft || 0,
+            verified: data.verified || false,
+            interests: data.interests || [],
             images: data.images || [],
-            pdfUrl: data.pdfUrl || '',
+            pdfUrl: data.pdfUrl || null,
+            featured: data.featured === true,
+            createdAt: data.createdAt ? new Date(data.createdAt) : null,
           };
-        }) as PropertyCardProps[];
-        
-        setProperties(propertiesData);
+        });
+
+        // Filter properties explicitly marked as featured (featured === true)
+        const featuredProps = allProperties.filter(p => p.featured === true);
+
+        if (featuredProps.length > 0) {
+          // Display up to numberOfProperties featured properties
+          setProperties(featuredProps.slice(0, numberOfProperties));
+        } else {
+          // Fallback: If no properties are marked as featured, display the 3 most recent properties
+          // const recentProps = [...allProperties].sort((a, b) => {
+          //   const timeA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+          //   const timeB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+          //   return timeB - timeA;
+          // });
+          setProperties(allProperties.slice(0, numberOfProperties));
+        }
       } catch (error) {
         console.error("Error fetching properties from Firestore: ", error);
       } finally {
@@ -46,7 +71,7 @@ const FeaturedProperties = ({numberOfProperties = 3, viewMore = true, ...rest}: 
     };
 
     fetchProperties();
-  }, []);
+  }, [numberOfProperties]);
 
   return (
     <div {...rest} className='bg-background-dark py-24 px-6 max-w-7xl mx-auto font-display'>
@@ -75,13 +100,13 @@ const FeaturedProperties = ({numberOfProperties = 3, viewMore = true, ...rest}: 
         </div>
       ) : (
         <div className='grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-10 justify-items-center w-full'>
-          {properties.slice(0, numberOfProperties).map((property, index) => (
+          {properties.map((property, index) => (
             <div className='w-full flex justify-center' key={property.id || index}>
               <PropertyCard {...property} />
             </div>
           ))}
           {properties.length === 0 && (
-            <p className="text-slate-400 text-sm text-center col-span-full">No featured properties available at this time.</p>
+            <p className="text-slate-400 text-sm text-center col-span-full">No properties available at this time.</p>
           )}
         </div>
       )}
@@ -98,5 +123,3 @@ const FeaturedProperties = ({numberOfProperties = 3, viewMore = true, ...rest}: 
 };
 
 export { FeaturedProperties };
-
-
