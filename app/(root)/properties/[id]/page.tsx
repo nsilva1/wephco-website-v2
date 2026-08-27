@@ -10,6 +10,7 @@ import { formatCurrency } from '@/lib/utils';
 import { toast } from 'react-toastify';
 import { BiBed, BiBath, BiArea, BiMap, BiShareAlt } from 'react-icons/bi';
 import { CountryFlag } from '@/components/CountryFlag';
+import { sendPropertyInquiryEmail } from '@/actions/email';
 
 export default function PropertyDetailsPage() {
   const params = useParams();
@@ -56,8 +57,9 @@ export default function PropertyDetailsPage() {
             tag: data.tag || 'Exclusive',
             verified: data.verified || false,
             developer: data.developer || 'Wephco',
-            beds: data.beds || data.bedrooms || 4,
-            baths: data.baths || data.bathrooms || 5,
+            agent: data.agent || null,
+            beds: data.beds || data.bedroom || data.bedrooms || 4,
+            baths: data.baths || data.bathroom || data.bathrooms || 5,
             sqft: data.sqft || data.square_foot || 4500,
             garage: data.garage || '3 Cars',
             amenities: data.amenities || [
@@ -103,7 +105,7 @@ export default function PropertyDetailsPage() {
     try {
       setSubmitting(true);
 
-      // Save to 'propertyEnquiries' collection in Firestore
+      // Save to 'propertyViewRequests' collection in Firestore
       await addDoc(collection(db, 'propertyViewRequests'), {
         name,
         email,
@@ -116,6 +118,21 @@ export default function PropertyDetailsPage() {
           `I am interested in scheduling a tour for ${property?.title}`,
         createdAt: new Date(),
       });
+
+      // Trigger Resend email for indicating property interest
+      try {
+        await sendPropertyInquiryEmail({
+          toEmail: email,
+          username: name,
+          agentName: property?.agent?.name || 'Wephco Advisory Team',
+          agentEmail: property?.agent?.email || 'support@wephco.com',
+          agentPhone: property?.agent?.phone || '+234 800 WEPHCO',
+          property: property?.title || 'Property',
+          propertyLink: typeof window !== 'undefined' ? window.location.href : '',
+        });
+      } catch (emailErr) {
+        console.warn('Failed to send property inquiry confirmation email:', emailErr);
+      }
 
       toast.success(
         'Tour request submitted successfully! An agent will contact you shortly.'
@@ -278,43 +295,6 @@ export default function PropertyDetailsPage() {
                 <p>{property.description}</p>
               </div>
             </section>
-
-            {/* Key Features Grid */}
-            {/* <section>
-              <h3 className="text-2xl font-bold mb-6 flex items-center gap-3 text-primary">
-                Key Features &amp; Amenities
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {property.amenities.map((amenity: string, idx: number) => (
-                  <div key={idx} className="flex items-center gap-4 p-4 rounded-lg bg-white/5 border border-white/5">
-                    <BiCheckCircle className="text-primary text-xl shrink-0" />
-                    <span className="text-slate-200 text-sm font-medium">{amenity}</span>
-                  </div>
-                ))}
-              </div>
-            </section> */}
-
-            {/* Property History Timeline */}
-            {/* <section>
-              <h3 className="text-2xl font-bold mb-8 flex items-center gap-3">
-                Property Registry History
-              </h3>
-              <div className="space-y-8 relative before:absolute before:inset-0 before:left-[11px] before:w-[2px] before:bg-primary/20">
-                {property.history.map((hist: any, idx: number) => (
-                  <div key={idx} className="relative pl-10">
-                    <div className="absolute left-0 top-1 w-6 h-6 rounded-full bg-primary flex items-center justify-center">
-                      <div className="w-2 h-2 rounded-full bg-background-dark"></div>
-                    </div>
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <p className="font-bold text-base">{hist.action || 'Registry Entry'}</p>
-                      <span className="text-xs font-semibold text-slate-500 uppercase">{hist.date}</span>
-                    </div>
-                    <p className="text-primary font-bold mt-1 text-sm">{formatCurrency(hist.price || property.price, property.currency)}</p>
-                    <p className="text-xs text-slate-400 mt-1">Managed &amp; Verified by Wephco</p>
-                  </div>
-                ))}
-              </div>
-            </section> */}
           </div>
 
           {/* Right Column: Sticky Sidebar Form */}
@@ -419,41 +399,6 @@ export default function PropertyDetailsPage() {
           </aside>
         </div>
       </main>
-
-      {/* Map & Location Section
-      <div className="bg-[#022618]/10 mt-20 py-16 border-t border-primary/5">
-        <div className="max-w-7xl mx-auto px-6">
-          <h3 className="text-2xl font-bold mb-10 text-center uppercase tracking-widest">The Neighborhood</h3>
-          <div className="h-[400px] w-full rounded-2xl overflow-hidden border border-primary/20 relative shadow-2xl">
-            <Image 
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBEK3SAogZclxHBaSsO5YXtgQdEqJO_j278wfOJ0Om5nOmiZzIOSYMkV4Al2gLIr0ZEP2epoRgyW-hjRhzTtZ83GC3jlUmyOwmMr7graDz-B3I-1suJ-vGT4os1HGDCUF3bTUgvyCunSJVqQNmMiWrugAvLJa6Bp-B0W1B13j74qZDy-NDmYldg91IVf8REJE1bBZ7hhJNNQDowD6YlwpECbS4mQaw0TSR365HGFBA6ysxp8V5QXzt6AtCxZnlVrwac6wMCaxrB-2n"
-              alt="Neighborhood Map"
-              fill
-              style={{ objectFit: 'cover' }}
-              className="opacity-50 grayscale brightness-50"
-            />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-primary">
-              <BiMap className="text-6xl drop-shadow-[0_0_15px_rgba(212,175,53,0.8)] animate-pulse" />
-            </div>
-            <div className="absolute bottom-6 left-6 bg-background-dark/95 border border-primary/20 p-6 rounded-xl max-w-xs md:max-w-sm shadow-xl">
-              <h5 className="text-lg font-bold mb-2">{property.location.split(',')[0]} neighborhood</h5>
-              <p className="text-xs text-slate-400 mb-4 leading-relaxed">
-                Consistently ranked among the most exclusive enclaves, this sector offers unmatched security, privacy, and long-term asset appreciation.
-              </p>
-              <div className="grid grid-cols-2 gap-4 text-[10px] font-bold uppercase tracking-widest">
-                <div className="flex flex-col">
-                  <span className="text-primary mb-1">98/100</span>
-                  <span className="opacity-60">Safety Score</span>
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-primary mb-1">Active</span>
-                  <span className="opacity-60">Security Patrol</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> */}
     </div>
   );
 }

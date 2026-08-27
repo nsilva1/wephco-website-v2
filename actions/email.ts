@@ -34,6 +34,16 @@ export interface SendEmailResult {
   error?: string;
 }
 
+export interface SendPropertyInquiryEmailParams {
+  toEmail: string;
+  username: string;
+  agentName?: string;
+  agentPhone?: string;
+  agentEmail?: string;
+  property?: any;
+  propertyLink?: string;
+}
+
 /**
  * Server Action to send a Booking Confirmation Email via Resend.
  */
@@ -142,7 +152,7 @@ export async function sendPropertyUploadEmail({
       };
     }
 
-    console.log('Sending Email...');
+    console.log('Sending Property Upload Email...');
 
     const { data, error } = await resend.emails.send({
       to: toEmail,
@@ -171,6 +181,78 @@ export async function sendPropertyUploadEmail({
     };
   } catch (err: any) {
     console.error('Unexpected error in sendPropertyUploadEmail:', err);
+    return {
+      success: false,
+      error: err?.message || 'An unexpected error occurred while sending email',
+    };
+  }
+}
+
+/**
+ * Server action to send email to people who indicate an interest to buy a property
+ */
+export async function sendPropertyInquiryEmail({
+  toEmail,
+  username,
+  agentName = 'Wephco',
+  agentPhone = '+234 800 WEPHCO',
+  agentEmail = 'support@wephco.com',
+  property,
+  propertyLink,
+}: SendPropertyInquiryEmailParams): Promise<SendEmailResult> {
+  try {
+    if (!resendApiKey) {
+      console.error('Resend API key is missing. Please check RESEND_API_KEY or RESEND_DEV_API_KEY in .env');
+      return {
+        success: false,
+        error: 'Email service configuration error: Missing Resend API key',
+      };
+    }
+
+    if (!toEmail) {
+      return {
+        success: false,
+        error: 'Recipient email (toEmail) is required.',
+      };
+    }
+
+    console.log('Sending Property Inquiry Email...');
+
+    const { data, error } = await resend.emails.send({
+      to: toEmail,
+      template: {
+        id: EMAIL_TEMPLATE_IDS.PROPERTY_INQUIRY,
+        variables: {
+          buyerName: username,
+          agentName: agentName,
+          agentPhone: agentPhone,
+          agentEmail: agentEmail,
+          propertyTitle: property.title,
+          propertyLocation: property.location,
+          propertyPrice: property.price,
+          propertyImage: property.images[0],
+          propertyLink: propertyLink ?? '',
+        },
+      },
+    });
+
+    console.log('Property inquiry email sent:', data);
+
+    if (error) {
+      console.error('Error sending property inquiry email via Resend:', error);
+      return {
+        success: false,
+        error: error.message || 'Failed to send email via Resend',
+      };
+    }
+
+    console.log(`Property Inquiry email sent successfully to ${toEmail}. Message ID: ${data?.id}`);
+    return {
+      success: true,
+      messageId: data?.id,
+    };
+  } catch (err: any) {
+    console.error('Unexpected error in sendPropertyInquiryEmail:', err);
     return {
       success: false,
       error: err?.message || 'An unexpected error occurred while sending email',
