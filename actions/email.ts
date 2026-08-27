@@ -1,10 +1,11 @@
 'use server';
 
+import React from 'react';
 import { Resend } from 'resend';
 import { BookingConfirmationEmailProps } from '@/emails/BookingConfirmationEmail';
+import { WaitlistConfirmationEmail, WaitlistConfirmationEmailProps } from '@/emails/WaitlistConfirmationEmail';
 
 const resendApiKey = process.env.RESEND_API_KEY || process.env.RESEND_DEV_API_KEY;
-
 
 // Initialize Resend client
 const resend = new Resend(resendApiKey);
@@ -15,6 +16,13 @@ const DEFAULT_FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'WEPHCO <support@wep
 export interface SendBookingEmailParams {
   toEmail: string;
   props: BookingConfirmationEmailProps;
+  subject?: string;
+  fromEmail?: string;
+}
+
+export interface SendWaitlistEmailParams {
+  toEmail: string;
+  props: WaitlistConfirmationEmailProps;
   subject?: string;
   fromEmail?: string;
 }
@@ -48,13 +56,10 @@ export async function sendBookingConfirmationEmail({
       };
     }
 
-    console.log('Sending Email...')
+    console.log('Sending Email...');
 
     const { data, error } = await resend.emails.send({
-      // from: sender,
       to: toEmail,
-      // subject: emailSubject,
-      // react: BookingConfirmationEmail(props),
       template: {
         id: '997873ab-0faf-4d49-b2c2-a3532434a668',
         variables: {
@@ -94,6 +99,23 @@ export async function sendBookingConfirmationEmail({
       error: err?.message || 'An unexpected error occurred while sending email',
     };
   }
+}
+
+/**
+ * Server Action to send a Project Waitlist Confirmation Email via Resend.
+ */
+export async function sendWaitlistEmail({
+  toEmail,
+  props,
+  subject,
+  fromEmail,
+}: SendWaitlistEmailParams): Promise<SendEmailResult> {
+  return sendEmail({
+    to: toEmail,
+    subject: subject || `VIP Waitlist Access Confirmed - ${props.projectName || 'The Canopies at Yas Point'}`,
+    react: React.createElement(WaitlistConfirmationEmail, props),
+    from: fromEmail,
+  });
 }
 
 export interface GenericSendEmailParams {

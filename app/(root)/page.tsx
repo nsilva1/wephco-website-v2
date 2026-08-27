@@ -5,6 +5,7 @@ import { Partners } from '@/components/Partners';
 import { MagazineAd } from '@/components/MagazineAd';
 import { FAQ } from '@/components/FAQ';
 import { ContactUs } from '@/components/ContactUs';
+import { ProjectWaitlist } from '@/components/ProjectWaitlist';
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
       <Hero />
       <VisionAndMission />
       <FeaturedProperties numberOfProperties={3} viewMore={true} />
+      <ProjectWaitlist />
       <Partners />
       <MagazineAd />
       <FAQ />
