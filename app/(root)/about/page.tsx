@@ -723,7 +723,7 @@ export default function AboutPage() {
                 </p>
               </div>
 
-              <div className="relative w-full aspect-16/9 rounded-2xl overflow-hidden border border-primary/30 shadow-xl mt-4">
+              <div className="relative w-full aspect-video rounded-2xl overflow-hidden border border-primary/30 shadow-xl mt-4">
                 <Image
                   src="/images/pdf-about/wephco_app_mockup.png"
                   alt="WEPHCO Brokerage Mobile App Showcase"
@@ -750,7 +750,7 @@ export default function AboutPage() {
                 </p>
               </div>
 
-              <div className="relative w-full aspect-16/9 rounded-2xl overflow-hidden border border-primary/30 shadow-xl mt-4">
+              <div className="relative w-full aspect-video rounded-2xl overflow-hidden border border-primary/30 shadow-xl mt-4">
                 <Image
                   src="/images/pdf-about/wimoa_magazine_showcase.png"
                   alt="WIMOA Magazine Cover featuring Keleb Nwubani"
