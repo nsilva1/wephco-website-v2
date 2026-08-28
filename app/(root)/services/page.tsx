@@ -240,7 +240,7 @@ export default function ServicesPage() {
                 style={{ objectFit: 'cover' }}
               />
             </div>
-            <div className="absolute -bottom-6 -right-6 md:-right-10 bg-background-dark/90 backdrop-blur-md border border-primary/20 p-8 rounded-2xl z-20 max-w-[200px] shadow-xl">
+            <div className="absolute -bottom-6 -right-6 md:-right-10 bg-background-dark/90 backdrop-blur-md border border-primary/20 p-8 rounded-2xl z-20 max-w-50 shadow-xl">
               <p className="text-primary text-4xl font-black mb-1">5+</p>
               <p className="text-slate-300 text-[10px] font-bold uppercase tracking-wider">
                 Years of Expertise in Luxury Markets

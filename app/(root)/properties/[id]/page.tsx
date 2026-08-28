@@ -185,7 +185,7 @@ export default function PropertyDetailsPage() {
             <div className="flex items-center gap-2 text-slate-400">
               <BiMap className="text-primary text-lg" />
               <p className="text-sm md:text-base">{property.location}</p>
-              <CountryFlag countryName={property.location.split(' ')[1]} />
+              <CountryFlag countryName={property.location} />
             </div>
           </div>
           <div className="text-left md:text-right">

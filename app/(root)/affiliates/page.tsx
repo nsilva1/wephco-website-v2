@@ -73,7 +73,7 @@ export default function AffiliatesPage() {
   return (
     <div className="min-h-screen bg-background-dark text-slate-100 font-display pt-20">
       {/* Hero Section */}
-      <section className="relative h-[360px] md:h-[450px] flex items-center justify-center px-6 overflow-hidden">
+      <section className="relative h-90 md:h-112.5 flex items-center justify-center px-6 overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center scale-100"
           style={{
@@ -183,7 +183,7 @@ export default function AffiliatesPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
             {/* Timeline Line (Horizontal Desktop Only) */}
-            <div className="hidden md:block absolute top-10 left-[15%] right-[15%] h-[2px] bg-primary/20"></div>
+            <div className="hidden md:block absolute top-10 left-[15%] right-[15%] h-0.5 bg-primary/20"></div>
 
             {/* Step 1 */}
             <div className="relative z-10 text-center space-y-4">

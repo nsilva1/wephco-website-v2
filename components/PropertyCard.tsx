@@ -14,8 +14,6 @@ export interface PropertyCardProps extends IProperty {
 
 const PropertyCard = ({ showModal, openModal, ...props }: PropertyCardProps) => {
 
-  const country = props.location.split(' ')[1];
-
   return (
     <div
       className='w-full max-w-xs sm:max-w-sm md:w-96 h-115 font-display z-10'
@@ -51,7 +49,7 @@ const PropertyCard = ({ showModal, openModal, ...props }: PropertyCardProps) => 
             <div className="flex justify-between items-center text-slate-400 text-xs font-semibold">
               <span className='flex items-center gap-1.5 font-mono uppercase tracking-wider text-[10px]'>
                 <span className="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
-                {props.location} <CountryFlag countryName={country} />
+                {props.location} <CountryFlag countryName={props.location} />
               </span>
             </div>
 

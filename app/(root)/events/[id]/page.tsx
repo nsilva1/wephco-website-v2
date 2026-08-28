@@ -172,8 +172,8 @@ export default function EventDetailPage() {
   return (
     <div className="min-h-screen bg-background-dark text-slate-100 font-sans pt-20 selection:bg-primary selection:text-background-dark">
       {/* Background ambient lighting */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[160px] pointer-events-none z-0" />
-      <div className="absolute bottom-20 left-10 w-[400px] h-[400px] bg-primary/3 rounded-full blur-[140px] pointer-events-none z-0" />
+      <div className="absolute top-0 right-0 w-125 h-125 bg-primary/5 rounded-full blur-[160px] pointer-events-none z-0" />
+      <div className="absolute bottom-20 left-10 w-100 h-100 bg-primary/3 rounded-full blur-[140px] pointer-events-none z-0" />
 
       <main className="max-w-7xl mx-auto px-6 py-8 relative z-10 space-y-8">
         {/* Navigation Breadcrumb */}
@@ -242,7 +242,7 @@ export default function EventDetailPage() {
 
         {/* Feature Gallery Banner */}
         {event.image && (
-          <div className="relative w-full aspect-video md:h-[480px] overflow-hidden rounded-2xl border border-primary/10 shadow-2xl">
+          <div className="relative w-full aspect-video md:h-120 overflow-hidden rounded-2xl border border-primary/10 shadow-2xl">
             <Image
               src={event.image}
               alt={event.title}
@@ -261,7 +261,7 @@ export default function EventDetailPage() {
             {/* Extended Long Description */}
             <section className="space-y-4">
               <h3 className="text-xl font-bold flex items-center gap-3">
-                <span className="w-6 h-[2px] bg-primary"></span>
+                <span className="w-6 h-0.5 bg-primary"></span>
                 The Experience
               </h3>
               <p className="text-slate-300 leading-relaxed text-sm md:text-base font-light whitespace-pre-line">
@@ -296,7 +296,7 @@ export default function EventDetailPage() {
                 <h3 className="text-xl font-bold flex items-center gap-3">
                   Event Agenda
                 </h3>
-                <div className="space-y-6 relative before:absolute before:inset-0 before:left-[11px] before:w-[2px] before:bg-primary/20">
+                <div className="space-y-6 relative before:absolute before:inset-0 before:left-2.75 before:w-0.5 before:bg-primary/20">
                   {event.agenda.map((item: any, index: number) => (
                     <div key={index} className="relative pl-10">
                       <div className="absolute left-0 top-1 w-6 h-6 rounded-full bg-primary flex items-center justify-center shadow-lg shadow-primary/20">

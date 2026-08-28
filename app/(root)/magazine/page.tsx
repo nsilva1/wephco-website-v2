@@ -70,7 +70,7 @@ export default function MagazineSubscriptionPage() {
       {/* Hero Header */}
       <section className="relative">
         <div
-          className="w-full h-[360px] md:h-[450px] bg-cover bg-center flex items-center justify-center p-6 text-center"
+          className="w-full h-90 md:h-112.5 bg-cover bg-center flex items-center justify-center p-6 text-center"
           style={{
             backgroundImage: `linear-gradient(rgba(32, 29, 18, 0.4), rgba(32, 29, 18, 0.8)), url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80')`,
           }}>

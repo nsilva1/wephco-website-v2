@@ -32,8 +32,8 @@ export default function EventsClient({ events }: EventsClientProps) {
   return (
     <div className="relative min-h-screen bg-background-dark text-slate-100 font-sans pt-20">
       {/* Background ambient lighting */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[160px] pointer-events-none z-0" />
-      <div className="absolute bottom-20 left-10 w-[400px] h-[400px] bg-primary/3 rounded-full blur-[140px] pointer-events-none z-0" />
+      <div className="absolute top-0 right-0 w-125 h-125 bg-primary/5 rounded-full blur-[160px] pointer-events-none z-0" />
+      <div className="absolute bottom-20 left-10 w-100 h-100 bg-primary/3 rounded-full blur-[140px] pointer-events-none z-0" />
 
       {/* Hero Section */}
       <section className="relative z-10 max-w-7xl mx-auto px-6 py-16 text-center space-y-6">

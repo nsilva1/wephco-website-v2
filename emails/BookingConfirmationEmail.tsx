@@ -69,10 +69,10 @@ export const BookingConfirmationEmail = ({
         }}
       >
         <Body className="bg-[#f4f5f3] font-sans my-0 mx-0 p-0 text-[#17212b]">
-          <div className="w-full bg-[#f4f5f3] py-[30px] px-0">
+          <div className="w-full bg-[#f4f5f3] py-7.5 px-0">
             <table
               role="presentation"
-              className="max-w-[680px] w-[680px] bg-white mx-auto my-0 p-0 border-collapse"
+              className="max-w-170 w-170 bg-white mx-auto my-0 p-0 border-collapse"
               align="center"
               cellPadding="0"
               cellSpacing="0"
@@ -81,17 +81,17 @@ export const BookingConfirmationEmail = ({
                 <tr>
                   <td>
                     {/* Hero Header */}
-                    <div className="bg-[#003f2d] pt-[34px] px-[35px] pb-[30px] text-center border-b-[5px] border-solid border-[#d6ad3d]">
+                    <div className="bg-[#003f2d] pt-8.5 px-8.75 pb-7.5 text-center border-b-1.25 border-solid border-[#d6ad3d]">
                       <div className="font-serif text-[62px] leading-none text-[#e0b53f]">
                         W
                       </div>
                       <div className="font-serif text-[28px] tracking-[7px] text-white font-bold uppercase">
                         {companyName}
                       </div>
-                      <div className="text-[12px] tracking-[3px] text-[#e0b53f] mt-[10px] uppercase font-semibold">
+                      <div className="text-[12px] tracking-[3px] text-[#e0b53f] mt-2.5 uppercase font-semibold">
                         PREMIUM REAL ESTATE SOLUTIONS
                       </div>
-                      <div className="font-serif text-[35px] leading-[1.15] text-white mt-[34px] mb-[4px]">
+                      <div className="font-serif text-[35px] leading-[1.15] text-white mt-8.5 mb-1">
                         Your Investor Consultation<br />
                         <span className="text-[#e0b53f]">is Confirmed.</span>
                       </div>
@@ -105,8 +105,8 @@ export const BookingConfirmationEmail = ({
                       <table role="presentation" className="w-full border-collapse">
                         <tbody>
                           <tr>
-                            <td className="w-[56%] align-top pr-[20px]">
-                              <p className="text-[22px] font-bold text-[#003f2d] my-0 mb-[18px]">
+                            <td className="w-[56%] align-top pr-5">
+                              <p className="text-[22px] font-bold text-[#003f2d] my-0 mb-4.5">
                                 Dear {customerName},
                               </p>
                               <p className="text-[15px] leading-[1.75] text-[#4b5660] my-0">
@@ -115,22 +115,22 @@ export const BookingConfirmationEmail = ({
                                 providing strategic insights and tailored opportunities aligned with
                                 your wealth objectives.
                               </p>
-                              <div className="font-serif italic text-[25px] text-[#174c3c] mt-[20px]">
+                              <div className="font-serif italic text-[25px] text-[#174c3c] mt-5">
                                 The {companyName} Advisory Team
                               </div>
-                              <div className="text-[11px] tracking-[2px] text-[#7b8388] mt-[5px] uppercase">
+                              <div className="text-[11px] tracking-[2px] text-[#7b8388] mt-1.25 uppercase">
                                 EXCELLENCE &nbsp;•&nbsp; TRUST &nbsp;•&nbsp; RESULTS
                               </div>
                             </td>
                             <td className="w-[44%] align-top">
-                              <div className="bg-[#fafaf8] border border-solid border-[#e4dcc7] rounded-[12px] p-[24px] text-center">
+                              <div className="bg-[#fafaf8] border border-solid border-[#e4dcc7] rounded-[12px] p-6 text-center">
                                 <div className="text-[12px] tracking-[2px] text-[#b18420] font-bold uppercase">
                                   BOOKING CONFIRMED
                                 </div>
-                                <div className="text-[11px] text-[#687179] mt-[15px]">
+                                <div className="text-[11px] text-[#687179] mt-3.75">
                                   Booking Reference
                                 </div>
-                                <div className="text-[22px] font-bold tracking-[1px] text-[#17212b] mt-[10px]">
+                                <div className="text-[22px] font-bold tracking-[1px] text-[#17212b] mt-2.5">
                                   {bookingId}
                                 </div>
                                 <div className="text-[11px] text-[#687179] mt-[12px]">
@@ -142,7 +142,7 @@ export const BookingConfirmationEmail = ({
                         </tbody>
                       </table>
 
-                      <div className="text-[16px] tracking-[1px] text-[#003f2d] font-bold border-b border-solid border-[#ded7c7] pb-[10px] mt-[35px] mb-[20px] uppercase">
+                      <div className="text-[16px] tracking-[1px] text-[#003f2d] font-bold border-b border-solid border-[#ded7c7] pb-[10px] mt-[35px] mb-5 uppercase">
                         YOUR APPOINTMENT DETAILS
                       </div>
 
@@ -150,7 +150,7 @@ export const BookingConfirmationEmail = ({
                         <tbody>
                           <tr>
                             <td className="w-1/4 align-top text-center p-[10px_12px] border-r border-solid border-[#e6dfd2]">
-                              <div className="w-[42px] h-[42px] border border-solid border-[#c9992f] rounded-full mx-auto mb-[10px] leading-[42px] text-[#b18420] text-[20px]">
+                              <div className="w-[42px] h-[42px] border border-solid border-[#c9992f] rounded-full mx-auto mb-[10px] leading-[42px] text-[#b18420] text-5">
                                 ▣
                               </div>
                               <div className="text-[10px] tracking-[1.5px] text-[#6c747a] font-bold uppercase">
@@ -164,7 +164,7 @@ export const BookingConfirmationEmail = ({
                               </div>
                             </td>
                             <td className="w-1/4 align-top text-center p-[10px_12px] border-r border-solid border-[#e6dfd2]">
-                              <div className="w-[42px] h-[42px] border border-solid border-[#c9992f] rounded-full mx-auto mb-[10px] leading-[42px] text-[#b18420] text-[20px]">
+                              <div className="w-[42px] h-[42px] border border-solid border-[#c9992f] rounded-full mx-auto mb-[10px] leading-[42px] text-[#b18420] text-5">
                                 ◉
                               </div>
                               <div className="text-[10px] tracking-[1.5px] text-[#6c747a] font-bold uppercase">
@@ -188,7 +188,7 @@ export const BookingConfirmationEmail = ({
                               )}
                             </td>
                             <td className="w-1/4 align-top text-center p-[10px_12px] border-r border-solid border-[#e6dfd2]">
-                              <div className="w-[42px] h-[42px] border border-solid border-[#c9992f] rounded-full mx-auto mb-[10px] leading-[42px] text-[#b18420] text-[20px]">
+                              <div className="w-[42px] h-[42px] border border-solid border-[#c9992f] rounded-full mx-auto mb-[10px] leading-[42px] text-[#b18420] text-5">
                                 ●
                               </div>
                               <div className="text-[10px] tracking-[1.5px] text-[#6c747a] font-bold uppercase">
@@ -204,7 +204,7 @@ export const BookingConfirmationEmail = ({
                               )}
                             </td>
                             <td className="w-1/4 align-top text-center p-[10px_12px]">
-                              <div className="w-[42px] h-[42px] border border-solid border-[#c9992f] rounded-full mx-auto mb-[10px] leading-[42px] text-[#b18420] text-[20px]">
+                              <div className="w-[42px] h-[42px] border border-solid border-[#c9992f] rounded-full mx-auto mb-[10px] leading-[42px] text-[#b18420] text-5">
                                 □
                               </div>
                               <div className="text-[10px] tracking-[1.5px] text-[#6c747a] font-bold uppercase">
@@ -226,7 +226,7 @@ export const BookingConfirmationEmail = ({
                         <table role="presentation" className="w-full border-collapse">
                           <tbody>
                             <tr>
-                              <td className="w-[48%] align-top pr-[20px]">
+                              <td className="w-[48%] align-top pr-5">
                                 <div className="text-[14px] tracking-[1px] text-[#e0b53f] font-bold uppercase">
                                   BE PREPARED FOR A PRODUCTIVE SESSION
                                 </div>
@@ -259,7 +259,7 @@ export const BookingConfirmationEmail = ({
                       </div>
 
                       {/* Important Reminders */}
-                      <div className="bg-[#fbf7e9] border-l-[5px] border-solid border-[#d6ad3d] p-[20px_22px] mt-[18px]">
+                      <div className="bg-[#fbf7e9] border-l-1.25 border-solid border-[#d6ad3d] p-[20px_22px] mt-4.5">
                         <div className="text-[13px] tracking-[1px] text-[#8c6418] font-bold uppercase">
                           IMPORTANT REMINDERS
                         </div>
@@ -271,7 +271,7 @@ export const BookingConfirmationEmail = ({
                           <div className="mt-[14px]">
                             <Link
                               href={meetingLink}
-                              className="bg-[#003f2d] text-white text-[12px] font-bold tracking-[0.7px] px-[24px] py-[13px] rounded-[5px] inline-block no-underline"
+                              className="bg-[#003f2d] text-white text-[12px] font-bold tracking-[0.7px] px-6 py-[13px] rounded-1.25 inline-block no-underline"
                             >
                               MANAGE APPOINTMENT
                             </Link>
@@ -322,7 +322,7 @@ export const BookingConfirmationEmail = ({
 
                     {/* Footer */}
                     <div className="p-[28px_42px] text-center bg-white">
-                      <div className="font-serif tracking-[5px] font-bold text-[#003f2d] text-[19px] uppercase">
+                      <div className="font-serif tracking-1.25 font-bold text-[#003f2d] text-[19px] uppercase">
                         {companyName}
                       </div>
                       <div className="text-[10px] tracking-[2px] text-[#9a7a32] mt-[6px] uppercase">

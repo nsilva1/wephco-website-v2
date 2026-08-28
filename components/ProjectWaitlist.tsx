@@ -93,7 +93,7 @@ export const ProjectWaitlist = () => {
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-700"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent opacity-90" />
+            <div className="absolute inset-0 bg-linear-to-t from-slate-950 via-slate-950/20 to-transparent opacity-90" />
 
             {/* Floating Top Badges */}
             <div className="absolute top-4 left-4 flex flex-wrap gap-2 z-10">
@@ -265,7 +265,7 @@ export const ProjectWaitlist = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-4 bg-gradient-to-r from-primary via-[#e5c158] to-[#b38f28] text-background-dark font-black rounded-xl hover:bg-primary/95 transition-all flex items-center justify-center gap-2 shadow-xl shadow-primary/20 cursor-pointer text-xs uppercase tracking-wider transform hover:scale-[1.01] mt-2"
+                  className="w-full py-4 bg-linear-to-r from-primary via-[#e5c158] to-[#b38f28] text-background-dark font-black rounded-xl hover:bg-primary/95 transition-all flex items-center justify-center gap-2 shadow-xl shadow-primary/20 cursor-pointer text-xs uppercase tracking-wider transform hover:scale-[1.01] mt-2"
                 >
                   {loading ? (
                     <Loader />
