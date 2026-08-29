@@ -87,9 +87,6 @@ export default function MagazineSubscriptionPage() {
             backgroundImage: `linear-gradient(rgba(32, 29, 18, 0.4), rgba(32, 29, 18, 0.8)), url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80')`,
           }}>
           <div className="max-w-4xl">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-primary/20 border border-primary/30 text-primary text-xs font-bold uppercase tracking-widest mb-4">
-              <Sparkles className="size-3.5" /> WEPHCO Magazine & Membership
-            </div>
             <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-6">
               Wephco Wimoa Magazine
             </h1>
