@@ -1,6 +1,9 @@
-import Link from "next/link"
+'use client'
+
+import { useRouter } from "next/navigation"
 
 const Hero = () => {
+    const router = useRouter()
     return (
         <div className='relative h-195 lg:h-screen w-full flex items-center justify-center overflow-hidden font-display z-10'>
             <video className='absolute inset-0 w-full h-full object-cover z-0' autoPlay loop muted playsInline preload="metadata">
@@ -17,7 +20,7 @@ const Hero = () => {
                     With Over $35 Million Sold — Wephco is the most reliable luxury real estate advisory, bridging ambition with generational legacy.
                 </p>
                 <div className="col-span-1">
-                    <button className="bg-primary px-3 py-4 rounded-lg hover:bg-primary/90 cursor-pointer text-black w-50">Search for Property</button>
+                    <button onClick={() => router.push('/properties')} className="bg-primary px-3 py-4 rounded-lg hover:bg-primary/90 cursor-pointer text-black w-50">Search for Property</button>
                 </div>
             </div>
         </div>
