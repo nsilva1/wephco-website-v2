@@ -32,8 +32,8 @@ export default function EventsClient({ events }: EventsClientProps) {
   return (
     <div className="relative min-h-screen bg-background-dark text-slate-100 font-sans pt-20">
       {/* Background ambient lighting */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[160px] pointer-events-none z-0" />
-      <div className="absolute bottom-20 left-10 w-[400px] h-[400px] bg-primary/3 rounded-full blur-[140px] pointer-events-none z-0" />
+      <div className="absolute top-0 right-0 w-125 h-125 bg-primary/5 rounded-full blur-[160px] pointer-events-none z-0" />
+      <div className="absolute bottom-20 left-10 w-100 h-100 bg-primary/3 rounded-full blur-[140px] pointer-events-none z-0" />
 
       {/* Hero Section */}
       <section className="relative z-10 max-w-7xl mx-auto px-6 py-16 text-center space-y-6">
@@ -59,29 +59,26 @@ export default function EventsClient({ events }: EventsClientProps) {
           <div className="inline-flex p-1 bg-slate-900/80 border border-primary/15 rounded-xl backdrop-blur-md">
             <button
               onClick={() => setActiveTab('upcoming')}
-              className={`px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-300 ${
-                activeTab === 'upcoming'
+              className={`px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-300 ${activeTab === 'upcoming'
                   ? 'bg-primary text-background-dark shadow-md'
                   : 'text-slate-400 hover:text-slate-200'
-              }`}>
+                }`}>
               Upcoming Shows
             </button>
             <button
               onClick={() => setActiveTab('virtual')}
-              className={`px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-300 ${
-                activeTab === 'virtual'
+              className={`px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-300 ${activeTab === 'virtual'
                   ? 'bg-primary text-background-dark shadow-md'
                   : 'text-slate-400 hover:text-slate-200'
-              }`}>
+                }`}>
               Virtual Roadshows
             </button>
             <button
               onClick={() => setActiveTab('past')}
-              className={`px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-300 ${
-                activeTab === 'past'
+              className={`px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-300 ${activeTab === 'past'
                   ? 'bg-primary text-background-dark shadow-md'
                   : 'text-slate-400 hover:text-slate-200'
-              }`}>
+                }`}>
               Past Exhibitions
             </button>
           </div>

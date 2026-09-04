@@ -6,7 +6,7 @@ import { IBlogPost } from "@/interfaces/blogInterface";
 export function BlogPostCard({ title, slug, excerpt, coverImage, category, tags, publishedAt, readTime }: Partial<IBlogPost>) {
   return (
     <div className="bg-[#022618]/15 border border-primary/10 rounded-2xl overflow-hidden hover:border-primary/45 transition-all duration-300 flex flex-col justify-between h-full group">
-      
+
       {/* Cover Image */}
       {coverImage ? (
         <div className="aspect-video overflow-hidden relative border-b border-primary/10">
@@ -24,17 +24,17 @@ export function BlogPostCard({ title, slug, excerpt, coverImage, category, tags,
 
       {/* Content */}
       <div className="p-6 flex-1 flex flex-col gap-4">
-        
+
         {/* Category & Tags */}
         <div className="flex flex-wrap items-center justify-between gap-2">
           {category && (
-            <span 
+            <span
               className="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded bg-[#022618]/30 border border-primary/10 text-primary w-fit"
             >
               {category.name}
             </span>
           )}
-          
+
           <div className="flex flex-wrap gap-1">
             {tags!.slice(0, 2).map((tag) => (
               <span key={tag} className="text-[9px] uppercase tracking-wider text-slate-400 font-mono">
@@ -59,7 +59,7 @@ export function BlogPostCard({ title, slug, excerpt, coverImage, category, tags,
 
       {/* Footer Meta */}
       <div className="px-6 py-4 border-t border-primary/10 bg-[#022618]/5 flex items-center justify-between text-[10px] text-slate-500 font-medium">
-        
+
         <div className="flex items-center gap-4">
           <span className="flex items-center gap-1.5">
             <Calendar className="text-primary text-sm" />
@@ -74,7 +74,7 @@ export function BlogPostCard({ title, slug, excerpt, coverImage, category, tags,
           )}
         </div>
 
-        <Link 
+        <Link
           href={`/blog/${slug}`}
           className="text-primary hover:text-white font-bold uppercase tracking-wider transition-colors hover:translate-x-0.5 duration-200"
         >

@@ -2,12 +2,9 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  devIndicators: {
-    buildActivity: false,
-  },
+  serverExternalPackages: ['firebase-admin'],
   experimental: {
     authInterrupts: true,
-    serverComponentsExternalPackages: ['firebase-admin']
   },
   images: {
     remotePatterns: [

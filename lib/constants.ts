@@ -21,6 +21,14 @@ export const navbarMenu = [
         label: 'Sell',
         path: '/sell'
     },
+    // {
+    //     label: 'Property Management',
+    //     path: '/property-management'
+    // },
+    {
+        label: 'Services',
+        path: '/services'
+    },
     {
         label: 'Affiliates',
         path: '/affiliates'
@@ -28,10 +36,6 @@ export const navbarMenu = [
     {
         label: 'About Us',
         path: '/about'
-    },
-    {
-        label: 'Services',
-        path: '/services'
     },
     {
         label: 'Events',
@@ -282,3 +286,117 @@ export const FIRESTORE_COLLECTIONS = {
     EVENTS: 'events',
     MAGAZINES: 'magazines',
 }
+
+export const EMAIL_TEMPLATE_IDS = {
+    CONSULTATION: '997873ab-0faf-4d49-b2c2-a3532434a668',
+    PROPERTY_UPLOAD: '27bb4afd-efab-439f-afa4-13b6e83ebb35',
+    PROPERTY_INQUIRY: '611d3795-4ada-4454-a7ba-85fc3fc3ce5f'
+}
+
+export interface IMembershipTier {
+  id: string;
+  name: string;
+  price: string;
+  priceAmount: number;
+  period: string;
+  targetAudience: string;
+  category: 'membership' | 'institutional';
+  positioning: string;
+  offers: string[];
+}
+
+export const WEPHCO_MEMBERSHIP_TIERS: IMembershipTier[] = [
+  {
+    id: 'insight',
+    name: 'WEPHCO INSIGHT',
+    price: 'FREE',
+    priceAmount: 0,
+    period: '/ year',
+    targetAudience: 'General readers, young professionals, emerging investors and the African/global audience.',
+    category: 'membership',
+    positioning: 'Build the WEPHCO audience and convert free readers into premium members.',
+    offers: [
+      'Selected magazine articles',
+      'Weekly investment intelligence',
+      'Market and investment news',
+      'Selected investment opportunities',
+      'CEO interviews',
+      'Africa market updates',
+      'Access to selected webinars',
+      'Event announcements',
+      'WEPHCO newsletter',
+    ],
+  },
+  {
+    id: 'executive',
+    name: 'WEPHCO EXECUTIVE',
+    price: '$49',
+    priceAmount: 49,
+    period: '/ year',
+    targetAudience: 'Professionals, executives, established investors and diaspora investors.',
+    category: 'membership',
+    positioning: 'For leaders who want to understand where capital, assets and opportunity are moving.',
+    offers: [
+      'Full digital magazine — 12 editions',
+      'Premium investment intelligence',
+      'Quarterly investment reports',
+      'Africa Investment Radar',
+      'Global Investment Destination reports',
+      'Digital magazine archive',
+      'CEO & Leadership Dialogues',
+      'Priority event invitations',
+      'Executive newsletters',
+      'Selected online investment briefings',
+      'Premium print editions where applicable',
+    ],
+  },
+  {
+    id: 'investor-circle',
+    name: 'WEPHCO INVESTOR CIRCLE',
+    price: '$299',
+    priceAmount: 299,
+    period: '/ year',
+    targetAudience: 'Serious investors, entrepreneurs, senior executives and high-net-worth individuals.',
+    category: 'membership',
+    positioning: 'A private circle connecting capital, intelligence, relationships and opportunity.',
+    offers: [
+      'Everything in Executive',
+      'Private investor briefings',
+      'Investor roundtables',
+      'Early access to WEPHCO reports',
+      'WEPHCO Investment Watchlist',
+      'Private investment intelligence sessions',
+      'International investment forums',
+      'Curated market opportunities',
+      'Priority access to WEPHCO events',
+      'Investor networking',
+      'Annual Investor Intelligence Report',
+      'Closed-door discussions',
+    ],
+  },
+  {
+    id: 'corporate-partner',
+    name: 'WEPHCO CORPORATE & STRATEGIC PARTNER',
+    price: 'From $1,999',
+    priceAmount: 1999,
+    period: '/ year',
+    targetAudience: 'Banks, oil & gas companies, insurance companies, investment firms, law firms, airlines, developers, multinational corporations and institutions.',
+    category: 'institutional',
+    positioning: "More than a subscription, a strategic partnership connecting your organisation to Africa's emerging investment ecosystem.",
+    offers: [
+      'Corporate magazine access',
+      'Multiple employee/user subscriptions',
+      'Executive investment briefings',
+      'Employee wealth & asset education',
+      'Corporate investment intelligence',
+      'CEO/Executive participation',
+      'Thought-leadership opportunities',
+      'Priority access to WEPHCO conferences',
+      'Corporate roundtables',
+      'Research collaboration',
+      'Strategic event partnership',
+      'Investment and networking opportunities',
+      'Dedicated corporate relationship support',
+    ],
+  },
+];

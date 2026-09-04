@@ -46,7 +46,7 @@ export const createEvent = async (data: EventItem): Promise<string> => {
             image: data.image,
             scope: data.scope,
             format: data.format,
-            seatsRemaining: data.seatsRemaining !== undefined ? Number(data.seatsRemaining) : null,
+            seatsRemaining: data.seatsRemaining !== undefined && data.seatsRemaining !== null ? Number(data.seatsRemaining) : null,
             isPast: data.isPast || false,
             agenda: data.agenda || [],
             hosts: data.hosts || [],
@@ -105,5 +105,77 @@ export const deleteEvent = async (id: string): Promise<boolean> => {
     } catch (error) {
         console.error(`Error deleting event ${id}:`, error);
         throw new Error("Failed to delete event");
+    }
+};
+
+/**
+ * Server action to reserve seats for an event and update seatsRemaining
+ */
+export const reserveEventSeat = async ({
+    eventId,
+    seatsCount = 1,
+    attendeeName,
+    email,
+    phone,
+    investmentTier,
+    preferences,
+}: {
+    eventId: string;
+    seatsCount?: number;
+    attendeeName: string;
+    email: string;
+    phone: string;
+    investmentTier?: string;
+    preferences?: string;
+}): Promise<{ success: boolean; error?: string; remainingSeats?: number | null }> => {
+    try {
+        let newSeatsRemaining: number | null = null;
+        let eventTitle = 'Event';
+
+        const eventDoc = await getDocument(COLLECTION_NAME, eventId);
+        if (eventDoc) {
+            const data = serializeDoc(eventDoc);
+            eventTitle = data.title || 'Event';
+            
+            if (data.seatsRemaining !== undefined && data.seatsRemaining !== null) {
+                const currentSeats = Number(data.seatsRemaining);
+                if (currentSeats < seatsCount) {
+                    return {
+                        success: false,
+                        error: currentSeats <= 0 ? 'This event is fully reserved.' : `Only ${currentSeats} seats remaining.`,
+                    };
+                }
+                newSeatsRemaining = Math.max(0, currentSeats - seatsCount);
+                await updateDocument(COLLECTION_NAME, eventId, {
+                    seatsRemaining: newSeatsRemaining,
+                    updatedAt: new Date(),
+                });
+            }
+        }
+
+        // Create RSVP reservation record
+        await createDocument('eventRSVPs', {
+            eventId,
+            eventTitle,
+            attendeeName,
+            email,
+            phone,
+            seatsReserved: Number(seatsCount),
+            investmentTier: investmentTier || '',
+            preferences: preferences || 'No special preferences requested.',
+            verified: false,
+            createdAt: new Date(),
+        });
+
+        return {
+            success: true,
+            remainingSeats: newSeatsRemaining,
+        };
+    } catch (error: any) {
+        console.error("Error reserving event seat:", error);
+        return {
+            success: false,
+            error: error.message || "Failed to reserve seat for event.",
+        };
     }
 };

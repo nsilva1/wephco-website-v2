@@ -8,11 +8,16 @@ const COLLECTION_NAME = FIRESTORE_COLLECTIONS.MAGAZINES;
 
 export interface IMagazineSubscription {
   id?: string;
-  type: 'Physical' | 'Online';
+  tierId?: string;
+  tierName?: string;
+  type?: string;
   name: string;
   email: string;
+  phoneNumber?: string;
+  companyName?: string;
   deliveryAddress?: string;
   fee: number;
+  language?: 'English' | 'French';
   status: 'pending' | 'paid' | 'cancelled';
   createdAt?: Date | string;
 }
@@ -20,11 +25,16 @@ export interface IMagazineSubscription {
 export const createMagazineSubscription = async (data: Omit<IMagazineSubscription, 'id' | 'status' | 'createdAt'>): Promise<IMagazineSubscription> => {
   try {
     const payload = {
-      type: data.type,
+      type: data.type || data.tierName || 'Membership',
+      tierId: data.tierId || '',
+      tierName: data.tierName || '',
       name: data.name,
       email: data.email,
-      deliveryAddress: data.deliveryAddress || "",
+      phoneNumber: data.phoneNumber || '',
+      companyName: data.companyName || '',
+      deliveryAddress: data.deliveryAddress || '',
       fee: data.fee,
+      language: data.language || 'English',
       status: 'pending' as const,
       createdAt: new Date(),
     };

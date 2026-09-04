@@ -22,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
+       <head>
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-S4KJ9R4BVF"
           strategy="afterInteractive"
@@ -39,7 +39,7 @@ export default function RootLayout({
           src="https://t.contentsquare.net/uxa/65358b2c8c4e3.js"
           strategy="afterInteractive"
         />
-      </head>
+      </head> 
       <body className={`${outfit.variable} antialiased`}>{children}</body>
     </html>
   );

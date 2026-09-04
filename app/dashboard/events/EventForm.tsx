@@ -13,7 +13,9 @@ import { Textarea } from '@/components/ui/textarea';
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
@@ -437,14 +439,17 @@ export default function EventForm({ event, mode }: EventFormProps) {
                       value={formState.scope}
                       onValueChange={(v) => handleChange('scope', v)}
                       >
-                      <SelectTrigger className='text-black'>
+                      <SelectTrigger className='text-black w-full'>
                         <SelectValue className='text-black' />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="Local">Local</SelectItem>
-                        <SelectItem value="International">
-                          International
-                        </SelectItem>
+                        <SelectGroup>
+                          <SelectLabel>Scope</SelectLabel>
+                          <SelectItem value="Local">Local</SelectItem>
+                          <SelectItem value="International">
+                            International
+                          </SelectItem>
+                        </SelectGroup>
                       </SelectContent>
                     </Select>
                   </div>
@@ -455,7 +460,7 @@ export default function EventForm({ event, mode }: EventFormProps) {
                     <Select
                       value={formState.format}
                       onValueChange={(v) => handleChange('format', v)}>
-                      <SelectTrigger className='text-black'>
+                      <SelectTrigger className='text-black w-full'>
                         <SelectValue className='text-black' />
                       </SelectTrigger>
                       <SelectContent>
