@@ -230,7 +230,7 @@ export default function PropertyDetailsPage() {
 
           {/* Thumbnails Sidebar */}
           <div className="hidden lg:grid grid-rows-3 gap-4 h-full">
-            {property.images.slice(0, 3).map((img: string, idx: number) => (
+            {property.images.slice(0, 4).map((img: string, idx: number) => (
               <div
                 key={idx}
                 onClick={() => setActiveImage(img)}

@@ -98,11 +98,25 @@ export default function PropertyForm({ property, mode }: PropertyFormProps) {
   const [selectedCountry, setSelectedCountry] = useState<{
     label: string;
     value: string;
-  } | null>(null);
+  } | null>(() => {
+    if (property?.location) {
+      const parts = property.location.split(',');
+      const country = parts[1]?.trim() || parts[0]?.trim() || '';
+      return country ? { label: country, value: country } : null;
+    }
+    return null;
+  });
   const [selectedCity, setSelectedCity] = useState<{
     label: string;
     value: string;
-  } | null>(null);
+  } | null>(() => {
+    if (property?.location) {
+      const parts = property.location.split(',');
+      const city = parts[0]?.trim() || '';
+      return city ? { label: city, value: city } : null;
+    }
+    return null;
+  });
   const [isLoadingCountries, setIsLoadingCountries] = useState(false);
 
   const [formState, setFormState] = useState({
@@ -157,7 +171,7 @@ export default function PropertyForm({ property, mode }: PropertyFormProps) {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
@@ -168,11 +182,13 @@ export default function PropertyForm({ property, mode }: PropertyFormProps) {
       !formState.price
     ) {
       toast.warning('Please fill in all required fields');
+      setIsSubmitting(false);
       return;
     }
 
-    if (selectedFiles.length === 0) {
+    if (existingImages.length === 0 && selectedFiles.length === 0) {
       toast.warning('Please upload at least one image of your property');
+      setIsSubmitting(false);
       return;
     }
 
@@ -188,6 +204,7 @@ export default function PropertyForm({ property, mode }: PropertyFormProps) {
       toast.warning(
         'Please enter valid numbers for bedrooms, bathrooms, and square footage'
       );
+      setIsSubmitting(false);
       return;
     }
 
@@ -339,43 +356,35 @@ export default function PropertyForm({ property, mode }: PropertyFormProps) {
                   <label className="font-semibold text-slate-700">
                     Country *
                   </label>
-                  {property?.location ? (
-                    <p>{property.location.split(',')[1].trim()}</p>
-                  ) : (
-                    <ReactSelect
-                      options={countryOptions}
-                      value={selectedCountry}
-                      onChange={(val) => {
-                        setSelectedCountry(val);
-                        setSelectedCity(null);
-                      }}
-                      placeholder={
-                        isLoadingCountries ? 'Loading...' : 'Select Country'
-                      }
-                      styles={customSelectStyles}
-                      isLoading={isLoadingCountries}
-                      isSearchable
-                      required
-                    />
-                  )}
+                  <ReactSelect
+                    options={countryOptions}
+                    value={selectedCountry}
+                    onChange={(val) => {
+                      setSelectedCountry(val);
+                      setSelectedCity(null);
+                    }}
+                    placeholder={
+                      isLoadingCountries ? 'Loading...' : 'Select Country'
+                    }
+                    styles={customSelectStyles}
+                    isLoading={isLoadingCountries}
+                    isSearchable
+                    required
+                  />
                 </div>
 
                 <div className="space-y-1">
                   <label className="font-semibold text-slate-700">City *</label>
-                  {property?.location ? (
-                    <p>{property.location.split(',')[0].trim()}</p>
-                  ) : (
-                    <ReactSelect
-                      options={cityOptions}
-                      value={selectedCity}
-                      onChange={(val) => setSelectedCity(val)}
-                      placeholder="Select City"
-                      styles={customSelectStyles}
-                      isDisabled={!selectedCountry}
-                      isSearchable
-                      required
-                    />
-                  )}
+                  <ReactSelect
+                    options={cityOptions}
+                    value={selectedCity}
+                    onChange={(val) => setSelectedCity(val)}
+                    placeholder="Select City"
+                    styles={customSelectStyles}
+                    isDisabled={!selectedCountry}
+                    isSearchable
+                    required
+                  />
                 </div>
               </div>
               <div className="grid gap-2">

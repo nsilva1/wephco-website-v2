@@ -91,28 +91,34 @@ export async function updateProperty(id: string, formData: FormData) {
   const imageFiles = formData.getAll('images') as File[];
   const pdfFile = formData.get('pdf') as File | null;
   const existingImagesRaw = formData.get('existingImages') as string;
+  const imageUrlsRaw = formData.get('imageUrls') as string;
   const existingPdf = formData.get('existingPdf') as string || '';
+  const pdfUrlRaw = formData.get('pdfUrl') as string || '';
 
-  let imageUrls: string[] = existingImagesRaw ? JSON.parse(existingImagesRaw) : [];
-  let pdfUrl = existingPdf;
+  const existingImages: string[] = existingImagesRaw ? JSON.parse(existingImagesRaw) : [];
+  const newImageUrls: string[] = imageUrlsRaw ? JSON.parse(imageUrlsRaw) : [];
+  let imageUrls: string[] = [...existingImages, ...newImageUrls];
+  let pdfUrl = pdfUrlRaw || existingPdf;
 
-  const bucket = storage.bucket(process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET);
-
-  for (const imageFile of imageFiles) {
-    if (imageFile && imageFile.size > 0) {
-      const fileName = `properties/${Date.now()}_${imageFile.name}`;
-      const file = bucket.file(fileName);
-      const buffer = Buffer.from(await imageFile.arrayBuffer());
-      await file.save(buffer, {
-        contentType: imageFile.type,
-        metadata: { firebaseStorageDownloadTokens: Date.now().toString() },
-      });
-      await file.makePublic();
-      imageUrls.push(`https://storage.googleapis.com/${bucket.name}/${fileName}`);
+  if (imageFiles && imageFiles.length > 0) {
+    const bucket = storage.bucket(process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET);
+    for (const imageFile of imageFiles) {
+      if (imageFile && imageFile.size > 0) {
+        const fileName = `properties/${Date.now()}_${imageFile.name}`;
+        const file = bucket.file(fileName);
+        const buffer = Buffer.from(await imageFile.arrayBuffer());
+        await file.save(buffer, {
+          contentType: imageFile.type,
+          metadata: { firebaseStorageDownloadTokens: Date.now().toString() },
+        });
+        await file.makePublic();
+        imageUrls.push(`https://storage.googleapis.com/${bucket.name}/${fileName}`);
+      }
     }
   }
 
   if (pdfFile && pdfFile.size > 0) {
+    const bucket = storage.bucket(process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET);
     const fileName = `properties/pdfs/${Date.now()}_${pdfFile.name}`;
     const file = bucket.file(fileName);
     const buffer = Buffer.from(await pdfFile.arrayBuffer());

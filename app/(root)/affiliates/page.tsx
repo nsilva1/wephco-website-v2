@@ -356,7 +356,7 @@ export default function AffiliatesPage() {
                   type="submit"
                   disabled={submitting}
                   className="w-full bg-primary hover:bg-primary/95 text-background-dark font-black py-4 rounded-lg transition-all shadow-lg hover:shadow-primary/30 uppercase tracking-widest text-xs cursor-pointer disabled:opacity-50">
-                  {submitting ? 'Submitting...' : 'Submit Application'}
+                  {submitting ? 'Submitting...' : 'Submit'}
                 </button>
               </div>
             </form>

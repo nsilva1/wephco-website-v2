@@ -19,81 +19,26 @@ import {
   Phone,
   Mail,
   ArrowRight,
-  Sparkles,
   UserCheck,
   Briefcase,
   Layers,
+  Quote,
 } from 'lucide-react';
 
-// Leadership & Team Data from Company Profile (Page 8) with Extracted PDF Images
-const teamMembers = [
-  {
-    name: 'Harvey Nwachukwu',
-    role: 'CEO and Group Chairman',
-    image: '/images/pdf-about/team_harvey_nwachukwu.png',
-    bio: 'Visionary real estate leader driving Wephco’s global expansion, wealth creation frameworks, and institutional trust.',
+// Brand Ambassador Data & Transcripts from Video Script Package PDF
+const brandAmbassador = {
+  name: 'Keleb Nwubani',
+  role: 'Brand Ambassador',
+  image: '/images/pdf-about/team_keleb_nwubani.png',
+  bio: 'Acclaimed professional athlete and advocate representing WEPHCO’s brand values of discipline, global vision, and wealth building.',
+  speech: {
+    tagline: 'Creating Wealth Without Borders.',
+    title: 'Official Video Speech — The Vision & Mission',
+    duration: '~105 seconds',
+    tone: 'Visionary, bold & purposeful',
+    content: 'Africa is rising. Its wealth is growing. Its ambition is global. And its investors — you — deserve access to the world’s most powerful wealth-building tool: Real estate. At WEPHCO, we see a future where African investors move without borders. Where your capital reaches premium markets in the UAE, the UK, the USA — and beyond. A future where property isn’t just an asset. It’s a legacy. Something you build, preserve, and pass down — generation after generation. That future isn’t distant. It’s the reason we exist: To become Africa’s most trusted global real estate investment platform. Connecting investors to premium opportunities. Creating prosperity — not just for today, but for the generations that come after you. But vision without action is just a dream. So here’s what we actually do: We bridge Africa’s rising wealth to the world’s most prestigious real estate markets. We remove the complexity, the confusion, the lack of transparency that has held too many investors back for too long. We put you at the center of every decision. Every deal. Every opportunity. Because at WEPHCO, wealth has no borders. Capital has no ceiling. And your potential? Is limitless. This is our mission. This is our promise: Connecting capital to global opportunities — creating wealth without borders. WEPHCO. Your world. Your wealth. Your legacy.',
   },
-  {
-    name: 'Peter Ekwe',
-    role: 'Human Resource Manager & Regional Trainer',
-    image: '/images/pdf-about/team_peter_ekwe.png',
-    bio: 'Oversees organizational growth, talent development, and regional advisory training across Wephco operations.',
-  },
-  {
-    name: 'Corina Aaron',
-    role: 'Corporate Trainer',
-    image: '/images/pdf-about/team_corina_aaron.png',
-    bio: 'Directs corporate excellence standards, international advisory alignment, and client service strategy.',
-  },
-  {
-    name: 'Keleb Nwubani',
-    role: 'Brand Ambassador',
-    image: '/images/pdf-about/team_keleb_nwubani.png',
-    bio: 'Acclaimed professional athlete and advocate representing Wephco’s brand values of discipline and wealth building.',
-  },
-  {
-    name: 'Abdullateef Kadiri',
-    role: 'Business Developer',
-    image: '/images/pdf-about/team_abdullateef_kadiri.png',
-    bio: 'Spearheads strategic partnerships, developer alliances, and new market acquisition pathways.',
-  },
-  {
-    name: 'Duru Chinwendu Blessing',
-    role: 'Sales Executive',
-    image: '/images/pdf-about/team_duru_blessing.png',
-    bio: 'Drives high-value residential and commercial property matching for private and corporate investors.',
-  },
-  {
-    name: 'Chibuzor Okenyi',
-    role: 'Digital Marketer',
-    image: '/images/pdf-about/team_chibuzor_okenyi.png',
-    bio: 'Manages digital media positioning, property campaign distribution, and global investor reach.',
-  },
-  {
-    name: 'Mercy Rowland Igwe',
-    role: 'Customer Relationship Manager',
-    image: '/images/pdf-about/team_mercy_igwe.png',
-    bio: 'Ensures white-glove client experience, concierge onboarding, and long-term portfolio relationship care.',
-  },
-  {
-    name: 'Isah Ismail',
-    role: 'Regional Marketer, Kano',
-    image: '/images/pdf-about/team_isah_ismail.png',
-    bio: 'Leads northern regional market expansion, diaspora client engagement, and local developer networks.',
-  },
-  {
-    name: 'Elijah Thomas Gabriel',
-    role: 'Visual Director',
-    image: '/images/pdf-about/team_elijah_gabriel.png',
-    bio: 'Curates high-definition visual storytelling, architectural presentation, and brand media standards.',
-  },
-  {
-    name: 'Great Nwachukwu',
-    role: 'Accounting and Finance',
-    image: '/images/pdf-about/team_great_nwachukwu.png',
-    bio: 'Oversees corporate financial compliance, transaction verification, and escrow audit frameworks.',
-  },
-];
+};
 
 // Featured Projects Portfolio from Company Profile (Pages 17-20) with Extracted PDF Images
 const featuredProjects = [
@@ -619,9 +564,6 @@ export default function AboutPage() {
             {/* Program 1 */}
             <div className="bg-slate-900/60 p-8 rounded-3xl border border-primary/20 space-y-6 flex flex-col justify-between hover:border-primary/40 transition-all duration-300">
               <div className="space-y-4">
-                <span className="text-xs font-extrabold text-primary bg-primary/15 px-3 py-1 rounded-full uppercase tracking-wider inline-block">
-                  Program 01
-                </span>
                 <h3 className="text-xl font-bold text-white">Homecoming Investor Package</h3>
                 <p className="text-xs text-slate-300 leading-relaxed font-light">
                   Designed for Africans in the diaspora. Transforms remote home construction into a structured, transparent, professionally managed experience from foundation to handover.
@@ -646,9 +588,6 @@ export default function AboutPage() {
             {/* Program 2 */}
             <div className="bg-slate-900/60 p-8 rounded-3xl border border-primary/20 space-y-6 flex flex-col justify-between hover:border-primary/40 transition-all duration-300">
               <div className="space-y-4">
-                <span className="text-xs font-extrabold text-primary bg-primary/15 px-3 py-1 rounded-full uppercase tracking-wider inline-block">
-                  Program 02
-                </span>
                 <h3 className="text-xl font-bold text-white">Global Investment Cycle</h3>
                 <p className="text-xs text-slate-300 leading-relaxed font-light">
                   A structured international investment framework connecting clients with high-growth global real estate opportunities in Abu Dhabi, London, and beyond.
@@ -673,9 +612,6 @@ export default function AboutPage() {
             {/* Program 3 */}
             <div className="bg-slate-900/60 p-8 rounded-3xl border border-primary/20 space-y-6 flex flex-col justify-between hover:border-primary/40 transition-all duration-300">
               <div className="space-y-4">
-                <span className="text-xs font-extrabold text-primary bg-primary/15 px-3 py-1 rounded-full uppercase tracking-wider inline-block">
-                  Program 03
-                </span>
                 <h3 className="text-xl font-bold text-white">Investment Access Cycle</h3>
                 <p className="text-xs text-slate-300 leading-relaxed font-light">
                   Gives qualified investors early access to vetted off-market listings before public release, backed by independent market research and full legal audit.
@@ -764,49 +700,55 @@ export default function AboutPage() {
       </section>
 
       {/* ------------------------------------------------------------------- */}
-      {/* MEET THE LEADERSHIP TEAM WITH PDF EXTRACTED PORTRAITS */}
+      {/* BRAND AMBASSADOR MESSAGE SECTION */}
       {/* ------------------------------------------------------------------- */}
-      <section className="py-24 px-6 md:px-12 lg:px-20 bg-slate-950 border-t border-primary/10">
-        <div className="max-w-7xl mx-auto space-y-16">
+      <section className="py-24 px-6 md:px-12 lg:px-20 bg-slate-950 border-t border-primary/10 relative overflow-hidden">
+        <div className="max-w-6xl mx-auto space-y-12 relative z-10">
           <div className="text-center max-w-3xl mx-auto space-y-4">
-            <span className="text-primary text-xs font-bold tracking-[0.25em] uppercase">
-              Leadership &amp; Advisory
-            </span>
-            <h2 className="text-3xl md:text-5xl font-light text-white leading-tight">
-              Meet The <span className="font-black text-primary">Team</span>
+            <h2 className="text-3xl md:text-4xl font-light text-white leading-tight">
+              Connecting Capital To <span className="font-black text-primary">Global Opportunities</span>
             </h2>
-            <p className="text-slate-300 text-sm md:text-base font-light">
-              Behind every successful investment is a team of dedicated professionals committed to delivering expertise, transparency, and exceptional client service.
+            <p className="text-slate-300 text-sm md:text-base font-light italic">
+              "{brandAmbassador.speech.tagline}"
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {teamMembers.map((member, idx) => (
-              <div
-                key={idx}
-                className="bg-slate-900/60 rounded-3xl h-125 overflow-hidden border border-primary/20 hover:border-primary/40 transition-all duration-300 group flex flex-col justify-between shadow-xl"
-              >
-                {/* Team Member Photo Extracted from PDF Page 8 */}
-                <div className="relative h-96 w-full overflow-hidden bg-slate-950">
+          {/* Single Unified Card for Profile & Speech Content */}
+          <div className="bg-slate-900/80 rounded-3xl border border-primary/20 p-6 md:p-10 shadow-2xl backdrop-blur-xl space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center border-b border-primary/10 pb-8">
+              <div className="md:col-span-4 lg:col-span-3 flex flex-col items-center sm:items-start text-center sm:text-left gap-4">
+                <div className="relative h-44 w-44 rounded-2xl overflow-hidden bg-slate-950 border-2 border-primary/30 shadow-lg shrink-0">
                   <Image
-                    src={member.image}
-                    alt={member.name}
+                    src={brandAmbassador.image}
+                    alt={brandAmbassador.name}
                     fill
-                    objectFit='cover'
-                    className="group-hover:scale-105 transition-transform duration-500"
+                    style={{ objectFit: 'cover' }}
+                    className="hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-linear-to-t from-slate-900 via-transparent to-transparent opacity-80" />
                 </div>
-
-                <div className="p-6 space-y-2">
-                  <h3 className="text-lg font-bold text-white">{member.name}</h3>
-                  <p className="text-xs font-semibold text-primary uppercase tracking-wider">{member.role}</p>
-                  <p className="text-xs text-slate-300 font-light leading-relaxed pt-1">
-                    {member.bio}
-                  </p>
+                <div>
+                  <h3 className="text-xl font-black text-white">{brandAmbassador.name}</h3>
+                  <p className="text-xs text-primary font-bold">{brandAmbassador.role}</p>
                 </div>
               </div>
-            ))}
+
+              <div className="md:col-span-8 lg:col-span-9 space-y-4">
+                <div className="flex items-center gap-2 text-primary font-extrabold text-xs uppercase tracking-wider">
+                  <Quote className="w-5 h-5" />
+                  <span>Brand Ambassador Statement</span>
+                </div>
+                <p className="text-slate-300 text-sm md:text-base leading-relaxed font-light">
+                  {brandAmbassador.speech.content}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-slate-400 font-medium">Core Creed:</span>
+                <span className="text-xs text-primary font-bold italic">"WEPHCO. Your world. Your wealth. Your legacy."</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
