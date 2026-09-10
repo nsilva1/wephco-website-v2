@@ -298,6 +298,7 @@ export interface IMembershipTier {
   name: string;
   price: string;
   priceAmount: number;
+  currency: string;
   period: string;
   targetAudience: string;
   category: 'membership' | 'institutional';
@@ -311,6 +312,7 @@ export const WEPHCO_MEMBERSHIP_TIERS: IMembershipTier[] = [
     name: 'WEPHCO INSIGHT',
     price: 'FREE',
     priceAmount: 0,
+    currency: 'USD',
     period: '/ year',
     targetAudience: 'General readers, young professionals, emerging investors and the African/global audience.',
     category: 'membership',
@@ -332,6 +334,7 @@ export const WEPHCO_MEMBERSHIP_TIERS: IMembershipTier[] = [
     name: 'WEPHCO EXECUTIVE',
     price: '$49',
     priceAmount: 49,
+    currency: 'USD',
     period: '/ year',
     targetAudience: 'Professionals, executives, established investors and diaspora investors.',
     category: 'membership',
@@ -355,6 +358,7 @@ export const WEPHCO_MEMBERSHIP_TIERS: IMembershipTier[] = [
     name: 'WEPHCO INVESTOR CIRCLE',
     price: '$299',
     priceAmount: 299,
+    currency: 'USD',
     period: '/ year',
     targetAudience: 'Serious investors, entrepreneurs, senior executives and high-net-worth individuals.',
     category: 'membership',
@@ -379,6 +383,7 @@ export const WEPHCO_MEMBERSHIP_TIERS: IMembershipTier[] = [
     name: 'WEPHCO CORPORATE & STRATEGIC PARTNER',
     price: 'From $1,999',
     priceAmount: 1999,
+    currency: 'USD',
     period: '/ year',
     targetAudience: 'Banks, oil & gas companies, insurance companies, investment firms, law firms, airlines, developers, multinational corporations and institutions.',
     category: 'institutional',

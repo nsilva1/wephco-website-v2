@@ -1,14 +1,13 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { User, Mail, MapPin, BookOpen, ArrowRight, IdCard, Globe, Phone, Building2, CheckCircle2, ShieldCheck, Sparkles } from 'lucide-react';
 import { Loader } from '@/components/Loader';
 import { toast } from 'react-toastify';
 import { createMagazineSubscription } from '@/actions/magazine';
 import { WEPHCO_MEMBERSHIP_TIERS, IMembershipTier } from '@/lib/constants';
+import { FlutterwaveButton } from '@/components/flutterwave/FlutterwaveButton';
 
-const ONLINE_PAYMENT_LINK = 'https://sandbox.flutterwave.com/pay/cowfzvobwq1v';
-const PHYSICAL_PAYMENT_LINK = 'https://sandbox.flutterwave.com/pay/yvxd7gzfe3bu';
 
 // Exclude free tier ('insight') from magazine membership checkout
 const PAID_MEMBERSHIP_TIERS = WEPHCO_MEMBERSHIP_TIERS.filter((tier) => tier.id !== 'insight');
@@ -18,6 +17,7 @@ export default function MagazineSubscriptionPage() {
   const [selectedTier, setSelectedTier] = useState<IMembershipTier>(PAID_MEMBERSHIP_TIERS[0]);
   const [subType, setSubType] = useState<'Online' | 'Physical'>('Online');
   const [language, setLanguage] = useState<'English' | 'French'>('English');
+  const flutterwaveRef = useRef<HTMLButtonElement>(null);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -31,7 +31,7 @@ export default function MagazineSubscriptionPage() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
 
     if (!formData.name || !formData.email) {
@@ -62,17 +62,11 @@ export default function MagazineSubscriptionPage() {
 
       toast.success(`Registered for ${selectedTier.name} [${subType}] (${language} Edition)! Redirecting to payment...`);
 
-      const paymentLink = subType === 'Physical' || selectedTier.category === 'institutional'
-        ? PHYSICAL_PAYMENT_LINK
-        : ONLINE_PAYMENT_LINK;
-      
-      // Delay slightly for toast visibility, then redirect
-      setTimeout(() => {
-        window.location.href = paymentLink;
-      }, 1500);
-
+      // Trigger Flutterwave payment modal via ref click
+      flutterwaveRef.current?.click();
     } catch (error) {
       toast.error((error as Error).message || 'Something went wrong. Please try again.');
+    } finally {
       setLoading(false);
     }
   };
@@ -381,8 +375,17 @@ export default function MagazineSubscriptionPage() {
                 </div>
 
                 <div className="flex items-center justify-center gap-2 text-slate-400 text-[11px] pt-1">
-                  <ShieldCheck className="size-4 text-primary" />
-                  <span>Secure 256-bit encrypted checkout</span>
+                  <FlutterwaveButton
+                    className='hidden'
+                    ref={flutterwaveRef}
+                    amount={selectedTier.priceAmount}
+                    email={formData.email}
+                    name={formData.name}
+                    phoneNumber={formData.phoneNumber}
+                    currency={selectedTier.currency}
+                    redirectUrl="/magazine/payment-success"
+                    description={`Wephco Wimoa Magazine - ${selectedTier.name} Subscription`}
+                  />
                 </div>
               </form>
             </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, SubmitEvent } from 'react';
+import React, { useState, useRef, SubmitEvent } from 'react';
 import {
   Calendar,
   Clock,
@@ -23,6 +23,7 @@ import { createConsultation } from '@/actions/consultation';
 import { consultationServices } from '@/lib/constants';
 import { sendBookingConfirmationEmail } from '@/actions/email';
 import { formatMeetingDate } from '@/lib/helperFunctions';
+import { FlutterwaveButton } from '@/components/flutterwave/FlutterwaveButton';
 
 // Match services to icons dynamically
 const getServiceIcon = (label: string) => {
@@ -33,11 +34,10 @@ const getServiceIcon = (label: string) => {
   return Wallet;
 };
 
-const privateConsultationPaymentLink = 'https://sandbox.flutterwave.com/pay/jhawafmnzuoc';
-
 const ConsultationsPage = () => {
   const [loading, setLoading] = useState(false);
   const [activeStep, setActiveStep] = useState<number>(1);
+  const flutterwaveRef = useRef<HTMLButtonElement>(null);
 
   // Initial state with no service selected initially
   const [formData, setFormData] = useState({
@@ -101,11 +101,7 @@ const ConsultationsPage = () => {
 
       toast.success(
         'Your private consultation request has been scheduled successfully!'
-      );
-
-      if (formData.service === 'Private Consulting') {
-        window.location.href = privateConsultationPaymentLink;
-      }
+      );      
 
       // send email to the user confirming the consultation booking
       await sendBookingConfirmationEmail({
@@ -117,24 +113,30 @@ const ConsultationsPage = () => {
           bookingDate: formatMeetingDate(formData.meetingDate),
           bookingTime: formData.meetingTime,
           meetingLocation: formData.meetingLocation === 'virtual' ? 'Virtual (Google Meet)' : 'Physical',
-          meetingLink: formData.meetingLocation === 'virtual' ? 'https://meet.google.com/vfg-kjnq-jqa?hs=186' : 'Los Angeles Mall, Kado, Abuja',
+          meetingLink: formData.meetingLocation === 'virtual' ? 'Virtual meeting link will be sent to your email address soon' : 'Los Angeles Mall, Kado, Abuja',
         },
       });
 
+
+      if (formData.service === 'Private Consulting') {
+        flutterwaveRef.current?.click();
+      }
+
+
       // Reset form
-      setFormData({
-        service: '',
-        meetingDate: '',
-        meetingTime: '11:00 AM',
-        meetingLocation: 'virtual',
-        preferredModeOfContact: 'email',
-        phoneNumber: '',
-        email: '',
-        organizationName: '',
-        name: '',
-        priceRange: '$2M - $5M',
-        details: '',
-      });
+      // setFormData({
+      //   service: '',
+      //   meetingDate: '',
+      //   meetingTime: '11:00 AM',
+      //   meetingLocation: 'virtual',
+      //   preferredModeOfContact: 'email',
+      //   phoneNumber: '',
+      //   email: '',
+      //   organizationName: '',
+      //   name: '',
+      //   priceRange: '$2M - $5M',
+      //   details: '',
+      // });
       setActiveStep(1);
     } catch (error) {
       toast.error(
@@ -609,6 +611,18 @@ const ConsultationsPage = () => {
                   </div>
                 </div>
               )}
+
+              <FlutterwaveButton
+                className="hidden"
+                ref={flutterwaveRef}
+                amount={100}
+                email={formData.email}
+                name={formData.name}
+                phoneNumber={formData.phoneNumber}
+                currency="USD"
+                redirectUrl={`/consultations/payment-success?service=${encodeURIComponent(formData.service || 'Private Consulting')}&date=${encodeURIComponent(formData.meetingDate)}&time=${encodeURIComponent(formData.meetingTime)}&location=${encodeURIComponent(formData.meetingLocation)}`}
+                description={`WEPHCO - ${formData.service || 'Private Consulting'} Advisory Session`}
+              />
             </form>
           </div>
         </div>
