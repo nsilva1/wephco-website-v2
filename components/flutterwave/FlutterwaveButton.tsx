@@ -54,30 +54,35 @@ const FlutterwaveButton = forwardRef<HTMLButtonElement, FlutterwaveButtonProps>(
     return (
         <div>
             <button
+                type="button"
                 ref={ref}
                 className={className}
-                onClick={() => handlePayment({
-                    callback: (response) => {
-                        console.log('Flutterwave response:', response);
-                        closePaymentModal();
-                        if (typeof window !== 'undefined') {
-                            const targetPath = redirectUrl || '/magazine/payment-success';
-                            const query = new URLSearchParams({
-                                status: response.status || 'successful',
-                                tx_ref: response.tx_ref || defaultTxRef,
-                                transaction_id: response.transaction_id ? String(response.transaction_id) : '',
-                                amount: String(amount),
-                                currency: currency,
-                                email: email,
-                                name: name,
-                            }).toString();
-                            window.location.href = `${targetPath}?${query}`;
+                onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handlePayment({
+                        callback: (response) => {
+                            console.log('Flutterwave response:', response);
+                            closePaymentModal();
+                            if (typeof window !== 'undefined') {
+                                const targetPath = redirectUrl || '/magazine/payment-success';
+                                const query = new URLSearchParams({
+                                    status: response.status || 'successful',
+                                    tx_ref: response.tx_ref || defaultTxRef,
+                                    transaction_id: response.transaction_id ? String(response.transaction_id) : '',
+                                    amount: String(amount),
+                                    currency: currency,
+                                    email: email,
+                                    name: name,
+                                }).toString();
+                                window.location.href = `${targetPath}?${query}`;
+                            }
+                        },
+                        onClose: () => {
+                            console.log('Payment modal closed');
                         }
-                    },
-                    onClose: () => {
-                        console.log('Payment modal closed');
-                    }
-                })}
+                    });
+                }}
             >
                 Pay {amount}
             </button>

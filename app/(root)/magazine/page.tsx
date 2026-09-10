@@ -374,20 +374,19 @@ export default function MagazineSubscriptionPage() {
                   </button>
                 </div>
 
-                <div className="flex items-center justify-center gap-2 text-slate-400 text-[11px] pt-1">
-                  <FlutterwaveButton
-                    className='hidden'
-                    ref={flutterwaveRef}
-                    amount={selectedTier.priceAmount}
-                    email={formData.email}
-                    name={formData.name}
-                    phoneNumber={formData.phoneNumber}
-                    currency={selectedTier.currency}
-                    redirectUrl="/magazine/payment-success"
-                    description={`Wephco Wimoa Magazine - ${selectedTier.name} Subscription`}
-                  />
-                </div>
               </form>
+
+              <FlutterwaveButton
+                className='hidden'
+                ref={flutterwaveRef}
+                amount={selectedTier.priceAmount}
+                email={formData.email}
+                name={formData.name}
+                phoneNumber={formData.phoneNumber}
+                currency={selectedTier.currency}
+                redirectUrl="/magazine/payment-success"
+                description={`Wephco Wimoa Magazine - ${selectedTier.name} Subscription`}
+              />
             </div>
 
           </div>

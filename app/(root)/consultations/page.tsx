@@ -70,6 +70,8 @@ const ConsultationsPage = () => {
   const submitForm = async (e: SubmitEvent) => {
     e.preventDefault();
 
+    if (loading) return;
+
     if (
       !formData.name ||
       !formData.email ||
@@ -117,26 +119,24 @@ const ConsultationsPage = () => {
         },
       });
 
-
       if (formData.service === 'Private Consulting') {
         flutterwaveRef.current?.click();
       }
 
-
       // Reset form
-      // setFormData({
-      //   service: '',
-      //   meetingDate: '',
-      //   meetingTime: '11:00 AM',
-      //   meetingLocation: 'virtual',
-      //   preferredModeOfContact: 'email',
-      //   phoneNumber: '',
-      //   email: '',
-      //   organizationName: '',
-      //   name: '',
-      //   priceRange: '$2M - $5M',
-      //   details: '',
-      // });
+      setFormData({
+        service: '',
+        meetingDate: '',
+        meetingTime: '11:00 AM',
+        meetingLocation: 'virtual',
+        preferredModeOfContact: 'email',
+        phoneNumber: '',
+        email: '',
+        organizationName: '',
+        name: '',
+        priceRange: '$2M - $5M',
+        details: '',
+      });
       setActiveStep(1);
     } catch (error) {
       toast.error(
@@ -612,18 +612,19 @@ const ConsultationsPage = () => {
                 </div>
               )}
 
-              <FlutterwaveButton
-                className="hidden"
-                ref={flutterwaveRef}
-                amount={100}
-                email={formData.email}
-                name={formData.name}
-                phoneNumber={formData.phoneNumber}
-                currency="USD"
-                redirectUrl={`/consultations/payment-success?service=${encodeURIComponent(formData.service || 'Private Consulting')}&date=${encodeURIComponent(formData.meetingDate)}&time=${encodeURIComponent(formData.meetingTime)}&location=${encodeURIComponent(formData.meetingLocation)}`}
-                description={`WEPHCO - ${formData.service || 'Private Consulting'} Advisory Session`}
-              />
             </form>
+
+            <FlutterwaveButton
+              className="hidden"
+              ref={flutterwaveRef}
+              amount={100}
+              email={formData.email}
+              name={formData.name}
+              phoneNumber={formData.phoneNumber}
+              currency="USD"
+              redirectUrl={`/consultations/payment-success?service=${encodeURIComponent(formData.service || 'Private Consulting')}&date=${encodeURIComponent(formData.meetingDate)}&time=${encodeURIComponent(formData.meetingTime)}&location=${encodeURIComponent(formData.meetingLocation)}`}
+              description={`WEPHCO - ${formData.service || 'Private Consulting'} Advisory Session`}
+            />
           </div>
         </div>
       </section>
