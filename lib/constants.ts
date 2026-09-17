@@ -6,7 +6,7 @@ import aldar from '@/images/aldar.png'
 import damac from '@/images/damac.svg'
 import sober from '@/images/sober.png'
 import aarano from '@/images/aarano.png'
-import { MdDashboard, MdChatBubble, MdAttachMoney, MdVerifiedUser, MdNotifications, MdAnalytics, MdEvent, MdContactPhone } from "react-icons/md";
+import { MdDashboard, MdChatBubble, MdAttachMoney, MdVerifiedUser, MdNotifications, MdAnalytics, MdEvent, MdContactPhone, MdOutlineAssignment } from "react-icons/md";
 import { BiBuildings, BiSupport } from "react-icons/bi";
 import { BsPeopleFill } from "react-icons/bs";
 import { Role } from "@/interfaces/userInterface";
@@ -21,10 +21,10 @@ export const navbarMenu = [
         label: 'Sell',
         path: '/sell'
     },
-    // {
-    //     label: 'Property Management',
-    //     path: '/property-management'
-    // },
+    {
+        label: 'Property Management',
+        path: '/property-management'
+    },
     {
         label: 'Services',
         path: '/services'
@@ -175,6 +175,11 @@ export const dashboardMenu = [
         icon: MdVerifiedUser,
         path: '/dashboard/kyc'
     },
+    {
+        label: 'Project Waitlist',
+        icon: MdOutlineAssignment,
+        path: '/dashboard/project-waitlist'
+    },
 ]
 
 export const allowedRoles = [Role.ADMIN, Role.SUPERADMIN, Role.SUPPORT]
@@ -285,6 +290,8 @@ export const FIRESTORE_COLLECTIONS = {
     AFFILIATES: 'affiliates',
     EVENTS: 'events',
     MAGAZINES: 'magazines',
+    PROJECT_WAITLIST: 'project_waitlist',
+    PROJECT_WAITLIST_CONFIG: 'project_waitlist_config',
 }
 
 export const EMAIL_TEMPLATE_IDS = {

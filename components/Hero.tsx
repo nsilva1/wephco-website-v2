@@ -4,17 +4,37 @@ import { useRouter } from "next/navigation"
 // import heroVideo from '@/public/videos/WephcoV1-compressed.mp4';
 
 const Hero = () => {
-    const router = useRouter()
+  const router = useRouter();
 
+  return (
+    <div className="relative h-96 lg:h-screen w-full flex items-center justify-center overflow-hidden font-display z-10">
+      {/* Mobile Video Player (visible on screens < md) */}
+      <video
+        className="md:hidden absolute inset-0 w-full h-full pointer-events-none z-0 aspect-square"
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="metadata"
+      >
+        <source src="/videos/WephcoV1-compressed.mp4" type="video/mp4" />
+      </video>
 
-    return (
-        <div className='relative h-195 lg:h-screen w-full flex items-center justify-center overflow-hidden font-display z-10'>
-            <video className='absolute inset-0 w-full h-full object-cover z-0' autoPlay loop muted playsInline preload="metadata" poster='../images/saadiyat.jpg'>
-                <source src="/videos/WephcoV1-compressed.mp4" type="video/mp4" />
-            </video>
-            <div className='absolute inset-0 bg-linear-to-b from-background-dark/35 via-background-dark/20 to-background-dark/10 z-10'></div>
+      {/* Desktop & Large Screen Video Player (visible on screens >= md) */}
+      <video
+        className="hidden md:block absolute inset-0 w-full h-full object-cover object-center pointer-events-none z-0"
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="metadata"
+      >
+        <source src="/videos/WephcoV1-compressed.mp4" type="video/mp4" />
+      </video>
 
-            <div className='relative z-20 text-center text-white px-6 max-w-4xl pt-16 w-full'>
+      <div className="absolute inset-0 bg-linear-to-b from-background-dark/35 via-background-dark/20 to-background-dark/10 z-10" />
+
+      {/* <div className='relative z-20 text-center text-white px-6 max-w-4xl pt-16 w-full'>
                 <h1 className='text-4xl md:text-7xl font-light mb-6 tracking-tight leading-tight'>
                     Secure Your<br className="md:hidden" />
                     <span className='font-extrabold italic text-primary'>Investment</span>
@@ -25,9 +45,9 @@ const Hero = () => {
                 <div className="col-span-1">
                     <button onClick={() => router.push('/properties')} className="bg-primary px-3 py-4 rounded-lg hover:bg-primary/90 cursor-pointer text-black w-50">Search for Property</button>
                 </div>
-            </div>
-        </div>
-    )
-}
+            </div> */}
+    </div>
+  );
+};
 
 export { Hero }
