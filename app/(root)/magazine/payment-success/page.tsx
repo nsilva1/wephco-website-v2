@@ -61,7 +61,7 @@ function MagazineSuccessContent() {
 
         <div className="space-y-3">
           <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight">
-            Welcome to <span className="text-primary italic">Wephco Wimoa Magazine</span>
+            Welcome to <span className="text-primary italic">Wimoa Magazine</span>
           </h1>
 
           <p className="text-slate-300 text-sm sm:text-base max-w-xl mx-auto font-light leading-relaxed">
@@ -112,7 +112,7 @@ function MagazineSuccessContent() {
             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
               Publication
             </span>
-            <p className="text-sm font-bold text-white mt-1">Wephco Wimoa Magazine</p>
+            <p className="text-sm font-bold text-white mt-1">Wimoa Magazine</p>
             <p className="text-xs text-slate-400">Global Luxury &amp; Real Estate</p>
           </div>
 

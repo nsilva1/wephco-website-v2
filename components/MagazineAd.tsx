@@ -17,7 +17,7 @@ const MagazineAd = () => {
               Exclusive Publication
             </span>
             <h3 className="text-3xl md:text-5xl font-light text-white leading-tight">
-              Wephco <span className="font-extrabold italic text-primary">WIMOA Magazine</span>
+              <span className="font-extrabold italic text-primary">WIMOA Magazine</span>
             </h3>
             <div className="h-1 w-16 bg-primary mt-4"></div>
           </div>

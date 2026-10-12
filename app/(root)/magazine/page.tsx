@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { User, Mail, MapPin, BookOpen, ArrowRight, IdCard, Globe, Phone, Building2, CheckCircle2, ShieldCheck, Sparkles } from 'lucide-react';
 import { Loader } from '@/components/Loader';
 import { toast } from 'react-toastify';
@@ -18,6 +18,15 @@ export default function MagazineSubscriptionPage() {
   const [subType, setSubType] = useState<'Online' | 'Physical'>('Online');
   const [language, setLanguage] = useState<'English' | 'French'>('English');
   const flutterwaveRef = useRef<HTMLButtonElement>(null);
+
+  const isCorporateTier = selectedTier.name === 'WEPHCO CORPORATE & STRATEGIC PARTNER';
+
+  // Automatically reset to Online format if package does not support Physical Print
+  useEffect(() => {
+    if (!isCorporateTier && subType === 'Physical') {
+      setSubType('Online');
+    }
+  }, [isCorporateTier, subType]);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -82,7 +91,7 @@ export default function MagazineSubscriptionPage() {
           }}>
           <div className="max-w-4xl">
             <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-6">
-              Wephco Wimoa Magazine
+              Wimoa Magazine
             </h1>
             <p className="text-slate-300 text-sm md:text-lg max-w-2xl mx-auto leading-relaxed font-light">
               Subscribe to the premier publication covering global luxury real estate, design masterpieces, wealth preservation, and institutional partnerships across Africa.
@@ -104,7 +113,6 @@ export default function MagazineSubscriptionPage() {
                   <h3 className="text-xl font-bold text-primary flex items-center gap-2">
                     <BookOpen className="size-5 text-primary" /> Select Membership Package
                   </h3>
-                  <span className="text-xs text-slate-400 font-medium">3 Paid Tiers</span>
                 </div>
                 
                 <div className="grid grid-cols-1 gap-4">
@@ -122,13 +130,14 @@ export default function MagazineSubscriptionPage() {
                       >
                         <div className="flex justify-between items-start gap-3 mb-3">
                           <div>
-                            <span className={`text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full tracking-wider border ${
-                              tier.category === 'institutional'
-                                ? 'bg-amber-500/20 text-amber-300 border-amber-500/30'
-                                : 'bg-primary/20 text-primary border-primary/30'
-                            }`}>
-                              {tier.category === 'institutional' ? 'Institutional Partnership' : 'Membership Tier'}
-                            </span>
+                            <div className="flex flex-wrap items-center gap-2">
+                              {tier.id === 'corporate-partner' && (
+                                <span className="inline-flex items-center gap-1.5 bg-rose-500/15 text-rose-300 border border-rose-500/30 text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full tracking-wider">
+                                  <span className="size-1.5 rounded-full bg-rose-400 animate-pulse" />
+                                  Limited Slots Available
+                                </span>
+                              )}
+                            </div>
                             <h4 className="font-extrabold text-lg md:text-xl text-white mt-1.5">
                               {tier.name}
                             </h4>
@@ -139,6 +148,14 @@ export default function MagazineSubscriptionPage() {
                             <span className="text-xs text-slate-400 block font-light">{tier.period}</span>
                           </div>
                         </div>
+
+                        {tier.id === 'corporate-partner' && (
+                          <div className="flex items-center gap-2.5 bg-amber-500/10 border border-amber-500/25 rounded-xl px-3.5 py-2.5 mb-3 text-xs text-amber-200">
+                            <span>
+                              <strong className="font-semibold text-white">Please Note:</strong> There are limited slots available for this corporate partnership.
+                            </span>
+                          </div>
+                        )}
 
                         {/* Positioning Statement */}
                         <p className="text-xs italic text-slate-300 mb-4 bg-slate-950/40 p-3 rounded-lg border border-white/5 leading-relaxed">
@@ -244,7 +261,7 @@ export default function MagazineSubscriptionPage() {
                       <span className="text-[10px] text-primary font-bold">{subType}</span>
                     </label>
 
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className={`grid ${isCorporateTier ? 'grid-cols-2' : 'grid-cols-1'} gap-2`}>
                       <button
                         type="button"
                         onClick={() => setSubType('Online')}
@@ -261,21 +278,23 @@ export default function MagazineSubscriptionPage() {
                         <p className="text-[10px] opacity-75 mt-1 leading-tight">Instant Digital Access</p>
                       </button>
 
-                      <button
-                        type="button"
-                        onClick={() => setSubType('Physical')}
-                        className={`p-3 rounded-lg border text-left transition-all cursor-pointer ${
-                          subType === 'Physical'
-                            ? 'bg-primary/20 border-primary text-white shadow-md'
-                            : 'bg-slate-900/60 border-primary/20 text-slate-400 hover:border-primary/40'
-                        }`}
-                      >
-                        <div className="font-bold text-xs flex items-center justify-between">
-                          <span>Physical Print</span>
-                          {subType === 'Physical' && <CheckCircle2 className="size-3.5 text-primary" />}
-                        </div>
-                        <p className="text-[10px] opacity-75 mt-1 leading-tight">Delivered Hard Copy</p>
-                      </button>
+                      {isCorporateTier && (
+                        <button
+                          type="button"
+                          onClick={() => setSubType('Physical')}
+                          className={`p-3 rounded-lg border text-left transition-all cursor-pointer ${
+                            subType === 'Physical'
+                              ? 'bg-primary/20 border-primary text-white shadow-md'
+                              : 'bg-slate-900/60 border-primary/20 text-slate-400 hover:border-primary/40'
+                          }`}
+                        >
+                          <div className="font-bold text-xs flex items-center justify-between">
+                            <span>Physical Print</span>
+                            {subType === 'Physical' && <CheckCircle2 className="size-3.5 text-primary" />}
+                          </div>
+                          <p className="text-[10px] opacity-75 mt-1 leading-tight">Delivered Hard Copy</p>
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -385,7 +404,7 @@ export default function MagazineSubscriptionPage() {
                 phoneNumber={formData.phoneNumber}
                 currency={selectedTier.currency}
                 redirectUrl="/magazine/payment-success"
-                description={`Wephco Wimoa Magazine - ${selectedTier.name} Subscription`}
+                description={`Wimoa Magazine - ${selectedTier.name} Subscription`}
               />
             </div>
 

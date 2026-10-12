@@ -7,10 +7,7 @@ import { wephcoServices } from '@/lib/constants';
 import { ServicesCarousel } from '@/components/ServicesCarousel';
 import {
   BiStar,
-  BiGlobe,
   BiSolidQuoteLeft,
-  BiCheckDouble,
-  BiTrendingUp,
   BiUserVoice,
 } from 'react-icons/bi';
 
