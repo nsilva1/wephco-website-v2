@@ -4,6 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { wephcoServices } from '@/lib/constants';
+import { ServicesCarousel } from '@/components/ServicesCarousel';
 import {
   BiStar,
   BiGlobe,
@@ -66,120 +67,8 @@ export default function ServicesPage() {
 
       {/* Services Grid Section */}
       <section className="py-20 px-6 md:px-20 bg-background-dark">
-        <div className="max-w-7xl mx-auto space-y-24">
-          {/* 1. International Services */}
-          <div>
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-4 border-b border-primary/10 pb-6">
-              <div>
-                <span className="text-primary text-xs font-bold tracking-widest uppercase block mb-1">
-                  Global Coverage
-                </span>
-                <h3 className="text-slate-100 text-3xl font-light">
-                  International{' '}
-                  <span className="font-extrabold text-primary">Services</span>
-                </h3>
-              </div>
-              <p className="text-slate-400 text-xs italic">
-                Connecting wealth with high-value prime global assets.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {wephcoServices.international.map((service, idx) => (
-                <div
-                  key={idx}
-                  className="bg-neutral-dark/20 p-8 rounded-2xl border border-primary/10 hover:border-primary/30 transition-all duration-300 flex gap-5 items-start">
-                  <div className="bg-primary/15 text-primary p-3.5 rounded-xl shrink-0">
-                    <BiGlobe className="text-2xl" />
-                  </div>
-                  <div className="space-y-2">
-                    <h4 className="text-slate-100 text-lg font-bold">
-                      {service.title}
-                    </h4>
-                    <p className="text-slate-400 text-sm leading-relaxed font-light">
-                      {service.description}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* 2. Local Services */}
-          <div>
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-4 border-b border-primary/10 pb-6">
-              <div>
-                <span className="text-primary text-xs font-bold tracking-widest uppercase block mb-1">
-                  Domestic Execution
-                </span>
-                <h3 className="text-slate-100 text-3xl font-light">
-                  Local{' '}
-                  <span className="font-extrabold text-primary">Services</span>
-                </h3>
-              </div>
-              <p className="text-slate-400 text-xs italic">
-                Unmatched security, management, and positioning within Nigeria.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {wephcoServices.local.map((service, idx) => (
-                <div
-                  key={idx}
-                  className="bg-neutral-dark/20 p-6 rounded-2xl border border-primary/10 hover:border-primary/30 transition-all duration-300 flex flex-col justify-between">
-                  <div className="space-y-4">
-                    <div className="bg-primary/15 text-primary p-3 rounded-lg w-fit">
-                      <BiCheckDouble className="text-xl" />
-                    </div>
-                    <h4 className="text-slate-100 text-base font-bold">
-                      {service.title}
-                    </h4>
-                    <p className="text-slate-400 text-xs leading-relaxed font-light">
-                      {service.description}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* 3. Consultation Services */}
-          <div>
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-4 border-b border-primary/10 pb-6">
-              <div>
-                <span className="text-primary text-xs font-bold tracking-widest uppercase block mb-1">
-                  Bespoke Guidance
-                </span>
-                <h3 className="text-slate-100 text-3xl font-light">
-                  Consultation &amp;{' '}
-                  <span className="font-extrabold text-primary">Advisory</span>
-                </h3>
-              </div>
-              <p className="text-slate-400 text-xs italic">
-                Private structuring and strategic acquisition planning.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {wephcoServices.consultation.map((service, idx) => (
-                <div
-                  key={idx}
-                  className="bg-neutral-dark/20 p-6 rounded-2xl border border-primary/10 hover:border-primary/30 transition-all duration-300 flex flex-col justify-between">
-                  <div className="space-y-4">
-                    <div className="bg-primary/15 text-primary p-3 rounded-lg w-fit">
-                      <BiTrendingUp className="text-xl" />
-                    </div>
-                    <h4 className="text-slate-100 text-base font-bold">
-                      {service.title}
-                    </h4>
-                    <p className="text-slate-400 text-xs leading-relaxed font-light">
-                      {service.description}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+        <div className="max-w-7xl mx-auto">
+          <ServicesCarousel />
         </div>
       </section>
 
