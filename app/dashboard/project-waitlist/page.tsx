@@ -721,7 +721,7 @@ export default function DashboardProjectWaitlistPage() {
                       fill
                       className="object-cover"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
+                    <div className="absolute inset-0 bg-linear-to-t from-slate-950 via-slate-950/20 to-transparent" />
                     <div className="absolute top-2 left-2 flex gap-1">
                       <span className="bg-[#cfb53b] text-slate-950 font-extrabold text-[9px] px-2 py-0.5 rounded">
                         {config.phaseBadge}

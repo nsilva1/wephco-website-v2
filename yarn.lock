@@ -4398,6 +4398,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"call-bound@npm:^1.0.2":
+  version: 1.0.4
+  resolution: "call-bound@npm:1.0.4"
+  dependencies:
+    call-bind-apply-helpers: "npm:^1.0.2"
+    get-intrinsic: "npm:^1.3.0"
+  checksum: 10c0/f4796a6a0941e71c766aea672f63b72bc61234c4f4964dc6d7606e3664c307e7d77845328a8f3359ce39ddb377fed67318f9ee203dea1d47e46165dcf2917644
+  languageName: node
+  linkType: hard
+
 "callsites@npm:^3.0.0":
   version: 3.1.0
   resolution: "callsites@npm:3.1.0"
@@ -5538,6 +5548,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"gaxios@npm:^7.1.3, gaxios@npm:^7.3.0":
+  version: 7.3.1
+  resolution: "gaxios@npm:7.3.1"
+  dependencies:
+    extend: "npm:^3.0.2"
+    https-proxy-agent: "npm:^7.0.1"
+    node-fetch: "npm:^3.3.2"
+  checksum: 10c0/64719a771c5ffa631b33d18b144253596f69d98fa3123c3864f7b66947bb1406fb98a4690bd7e11c651d2ee3f57b60b23814cc4a7dbd62d043eab9fa3df60f96
+  languageName: node
+  linkType: hard
+
 "gcp-metadata@npm:8.1.2":
   version: 8.1.2
   resolution: "gcp-metadata@npm:8.1.2"
@@ -5560,6 +5581,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"gcp-metadata@npm:^9.0.0":
+  version: 9.0.4
+  resolution: "gcp-metadata@npm:9.0.4"
+  dependencies:
+    gaxios: "npm:^7.1.3"
+    google-logging-utils: "npm:^2.0.0"
+    json-bigint: "npm:^1.0.0"
+  checksum: 10c0/bd10f0ac2594f066f52818f2f2191bd60d6038619ee315d5a8e101b1b00d43d28b6c331879c025657128fc63435153b3506b2dbc9a9bf9872e77d2cd7a0c8828
+  languageName: node
+  linkType: hard
+
 "generator-function@npm:^2.0.0":
   version: 2.0.1
   resolution: "generator-function@npm:2.0.1"
@@ -5574,7 +5606,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"get-intrinsic@npm:^1.2.6":
+"get-intrinsic@npm:^1.2.5, get-intrinsic@npm:^1.2.6, get-intrinsic@npm:^1.3.0":
   version: 1.3.1
   resolution: "get-intrinsic@npm:1.3.1"
   dependencies:
@@ -5637,6 +5669,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"google-auth-library@npm:^11.0.0":
+  version: 11.1.0
+  resolution: "google-auth-library@npm:11.1.0"
+  dependencies:
+    base64-js: "npm:^1.3.0"
+    ecdsa-sig-formatter: "npm:^1.0.11"
+    gaxios: "npm:^7.1.4"
+    gcp-metadata: "npm:^9.0.0"
+    google-logging-utils: "npm:^2.0.0"
+    jws: "npm:^4.0.0"
+  checksum: 10c0/223190ce8fb59ed6cbd4be232283eafe94455ba72644c0d7e8656a660541e68cc4612d97372a3501572aee46c03e37018814f8a0ce812b564a192b654c467e68
+  languageName: node
+  linkType: hard
+
 "google-auth-library@npm:^9.3.0, google-auth-library@npm:^9.6.3":
   version: 9.15.1
   resolution: "google-auth-library@npm:9.15.1"
@@ -5689,6 +5735,37 @@ __metadata:
   version: 1.2.0
   resolution: "google-logging-utils@npm:1.2.0"
   checksum: 10c0/a5bceaa13ef6ed7e84a4dd96d8acb5ca895c7777a35629921096c53b1740518d3a8aa35d808697488ecf0416f2e72d462148ecbbbec34a805b5eacc136171a53
+  languageName: node
+  linkType: hard
+
+"google-logging-utils@npm:^2.0.0":
+  version: 2.0.1
+  resolution: "google-logging-utils@npm:2.0.1"
+  checksum: 10c0/f8926ef09ad94e2c9f0bca4c455e300f610a7b13da6fb055aecaab79975fc0fe0d308241063da9bdbfc19cf450088258a3c4c7ce5ffdf79c77d74c71a9427881
+  languageName: node
+  linkType: hard
+
+"googleapis-common@npm:^9.0.0":
+  version: 9.1.0
+  resolution: "googleapis-common@npm:9.1.0"
+  dependencies:
+    extend: "npm:^3.0.2"
+    gaxios: "npm:^7.3.0"
+    google-auth-library: "npm:^11.0.0"
+    google-logging-utils: "npm:^2.0.0"
+    qs: "npm:^6.7.0"
+    url-template: "npm:^2.0.8"
+  checksum: 10c0/adb9974574b46a4c8c07355bc440b8bf756e77e4f3821c9bf05371e826631067348070d879451b95e03bc40e40bcf77b288292e3b9ce0bfebed7a2c951241b56
+  languageName: node
+  linkType: hard
+
+"googleapis@npm:^181.0.0":
+  version: 181.0.0
+  resolution: "googleapis@npm:181.0.0"
+  dependencies:
+    google-auth-library: "npm:^11.0.0"
+    googleapis-common: "npm:^9.0.0"
+  checksum: 10c0/23291265ab67e7c0901cdfab3f2c55e55016b078a358b606a41f6b0ac227a8d6c97c61476583057259a148c97353348f64f0be321192aaa96217e6ba1190ddfa
   languageName: node
   linkType: hard
 
@@ -6926,6 +7003,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"object-inspect@npm:^1.13.3, object-inspect@npm:^1.13.4":
+  version: 1.13.4
+  resolution: "object-inspect@npm:1.13.4"
+  checksum: 10c0/d7f8711e803b96ea3191c745d6f8056ce1f2496e530e6a19a0e92d89b0fa3c76d910c31f0aa270432db6bd3b2f85500a376a83aaba849a8d518c8845b3211692
+  languageName: node
+  linkType: hard
+
 "once@npm:^1.4.0":
   version: 1.4.0
   resolution: "once@npm:1.4.0"
@@ -7186,6 +7270,16 @@ __metadata:
   version: 2.3.1
   resolution: "punycode@npm:2.3.1"
   checksum: 10c0/14f76a8206bc3464f794fb2e3d3cc665ae416c01893ad7a02b23766eb07159144ee612ad67af5e84fa4479ccfe67678c4feb126b0485651b302babf66f04f9e9
+  languageName: node
+  linkType: hard
+
+"qs@npm:^6.7.0":
+  version: 6.16.0
+  resolution: "qs@npm:6.16.0"
+  dependencies:
+    es-define-property: "npm:^1.0.1"
+    side-channel: "npm:^1.1.1"
+  checksum: 10c0/eb3e31992fbd70e31a1791e571ed817d70975de7d3bfcbbbec93d77d1dd305877e9e8fdbcc62303c228ee5c3606685622cd6231c042dbc4790bb4e7c65fcbe18
   languageName: node
   linkType: hard
 
@@ -7790,6 +7884,54 @@ __metadata:
   languageName: node
   linkType: hard
 
+"side-channel-list@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "side-channel-list@npm:1.0.1"
+  dependencies:
+    es-errors: "npm:^1.3.0"
+    object-inspect: "npm:^1.13.4"
+  checksum: 10c0/d346c787fd2f9f1c2fdea14f00e8250118db0e7596d85a6cb9faa75f105d31a73a8f7a341c93d7df2a2429098c3d37a77bd3be9e88c37094b8c01807bc77c7a2
+  languageName: node
+  linkType: hard
+
+"side-channel-map@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "side-channel-map@npm:1.0.1"
+  dependencies:
+    call-bound: "npm:^1.0.2"
+    es-errors: "npm:^1.3.0"
+    get-intrinsic: "npm:^1.2.5"
+    object-inspect: "npm:^1.13.3"
+  checksum: 10c0/010584e6444dd8a20b85bc926d934424bd809e1a3af941cace229f7fdcb751aada0fb7164f60c2e22292b7fa3c0ff0bce237081fd4cdbc80de1dc68e95430672
+  languageName: node
+  linkType: hard
+
+"side-channel-weakmap@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "side-channel-weakmap@npm:1.0.2"
+  dependencies:
+    call-bound: "npm:^1.0.2"
+    es-errors: "npm:^1.3.0"
+    get-intrinsic: "npm:^1.2.5"
+    object-inspect: "npm:^1.13.3"
+    side-channel-map: "npm:^1.0.1"
+  checksum: 10c0/71362709ac233e08807ccd980101c3e2d7efe849edc51455030327b059f6c4d292c237f94dc0685031dd11c07dd17a68afde235d6cf2102d949567f98ab58185
+  languageName: node
+  linkType: hard
+
+"side-channel@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "side-channel@npm:1.1.1"
+  dependencies:
+    es-errors: "npm:^1.3.0"
+    object-inspect: "npm:^1.13.4"
+    side-channel-list: "npm:^1.0.1"
+    side-channel-map: "npm:^1.0.1"
+    side-channel-weakmap: "npm:^1.0.2"
+  checksum: 10c0/dc0ab81d67f61bda9247d053ce93f41c3fd8ad2bdcb9cf9d8d2f8540d488f26d87a5e99ebfc07eea49ec025867b2452b705442d974b1478f0395e69f6bfb3270
+  languageName: node
+  linkType: hard
+
 "sift@npm:17.1.3":
   version: 17.1.3
   resolution: "sift@npm:17.1.3"
@@ -8295,6 +8437,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"url-template@npm:^2.0.8":
+  version: 2.0.8
+  resolution: "url-template@npm:2.0.8"
+  checksum: 10c0/56a15057eacbcf05d52b0caed8279c8451b3dd9d32856a1fdd91c6dc84dcb1646f12bafc756b7ade62ca5b1564da8efd7baac5add35868bafb43eb024c62805b
+  languageName: node
+  linkType: hard
+
 "use-callback-ref@npm:^1.3.3":
   version: 1.3.3
   resolution: "use-callback-ref@npm:1.3.3"
@@ -8502,6 +8651,7 @@ __metadata:
     flutterwave-react-v3: "npm:^1.3.3"
     formidable: "npm:^3.5.4"
     formidable-serverless: "npm:^1.1.1"
+    googleapis: "npm:^181.0.0"
     i18n-iso-countries: "npm:^7.14.0"
     lucide-react: "npm:^0.543.0"
     mongoose: "npm:^8.13.2"
