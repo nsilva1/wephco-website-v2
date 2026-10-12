@@ -101,6 +101,26 @@ export const ProjectWaitlist: React.FC<ProjectWaitlistProps> = ({
     };
   }, [initialConfig]);
 
+  // Smoothly scroll to waitlist if navigated with hash or campaign query param
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const hash = window.location.hash ? window.location.hash.toLowerCase() : '';
+      const params = new URLSearchParams(window.location.search);
+      const isWaitlistParam =
+        params.get('waitlist') === 'true' || params.get('section') === 'waitlist';
+
+      if (hash === '#project-waitlist' || hash === '#waitlist' || isWaitlistParam) {
+        const timer = setTimeout(() => {
+          const el = document.getElementById('project-waitlist');
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 250);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, []);
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -151,7 +171,11 @@ export const ProjectWaitlist: React.FC<ProjectWaitlistProps> = ({
       : DEFAULT_PROJECT_WAITLIST_CONFIG.unitCategories;
 
   return (
-    <section className="relative bg-background-dark py-20 px-6 max-w-7xl mx-auto font-display border-t border-b border-primary/15 overflow-hidden">
+    <section
+      id="project-waitlist"
+      className="relative bg-background-dark py-20 px-6 max-w-7xl mx-auto font-display border-t border-b border-primary/15 overflow-hidden scroll-mt-24"
+    >
+      <span id="waitlist" className="absolute -top-24 left-0 pointer-events-none" />
       {/* Background Subtle Gradient Glow */}
       <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-96 h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
 
