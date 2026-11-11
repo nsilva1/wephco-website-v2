@@ -16,6 +16,9 @@ export interface IBlogCategory {
   createdAt: Date;
   updatedAt: Date;
 
+  /** Number of posts filed under this category. Set by `fetchCategories`. */
+  postCount?: number;
+
   /**
    * Relational field.
    * This property will only be present if you use `include: { posts: true }` in your Prisma query.

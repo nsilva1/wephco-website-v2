@@ -1,57 +1,52 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { fetchPosts } from '@/actions/blog';
+import { fetchAdminPosts, fetchBlogStats } from '@/actions/blog';
 import { BarChart3, FileText, Eye, TrendingUp } from 'lucide-react';
-import { useSessionUser } from '@/hooks/useSessionUser';
-import { useAuth } from '@/context/AuthContext';
-import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { Loader } from '@/components/Loader';
+import { IBlogPost } from '@/interfaces/blogInterface';
+
+type BlogStats = Awaited<ReturnType<typeof fetchBlogStats>>;
 
 export default function BlogAdminPage() {
-  const router = useRouter();
-  const { user: currentUser, loading: sessionLoading } = useSessionUser();
-  const { loading: authLoading } = useAuth();
-
-  const [posts, setPosts] = useState<any[]>([]);
+  const [posts, setPosts] = useState<IBlogPost[]>([]);
+  const [stats, setStats] = useState<BlogStats | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const loadData = useCallback(async () => {
-    try {
-      setLoading(true);
-      const data = await fetchPosts();
-      setPosts(data);
-    } catch (error) {
-      console.error('Failed to fetch admin stats posts:', error);
-      toast.error('Failed to load blog dashboard data');
-    } finally {
-      setLoading(false);
-    }
+  useEffect(() => {
+    let cancelled = false;
+
+    Promise.all([fetchBlogStats(), fetchAdminPosts({ limit: 5 })])
+      .then(([statsResult, postsResult]) => {
+        if (cancelled) return;
+        setStats(statsResult);
+        setPosts(postsResult.posts ?? []);
+      })
+      .catch((error) => {
+        console.error('Failed to fetch blog dashboard data:', error);
+        if (!cancelled) toast.error('Failed to load blog dashboard data');
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
-  useEffect(() => {
-    if (!sessionLoading && !authLoading) {
-      if (!currentUser) {
-        toast.error('Please login to access the blog admin dashboard');
-        router.push('/auth/login');
-      } else {
-        loadData();
-      }
-    }
-  }, [currentUser, sessionLoading, authLoading, router, loadData]);
-
-  if (sessionLoading || authLoading || loading) {
+  if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen bg-background-dark">
+      <div className="flex justify-center items-center h-96">
         <Loader />
       </div>
     );
   }
 
   return (
-    <div className="space-y-6 p-6 max-w-7xl mx-auto min-h-screen bg-background-dark text-slate-100 pt-28">
+    <div className="space-y-6 max-w-7xl mx-auto text-slate-100">
       <div>
         <h1 className="text-3xl font-light">
           Blog <span className="font-extrabold text-primary">Dashboard</span>
@@ -69,7 +64,7 @@ export default function BlogAdminPage() {
             <FileText className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{posts?.length || 0}</div>
+            <div className="text-2xl font-bold">{stats?.totalPosts ?? 0}</div>
             <p className="text-xs text-slate-400">All posts in database</p>
           </CardContent>
         </Card>
@@ -81,7 +76,7 @@ export default function BlogAdminPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {posts?.filter((p) => p.status === 'PUBLISHED').length || 0}
+              {stats?.publishedPosts ?? 0}
             </div>
             <p className="text-xs text-slate-400">Live on your blog</p>
           </CardContent>
@@ -93,9 +88,7 @@ export default function BlogAdminPage() {
             <FileText className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {posts?.filter((p) => p.status === 'DRAFT').length || 0}
-            </div>
+            <div className="text-2xl font-bold">{stats?.draftPosts ?? 0}</div>
             <p className="text-xs text-slate-400">Unpublished posts</p>
           </CardContent>
         </Card>
@@ -106,12 +99,7 @@ export default function BlogAdminPage() {
             <Eye className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {posts?.reduce(
-                (prevPost, post) => prevPost + (post.views || 0),
-                0
-              )}
-            </div>
+            <div className="text-2xl font-bold">{stats?.totalViews ?? 0}</div>
             <p className="text-xs text-slate-400">All time views</p>
           </CardContent>
         </Card>
@@ -127,7 +115,7 @@ export default function BlogAdminPage() {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {posts?.slice(0, 5).map((post) => (
+            {posts.map((post) => (
               <div
                 key={post.id}
                 className="flex items-center justify-between p-4 border border-primary/15 rounded-lg bg-neutral-dark/10">

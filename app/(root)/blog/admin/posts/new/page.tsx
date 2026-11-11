@@ -1,10 +1,16 @@
 'use client';
 
 import { PostEditor } from '@/components/blog/admin/post-editor';
+import { useAuth } from '@/context/AuthContext';
 import { useSessionUser } from '@/hooks/useSessionUser';
 
 export default function NewPostPage() {
-  const { user: currentUser } = useSessionUser();
+  const { user: sessionUser } = useSessionUser();
+  const { currentUser } = useAuth();
+
+  // The session copy of the user does not always carry an id, so fall back to
+  // the signed-in Firebase user.
+  const userId = sessionUser?.id ?? currentUser?.id;
 
   return (
     <div className="space-y-6">
@@ -15,7 +21,7 @@ export default function NewPostPage() {
         </p>
       </div>
 
-      <PostEditor userId={currentUser?.id} />
+      <PostEditor userId={userId} />
     </div>
   );
 }

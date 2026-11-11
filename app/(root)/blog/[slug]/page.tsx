@@ -9,10 +9,19 @@ import {
 import Link from 'next/link';
 import { fetchPost } from '@/actions/blog';
 import Image from 'next/image';
+import { notFound } from 'next/navigation';
 
-export default async function BlogPostPage({ params }: any) {
+export default async function BlogPostPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { slug } = await params;
   const post = await fetchPost(slug);
+
+  if (!post) {
+    notFound();
+  }
 
   return (
     <div className="min-h-screen bg-background-dark text-slate-100 font-display pt-24 pb-20">

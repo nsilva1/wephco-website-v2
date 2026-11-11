@@ -36,7 +36,7 @@ export function BlogPostCard({ title, slug, excerpt, coverImage, category, tags,
           )}
 
           <div className="flex flex-wrap gap-1">
-            {tags!.slice(0, 2).map((tag) => (
+            {(tags ?? []).slice(0, 2).map((tag) => (
               <span key={tag} className="text-[9px] uppercase tracking-wider text-slate-400 font-mono">
                 #{tag}
               </span>

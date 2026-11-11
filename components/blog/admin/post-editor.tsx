@@ -13,7 +13,7 @@ import { fetchCategories } from "@/actions/blog"
 import { IBlogCategory, IBlogPost, PostStatus } from "@/interfaces/blogInterface"
 import { generateId } from "@/lib/helperFunctions"
 import { uploadFile } from "@/actions/vercel"
-import { createBlogPost } from "@/actions/blog"
+import { createBlogPost, updateBlogPost } from "@/actions/blog"
 
 
 const validateForm = (formData: IBlogPost) => {
@@ -34,32 +34,41 @@ const validateForm = (formData: IBlogPost) => {
   return errors
 }
 
-export function PostEditor({userId}: {userId: string | undefined}) {
+interface PostEditorProps {
+  userId: string | undefined
+  /** When given, the editor updates this post instead of creating a new one. */
+  post?: IBlogPost
+}
+
+export function PostEditor({ userId, post }: PostEditorProps) {
   const router = useRouter()
+  const isEditing = Boolean(post?.id)
   const [isLoading, setIsLoading] = useState(false)
   const [categories, setCategories] = useState<IBlogCategory[]>([])
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [imageUploading, setImageUploading] = useState(false);
-  const [previewImages, setPreviewImages] = useState<string[]>([])
+  const [previewImages, setPreviewImages] = useState<string[]>(
+    post?.coverImage ? [post.coverImage] : []
+  )
   const [imageProgress, setImageProgress] = useState(0);
   const [formData, setFormData] = useState<IBlogPost>({
-    title: "",
-    content: "",
-    excerpt: "",
-    coverImage: "",
-    categoryId: "",
-    tags: [],
-    status: PostStatus.DRAFT,
-    featured: false,
-    slug: "",
-    views: 0,
-    readTime: 0,
-    metaTitle: "",
-    metaDescription: "",
-    publishedAt: null,
-    authorId: ''
+    title: post?.title ?? "",
+    content: post?.content ?? "",
+    excerpt: post?.excerpt ?? "",
+    coverImage: post?.coverImage ?? "",
+    categoryId: post?.categoryId ?? "",
+    tags: post?.tags ?? [],
+    status: post?.status ?? PostStatus.DRAFT,
+    featured: post?.featured === true,
+    slug: post?.slug ?? "",
+    views: post?.views ?? 0,
+    readTime: post?.readTime ?? 0,
+    metaTitle: post?.metaTitle ?? "",
+    metaDescription: post?.metaDescription ?? "",
+    publishedAt: post?.publishedAt ?? null,
+    authorId: post?.authorId ?? ''
   })
-  const [tagInput, setTagInput] = useState("")
+  const [tagInput, setTagInput] = useState((post?.tags ?? []).join(", "))
   const [errors, setErrors] = useState<Record<string, string>>({})
 
   const getCategories = useCallback(async () => {
@@ -103,33 +112,51 @@ export function PostEditor({userId}: {userId: string | undefined}) {
       return
     }
 
-    setImageUploading(true)
     setIsLoading(true)
 
-    const imageId = generateId()
-
-    const imageBlob = await uploadFile(imageId, selectedFile!, setImageProgress)
-    
-    const blogData: Omit<IBlogPost, 'slug' | 'views' | 'readTime' | 'metaTitle' | 'metaDescription' | 'publishedAt'> = {
-      title: formData.title,
-      content: formData.content,
-      excerpt: formData.excerpt,
-      coverImage: imageBlob.url,
-      categoryId: formData.categoryId,
-      tags: formData.tags,
-      status: PostStatus.PUBLISHED,
-      featured: formData.featured,
-      authorId: userId!
-    }
-
     try {
-      await createBlogPost(blogData)
+      // The cover image is optional. When editing, the current image is kept
+      // unless a new file was chosen.
+      let coverImage = formData.coverImage || ""
+      if (selectedFile) {
+        setImageProgress(0)
+        setImageUploading(true)
+        const imageBlob = await uploadFile(generateId(), selectedFile, setImageProgress)
+        coverImage = imageBlob.url
+      }
 
-      toast.success("Post created successfully")
+      // Tags are normally committed on blur; read the input here too so that
+      // submitting straight from the field does not drop them.
+      const tags = tagInput
+        .split(",")
+        .map((tag) => tag.trim())
+        .filter(Boolean)
+
+      const blogData = {
+        title: formData.title,
+        content: formData.content,
+        excerpt: formData.excerpt,
+        coverImage,
+        categoryId: formData.categoryId,
+        tags,
+        status: formData.status,
+        featured: formData.featured,
+      }
+
+      if (isEditing) {
+        await updateBlogPost(post!.id!, blogData)
+        toast.success("Post updated successfully")
+      } else {
+        await createBlogPost({ ...blogData, authorId: userId ?? "" })
+        toast.success("Post created successfully")
+      }
+
       router.push("/blog/admin/posts")
     } catch (error) {
+      console.error("Failed to save post:", error)
       toast.error("Failed to save post")
     } finally {
+      setImageUploading(false)
       setIsLoading(false)
     }
   }
@@ -152,7 +179,7 @@ export function PostEditor({userId}: {userId: string | undefined}) {
           </Button> */}
           <Button type="submit" disabled={isLoading} className="gap-2">
             <Save className="h-4 w-4" />
-            {isLoading ? "Saving..." : "Create Post"}
+            {isLoading ? "Saving..." : isEditing ? "Save Changes" : "Create Post"}
           </Button>
         </div>
       </div>
@@ -215,6 +242,7 @@ export function PostEditor({userId}: {userId: string | undefined}) {
               <div>
                 <Label htmlFor="status">Status</Label>
                 <select
+                  id="status"
                   value={formData.status}
                   onChange={(e) => updateField("status", e.target.value as any)}
                   className="flex mt-2 h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
@@ -228,6 +256,7 @@ export function PostEditor({userId}: {userId: string | undefined}) {
               <div>
                 <Label htmlFor="categoryId">Category</Label>
                 <select
+                  id="categoryId"
                   value={formData.categoryId}
                   onChange={(e) => updateField("categoryId", e.target.value)}
                   className="flex mt-2 h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
@@ -249,8 +278,8 @@ export function PostEditor({userId}: {userId: string | undefined}) {
             </CardHeader>
             <CardContent>
               <div>
-                <Label htmlFor="coverImage">Cover Image URL</Label>
-                <Input className="mt-2" type='file' accept="image/jpeg, image/png, image/svg" onChange={handleImageChange} />
+                <Label htmlFor="coverImage">Cover Image (optional)</Label>
+                <Input id="coverImage" className="mt-2" type='file' accept="image/jpeg, image/png, image/webp" onChange={handleImageChange} />
                 {/* <Input
                   id="coverImage"
                   placeholder="https://example.com/image.jpg"
@@ -311,10 +340,9 @@ export function PostEditor({userId}: {userId: string | undefined}) {
 
               <div className="mt-4">
                 <Label>Featured Post</Label>
-                <select onChange={(e) => updateField('featured', e.target.value)} className="flex mt-2 h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2" >
-                  <option value="-">-</option>
-                  <option value='True'>Yes</option>
-                  <option value="False">No</option>
+                <select value={formData.featured ? 'yes' : 'no'} onChange={(e) => updateField('featured', e.target.value === 'yes')} className="flex mt-2 h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2" >
+                  <option value="no">No</option>
+                  <option value="yes">Yes</option>
                 </select>
               </div>
             </CardContent>

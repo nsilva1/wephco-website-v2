@@ -1,17 +1,35 @@
 'use client'
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Badge } from "@/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { fetchCategories } from "@/actions/blog"
 import { IBlogCategory } from "@/interfaces/blogInterface"
+import { toast } from "react-toastify"
+
+// Fired by CreateCategoryDialog so this table can reload without a page refresh
+export const CATEGORIES_CHANGED_EVENT = "blog:categories-changed"
 
 export function AdminCategoriesTable() {
   const [categories, setCategories] = useState<IBlogCategory[]>([])
-  
+  const [loading, setLoading] = useState(true)
+
+  const loadCategories = useCallback(async () => {
+    try {
+      setCategories(await fetchCategories())
+    } catch (error) {
+      console.error("Failed to load categories:", error)
+      toast.error("Failed to load categories")
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
   useEffect(() => {
-    fetchCategories().then(setCategories)
-  },[])
+    loadCategories()
+    window.addEventListener(CATEGORIES_CHANGED_EVENT, loadCategories)
+    return () => window.removeEventListener(CATEGORIES_CHANGED_EVENT, loadCategories)
+  }, [loadCategories])
 
   return (
     <div className="border rounded-lg">
@@ -22,10 +40,23 @@ export function AdminCategoriesTable() {
             <TableHead>Description</TableHead>
             <TableHead>Color</TableHead>
             <TableHead>Posts</TableHead>
-            {/* <TableHead className="w-[100px]">Actions</TableHead> */}
           </TableRow>
         </TableHeader>
         <TableBody>
+          {loading && (
+            <TableRow>
+              <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
+                Loading categories...
+              </TableCell>
+            </TableRow>
+          )}
+          {!loading && categories.length === 0 && (
+            <TableRow>
+              <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
+                No categories yet.
+              </TableCell>
+            </TableRow>
+          )}
           {categories.map((category) => (
             <TableRow key={category.id}>
               <TableCell className="font-medium">{category.name}</TableCell>
@@ -37,18 +68,8 @@ export function AdminCategoriesTable() {
                 </div>
               </TableCell>
               <TableCell>
-                <Badge variant="secondary">{category.posts?.length}</Badge>
+                <Badge variant="secondary">{category.postCount ?? 0}</Badge>
               </TableCell>
-              {/* <TableCell>
-                <div className="flex items-center gap-1">
-                  <Button variant="ghost" size="sm">
-                    <Edit className="h-4 w-4" />
-                  </Button>
-                  <Button variant="ghost" size="sm">
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              </TableCell> */}
             </TableRow>
           ))}
         </TableBody>
