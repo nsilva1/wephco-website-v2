@@ -1,7 +1,9 @@
 'use server';
 
+import { FieldValue } from "firebase-admin/firestore";
 import { db } from "@/firebase/firebaseConfig";
 import { IBlogPost, IBlogCategory, PostStatus } from "@/interfaces/blogInterface";
+import { IAdminUser } from "@/interfaces/userInterface";
 
 export interface PaginatedResponse<T> {
   posts?: T[];
@@ -35,6 +37,68 @@ const slugify = (text: string): string => {
     .replace(/-+$/, ''); // Trim - from end of text
 };
 
+// Helper: Firestore Timestamps are class instances and cannot cross the
+// server action boundary, so convert every one of them to a plain Date.
+const serializeDoc = (id: string, data: FirebaseFirestore.DocumentData): any => {
+  const result: Record<string, unknown> = { id };
+  for (const [key, value] of Object.entries(data)) {
+    result[key] = value && typeof value.toDate === 'function' ? value.toDate() : value;
+  }
+  return result;
+};
+
+const toMillis = (value: unknown): number => {
+  if (!value) return 0;
+  const time = new Date(value as string | number | Date).getTime();
+  return Number.isNaN(time) ? 0 : time;
+};
+
+const sortNewestFirst = <T extends { createdAt?: unknown }>(items: T[]): T[] =>
+  [...items].sort((a, b) => toMillis(b.createdAt) - toMillis(a.createdAt));
+
+// Helper: Load every category once, keyed by id
+const loadCategoryMap = async (): Promise<Map<string, IBlogCategory>> => {
+  const snapshot = await db.collection('blogCategories').get();
+  return new Map(
+    snapshot.docs.map((doc) => [doc.id, serializeDoc(doc.id, doc.data()) as IBlogCategory])
+  );
+};
+
+const attachCategories = async (posts: IBlogPost[]): Promise<IBlogPost[]> => {
+  if (!posts.some((post) => post.categoryId)) return posts;
+
+  const categories = await loadCategoryMap();
+  return posts.map((post) => ({
+    ...post,
+    category: (post.categoryId && categories.get(post.categoryId)) || null,
+  }));
+};
+
+// Helper: Resolve the author names shown in the admin table
+const attachAuthors = async (posts: IBlogPost[]): Promise<IBlogPost[]> => {
+  const authorIds = [...new Set(posts.map((post) => post.authorId).filter(Boolean))];
+  if (authorIds.length === 0) return posts;
+
+  const authorDocs = await Promise.all(
+    authorIds.map((id) => db.collection('users').doc(id).get())
+  );
+
+  const authors = new Map<string, IAdminUser>();
+  authorDocs.forEach((doc) => {
+    const data = doc.data();
+    if (!data) return;
+    authors.set(doc.id, {
+      id: doc.id,
+      firstName: data.firstName || '',
+      lastName: data.lastName || '',
+      email: data.email || '',
+      role: data.role,
+    });
+  });
+
+  return posts.map((post) => ({ ...post, author: authors.get(post.authorId) }));
+};
+
 // ==========================================
 // BLOG POSTS ACTIONS
 // ==========================================
@@ -43,24 +107,44 @@ const slugify = (text: string): string => {
 export const createBlogPost = async (
   postData: Omit<IBlogPost, 'slug' | 'views' | 'readTime' | 'metaTitle' | 'metaDescription' | 'publishedAt'>
 ): Promise<IBlogPost> => {
+  const title = postData.title?.trim();
+  const content = postData.content?.trim();
+
+  if (!title || !content) {
+    throw new Error("Title and content are required");
+  }
+
   try {
-    const slug = `${slugify(postData.title)}-${Math.random().toString(36).substr(2, 5)}`;
-    const readTime = calculateReadTime(postData.content);
-    
-    const newPost: any = {
-      ...postData,
+    const slug = `${slugify(title)}-${Math.random().toString(36).substring(2, 7)}`;
+    const status = Object.values(PostStatus).includes(postData.status)
+      ? postData.status
+      : PostStatus.DRAFT;
+    const excerpt = postData.excerpt?.trim() || '';
+    const now = new Date();
+
+    // Firestore rejects `undefined`, so every field gets an explicit value.
+    const newPost = {
+      title,
+      content,
+      excerpt,
+      coverImage: postData.coverImage || '',
+      categoryId: postData.categoryId || '',
+      tags: Array.isArray(postData.tags) ? postData.tags : [],
+      status,
+      featured: postData.featured === true,
+      authorId: postData.authorId || '',
       slug,
-      readTime,
+      readTime: calculateReadTime(content),
       views: 0,
-      metaTitle: postData.title,
-      metaDescription: postData.excerpt || postData.content.substring(0, 150),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      publishedAt: postData.status === PostStatus.PUBLISHED ? new Date() : null,
+      metaTitle: title,
+      metaDescription: excerpt || content.substring(0, 150),
+      createdAt: now,
+      updatedAt: now,
+      publishedAt: status === PostStatus.PUBLISHED ? now : null,
     };
 
     const docRef = await db.collection('blogPosts').add(newPost);
-    return { id: docRef.id, ...newPost } as IBlogPost;
+    return { id: docRef.id, ...newPost };
   } catch (error) {
     console.error("Error creating blog post:", error);
     throw new Error("Failed to create blog post");
@@ -70,43 +154,25 @@ export const createBlogPost = async (
 // Fetch published posts
 export const fetchPosts = async (): Promise<IBlogPost[]> => {
   try {
+    // Filtering on `status` and ordering by `createdAt` in the same query needs
+    // a composite index, so the ordering is done here instead.
     const snapshot = await db
       .collection('blogPosts')
       .where('status', '==', PostStatus.PUBLISHED)
-      .orderBy('createdAt', 'desc')
       .get();
 
-    const posts = snapshot.docs.map(doc => {
-      const data = doc.data();
-      return {
-        id: doc.id,
-        ...data,
-        createdAt: data.createdAt?.toDate ? data.createdAt.toDate() : data.createdAt,
-        updatedAt: data.updatedAt?.toDate ? data.updatedAt.toDate() : data.updatedAt,
-        publishedAt: data.publishedAt?.toDate ? data.publishedAt.toDate() : data.publishedAt,
-      };
-    }) as any[];
+    const posts = snapshot.docs.map((doc) => serializeDoc(doc.id, doc.data()) as IBlogPost);
 
-    // Resolve category details
-    const resolvedPosts = await Promise.all(posts.map(async (post) => {
-      if (post.categoryId) {
-        const catDoc = await db.collection('blogCategories').doc(post.categoryId).get();
-        if (catDoc.exists) {
-          post.category = { id: catDoc.id, ...catDoc.data() };
-        }
-      }
-      return post;
-    }));
-
-    return resolvedPosts as IBlogPost[];
+    return attachCategories(sortNewestFirst(posts));
   } catch (error) {
     console.error("Error fetching blog posts:", error);
     throw new Error("Failed to fetch blog posts");
   }
 };
 
-// Fetch single blog post by slug
-export const fetchPost = async (slug: string): Promise<IBlogPost> => {
+// Fetch a single published blog post by slug. Resolves to null when there is
+// no published post with that slug.
+export const fetchPost = async (slug: string): Promise<IBlogPost | null> => {
   try {
     const snapshot = await db
       .collection('blogPosts')
@@ -114,35 +180,23 @@ export const fetchPost = async (slug: string): Promise<IBlogPost> => {
       .limit(1)
       .get();
 
-    if (snapshot.empty) {
-      throw new Error("Post not found");
-    }
+    if (snapshot.empty) return null;
 
     const doc = snapshot.docs[0];
-    const data = doc.data();
-    
-    // Increment view count asynchronously
-    await db.collection('blogPosts').doc(doc.id).update({
-      views: (data.views || 0) + 1
-    });
+    const post = serializeDoc(doc.id, doc.data()) as IBlogPost;
 
-    const post: any = {
-      id: doc.id,
-      ...data,
-      views: (data.views || 0) + 1,
-      createdAt: data.createdAt?.toDate ? data.createdAt.toDate() : data.createdAt,
-      updatedAt: data.updatedAt?.toDate ? data.updatedAt.toDate() : data.updatedAt,
-      publishedAt: data.publishedAt?.toDate ? data.publishedAt.toDate() : data.publishedAt,
-    };
+    if (post.status !== PostStatus.PUBLISHED) return null;
 
-    if (post.categoryId) {
-      const catDoc = await db.collection('blogCategories').doc(post.categoryId).get();
-      if (catDoc.exists) {
-        post.category = { id: catDoc.id, ...catDoc.data() };
-      }
+    // Count the view, but never fail the page over it
+    try {
+      await doc.ref.update({ views: FieldValue.increment(1) });
+      post.views = (post.views || 0) + 1;
+    } catch (error) {
+      console.error(`Error updating view count for post: ${slug}`, error);
     }
 
-    return post as IBlogPost;
+    const [resolved] = await attachCategories([post]);
+    return resolved;
   } catch (error) {
     console.error(`Error fetching post with slug: ${slug}`, error);
     throw new Error("Failed to fetch blog post details");
@@ -153,19 +207,28 @@ export const fetchPost = async (slug: string): Promise<IBlogPost> => {
 // BLOG CATEGORIES ACTIONS
 // ==========================================
 
-// Fetch categories
+// Fetch categories, each with the number of posts filed under it
 export const fetchCategories = async (): Promise<IBlogCategory[]> => {
   try {
-    const snapshot = await db.collection('blogCategories').get();
-    return snapshot.docs.map(doc => {
-      const data = doc.data();
-      return {
-        id: doc.id,
-        ...data,
-        createdAt: data.createdAt?.toDate ? data.createdAt.toDate() : data.createdAt,
-        updatedAt: data.updatedAt?.toDate ? data.updatedAt.toDate() : data.updatedAt,
-      };
-    }) as any[];
+    const [categoriesSnapshot, postsSnapshot] = await Promise.all([
+      db.collection('blogCategories').get(),
+      db.collection('blogPosts').select('categoryId').get(),
+    ]);
+
+    const postCounts = new Map<string, number>();
+    postsSnapshot.forEach((doc) => {
+      const categoryId = doc.get('categoryId');
+      if (categoryId) {
+        postCounts.set(categoryId, (postCounts.get(categoryId) || 0) + 1);
+      }
+    });
+
+    return categoriesSnapshot.docs
+      .map((doc) => ({
+        ...(serializeDoc(doc.id, doc.data()) as IBlogCategory),
+        postCount: postCounts.get(doc.id) || 0,
+      }))
+      .sort((a, b) => (a.name || '').localeCompare(b.name || ''));
   } catch (error) {
     console.error("Error fetching categories:", error);
     throw new Error("Failed to fetch categories");
@@ -174,19 +237,25 @@ export const fetchCategories = async (): Promise<IBlogCategory[]> => {
 
 // Create new category
 export const createCategory = async (data: Partial<IBlogCategory>): Promise<IBlogCategory> => {
+  const name = data.name?.trim();
+
+  if (!name) {
+    throw new Error("Category name is required");
+  }
+
   try {
-    const slug = slugify(data.name || 'Category');
-    const newCategory: any = {
-      name: data.name,
+    const now = new Date();
+    const newCategory = {
+      name,
       color: data.color || '#d4af35',
-      description: data.description || '',
-      slug,
-      createdAt: new Date(),
-      updatedAt: new Date()
+      description: data.description?.trim() || '',
+      slug: slugify(name),
+      createdAt: now,
+      updatedAt: now,
     };
 
     const docRef = await db.collection('blogCategories').add(newCategory);
-    return { id: docRef.id, ...newCategory } as IBlogCategory;
+    return { id: docRef.id, ...newCategory };
   } catch (error) {
     console.error("Error creating category:", error);
     throw new Error("Failed to create category");
@@ -197,48 +266,32 @@ export const createCategory = async (data: Partial<IBlogCategory>): Promise<IBlo
 // ADMIN ACTIONS
 // ==========================================
 
-// Fetch posts for admin (paginated, unfiltered by status)
+// Fetch posts for admin (paginated, every status unless one is given)
 export async function fetchAdminPosts(params?: {
   page?: number;
   limit?: number;
   status?: string;
 }): Promise<PaginatedResponse<IBlogPost>> {
   try {
-    const page = params?.page || 1;
-    const limit = params?.limit || 10;
-    
-    let query = db.collection('blogPosts').orderBy('createdAt', 'desc');
-    
+    const page = Math.max(1, params?.page || 1);
+    const limit = Math.max(1, params?.limit || 10);
+
+    // Status is filtered in memory: combining it with the ordering in the
+    // query would need a composite index.
+    const snapshot = await db.collection('blogPosts').get();
+
+    let allPosts = snapshot.docs.map((doc) => serializeDoc(doc.id, doc.data()) as IBlogPost);
     if (params?.status) {
-      query = query.where('status', '==', params.status) as any;
+      allPosts = allPosts.filter((post) => post.status === params.status);
     }
+    allPosts = sortNewestFirst(allPosts);
 
-    const snapshot = await query.get();
-    const total = snapshot.size;
+    const total = allPosts.length;
     const totalPages = Math.ceil(total / limit);
-
-    // Manual slice pagination since Firestore admin lacks simple offset
     const startIndex = (page - 1) * limit;
-    const slicedDocs = snapshot.docs.slice(startIndex, startIndex + limit);
+    const pagePosts = allPosts.slice(startIndex, startIndex + limit);
 
-    const posts = await Promise.all(slicedDocs.map(async (doc) => {
-      const data = doc.data();
-      const post: any = {
-        id: doc.id,
-        ...data,
-        createdAt: data.createdAt?.toDate ? data.createdAt.toDate() : data.createdAt,
-        updatedAt: data.updatedAt?.toDate ? data.updatedAt.toDate() : data.updatedAt,
-        publishedAt: data.publishedAt?.toDate ? data.publishedAt.toDate() : data.publishedAt,
-      };
-
-      if (post.categoryId) {
-        const catDoc = await db.collection('blogCategories').doc(post.categoryId).get();
-        if (catDoc.exists) {
-          post.category = { id: catDoc.id, ...catDoc.data() };
-        }
-      }
-      return post;
-    }));
+    const posts = await attachAuthors(await attachCategories(pagePosts));
 
     return {
       posts,
@@ -254,6 +307,79 @@ export async function fetchAdminPosts(params?: {
   } catch (error) {
     console.error("Error fetching admin posts:", error);
     throw new Error("Failed to fetch admin posts");
+  }
+}
+
+// Fetch a single post by id for the admin editor (any status, no view count)
+export async function fetchPostById(id: string): Promise<IBlogPost | null> {
+  if (!id) return null;
+
+  try {
+    const doc = await db.collection('blogPosts').doc(id).get();
+    const data = doc.data();
+    if (!data) return null;
+
+    return serializeDoc(doc.id, data) as IBlogPost;
+  } catch (error) {
+    console.error(`Error fetching post with id: ${id}`, error);
+    throw new Error("Failed to fetch blog post");
+  }
+}
+
+// Update an existing blog post. The slug is left alone so published links keep working.
+export async function updateBlogPost(
+  id: string,
+  postData: Pick<IBlogPost, 'title' | 'content' | 'excerpt' | 'coverImage' | 'categoryId' | 'tags' | 'status' | 'featured'>
+): Promise<{ message: string }> {
+  const title = postData.title?.trim();
+  const content = postData.content?.trim();
+
+  if (!id) {
+    throw new Error("Post id is required");
+  }
+  if (!title || !content) {
+    throw new Error("Title and content are required");
+  }
+
+  try {
+    const docRef = db.collection('blogPosts').doc(id);
+    const existing = (await docRef.get()).data();
+
+    if (!existing) {
+      throw new Error("Post not found");
+    }
+
+    const status = Object.values(PostStatus).includes(postData.status)
+      ? postData.status
+      : PostStatus.DRAFT;
+    const excerpt = postData.excerpt?.trim() || '';
+    const now = new Date();
+
+    const updates: Record<string, unknown> = {
+      title,
+      content,
+      excerpt,
+      coverImage: postData.coverImage || '',
+      categoryId: postData.categoryId || '',
+      tags: Array.isArray(postData.tags) ? postData.tags : [],
+      status,
+      featured: postData.featured === true,
+      readTime: calculateReadTime(content),
+      metaTitle: title,
+      metaDescription: excerpt || content.substring(0, 150),
+      updatedAt: now,
+    };
+
+    // Stamp the publish date the first time a post goes live
+    if (status === PostStatus.PUBLISHED && !existing.publishedAt) {
+      updates.publishedAt = now;
+    }
+
+    await docRef.update(updates);
+    return { message: "Post updated successfully" };
+  } catch (error) {
+    console.error("Error updating blog post:", error);
+    throw new Error("Failed to update blog post");
   }
 }
 

@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { createCategory } from "@/actions/blog"
+import { CATEGORIES_CHANGED_EVENT } from "./admin-categories-table"
 
 interface CreateCategoryDialogProps {
   children: React.ReactNode
@@ -70,9 +71,8 @@ export function CreateCategoryDialog({ children }: CreateCategoryDialogProps) {
 
     setIsLoading(true)
     try {
-      const response = await createCategory(formData)
-
-      
+      await createCategory(formData)
+      window.dispatchEvent(new Event(CATEGORIES_CHANGED_EVENT))
 
       setToast({ message: "Category created successfully", type: "success" })
       setTimeout(() => setToast(null), 3000)
