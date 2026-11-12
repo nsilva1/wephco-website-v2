@@ -8,8 +8,17 @@ import { EMAIL_TEMPLATE_IDS } from '@/lib/constants';
 
 const resendApiKey = process.env.RESEND_API_KEY || process.env.RESEND_DEV_API_KEY;
 
-// Initialize Resend client
-const resend = new Resend(resendApiKey);
+// The client is created on first use, not when this file loads. The Resend
+// constructor throws without an API key, and this file is loaded while pages
+// are built, so creating it up front would fail the build wherever the key is
+// not set. Every sender below checks for the key before calling this.
+let resendClient: Resend | undefined;
+const getResend = (): Resend => {
+  if (!resendClient) {
+    resendClient = new Resend(resendApiKey);
+  }
+  return resendClient;
+};
 
 // Default sender email (Use onboard@resend.dev during testing or custom domain when verified)
 const DEFAULT_FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'WEPHCO <support@wephco.com>';
@@ -69,7 +78,7 @@ export async function sendBookingConfirmationEmail({
 
     console.log('Sending Email...');
 
-    const { data, error } = await resend.emails.send({
+    const { data, error } = await getResend().emails.send({
       to: toEmail,
       template: {
         id: '997873ab-0faf-4d49-b2c2-a3532434a668',
@@ -154,7 +163,7 @@ export async function sendPropertyUploadEmail({
 
     console.log('Sending Property Upload Email...');
 
-    const { data, error } = await resend.emails.send({
+    const { data, error } = await getResend().emails.send({
       to: toEmail,
       template: {
         id: EMAIL_TEMPLATE_IDS.PROPERTY_UPLOAD,
@@ -218,7 +227,7 @@ export async function sendPropertyInquiryEmail({
 
     console.log('Sending Property Inquiry Email...');
 
-    const { data, error } = await resend.emails.send({
+    const { data, error } = await getResend().emails.send({
       to: toEmail,
       template: {
         id: EMAIL_TEMPLATE_IDS.PROPERTY_INQUIRY,
@@ -260,6 +269,15 @@ export async function sendPropertyInquiryEmail({
   }
 }
 
+export interface EmailAttachment {
+  filename: string;
+  /** The file itself, as a Buffer or a base64 string */
+  content?: Buffer | string;
+  /** URL the file is hosted at */
+  path?: string;
+  contentType?: string;
+}
+
 export interface GenericSendEmailParams {
   to: string | string[];
   subject: string;
@@ -269,6 +287,8 @@ export interface GenericSendEmailParams {
   from?: string;
   /** Where replies go, when that should differ from the sender */
   replyTo?: string;
+  /** Files to attach: each has its content, or a path to where it is hosted */
+  attachments?: EmailAttachment[];
 }
 
 /**
@@ -282,6 +302,7 @@ export async function sendEmail({
   text,
   from,
   replyTo,
+  attachments,
 }: GenericSendEmailParams): Promise<SendEmailResult> {
   try {
     if (!resendApiKey) {
@@ -294,7 +315,7 @@ export async function sendEmail({
     const recipient = Array.isArray(to) ? to : [to];
     const sender = from || DEFAULT_FROM_EMAIL;
 
-    const { data, error } = await resend.emails.send({
+    const { data, error } = await getResend().emails.send({
       from: sender,
       to: recipient,
       subject,
@@ -302,7 +323,8 @@ export async function sendEmail({
       ...(html ? { html } : {}),
       ...(text ? { text } : {}),
       ...(replyTo ? { replyTo } : {}),
-    } as Parameters<typeof resend.emails.send>[0]);
+      ...(attachments && attachments.length > 0 ? { attachments } : {}),
+    } as Parameters<Resend['emails']['send']>[0]);
 
     if (error) {
       console.error('Error sending email via Resend:', error);
