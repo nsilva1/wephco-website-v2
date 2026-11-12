@@ -75,7 +75,8 @@ const FlutterwaveButton = forwardRef<HTMLButtonElement, FlutterwaveButtonProps>(
                                     email: email,
                                     name: name,
                                 }).toString();
-                                window.location.href = `${targetPath}?${query}`;
+                                const separator = targetPath.includes('?') ? '&' : '?';
+                                window.location.href = `${targetPath}${separator}${query}`;
                             }
                         },
                         onClose: () => {
