@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Sparkles, Shield, Compass } from 'lucide-react';
 import { EventCard, EventItem } from './_components/EventCard';
 import { PrivateRSVPModal } from './_components/PrivateRSVPModal';
+import { isEventPast } from '@/lib/eventTime';
 
 interface EventsClientProps {
   events: EventItem[];
@@ -22,12 +23,38 @@ export default function EventsClient({ events }: EventsClientProps) {
   };
 
   const filteredEvents = events.filter((evt) => {
-    if (activeTab === 'upcoming')
-      return !evt.isPast && evt.format === 'Physical';
-    if (activeTab === 'virtual') return !evt.isPast && evt.format === 'Virtual';
-    if (activeTab === 'past') return evt.isPast;
+    const past = isEventPast(evt);
+    if (activeTab === 'upcoming') return !past && evt.format === 'Physical';
+    if (activeTab === 'virtual') return !past && evt.format === 'Virtual';
+    if (activeTab === 'past') return past;
     return true;
   });
+
+  // Shown when the selected tab has nothing to list
+  const emptyState =
+    events.length === 0
+      ? {
+          title: 'No Events Yet',
+          message:
+            'There are no events to show at the moment. We are curating new exclusive showcases, so please check back soon.',
+        }
+      : {
+          upcoming: {
+            title: 'No Upcoming Shows',
+            message:
+              'There are no in-person events scheduled right now. Please check back soon, or browse our virtual roadshows and past exhibitions.',
+          },
+          virtual: {
+            title: 'No Virtual Roadshows',
+            message:
+              'There are no virtual events scheduled right now. Please check back soon, or browse our upcoming shows.',
+          },
+          past: {
+            title: 'No Past Exhibitions',
+            message:
+              'Completed events will appear here once they have taken place.',
+          },
+        }[activeTab];
 
   return (
     <div className="relative min-h-screen bg-background-dark text-slate-100 font-sans pt-20">
@@ -104,10 +131,10 @@ export default function EventsClient({ events }: EventsClientProps) {
               style={{ animationDuration: '8s' }}
             />
             <h3 className="text-lg font-bold text-slate-200">
-              No Events Scheduled
+              {emptyState.title}
             </h3>
             <p className="text-xs text-slate-400 mt-2 max-w-xs mx-auto">
-              We are currently curating new exclusive showcases.
+              {emptyState.message}
             </p>
           </div>
         )}

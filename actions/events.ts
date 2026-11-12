@@ -42,11 +42,15 @@ export const createEvent = async (data: EventItem): Promise<string> => {
             longDescription: data.longDescription || "",
             date: data.date,
             time: data.time,
+            startsAt: data.startsAt || null,
+            timezone: data.timezone || null,
             location: data.location,
             image: data.image,
             scope: data.scope,
             format: data.format,
             seatsRemaining: data.seatsRemaining !== undefined && data.seatsRemaining !== null ? Number(data.seatsRemaining) : null,
+            availabilityText: data.availabilityText?.trim() || "",
+            hideSeatCount: data.hideSeatCount || false,
             isPast: data.isPast || false,
             agenda: data.agenda || [],
             hosts: data.hosts || [],
@@ -73,11 +77,15 @@ export const updateEvent = async (id: string, data: Partial<EventItem>): Promise
         if (data.longDescription !== undefined) payload.longDescription = data.longDescription;
         if (data.date !== undefined) payload.date = data.date;
         if (data.time !== undefined) payload.time = data.time;
+        if (data.startsAt !== undefined) payload.startsAt = data.startsAt || null;
+        if (data.timezone !== undefined) payload.timezone = data.timezone || null;
         if (data.location !== undefined) payload.location = data.location;
         if (data.image !== undefined) payload.image = data.image;
         if (data.scope !== undefined) payload.scope = data.scope;
         if (data.format !== undefined) payload.format = data.format;
         if (data.seatsRemaining !== undefined) payload.seatsRemaining = data.seatsRemaining !== null ? Number(data.seatsRemaining) : null;
+        if (data.availabilityText !== undefined) payload.availabilityText = data.availabilityText.trim();
+        if (data.hideSeatCount !== undefined) payload.hideSeatCount = data.hideSeatCount;
         if (data.isPast !== undefined) payload.isPast = data.isPast;
         if (data.agenda !== undefined) payload.agenda = data.agenda;
         if (data.hosts !== undefined) payload.hosts = data.hosts;

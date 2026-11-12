@@ -15,11 +15,12 @@ import {
   Clock,
   Ticket,
 } from 'lucide-react';
-import { MOCK_EVENTS } from '../data';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/firebase/firebaseClient';
 import { reserveEventSeat } from '@/actions/events';
 import { toast } from 'react-toastify';
+import { useEventTimeDisplay } from '@/hooks/useEventTimeDisplay';
+import { isEventPast } from '@/lib/eventTime';
 
 export default function EventDetailPage() {
   const params = useParams();
@@ -27,6 +28,7 @@ export default function EventDetailPage() {
 
   const [event, setEvent] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -36,7 +38,7 @@ export default function EventDetailPage() {
   const [preferences, setPreferences] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
-  // Fetch Event from Firestore (or fallback to MOCK_EVENTS)
+  // Fetch Event from Firestore
   useEffect(() => {
     window.scrollTo(0, 0);
 
@@ -45,6 +47,7 @@ export default function EventDetailPage() {
     const fetchEvent = async () => {
       try {
         setLoading(true);
+        setLoadError(false);
         // Try fetching from Firestore 'events' collection
         const docRef = doc(db, 'events', id);
         const docSnap = await getDoc(docRef);
@@ -58,11 +61,15 @@ export default function EventDetailPage() {
             longDescription: data.longDescription || data.description || '',
             date: data.date || '',
             time: data.time || '',
+            startsAt: data.startsAt || null,
+            timezone: data.timezone || null,
             location: data.location || '',
             image: data.image || '',
             scope: data.scope || 'Local',
             format: data.format || 'Physical',
             seatsRemaining: data.seatsRemaining !== undefined && data.seatsRemaining !== null ? Number(data.seatsRemaining) : null,
+            availabilityText: data.availabilityText || '',
+            hideSeatCount: data.hideSeatCount || false,
             isPast: data.isPast || false,
             highlights: data.highlights || [],
             agenda: data.agenda || [],
@@ -71,14 +78,12 @@ export default function EventDetailPage() {
             galleryImages: data.galleryImages || [],
           });
         } else {
-          // Fallback to MOCK_EVENTS if not in Firestore
-          const mock = MOCK_EVENTS.find((e) => e.id === id);
-          setEvent(mock || null);
+          setEvent(null);
         }
       } catch (err) {
         console.error('Error fetching event details from Firestore:', err);
-        const mock = MOCK_EVENTS.find((e) => e.id === id);
-        setEvent(mock || null);
+        setEvent(null);
+        setLoadError(true);
       } finally {
         setLoading(false);
       }
@@ -87,10 +92,29 @@ export default function EventDetailPage() {
     fetchEvent();
   }, [id]);
 
+  const when = useEventTimeDisplay(event ?? {});
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background-dark text-slate-100 flex items-center justify-center pt-24">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  if (loadError) {
+    return (
+      <div className="min-h-screen bg-background-dark text-slate-100 flex flex-col items-center justify-center gap-4 pt-24 px-6 text-center">
+        <h2 className="text-3xl font-bold">Unable to Load Event</h2>
+        <p className="text-slate-400 text-sm max-w-sm">
+          Something went wrong while loading this event. Please check your
+          connection and try again.
+        </p>
+        <Link
+          href="/events"
+          className="px-6 py-2.5 bg-primary text-background-dark font-bold rounded-lg transition-colors">
+          Back to Events
+        </Link>
       </div>
     );
   }
@@ -108,7 +132,21 @@ export default function EventDetailPage() {
     );
   }
 
+  const isPast = isEventPast(event);
+
+  // Attendees of a physical event need the time at the venue first; for a
+  // virtual event the viewer's own time is the one that matters.
+  const localFirst = event.format === 'Virtual' && when.local !== null;
+  const localDate = when.local?.dateDiffers ? `${when.local.date}, ` : '';
+
   const isSoldOut = event.seatsRemaining !== null && event.seatsRemaining !== undefined && event.seatsRemaining <= 0;
+
+  // Availability box: custom wording from the dashboard, the real seat count, or both
+  const availabilityNote = (event.availabilityText || '').trim();
+  const showSeatCount =
+    !event.hideSeatCount &&
+    event.seatsRemaining !== null &&
+    event.seatsRemaining !== undefined;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -196,7 +234,7 @@ export default function EventDetailPage() {
               <span className="px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase bg-slate-900 border border-primary/20 text-primary">
                 {event.format}
               </span>
-              {event.isPast ? (
+              {isPast ? (
                 <span className="px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase bg-red-950/80 text-red-400 border border-red-900/30">
                   Completed
                 </span>
@@ -214,11 +252,30 @@ export default function EventDetailPage() {
             <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-slate-400">
               <div className="flex items-center gap-1.5">
                 <Calendar className="size-4 text-primary" />
-                <span>{event.date}</span>
+                <span>{when.date}</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <Clock className="size-4 text-primary" />
-                <span>{event.time}</span>
+                {when.local && localFirst ? (
+                  <span>
+                    <span className="text-slate-200">
+                      {localDate}
+                      {when.local.time} your time
+                    </span>{' '}
+                    <span className="text-slate-500">· {when.time} host time</span>
+                  </span>
+                ) : (
+                  <span>
+                    {when.time}
+                    {when.local && (
+                      <span className="text-slate-500">
+                        {' '}
+                        · {localDate}
+                        {when.local.time} your time
+                      </span>
+                    )}
+                  </span>
+                )}
               </div>
               <div className="flex items-center gap-1.5">
                 <MapPin className="size-4 text-primary" />
@@ -227,15 +284,25 @@ export default function EventDetailPage() {
             </div>
           </div>
 
-          {!event.isPast && event.seatsRemaining !== undefined && event.seatsRemaining !== null && (
-            <div className={`px-5 py-3 rounded-xl border ${isSoldOut ? 'bg-red-950/30 border-red-500/30' : 'bg-amber-950/30 border-amber-500/20'}`}>
+          {!isPast && (isSoldOut || availabilityNote || showSeatCount) && (
+            <div className={`px-5 py-3 rounded-xl border max-w-xs ${isSoldOut ? 'bg-red-950/30 border-red-500/30' : 'bg-amber-950/30 border-amber-500/20'}`}>
               <p className={`text-[10px] font-bold uppercase tracking-widest mb-1 ${isSoldOut ? 'text-red-400' : 'text-amber-500'}`}>
                 Availability
               </p>
               <p className="text-lg font-black text-white flex items-center gap-2">
-                <Users className={`size-5 ${isSoldOut ? 'text-red-400' : 'text-amber-500'}`} />
-                <span>{isSoldOut ? 'Fully Reserved' : `${event.seatsRemaining} VIP Seats Left`}</span>
+                <Users className={`size-5 shrink-0 ${isSoldOut ? 'text-red-400' : 'text-amber-500'}`} />
+                <span>
+                  {isSoldOut
+                    ? 'Fully Reserved'
+                    : availabilityNote || `${event.seatsRemaining} VIP Seats Left`}
+                </span>
               </p>
+              {/* With custom wording, the real count moves to a second line */}
+              {!isSoldOut && availabilityNote && showSeatCount && (
+                <p className="text-xs text-slate-400 mt-1">
+                  {event.seatsRemaining} VIP seats left
+                </p>
+              )}
             </div>
           )}
         </div>
@@ -370,10 +437,10 @@ export default function EventDetailPage() {
               <div className="space-y-1">
                 <h3 className="text-lg font-bold text-white flex items-center gap-2">
                   <Ticket className="size-5 text-primary" />
-                  {event.isPast ? 'Showcase Concluded' : isSoldOut ? 'Event Fully Reserved' : 'Reserve Your Seat'}
+                  {isPast ? 'Showcase Concluded' : isSoldOut ? 'Event Fully Reserved' : 'Reserve Your Seat'}
                 </h3>
                 <p className="text-xs text-slate-400">
-                  {event.isPast
+                  {isPast
                     ? 'This showcase has ended. Apply below to request notifications for upcoming shows.'
                     : isSoldOut
                       ? 'All VIP seats for this event are currently reserved.'
@@ -389,7 +456,7 @@ export default function EventDetailPage() {
                   <input
                     required
                     type="text"
-                    disabled={isSoldOut || event.isPast}
+                    disabled={isSoldOut || isPast}
                     placeholder="John Doe"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
@@ -403,7 +470,7 @@ export default function EventDetailPage() {
                   <input
                     required
                     type="email"
-                    disabled={isSoldOut || event.isPast}
+                    disabled={isSoldOut || isPast}
                     placeholder="john@example.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -417,7 +484,7 @@ export default function EventDetailPage() {
                   <input
                     required
                     type="tel"
-                    disabled={isSoldOut || event.isPast}
+                    disabled={isSoldOut || isPast}
                     placeholder="+234..."
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
@@ -432,7 +499,7 @@ export default function EventDetailPage() {
                     </label>
                     <select
                       value={seatsToReserve}
-                      disabled={isSoldOut || event.isPast}
+                      disabled={isSoldOut || isPast}
                       onChange={(e) => setSeatsToReserve(e.target.value)}
                       className="w-full bg-slate-800/50 border border-white/10 rounded-lg px-3 py-2.5 text-xs text-white focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all disabled:opacity-50">
                       <option value="1">1 Seat</option>
@@ -449,7 +516,7 @@ export default function EventDetailPage() {
                     </label>
                     <select
                       value={investmentTier}
-                      disabled={isSoldOut || event.isPast}
+                      disabled={isSoldOut || isPast}
                       onChange={(e) => setInvestmentTier(e.target.value)}
                       className="w-full bg-slate-800/50 border border-white/10 rounded-lg px-3 py-2.5 text-xs text-white focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all disabled:opacity-50">
                       <option value="$200k - $1M">$200k - $1M</option>
@@ -465,7 +532,7 @@ export default function EventDetailPage() {
                     Special Preferences
                   </label>
                   <textarea
-                    disabled={isSoldOut || event.isPast}
+                    disabled={isSoldOut || isPast}
                     placeholder="Dietary requests, transport coordinates, airport concierge requirements..."
                     rows={3}
                     value={preferences}
@@ -476,7 +543,7 @@ export default function EventDetailPage() {
 
                 <button
                   type="submit"
-                  disabled={submitting || isSoldOut || event.isPast}
+                  disabled={submitting || isSoldOut || isPast}
                   className="w-full bg-primary text-background-dark font-extrabold uppercase py-3 rounded-lg hover:shadow-lg hover:shadow-primary/10 transition-all text-xs cursor-pointer disabled:opacity-50 flex items-center justify-center gap-1.5">
                   <Ticket className="size-4 shrink-0" />
                   <span>
@@ -484,7 +551,7 @@ export default function EventDetailPage() {
                       ? 'Reserving Seat...'
                       : isSoldOut
                         ? 'Fully Reserved'
-                        : event.isPast
+                        : isPast
                           ? 'Event Concluded'
                           : `Reserve ${seatsToReserve} Seat(s)`}
                   </span>

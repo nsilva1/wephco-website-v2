@@ -23,6 +23,17 @@ import { ArrowLeft, Upload, ImageIcon, Plus, Trash2, User } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { uploadFile } from '@/lib/helperFunctions';
+import {
+  DEFAULT_EVENT_TIMEZONE,
+  EVENT_TIMEZONES,
+  formatZonedDate,
+  formatZonedTime,
+  isoToZonedInputs,
+  parseLegacyEventTime,
+  zonedDateTimeToIso,
+} from '@/lib/eventTime';
+
+const AVAILABILITY_TEXT_MAX = 60;
 
 interface EventFormProps {
   event?: EventItem;
@@ -44,17 +55,33 @@ export default function EventForm({ event, mode }: EventFormProps) {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Date, time and timezone the event is held in. Events saved before these
+  // were structured only have free text, which is read on a best-effort basis
+  // so the admin can confirm it rather than retype it.
+  const initialTimezone = event?.timezone || '';
+  const initialWhen =
+    (event?.startsAt &&
+      initialTimezone && {
+        ...isoToZonedInputs(event.startsAt, initialTimezone),
+        timezone: initialTimezone,
+      }) ||
+    (event ? parseLegacyEventTime(event.date, event.time) : null);
+  const needsTimeConfirmation = mode === 'edit' && !event?.startsAt;
+
   // Basic Fields
   const [formState, setFormState] = useState({
     title: event?.title || '',
     description: event?.description || '',
     longDescription: event?.longDescription || '',
-    date: event?.date || '',
-    time: event?.time || '',
+    date: initialWhen?.date || '',
+    time: initialWhen?.time || '',
+    timezone: initialWhen?.timezone || DEFAULT_EVENT_TIMEZONE,
     location: event?.location || '',
     scope: event?.scope || 'Local',
     format: event?.format || 'Physical',
     seatsRemaining: event?.seatsRemaining?.toString() || '',
+    availabilityText: event?.availabilityText || '',
+    hideSeatCount: event?.hideSeatCount || false,
     isPast: event?.isPast || false,
     hasGallery: event?.hasGallery || false,
   });
@@ -104,6 +131,16 @@ export default function EventForm({ event, mode }: EventFormProps) {
   const [newGalleryFiles, setNewGalleryFiles] = useState<
     { file: File; preview: string }[]
   >([]);
+
+  // Keep an event's saved timezone selectable even if it is not in the list
+  const timezoneOptions = EVENT_TIMEZONES.some(
+    (zone) => zone.value === formState.timezone
+  )
+    ? EVENT_TIMEZONES
+    : [
+        ...EVENT_TIMEZONES,
+        { value: formState.timezone, label: formState.timezone },
+      ];
 
   const handleChange = (field: string, value: any) => {
     setFormState((prev) => ({ ...prev, [field]: value }));
@@ -220,6 +257,16 @@ export default function EventForm({ event, mode }: EventFormProps) {
       return;
     }
 
+    const startsAt = zonedDateTimeToIso(
+      formState.date,
+      formState.time,
+      formState.timezone
+    );
+    if (!startsAt) {
+      toast.error('Please set a valid date, time and timezone');
+      return;
+    }
+
     setIsSubmitting(true);
     const toastId = toast.loading(
       `${mode === 'create' ? 'Creating' : 'Updating'} event...`
@@ -257,8 +304,11 @@ export default function EventForm({ event, mode }: EventFormProps) {
         title: formState.title,
         description: formState.description,
         longDescription: formState.longDescription || undefined,
-        date: formState.date,
-        time: formState.time,
+        // The text versions are kept for anything that still reads them
+        date: formatZonedDate(startsAt, formState.timezone) || formState.date,
+        time: formatZonedTime(startsAt, formState.timezone) || formState.time,
+        startsAt,
+        timezone: formState.timezone,
         location: formState.location,
         image: finalCoverUrl,
         scope: formState.scope as 'Local' | 'International',
@@ -266,6 +316,8 @@ export default function EventForm({ event, mode }: EventFormProps) {
         seatsRemaining: formState.seatsRemaining
           ? Number(formState.seatsRemaining)
           : undefined,
+        availabilityText: formState.availabilityText.trim(),
+        hideSeatCount: formState.hideSeatCount,
         isPast: formState.isPast,
         hasGallery: formState.hasGallery,
         highlights: highlights.length > 0 ? highlights : undefined,
@@ -389,9 +441,9 @@ export default function EventForm({ event, mode }: EventFormProps) {
                     <div className="relative">
                       <Input
                         id="date"
+                        type="date"
                         value={formState.date}
                         onChange={(e) => handleChange('date', e.target.value)}
-                        placeholder="e.g. Oct 24, 2026 or 2026-10-24"
                         className='text-black'
                         required
                       />
@@ -401,17 +453,48 @@ export default function EventForm({ event, mode }: EventFormProps) {
                     <Label
                       htmlFor="time"
                       className="text-slate-700 font-semibold">
-                      Time *
+                      Start Time *
                     </Label>
                     <Input
                       id="time"
+                      type="time"
                       value={formState.time}
                       onChange={(e) => handleChange('time', e.target.value)}
-                      placeholder="e.g. 10:00 AM WAT"
                       className='text-black'
                       required
                     />
                   </div>
+                </div>
+
+                <div className="grid gap-2">
+                  <Label className="text-slate-700 font-semibold">
+                    Timezone *
+                  </Label>
+                  <Select
+                    value={formState.timezone}
+                    onValueChange={(v) => handleChange('timezone', v)}>
+                    <SelectTrigger className='text-black w-full'>
+                      <SelectValue className='text-black' />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {timezoneOptions.map((zone) => (
+                        <SelectItem key={zone.value} value={zone.value}>
+                          {zone.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <p className="text-xs text-slate-500">
+                    Enter the date and time as they are where the event is
+                    held. Visitors also see it converted to their own time.
+                  </p>
+                  {needsTimeConfirmation && (
+                    <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-md p-2">
+                      This event was saved as &ldquo;{event?.date}
+                      {event?.time ? `, ${event.time}` : ''}&rdquo;. Please
+                      check the date, time and timezone above before saving.
+                    </p>
+                  )}
                 </div>
 
                 <div className="grid gap-2">
@@ -504,6 +587,7 @@ export default function EventForm({ event, mode }: EventFormProps) {
                       Past Event
                     </Label>
                   </div>
+                  {/* Events also move to "past" by themselves once their day has ended */}
 
                   <div className="flex items-center gap-2 mt-6">
                     <input
@@ -519,6 +603,46 @@ export default function EventForm({ event, mode }: EventFormProps) {
                       htmlFor="hasGallery"
                       className="cursor-pointer text-slate-700 font-semibold">
                       Has Gallery
+                    </Label>
+                  </div>
+                </div>
+
+                <div className="grid gap-2 pt-4 border-t">
+                  <Label
+                    htmlFor="availabilityText"
+                    className="text-slate-700 font-semibold">
+                    Availability Message
+                  </Label>
+                  <Input
+                    id="availabilityText"
+                    value={formState.availabilityText}
+                    maxLength={AVAILABILITY_TEXT_MAX}
+                    className='text-black'
+                    onChange={(e) =>
+                      handleChange('availabilityText', e.target.value)
+                    }
+                    placeholder="e.g. Limited VIP seating"
+                  />
+                  <p className="text-xs text-slate-500">
+                    Optional. Shown in the Availability box on the event page.
+                    Leave empty to show the seats-left count on its own. Once
+                    seats run out the box always reads &ldquo;Fully
+                    Reserved&rdquo;.
+                  </p>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      id="hideSeatCount"
+                      checked={formState.hideSeatCount}
+                      onChange={(e) =>
+                        handleChange('hideSeatCount', e.target.checked)
+                      }
+                      className="h-4 w-4 rounded border-gray-300 text-black focus:ring-black cursor-pointer"
+                    />
+                    <Label
+                      htmlFor="hideSeatCount"
+                      className="cursor-pointer text-slate-700 font-semibold">
+                      Hide the seats-left number
                     </Label>
                   </div>
                 </div>

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { EventItem } from '@/app/(root)/events/_components/EventCard';
+import { getEventTimeDisplay, isEventPast } from '@/lib/eventTime';
 import { deleteEvent } from '@/actions/events';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -66,13 +67,13 @@ export default function EventsListClient({
       event.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
       event.description.toLowerCase().includes(searchQuery.toLowerCase());
 
-    // An event is past if isPast is true, or hasPassed logic (optional fallback)
-    const isEventPast = event.isPast === true;
+    // Past when marked so by hand, or once the event's day has ended
+    const past = isEventPast(event);
 
     if (activeTab === 'upcoming') {
-      return matchesSearch && !isEventPast;
+      return matchesSearch && !past;
     } else {
-      return matchesSearch && isEventPast;
+      return matchesSearch && past;
     }
   });
 
@@ -176,11 +177,11 @@ export default function EventsListClient({
                   <div className="space-y-1.5 text-xs text-slate-700 pt-2 border-t">
                     <div className="flex items-center gap-2">
                       <Calendar className="h-3.5 w-3.5 text-[#cfb53b]" />
-                      <span>{event.date}</span>
+                      <span>{getEventTimeDisplay(event).date}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <Clock className="h-3.5 w-3.5 text-[#cfb53b]" />
-                      <span>{event.time}</span>
+                      <span>{getEventTimeDisplay(event).time}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <MapPin className="h-3.5 w-3.5 text-[#cfb53b]" />

@@ -4,19 +4,31 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Calendar, MapPin, Users, ArrowUpRight } from 'lucide-react';
+import { useEventTimeDisplay } from '@/hooks/useEventTimeDisplay';
+import { isEventPast } from '@/lib/eventTime';
 
 export interface EventItem {
   id?: string;
   title: string;
   description: string;
   longDescription?: string;
+  /** Display text for the date. Generated from `startsAt` for newer events. */
   date: string;
+  /** Display text for the time. Generated from `startsAt` for newer events. */
   time: string;
+  /** Exact start instant as an ISO string. Missing on events saved as free text. */
+  startsAt?: string | null;
+  /** IANA timezone the event is held in, e.g. "Africa/Lagos". */
+  timezone?: string | null;
   location: string;
   image: string;
   scope: 'Local' | 'International';
   format: 'Physical' | 'Virtual';
   seatsRemaining?: number;
+  /** Custom wording for the Availability box on the event page. */
+  availabilityText?: string;
+  /** Show only the custom wording, without the seats-left number. */
+  hideSeatCount?: boolean;
   isPast?: boolean;
   agenda?: {
     time: string;
@@ -45,15 +57,22 @@ export function EventCard({ event, onApply }: EventCardProps) {
     id,
     title,
     description,
-    date,
-    time,
     location,
     image,
     scope,
     format,
     seatsRemaining,
-    isPast,
+    availabilityText,
+    hideSeatCount,
   } = event;
+
+  const { date, time, local } = useEventTimeDisplay(event);
+  const isPast = isEventPast(event);
+
+  const hasSeatCount = seatsRemaining !== undefined && seatsRemaining !== null;
+  const isSoldOut = hasSeatCount && seatsRemaining <= 0;
+  const availabilityNote = availabilityText?.trim();
+  const showSeatCount = hasSeatCount && !hideSeatCount;
 
   return (
     <div className="group relative bg-slate-900/40 backdrop-blur-sm border border-primary/10 rounded-2xl overflow-hidden shadow-xl hover:border-primary/30 transition-all duration-300 flex flex-col h-full">
@@ -90,6 +109,12 @@ export function EventCard({ event, onApply }: EventCardProps) {
             <span className="text-slate-600">•</span>
             <span>{time}</span>
           </div>
+          {local && (
+            <p className="text-[11px] text-slate-400">
+              {local.dateDiffers ? `${local.date}, ` : ''}
+              {local.time} your time
+            </p>
+          )}
 
           <h3 className="text-lg font-bold text-white group-hover:text-primary transition-colors line-clamp-1">
             {id ? <Link href={`/events/${id}`}>{title}</Link> : title}
@@ -107,10 +132,19 @@ export function EventCard({ event, onApply }: EventCardProps) {
             <span className="line-clamp-1">{location}</span>
           </div>
 
-          {!isPast && seatsRemaining !== undefined && (
+          {!isPast && isSoldOut && (
+            <div className="flex items-center gap-2 text-xs text-red-400">
+              <Users className="size-3.5 shrink-0" />
+              <span>Fully reserved</span>
+            </div>
+          )}
+          {!isPast && !isSoldOut && (availabilityNote || showSeatCount) && (
             <div className="flex items-center gap-2 text-xs text-amber-500">
               <Users className="size-3.5 shrink-0" />
-              <span>Only {seatsRemaining} VIP invites remaining</span>
+              <span className="line-clamp-1">
+                {availabilityNote ||
+                  `Only ${seatsRemaining} VIP invites remaining`}
+              </span>
             </div>
           )}
         </div>

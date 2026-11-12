@@ -10,7 +10,6 @@ import {
   X,
   Image as ImageIcon,
 } from 'lucide-react';
-import { MOCK_EVENTS } from '../../data';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/firebase/firebaseClient';
 
@@ -20,6 +19,7 @@ export default function EventGalleryPage() {
 
   const [event, setEvent] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [activePhotoIndex, setActivePhotoIndex] = useState<number | null>(null);
 
   useEffect(() => {
@@ -27,6 +27,7 @@ export default function EventGalleryPage() {
     const fetchEvent = async () => {
       try {
         setLoading(true);
+        setLoadError(false);
         const docRef = doc(db, 'events', id);
         const docSnap = await getDoc(docRef);
 
@@ -39,13 +40,12 @@ export default function EventGalleryPage() {
             galleryImages: data.galleryImages || [],
           });
         } else {
-          const mock = MOCK_EVENTS.find((e) => e.id === id);
-          setEvent(mock || null);
+          setEvent(null);
         }
       } catch (err) {
         console.error('Error fetching event gallery from Firestore:', err);
-        const mock = MOCK_EVENTS.find((e) => e.id === id);
-        setEvent(mock || null);
+        setEvent(null);
+        setLoadError(true);
       } finally {
         setLoading(false);
       }
@@ -74,6 +74,23 @@ export default function EventGalleryPage() {
     return (
       <div className="min-h-screen bg-background-dark text-slate-100 flex items-center justify-center pt-24">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  if (loadError) {
+    return (
+      <div className="min-h-screen bg-background-dark text-slate-100 flex flex-col items-center justify-center gap-4 pt-24 px-6 text-center">
+        <h2 className="text-3xl font-bold">Unable to Load Event</h2>
+        <p className="text-slate-400 text-sm max-w-sm">
+          Something went wrong while loading this event. Please check your
+          connection and try again.
+        </p>
+        <Link
+          href="/events"
+          className="px-6 py-2.5 bg-primary text-background-dark font-bold rounded-lg transition-colors">
+          Back to Events
+        </Link>
       </div>
     );
   }
