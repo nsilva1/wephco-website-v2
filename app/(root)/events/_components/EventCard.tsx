@@ -30,6 +30,12 @@ export interface EventItem {
   /** Show only the custom wording, without the seats-left number. */
   hideSeatCount?: boolean;
   isPast?: boolean;
+  /**
+   * Address(es) emailed about updates to this event, comma-separated. Only
+   * used to carry the value from the dashboard form to the save actions: it is
+   * stored separately and never on the event itself, which is public.
+   */
+  notificationEmail?: string;
   agenda?: {
     time: string;
     title: string;

@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import { getEvent } from '@/actions/events';
+import { getEventNotificationEmail } from '@/lib/eventNotifications';
 import EventForm from '../../EventForm';
 
 export const revalidate = 0;
@@ -16,5 +17,13 @@ export default async function EditEventPage({ params }: EditEventPageProps) {
 
   if (!event) return notFound();
 
-  return <EventForm mode="edit" event={event} />;
+  const notificationEmail = await getEventNotificationEmail(id);
+
+  return (
+    <EventForm
+      mode="edit"
+      event={event}
+      notificationEmail={notificationEmail}
+    />
+  );
 }

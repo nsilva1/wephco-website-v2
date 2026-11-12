@@ -267,6 +267,8 @@ export interface GenericSendEmailParams {
   html?: string;
   text?: string;
   from?: string;
+  /** Where replies go, when that should differ from the sender */
+  replyTo?: string;
 }
 
 /**
@@ -279,6 +281,7 @@ export async function sendEmail({
   html,
   text,
   from,
+  replyTo,
 }: GenericSendEmailParams): Promise<SendEmailResult> {
   try {
     if (!resendApiKey) {
@@ -298,6 +301,7 @@ export async function sendEmail({
       ...(react ? { react } : {}),
       ...(html ? { html } : {}),
       ...(text ? { text } : {}),
+      ...(replyTo ? { replyTo } : {}),
     } as Parameters<typeof resend.emails.send>[0]);
 
     if (error) {

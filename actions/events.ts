@@ -4,6 +4,12 @@ import { EventItem } from "@/app/(root)/events/_components/EventCard";
 import { createDocument, getDocument, getAllDocuments, updateDocument, deleteDocument } from "@/firebase/firebaseConfig";
 import { serializeDoc } from "@/lib/utils";
 import { FIRESTORE_COLLECTIONS } from "@/lib/constants";
+import { getEventTimeDisplay } from "@/lib/eventTime";
+import {
+    deleteEventNotificationEmail,
+    notifyEventReservation,
+    saveEventNotificationEmail,
+} from "@/lib/eventNotifications";
 
 const COLLECTION_NAME = FIRESTORE_COLLECTIONS.EVENTS || 'events';
 
@@ -62,6 +68,9 @@ export const createEvent = async (data: EventItem): Promise<string> => {
         };
 
         const id = await createDocument(COLLECTION_NAME, payload);
+        if (data.notificationEmail?.trim()) {
+            await saveEventNotificationEmail(id, data.notificationEmail);
+        }
         return id;
     } catch (error) {
         console.error("Error creating event:", error);
@@ -99,6 +108,9 @@ export const updateEvent = async (id: string, data: Partial<EventItem>): Promise
         }
 
         await updateDocument(COLLECTION_NAME, id, payload);
+        if (data.notificationEmail !== undefined) {
+            await saveEventNotificationEmail(id, data.notificationEmail);
+        }
         return true;
     } catch (error) {
         console.error(`Error updating event ${id}:`, error);
@@ -109,6 +121,7 @@ export const updateEvent = async (id: string, data: Partial<EventItem>): Promise
 export const deleteEvent = async (id: string): Promise<boolean> => {
     try {
         await deleteDocument(COLLECTION_NAME, id);
+        await deleteEventNotificationEmail(id);
         return true;
     } catch (error) {
         console.error(`Error deleting event ${id}:`, error);
@@ -139,11 +152,15 @@ export const reserveEventSeat = async ({
     try {
         let newSeatsRemaining: number | null = null;
         let eventTitle = 'Event';
+        let eventWhen = { date: '', time: '' };
+        let eventLocation = '';
 
         const eventDoc = await getDocument(COLLECTION_NAME, eventId);
         if (eventDoc) {
             const data = serializeDoc(eventDoc);
             eventTitle = data.title || 'Event';
+            eventWhen = getEventTimeDisplay(data);
+            eventLocation = data.location || '';
             
             if (data.seatsRemaining !== undefined && data.seatsRemaining !== null) {
                 const currentSeats = Number(data.seatsRemaining);
@@ -173,6 +190,21 @@ export const reserveEventSeat = async ({
             preferences: preferences || 'No special preferences requested.',
             verified: false,
             createdAt: new Date(),
+        });
+
+        // Tell whoever is set to be notified about this event
+        await notifyEventReservation(eventId, {
+            eventTitle,
+            eventDate: eventWhen.date,
+            eventTime: eventWhen.time,
+            eventLocation,
+            attendeeName,
+            attendeeEmail: email,
+            attendeePhone: phone,
+            seatsReserved: Number(seatsCount),
+            seatsRemaining: newSeatsRemaining,
+            investmentTier: investmentTier || '',
+            preferences: preferences || '',
         });
 
         return {
