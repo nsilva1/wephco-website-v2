@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ColumnDef } from '@tanstack/react-table';
-import { IProperty } from '@/interfaces/propertyInterface';
+import { IProperty, getPropertyType } from '@/interfaces/propertyInterface';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ArrowUpDown, ExternalLink, Star } from 'lucide-react';
@@ -142,6 +142,14 @@ export const columns: ColumnDef<IProperty>[] = [
   {
     accessorKey: 'location',
     header: 'Location',
+  },
+  {
+    id: 'propertyType',
+    accessorFn: (row) => getPropertyType(row.propertyType),
+    header: 'Type',
+    cell: ({ row }) => (
+      <Badge variant="outline">{getPropertyType(row.original.propertyType)}</Badge>
+    ),
   },
   {
     accessorKey: 'featured',

@@ -12,6 +12,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import PropertyControls from './PropertyControls';
 import { formatCurrency } from '@/lib/utils';
+import { getPropertyType } from '@/interfaces/propertyInterface';
 
 export const revalidate = 0;
 
@@ -52,6 +53,9 @@ export default async function PropertyDetailPage({
         <span
           className={`capitalize inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold border-transparent ${statusColors[property.status] || ''}`}>
           {property.status || 'available'}
+        </span>
+        <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold border border-slate-300 text-slate-700">
+          {getPropertyType(property.propertyType)}
         </span>
       </div>
 

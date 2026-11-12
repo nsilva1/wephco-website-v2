@@ -10,6 +10,19 @@ export interface IPropertyUnit {
   square_foot: string | number;
 }
 
+export type PropertyType = 'Residential' | 'Commercial';
+
+export const PROPERTY_TYPES: PropertyType[] = ['Residential', 'Commercial'];
+
+/**
+ * Reads a stored property type. Properties saved before the field existed
+ * have none and are treated as residential.
+ */
+export const getPropertyType = (value: unknown): PropertyType =>
+  typeof value === 'string' && value.toLowerCase() === 'commercial'
+    ? 'Commercial'
+    : 'Residential';
+
 export interface IProperty {
   id?: string;
   title: string;
@@ -24,6 +37,8 @@ export interface IProperty {
   tag: 'Local' | 'International';
   pdfUrl: string | null;
   category: 'Rent' | 'Lease' | 'Sale';
+  /** Residential or commercial. Missing on older properties: see getPropertyType. */
+  propertyType?: PropertyType;
   bedroom: string | number | (string | number)[];
   bathroom: string | number | (string | number)[];
   square_foot: string | number | (string | number)[];

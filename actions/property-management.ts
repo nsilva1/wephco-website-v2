@@ -6,6 +6,7 @@ import {
   IPropertyAgent,
   IPropertyUnit,
 } from '@/interfaces/propertyInterface';
+import { getPropertyType } from '@/interfaces/propertyInterface';
 import { serializeDoc } from '@/lib/utils';
 
 export async function getProperties() {
@@ -33,6 +34,7 @@ export async function createProperty(formData: FormData) {
   const status = formData.get('status') as string || 'available';
   const tag = formData.get('tag') as string || 'pending';
   const category = formData.get('category') as string || '';
+  const propertyType = getPropertyType(formData.get('propertyType'));
   const bedroom = formData.get('bedroom') as string || '';
   const bathroom = formData.get('bathroom') as string || '';
   const square_foot = formData.get('square_foot') as string || '';
@@ -58,6 +60,7 @@ export async function createProperty(formData: FormData) {
     status,
     tag,
     category,
+    propertyType,
     bedroom,
     bathroom,
     square_foot,
@@ -87,6 +90,7 @@ export async function updateProperty(id: string, formData: FormData) {
   const status = formData.get('status') as string || 'available';
   const tag = formData.get('tag') as string || 'pending';
   const category = formData.get('category') as string || '';
+  const propertyTypeRaw = formData.get('propertyType');
   const bedroom = formData.get('bedroom') as string || '';
   const bathroom = formData.get('bathroom') as string || '';
   const square_foot = formData.get('square_foot') as string || '';
@@ -163,6 +167,11 @@ export async function updateProperty(id: string, formData: FormData) {
 
   if (agent) {
     updateData.agent = agent;
+  }
+
+  // Only written when the caller sent it, so other update paths leave it alone
+  if (propertyTypeRaw !== null) {
+    updateData.propertyType = getPropertyType(propertyTypeRaw);
   }
 
   await db.collection('properties').doc(id).update(updateData);

@@ -3,7 +3,12 @@
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { createProperty, updateProperty } from '@/actions/property-management';
-import { IProperty, IPropertyUnit } from '@/interfaces/propertyInterface';
+import {
+  IProperty,
+  IPropertyUnit,
+  PROPERTY_TYPES,
+  getPropertyType,
+} from '@/interfaces/propertyInterface';
 import { toast } from 'sonner';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -171,9 +176,12 @@ export default function PropertyForm({ property, mode }: PropertyFormProps) {
     status: property?.status || 'Available',
     tag: property?.tag || 'local',
     category: property?.category || 'Sale',
+    propertyType: getPropertyType(property?.propertyType),
     verified: property?.verified ?? false,
     interests: property?.interests?.join(', ') || '',
   });
+
+  const isCommercial = formState.propertyType === 'Commercial';
 
   const handleChange = (field: string, value: any) => {
     setFormState((prev) => ({ ...prev, [field]: value }));
@@ -301,6 +309,7 @@ export default function PropertyForm({ property, mode }: PropertyFormProps) {
       formData.append('status', formState.status);
       formData.append('tag', formState.tag);
       formData.append('category', formState.category);
+      formData.append('propertyType', formState.propertyType);
       formData.append('bedroom', bedroomSummary);
       formData.append('bathroom', bathroomSummary);
       formData.append('square_foot', sqftSummary);
@@ -484,6 +493,8 @@ export default function PropertyForm({ property, mode }: PropertyFormProps) {
                     <p className="text-xs text-slate-500">
                       Add each unit type available in this project (e.g. 1 Bed,
                       2 Beds, 3 Beds with their respective bathrooms & sq ft).
+                      {isCommercial &&
+                        ' Bedrooms and bathrooms are optional for commercial properties.'}
                     </p>
                   </div>
                   <Button
@@ -517,7 +528,7 @@ export default function PropertyForm({ property, mode }: PropertyFormProps) {
                           }
                           className="text-slate-800 bg-white h-9"
                           placeholder="e.g. 1"
-                          required
+                          required={!isCommercial}
                         />
                       </div>
 
@@ -535,7 +546,7 @@ export default function PropertyForm({ property, mode }: PropertyFormProps) {
                           }
                           className="text-slate-800 bg-white h-9"
                           placeholder="e.g. 1.5"
-                          required
+                          required={!isCommercial}
                         />
                       </div>
 
@@ -679,6 +690,25 @@ export default function PropertyForm({ property, mode }: PropertyFormProps) {
                       </SelectContent>
                     </Select>
                   </div>
+                </div>
+                <div className="grid gap-2">
+                  <Label className="text-slate-700 font-semibold">
+                    Property Type
+                  </Label>
+                  <Select
+                    value={formState.propertyType}
+                    onValueChange={(v) => handleChange('propertyType', v)}>
+                    <SelectTrigger className="text-slate-800">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {PROPERTY_TYPES.map((type) => (
+                        <SelectItem key={type} value={type}>
+                          {type}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
                 <div className="grid gap-2">
                   <Label className="text-slate-700 font-semibold">Status</Label>

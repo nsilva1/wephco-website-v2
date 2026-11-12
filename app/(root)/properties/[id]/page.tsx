@@ -11,6 +11,7 @@ import { toast } from 'react-toastify';
 import { BiBed, BiBath, BiArea, BiMap, BiShareAlt } from 'react-icons/bi';
 import { CountryFlag } from '@/components/CountryFlag';
 import { sendPropertyInquiryEmail } from '@/actions/email';
+import { getPropertyType } from '@/interfaces/propertyInterface';
 
 export default function PropertyDetailsPage() {
   const params = useParams();
@@ -117,6 +118,7 @@ export default function PropertyDetailsPage() {
                 ? `${data.city}, ${data.country}`
                 : ''),
             category: data.category || data.type || 'Residential',
+            propertyType: getPropertyType(data.propertyType),
             images: data.images || [],
             pdfUrl: data.pdfUrl || '',
             status: data.status || 'Available',
@@ -287,6 +289,9 @@ export default function PropertyDetailsPage() {
             <div className="absolute bottom-6 left-6 flex gap-3">
               <span className="px-3 py-1 bg-primary text-background-dark text-[10px] font-bold uppercase tracking-widest rounded-md">
                 {property.status}
+              </span>
+              <span className="px-3 py-1 bg-background-dark/70 backdrop-blur-md text-primary border border-primary/30 text-[10px] font-bold uppercase tracking-widest rounded-md">
+                {property.propertyType}
               </span>
               {property.verified && (
                 <span className="px-3 py-1 bg-white/10 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-widest rounded-md">

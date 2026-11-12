@@ -6,6 +6,7 @@ import { BiArrowToRight } from 'react-icons/bi';
 import Link from 'next/link';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/firebase/firebaseClient';
+import { getPropertyType } from '@/interfaces/propertyInterface';
 
 interface PropertyProps extends React.ComponentPropsWithoutRef<'div'> {
   numberOfProperties?: number;
@@ -33,6 +34,7 @@ const FeaturedProperties = ({ numberOfProperties = 3, viewMore = true, ...rest }
             description: data.description || '',
             location: data.location || (data.city && data.country ? `${data.city}, ${data.country}` : ''),
             category: data.category || data.type || 'Sale',
+            propertyType: getPropertyType(data.propertyType),
             tag: data.tag || 'Local',
             status: data.status || 'Available',
             currency: data.currency || 'USD',

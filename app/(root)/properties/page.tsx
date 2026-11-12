@@ -5,6 +5,11 @@ import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/firebase/firebaseClient';
 import { PropertyCard, PropertyCardProps } from '@/components/PropertyCard';
 import { formatCurrency } from '@/lib/utils';
+import {
+  PROPERTY_TYPES,
+  PropertyType,
+  getPropertyType,
+} from '@/interfaces/propertyInterface';
 import { BiFilterAlt, BiGridAlt, BiMap, BiX } from 'react-icons/bi';
 
 export default function PropertyListingsPage() {
@@ -18,6 +23,9 @@ export default function PropertyListingsPage() {
   const [priceRange, setPriceRange] = useState<number>(50000000); // Max price default to 50M
   const [selectedBedroomFilter, setSelectedBedroomFilter] =
     useState<string>('Any');
+  const [selectedTypeFilter, setSelectedTypeFilter] = useState<
+    'All' | PropertyType
+  >('All');
   const [sortBy, setSortBy] = useState('Newest Listings');
   const [viewMode, setViewMode] = useState<'grid' | 'map'>('grid');
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -42,6 +50,7 @@ export default function PropertyListingsPage() {
                 ? `${data.city}, ${data.country}`
                 : ''),
             category: data.category || data.type || '',
+            propertyType: getPropertyType(data.propertyType),
             images: data.images || [],
             pdfUrl: data.pdfUrl || '',
             status: data.status || 'Available',
@@ -78,6 +87,13 @@ export default function PropertyListingsPage() {
     // Price range filter
     result = result.filter((p) => Number(p.price) <= priceRange);
 
+    // Residential / commercial filter
+    if (selectedTypeFilter !== 'All') {
+      result = result.filter(
+        (p) => getPropertyType(p.propertyType) === selectedTypeFilter
+      );
+    }
+
     // Bedroom configuration filter (matches if project contains a unit with the selected bedroom count)
     if (selectedBedroomFilter !== 'Any') {
       result = result.filter((p) => {
@@ -113,11 +129,12 @@ export default function PropertyListingsPage() {
     }
 
     setFilteredProperties(result);
-  }, [properties, priceRange, selectedBedroomFilter, sortBy]);
+  }, [properties, priceRange, selectedBedroomFilter, selectedTypeFilter, sortBy]);
 
   const clearFilters = () => {
     setPriceRange(50000000);
     setSelectedBedroomFilter('Any');
+    setSelectedTypeFilter('All');
     setSortBy('Newest Listings');
   };
 
@@ -173,6 +190,29 @@ export default function PropertyListingsPage() {
                   <span>$25M</span>
                   <span>$50M+</span>
                 </div>
+              </div>
+            </div>
+
+            {/* Property Type Filter */}
+            <div className="space-y-3 pt-4 border-t border-primary/10">
+              <label className="text-xs font-bold uppercase tracking-widest text-primary block">
+                Property Type
+              </label>
+              <div className="grid grid-cols-3 gap-2">
+                {(['All', ...PROPERTY_TYPES] as const).map((type) => (
+                  <button
+                    key={type}
+                    type="button"
+                    onClick={() => setSelectedTypeFilter(type)}
+                    className={`py-2 rounded-lg text-xs font-bold border transition-all cursor-pointer ${
+                      selectedTypeFilter === type
+                        ? 'bg-primary text-background-dark border-primary'
+                        : 'bg-white/5 text-slate-300 border-primary/15 hover:border-primary/40'
+                    }`}
+                  >
+                    {type}
+                  </button>
+                ))}
               </div>
             </div>
 

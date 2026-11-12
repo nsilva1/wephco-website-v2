@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { IProperty } from '@/interfaces/propertyInterface';
+import { IProperty, getPropertyType } from '@/interfaces/propertyInterface';
 import { formatCurrency as format } from '@/lib/utils';
 import Link from 'next/link';
 import { CountryFlag } from './CountryFlag';
@@ -60,6 +60,9 @@ const PropertyCard = ({ showModal, openModal, ...props }: PropertyCardProps) => 
             )}
             <div className='absolute top-4 left-4 bg-background-dark/80 backdrop-blur-md px-4 py-1.5 rounded text-[10px] font-bold text-primary tracking-widest uppercase border border-primary/20 z-20'>
               {props.status}
+            </div>
+            <div className='absolute top-4 right-4 bg-background-dark/80 backdrop-blur-md px-4 py-1.5 rounded text-[10px] font-bold text-slate-200 tracking-widest uppercase border border-white/15 z-20'>
+              {getPropertyType(props.propertyType)}
             </div>
             <div className='absolute inset-0 bg-linear-to-t from-background-dark via-transparent to-transparent opacity-80 z-10'></div>
             <div className='absolute bottom-4 left-6 right-6 z-20'>
