@@ -20,6 +20,16 @@ export default function MagazineSubscriptionPage() {
   const [subType, setSubType] = useState<'Online' | 'Physical'>('Online');
   const [language, setLanguage] = useState<'English' | 'French'>('English');
   const flutterwaveRef = useRef<HTMLButtonElement>(null);
+  // Set once the subscription is saved: its reference ties the payment to it
+  const [payment, setPayment] = useState<{ txRef: string } | null>(null);
+
+  // Open the payment window only after the button has re-rendered with the
+  // subscription's reference, so the payment carries the right one.
+  useEffect(() => {
+    if (payment) {
+      flutterwaveRef.current?.click();
+    }
+  }, [payment]);
 
   const isCorporateTier = selectedTier.name === 'WEPHCO CORPORATE & STRATEGIC PARTNER';
 
@@ -58,7 +68,7 @@ export default function MagazineSubscriptionPage() {
     setLoading(true);
 
     try {
-      await createMagazineSubscription({
+      const subscription = await createMagazineSubscription({
         tierId: selectedTier.id,
         tierName: selectedTier.name,
         type: `${selectedTier.name} (${subType})`,
@@ -73,8 +83,12 @@ export default function MagazineSubscriptionPage() {
 
       toast.success(`Registered for ${selectedTier.name} [${subType}] (${language} Edition)! Redirecting to payment...`);
 
-      // Trigger Flutterwave payment modal via ref click
-      flutterwaveRef.current?.click();
+      if (!subscription.txRef) {
+        throw new Error('Could not start the payment. Please try again.');
+      }
+
+      // Starts the payment (see the effect above)
+      setPayment({ txRef: subscription.txRef });
     } catch (error) {
       toast.error((error as Error).message || 'Something went wrong. Please try again.');
     } finally {
@@ -414,6 +428,7 @@ export default function MagazineSubscriptionPage() {
                 name={formData.name}
                 phoneNumber={formData.phoneNumber}
                 currency={selectedTier.currency}
+                txRef={payment?.txRef}
                 redirectUrl="/magazine/payment-success"
                 description={`Wimoa Magazine - ${selectedTier.name} Subscription`}
               />

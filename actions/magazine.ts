@@ -3,6 +3,9 @@
 import { createDocument, getAllDocuments, updateDocument, getDocument, deleteDocument } from "@/firebase/firebaseConfig";
 import { serializeDoc } from "@/lib/utils";
 import { FIRESTORE_COLLECTIONS } from "@/lib/constants";
+import { randomUUID } from "crypto";
+import { headers } from "next/headers";
+import { fulfilMagazineSubscription, MagazineFulfilmentResult } from "@/lib/magazineFulfilment";
 
 const COLLECTION_NAME = FIRESTORE_COLLECTIONS.MAGAZINES;
 
@@ -19,10 +22,12 @@ export interface IMagazineSubscription {
   fee: number;
   language?: 'English' | 'French';
   status: 'pending' | 'paid' | 'cancelled';
+  /** Payment reference, created with the subscription and passed to the payment provider */
+  txRef?: string;
   createdAt?: Date | string;
 }
 
-export const createMagazineSubscription = async (data: Omit<IMagazineSubscription, 'id' | 'status' | 'createdAt'>): Promise<IMagazineSubscription> => {
+export const createMagazineSubscription = async (data: Omit<IMagazineSubscription, 'id' | 'status' | 'createdAt' | 'txRef'>): Promise<IMagazineSubscription> => {
   try {
     const payload = {
       type: data.type || data.tierName || 'Membership',
@@ -36,6 +41,9 @@ export const createMagazineSubscription = async (data: Omit<IMagazineSubscriptio
       fee: data.fee,
       language: data.language || 'English',
       status: 'pending' as const,
+      // Ties the payment to this subscription, so a confirmed payment can be
+      // matched back to the person and tier it was for
+      txRef: `wephco-mag-${randomUUID()}`,
       createdAt: new Date(),
     };
 
@@ -97,5 +105,33 @@ export const deleteMagazineSubscription = async (id: string): Promise<void> => {
   } catch (error) {
     console.error(`Error deleting magazine subscription ${id}:`, error);
     throw new Error("Failed to delete magazine subscription");
+  }
+};
+
+/**
+ * Called by the payment success page. Confirms the payment with the payment
+ * provider and, once confirmed, emails the subscriber the PDFs for their tier.
+ * Safe to call more than once: the emails are only sent once.
+ */
+export const confirmMagazinePayment = async ({
+  txRef,
+  transactionId,
+}: {
+  txRef: string;
+  transactionId?: string;
+}): Promise<MagazineFulfilmentResult> => {
+  try {
+    const requestHeaders = await headers();
+    const host = requestHeaders.get('x-forwarded-host') || requestHeaders.get('host');
+    const protocol = requestHeaders.get('x-forwarded-proto') || 'https';
+
+    return await fulfilMagazineSubscription({
+      txRef,
+      transactionId,
+      siteOrigin: host ? `${protocol}://${host}` : null,
+    });
+  } catch (error) {
+    console.error(`Error confirming magazine payment ${txRef}:`, error);
+    return { outcome: 'unavailable' };
   }
 };
