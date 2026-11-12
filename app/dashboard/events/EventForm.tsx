@@ -23,6 +23,7 @@ import { ArrowLeft, Upload, ImageIcon, Plus, Trash2, User } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { uploadFile } from '@/lib/helperFunctions';
+import { parseNotificationEmails } from '@/lib/notificationEmails';
 import {
   DEFAULT_EVENT_TIMEZONE,
   EVENT_TIMEZONES,
@@ -38,6 +39,8 @@ const AVAILABILITY_TEXT_MAX = 60;
 interface EventFormProps {
   event?: EventItem;
   mode: 'create' | 'edit';
+  /** Saved notification address(es) for the event being edited */
+  notificationEmail?: string;
 }
 
 interface HostInput {
@@ -48,7 +51,11 @@ interface HostInput {
   existingUrl?: string;
 }
 
-export default function EventForm({ event, mode }: EventFormProps) {
+export default function EventForm({
+  event,
+  mode,
+  notificationEmail = '',
+}: EventFormProps) {
   const router = useRouter();
   const coverInputRef = useRef<HTMLInputElement>(null);
   const galleryInputRef = useRef<HTMLInputElement>(null);
@@ -81,6 +88,7 @@ export default function EventForm({ event, mode }: EventFormProps) {
     format: event?.format || 'Physical',
     seatsRemaining: event?.seatsRemaining?.toString() || '',
     availabilityText: event?.availabilityText || '',
+    notificationEmail,
     hideSeatCount: event?.hideSeatCount || false,
     isPast: event?.isPast || false,
     hasGallery: event?.hasGallery || false,
@@ -267,6 +275,16 @@ export default function EventForm({ event, mode }: EventFormProps) {
       return;
     }
 
+    const notificationEmails = parseNotificationEmails(
+      formState.notificationEmail
+    );
+    if (notificationEmails.invalid.length > 0) {
+      toast.error(
+        `Notification email is not valid: ${notificationEmails.invalid.join(', ')}`
+      );
+      return;
+    }
+
     setIsSubmitting(true);
     const toastId = toast.loading(
       `${mode === 'create' ? 'Creating' : 'Updating'} event...`
@@ -317,6 +335,7 @@ export default function EventForm({ event, mode }: EventFormProps) {
           ? Number(formState.seatsRemaining)
           : undefined,
         availabilityText: formState.availabilityText.trim(),
+        notificationEmail: notificationEmails.valid.join(', '),
         hideSeatCount: formState.hideSeatCount,
         isPast: formState.isPast,
         hasGallery: formState.hasGallery,
@@ -605,6 +624,31 @@ export default function EventForm({ event, mode }: EventFormProps) {
                       Has Gallery
                     </Label>
                   </div>
+                </div>
+
+                <div className="grid gap-2 pt-4 border-t">
+                  <Label
+                    htmlFor="notificationEmail"
+                    className="text-slate-700 font-semibold">
+                    Notification Email
+                  </Label>
+                  <Input
+                    id="notificationEmail"
+                    type="text"
+                    inputMode="email"
+                    autoComplete="off"
+                    value={formState.notificationEmail}
+                    className='text-black'
+                    onChange={(e) =>
+                      handleChange('notificationEmail', e.target.value)
+                    }
+                    placeholder="e.g. events@wephco.com"
+                  />
+                  <p className="text-xs text-slate-500">
+                    Optional. An email is sent to this address each time
+                    someone reserves a seat for this event. Separate several
+                    addresses with commas. It is not shown on the website.
+                  </p>
                 </div>
 
                 <div className="grid gap-2 pt-4 border-t">
